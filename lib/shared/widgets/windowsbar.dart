@@ -15,6 +15,7 @@ class WindowBar extends StatefulWidget {
 
 class _WindowBarState extends State<WindowBar> {
   bool _isFullscreen = false;
+  bool _isMaximized = false;
 
   @override
   void initState() {
@@ -24,6 +25,7 @@ class _WindowBarState extends State<WindowBar> {
 
   Future<void> _syncWindowState() async {
     _isFullscreen = await windowManager.isFullScreen();
+    _isMaximized = await windowManager.isMaximized();
     setState(() {});
   }
 
@@ -54,9 +56,16 @@ class _WindowBarState extends State<WindowBar> {
           ),
           _WindowBarButton(
             onPressed: () {
-              windowManager.maximize();
+              if (_isMaximized) {
+                windowManager.unmaximize();
+              } else {
+                windowManager.maximize();
+              }
+              _syncWindowState();
             },
-            icon: FluentIcons.square_24_regular,
+            icon: _isMaximized
+                ? FluentIcons.square_multiple_24_regular
+                : FluentIcons.square_24_regular,
           ),
           _WindowBarButton(
             onPressed: () {
