@@ -48,8 +48,8 @@ dev_dependencies:
   retrofit_generator: ^10.2.1
 
 flutter_launcher_icons:
-  android: "lc_icon"
-  ios: true
+  android: false
+  ios: false
   image_path: "assets/icon/icon.png"
   min_sdk_android: 21
   web:
@@ -69,18 +69,9 @@ flutter_native_splash:
   color: "#000000"
   image: "assets/icon/icon.png"
   branding: "assets/icon/icon.png"
-  color_dark: "#121212"
-  image_dark: "assets/icon/icon.png"
-  branding_dark: "assets/icon/icon.png"
 
-  android_12:
-    color: "#000000"
-    icon_background_color: "#ffffff"
-    image: "assets/icon/icon.png"
-    branding: "assets/icon/icon.png"
-
-  android: true
-  ios: true
+  android: false
+  ios: false
   web: false
 
 flutter:
@@ -93,6 +84,8 @@ flutter:
     - 'assets/svg/search.svg'
     - 'assets/svg/favorite.svg'
     - 'assets/svg/settings.svg'
+    - 'assets/svg/logo.svg'
+    - 'assets/svg/icon.svg'
 
     - 'assets/icon/icon.png'
 
