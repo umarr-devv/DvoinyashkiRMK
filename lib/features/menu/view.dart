@@ -1,4 +1,6 @@
 import 'package:app/core/router/router.dart';
+import 'package:app/features/menu/widgets/widgets.dart';
+import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +11,17 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter.tabBar(
-      routes: [HomeRoute()],
+      routes: [OrderRoute()],
       scrollDirection: Axis.horizontal,
       builder: (context, child, tabController) {
-        return Scaffold(body: child);
+        return Scaffold(
+          body: Column(
+            children: [
+              WindowBar(),
+              Expanded(child: child),
+            ],
+          ),
+        );
       },
     );
   }
