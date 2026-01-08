@@ -1,3 +1,4 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/widgets/widgets.dart';
 import 'package:app/shared/widgets/widgets.dart';
@@ -11,15 +12,24 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter.tabBar(
-      routes: [OrderRoute()],
+      routes: [
+        OrderRoute(),
+        OrderRoute(),
+        OrderRoute(),
+        OrderRoute(),
+        OrderRoute(),
+      ],
       scrollDirection: Axis.horizontal,
       builder: (context, child, tabController) {
-        return Scaffold(
-          body: Column(
-            children: [
-              WindowBar(),
-              Expanded(child: child),
-            ],
+        return ThemeSwitchingArea(
+          child: Scaffold(
+            body: Column(
+              children: [
+                WindowBar(),
+                MenuNavBar(),
+                Expanded(child: child),
+              ],
+            ),
           ),
         );
       },

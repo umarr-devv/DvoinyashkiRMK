@@ -51,29 +51,11 @@ class CustomThemeData {
 
   Color get success => by(light: Color(0xFF16A34A), dark: Color(0xFF22C55E));
 
+  Color get destructiveTextForeground => Color(0xFFEF4444);
+
   Color get border => by(light: Color(0xFFE4E4E7), dark: Color(0xFF27272A));
 
   Color get textSelect => foreground.withValues(alpha: 0.075);
-
-  Color get tableRows => by(
-    light: Color(0xFFF4F4F5).withValues(alpha: 0.75),
-    dark: Color(0xFF19191B).withValues(alpha: 0.75),
-  );
-
-  TextStyle get primaryTextStyle =>
-      TextStyle(fontWeight: FontWeight.w500, color: foreground, fontSize: 14);
-
-  TextStyle get secondaryTextStyle => TextStyle(
-    fontWeight: FontWeight.w400,
-    color: secondaryForeground,
-    fontSize: 14,
-  );
-
-  TextStyle get invertTextStyle => TextStyle(
-    fontWeight: FontWeight.w500,
-    color: primaryForeground,
-    fontSize: 14,
-  );
 
   ThemeData toTheme() {
     return ThemeData(

@@ -25,7 +25,7 @@ class AuthActions extends StatelessWidget {
                     theme: isDarkTheme
                         ? lightTheme.toTheme()
                         : darkTheme.toTheme(),
-                    isReversed: isDarkTheme,
+                    isReversed: !isDarkTheme,
                   );
                 },
                 child: Icon(
