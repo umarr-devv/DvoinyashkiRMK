@@ -27,7 +27,12 @@ class MenuScreen extends StatelessWidget {
               children: [
                 WindowBar(),
                 MenuNavBar(),
-                Expanded(child: child),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: child,
+                  ),
+                ),
               ],
             ),
           ),
