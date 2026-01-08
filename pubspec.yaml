@@ -66,13 +66,13 @@ flutter_launcher_icons:
     image_path: "assets/icon/icon.png"
 
 flutter_native_splash:
-  color: "#000000"
-  image: "assets/icon/icon.png"
-  branding: "assets/icon/icon.png"
+  color: "#ffffff"
+  image: "assets/images/splash_image.png"
+  branding: "assets/images/splash_branding.png"
 
   android: false
   ios: false
-  web: false
+  web: true
 
 flutter:
   uses-material-design: true
@@ -86,6 +86,9 @@ flutter:
     - 'assets/svg/settings.svg'
     - 'assets/svg/logo.svg'
     - 'assets/svg/icon.svg'
+
+    - 'assets/images/splash_image.png'
+    - 'assets/images/splash_branding.png'
 
     - 'assets/icon/icon.png'
 
