@@ -6,7 +6,6 @@ import 'package:app/service/service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
@@ -26,8 +25,7 @@ Future initDependencies() async {
   final talker = TalkerConfigure.init();
   GetIt.I.registerSingleton<Talker>(talker);
 
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
 
