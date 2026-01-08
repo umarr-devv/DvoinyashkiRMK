@@ -28,6 +28,7 @@ class _AppScreenState extends State<AppScreen> {
           child: MaterialApp.router(
             title: 'Dvoinyashki RMK',
             theme: theme,
+            debugShowCheckedModeBanner: false,
             routerConfig: appRoute.config(
               navigatorObservers: () => [
                 TalkerRouteObserver(GetIt.I<Talker>()),
