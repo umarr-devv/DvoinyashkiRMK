@@ -6,7 +6,9 @@ enum CustomIcons {
   home,
   search,
   favorite,
-  settings;
+  settings,
+  logo,
+  icon;
 
   String get assetName => '$name.svg';
 
