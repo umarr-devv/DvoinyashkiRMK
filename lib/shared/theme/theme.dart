@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:forui/forui.dart';
 
 class CustomThemeData {
   CustomThemeData({required this.brightness});
@@ -11,69 +13,113 @@ class CustomThemeData {
     return brightness == Brightness.light ? light : dark;
   }
 
-  Color get primaryColor => Color(0xff6200ee);
+  Color get accent => Color(0xffa67dd9);
 
-  Color get primaryBackground {
-    return by(light: const Color(0xFFffffff), dark: const Color(0xFF000000));
-  }
+  Color get transparent => Color(0x00000000);
 
-  Color get secondaryBackground {
-    return by(light: const Color(0xFFeeeff0), dark: const Color(0xFF181818));
-  }
+  Color get barrier => by(light: Color(0x33000000), dark: Color(0x7A000000));
 
-  Color get primaryForeground {
-    return by(light: const Color(0xFF000000), dark: const Color(0xFFFFFFFF));
-  }
+  Color get background => by(light: Color(0xFFFFFFFF), dark: Color(0xFF09090B));
 
-  Color get secondaryForeground => primaryForeground.withValues(alpha: 0.75);
+  Color get foreground => by(light: Color(0xFF09090B), dark: Color(0xFFFAFAFA));
+
+  Color get primary => by(light: Color(0xFF18181B), dark: Color(0xFFFAFAFA));
+
+  Color get primaryForeground =>
+      by(light: Color(0xFFFAFAFA), dark: Color(0xFF18181B));
+
+  Color get secondary => by(light: Color(0xFFF4F4F5), dark: Color(0xFF27272A));
+
+  Color get secondaryForeground =>
+      by(light: Color(0xC018181B), dark: Color(0xC0FAFAFA));
+
+  Color get muted => by(light: Color(0xFFF4F4F5), dark: Color(0xFF27272A));
+
+  Color get mutedForeground =>
+      by(light: Color(0xFF71717A), dark: Color(0xFFA1A1AA));
+
+  Color get destructive =>
+      by(light: Color(0xFFEF4444), dark: Color(0xFF7F1D1D));
+
+  Color get destructiveForeground =>
+      by(light: Color(0xFFFAFAFA), dark: Color(0xFFFAFAFA));
+
+  Color get error => by(light: Color(0xFFEF4444), dark: Color(0xFF7F1D1D));
+
+  Color get errorForeground =>
+      by(light: Color(0xFFFAFAFA), dark: Color(0xFFFAFAFA));
+
+  Color get success => by(light: Color(0xFF16A34A), dark: Color(0xFF22C55E));
+
+  Color get border => by(light: Color(0xFFE4E4E7), dark: Color(0xFF27272A));
+
+  Color get textSelect => foreground.withValues(alpha: 0.075);
+
+  Color get tableRows => by(
+    light: Color(0xFFF4F4F5).withValues(alpha: 0.75),
+    dark: Color(0xFF19191B).withValues(alpha: 0.75),
+  );
+
+  TextStyle get primaryTextStyle =>
+      TextStyle(fontWeight: FontWeight.w500, color: foreground, fontSize: 14);
+
+  TextStyle get secondaryTextStyle => TextStyle(
+    fontWeight: FontWeight.w400,
+    color: secondaryForeground,
+    fontSize: 14,
+  );
+
+  TextStyle get invertTextStyle => TextStyle(
+    fontWeight: FontWeight.w500,
+    color: primaryForeground,
+    fontSize: 14,
+  );
 
   ThemeData toTheme() {
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
-      primaryColor: primaryBackground,
-      scaffoldBackgroundColor: secondaryBackground,
+      primaryColor: primary,
+      scaffoldBackgroundColor: background,
       fontFamily: font,
-      appBarTheme: AppBarTheme(
-        backgroundColor: primaryBackground,
-        surfaceTintColor: primaryBackground,
-        iconTheme: IconThemeData(color: primaryForeground),
+      textSelectionTheme: TextSelectionThemeData(selectionColor: textSelect),
+      dataTableTheme: DataTableThemeData(
+        headingTextStyle: TextStyle(
+          color: mutedForeground,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+        ),
+        dataTextStyle: TextStyle(
+          color: foreground,
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+        ),
+        dividerThickness: 0,
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: primaryBackground,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-      ),
-      colorScheme: ColorScheme.fromSeed(
+      dividerColor: border,
+    );
+  }
+
+  FThemeData toFTheme() {
+    return FThemeData(
+      typography: FTypography(defaultFontFamily: font),
+      colors: FColors(
         brightness: brightness,
-        seedColor: primaryColor,
-        primary: primaryBackground,
-        onPrimary: primaryForeground,
-        secondary: secondaryBackground,
-        onSecondary: secondaryForeground,
-        surface: secondaryBackground,
-        onSurface: primaryForeground,
-      ),
-      textTheme: TextTheme(
-        titleLarge: TextStyle(
-          fontFamily: font,
-          color: primaryForeground,
-          fontWeight: FontWeight.w600,
-          fontSize: 18,
-        ),
-        titleMedium: TextStyle(
-          fontFamily: font,
-          color: primaryForeground,
-          fontWeight: FontWeight.w600,
-          fontSize: 16,
-        ),
-        titleSmall: TextStyle(
-          fontFamily: font,
-          color: primaryForeground,
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        barrier: barrier,
+        background: background,
+        foreground: foreground,
+        primary: primary,
+        primaryForeground: primaryForeground,
+        secondary: secondary,
+        secondaryForeground: secondaryForeground,
+        muted: muted,
+        mutedForeground: mutedForeground,
+        destructive: destructive,
+        destructiveForeground: destructiveForeground,
+        error: error,
+        errorForeground: errorForeground,
+        border: border,
       ),
     );
   }
