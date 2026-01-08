@@ -30,44 +30,42 @@ class _WindowBarState extends State<WindowBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return DragToMoveArea(
-      child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            WindowBarLogo(),
-            Expanded(child: SizedBox()),
-            _WindowBarButton(
-              onPressed: () {
-                windowManager.setFullScreen(!_isFullscreen);
-                _syncWindowState();
-              },
-              icon: _isFullscreen
-                  ? FluentIcons.full_screen_minimize_24_regular
-                  : FluentIcons.full_screen_maximize_24_regular,
-            ),
-            _WindowBarButton(
-              onPressed: () {
-                windowManager.minimize();
-              },
-              icon: FluentIcons.subtract_24_regular,
-            ),
-            _WindowBarButton(
-              onPressed: () {
-                windowManager.maximize();
-              },
-              icon: FluentIcons.square_24_regular,
-            ),
-            _WindowBarButton(
-              onPressed: () {
-                WindowCloseDialog().show(context);
-              },
-              color: theme.custom.destructive,
-              icon: Icons.close,
-            ),
-          ],
-        ),
+    return SizedBox(
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          DragToMoveArea(child: WindowBarLogo()),
+          Expanded(child: DragToMoveArea(child: Container(height: 36))),
+          _WindowBarButton(
+            onPressed: () {
+              windowManager.setFullScreen(!_isFullscreen);
+              _syncWindowState();
+            },
+            icon: _isFullscreen
+                ? FluentIcons.full_screen_minimize_24_regular
+                : FluentIcons.full_screen_maximize_24_regular,
+          ),
+          _WindowBarButton(
+            onPressed: () {
+              windowManager.minimize();
+            },
+            icon: FluentIcons.subtract_24_regular,
+          ),
+          _WindowBarButton(
+            onPressed: () {
+              windowManager.maximize();
+            },
+            icon: FluentIcons.square_24_regular,
+          ),
+          _WindowBarButton(
+            onPressed: () {
+              WindowCloseDialog().show(context);
+            },
+            color: theme.custom.destructive,
+            icon: Icons.close,
+          ),
+        ],
       ),
     );
   }
@@ -82,11 +80,11 @@ class WindowBarLogo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 2, left: 16),
       child: Row(
-        spacing: 8,
+        spacing: 6,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CustomIcons.icon(size: 20, color: theme.custom.foreground),
-          CustomIcons.logo(size: 12, color: theme.custom.foreground),
+          CustomIcons.logo(size: 14, color: theme.custom.foreground),
         ],
       ),
     );
