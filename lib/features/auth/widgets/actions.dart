@@ -11,7 +11,7 @@ class AuthActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.only(top: 48, right: 16),
       child: Row(
         spacing: 12,
         mainAxisAlignment: MainAxisAlignment.end,

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   runZonedGuarded(
@@ -40,4 +41,16 @@ Future initDependencies() async {
 
   GetIt.I.registerSingleton<SecureStorage>(secureStorage);
   GetIt.I.registerSingleton<GeneralStorage>(generalStorage);
+
+  await windowManager.ensureInitialized();
+
+  final windowsOptions = const WindowOptions(
+    titleBarStyle: TitleBarStyle.hidden,
+    windowButtonVisibility: false,
+  );
+
+  windowManager.waitUntilReadyToShow(windowsOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
 }

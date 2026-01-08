@@ -38,6 +38,7 @@ dependencies:
   talker_dio_logger: ^5.1.9
   talker_flutter: ^5.1.9
   talker_logger: ^5.1.9
+  window_manager: ^0.5.1
 
 dev_dependencies:
   auto_route_generator: ^10.2.3
@@ -47,7 +48,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  forui: ^0.17.0
   json_serializable: ^6.9.5
   lean_builder: ^0.1.0-alpha.13
   retrofit_generator: ^10.2.1

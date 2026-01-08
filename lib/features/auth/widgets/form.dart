@@ -1,4 +1,6 @@
+import 'package:app/core/router/router.dart';
 import 'package:app/shared/theme/theme.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
@@ -54,7 +56,12 @@ class AuthForm extends StatelessWidget {
               ),
               hint: 'Введите пароль',
             ),
-            FButton(onPress: () {}, child: Text('Войти')),
+            FButton(
+              onPress: () {
+                AutoRouter.of(context).replace(MenuRoute());
+              },
+              child: Text('Войти'),
+            ),
           ],
         ),
       ),
