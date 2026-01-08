@@ -15,11 +15,13 @@ enum CustomIcons {
 
   String get assetName => '$name.svg';
 
-  SvgPicture call({double size = 24, Color color = const Color(0xff000000)}) {
+  SvgPicture call({double size = 24, Color? color}) {
     return SvgPicture.asset(
       'assets/svg/$assetName',
       height: size,
-      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+      colorFilter: color != null
+          ? ColorFilter.mode(color, BlendMode.srcIn)
+          : null,
     );
   }
 }

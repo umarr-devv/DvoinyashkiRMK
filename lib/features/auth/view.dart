@@ -11,7 +11,22 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ThemeSwitchingArea(
       child: Scaffold(
-        body:Stack(children: [AuthActions()]),
+        body: Stack(
+          children: [
+            AuthActions(),
+            Center(
+              child: SizedBox(
+                width: 420,
+                child: Column(
+                  spacing: 24,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [AuthLogo(), AuthForm(), AuthRules()],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
