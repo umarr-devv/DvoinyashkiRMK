@@ -1,3 +1,5 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:app/features/auth/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,10 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return ThemeSwitchingArea(
+      child: Scaffold(
+        body:Stack(children: [AuthActions()]),
+      ),
+    );
   }
 }

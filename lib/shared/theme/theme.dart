@@ -129,5 +129,5 @@ extension ThemeExtension on ThemeData {
   CustomThemeData get custom => CustomThemeData(brightness: brightness);
 }
 
-final lightTheme = CustomThemeData(brightness: Brightness.light).toTheme();
-final darkTheme = CustomThemeData(brightness: Brightness.dark).toTheme();
+final lightTheme = CustomThemeData(brightness: Brightness.light);
+final darkTheme = CustomThemeData(brightness: Brightness.dark);
