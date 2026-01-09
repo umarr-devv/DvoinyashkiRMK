@@ -14,10 +14,11 @@ class MenuScreen extends StatelessWidget {
     return AutoTabsRouter.tabBar(
       routes: [
         OrderRoute(),
-        OrderRoute(),
-        OrderRoute(),
-        OrderRoute(),
-        OrderRoute(),
+        SellHistoryRoute(),
+        WithdrawRoute(),
+        MovementRoute(),
+        StatisticRoute(),
+        WorkTimeRoute(),
       ],
       scrollDirection: Axis.horizontal,
       builder: (context, child, tabController) {
