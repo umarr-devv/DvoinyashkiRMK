@@ -29,6 +29,9 @@ class AppRouter extends RootStackRouter {
     ),
     AutoRoute(page: AuthRoute.page, initial: true),
     AutoRoute(page: InitRoute.page),
-    AutoRoute(page: SettingsRoute.page),
+    CustomRoute(
+      page: SettingsRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
   ];
 }

@@ -148,7 +148,9 @@ class _MenuNavBarUser extends StatelessWidget {
                 prefix: const Icon(FIcons.settings),
                 title: const Text('Настройки'),
                 suffix: Icon(FIcons.chevronRight),
-                onPress: () {},
+                onPress: () {
+                  AutoRouter.of(context).push(SettingsRoute());
+                },
               ),
               FTile(
                 prefix: const Icon(FIcons.headphones),
