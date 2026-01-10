@@ -1,8 +1,6 @@
-import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 
@@ -11,7 +9,6 @@ class OrderBasket extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return SizedBox(
       height: double.infinity,
       width: 400,
@@ -121,9 +118,7 @@ class _OrderBasketSubmitButton extends StatelessWidget {
           ],
         ),
         FButton(
-          onPress: () {
-            OrderPaymentDialog(context).show();
-          },
+          onPress: () {},
           style: (style) => style.copyWith(
             decoration: FWidgetStateMap.all(
               BoxDecoration(
@@ -132,7 +127,9 @@ class _OrderBasketSubmitButton extends StatelessWidget {
               ),
             ),
           ),
-          child: Text('Подтвердить'),
+          child: Text('Принять оплату', style: TextStyle(
+            color: theme.custom.successForeground
+          ),),
         ),
       ],
     );

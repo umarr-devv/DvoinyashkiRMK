@@ -49,7 +49,10 @@ class CustomThemeData {
   Color get errorForeground =>
       by(light: Color(0xFFFAFAFA), dark: Color(0xFFFAFAFA));
 
-  Color get success => by(light: Color(0xFF16A34A), dark: Color(0xFF22C55E));
+  Color get success => by(light: Color(0xFF16A34A), dark: Color(0xFF007e33));
+
+  Color get successForeground =>
+      by(light: Color(0xFFFAFAFA), dark: Color(0xFFFAFAFA));
 
   Color get destructiveTextForeground => Color(0xFFEF4444);
 

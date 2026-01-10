@@ -30,7 +30,7 @@ class _OrderCatalogSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 320,
+      width: 280,
       child: FTextField(
         prefixBuilder: (context, style, states) => Padding(
           padding: const EdgeInsets.only(left: 12),
@@ -61,9 +61,6 @@ class _OrderCatalogCategories extends StatelessWidget {
             _OrderCatalogCategoriesItem(label: 'Десерт'),
             _OrderCatalogCategoriesItem(label: 'Разное'),
             _OrderCatalogCategoriesItem(label: 'На день рождение'),
-            _OrderCatalogCategoriesItem(label: 'Разное'),
-            _OrderCatalogCategoriesItem(label: 'Разное'),
-            _OrderCatalogCategoriesItem(label: 'Разное'),
           ],
         ),
       ),

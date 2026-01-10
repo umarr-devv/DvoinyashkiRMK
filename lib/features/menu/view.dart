@@ -21,6 +21,7 @@ class MenuScreen extends StatelessWidget {
         WorkTimeRoute(),
       ],
       scrollDirection: Axis.horizontal,
+      physics: NeverScrollableScrollPhysics(),
       builder: (context, child, tabController) {
         return ThemeSwitchingArea(
           child: Scaffold(

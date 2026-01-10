@@ -15,7 +15,7 @@ class WindowBar extends StatefulWidget {
 
 class _WindowBarState extends State<WindowBar> {
   bool _isFullscreen = false;
-  bool _isMaximized = false;
+  bool _isMaximized = true;
 
   @override
   void initState() {

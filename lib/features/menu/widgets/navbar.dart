@@ -17,8 +17,8 @@ class MenuNavBar extends StatelessWidget {
         spacing: 12,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _NavBarTabs(),
-          Row(spacing: 24, children: [_MenuNavBarUser()]),
+          Expanded(child: _NavBarTabs()),
+          _MenuNavBarUser(),
         ],
       ),
     );
@@ -30,40 +30,43 @@ class _NavBarTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: 12,
-      children: [
-        _NavBarTabsItem(
-          icon: FluentIcons.cart_24_regular,
-          label: 'Корзина',
-          index: 0,
-        ),
-        _NavBarTabsItem(
-          icon: FluentIcons.receipt_24_regular,
-          label: 'История продаж',
-          index: 1,
-        ),
-        _NavBarTabsItem(
-          icon: FluentIcons.money_24_regular,
-          label: 'Выемка',
-          index: 2,
-        ),
-        _NavBarTabsItem(
-          icon: FluentIcons.box_24_regular,
-          label: 'Заказ',
-          index: 3,
-        ),
-        _NavBarTabsItem(
-          icon: FluentIcons.chart_person_24_regular,
-          label: 'Статистика',
-          index: 4,
-        ),
-        _NavBarTabsItem(
-          icon: FluentIcons.timer_24_regular,
-          label: 'Рабочее время',
-          index: 5,
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        spacing: 12,
+        children: [
+          _NavBarTabsItem(
+            icon: FluentIcons.cart_24_regular,
+            label: 'Корзина',
+            index: 0,
+          ),
+          _NavBarTabsItem(
+            icon: FluentIcons.receipt_24_regular,
+            label: 'История продаж',
+            index: 1,
+          ),
+          _NavBarTabsItem(
+            icon: FluentIcons.money_24_regular,
+            label: 'Выемка',
+            index: 2,
+          ),
+          _NavBarTabsItem(
+            icon: FluentIcons.box_24_regular,
+            label: 'Заказ',
+            index: 3,
+          ),
+          _NavBarTabsItem(
+            icon: FluentIcons.chart_person_24_regular,
+            label: 'Статистика',
+            index: 4,
+          ),
+          _NavBarTabsItem(
+            icon: FluentIcons.timer_24_regular,
+            label: 'Рабочее время',
+            index: 5,
+          ),
+        ],
+      ),
     );
   }
 }

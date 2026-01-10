@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/shared/theme/theme.dart';
+import 'package:app/utils/sctoll.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:get_it/get_it.dart';
@@ -29,6 +30,7 @@ class _AppScreenState extends State<AppScreen> {
             title: 'Dvoinyashki RMK',
             theme: theme,
             debugShowCheckedModeBanner: false,
+            scrollBehavior: CustomScrollBehavior(),
             routerConfig: appRoute.config(
               navigatorObservers: () => [
                 TalkerRouteObserver(GetIt.I<Talker>()),
