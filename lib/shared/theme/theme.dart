@@ -15,6 +15,9 @@ class CustomThemeData {
 
   Color get accent => Color(0xffa67dd9);
 
+  Color get secondaryAccent =>
+      by(light: Color(0xff948FFF), dark: Color(0xFFCBC8FF));
+
   Color get transparent => Color(0x00000000);
 
   Color get barrier => by(light: Color(0x33000000), dark: Color(0x7A000000));

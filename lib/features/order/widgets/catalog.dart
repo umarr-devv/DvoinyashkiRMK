@@ -30,7 +30,7 @@ class _OrderCatalogSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 280,
+      width: 320,
       child: FTextField(
         prefixBuilder: (context, style, states) => Padding(
           padding: const EdgeInsets.only(left: 12),

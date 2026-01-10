@@ -101,7 +101,7 @@ class _NavBarTabsItemState extends State<_NavBarTabsItem> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
           decoration: BoxDecoration(
-            color: active ? theme.custom.primary : theme.custom.muted,
+            color: active ? theme.custom.secondaryAccent : theme.custom.muted,
             borderRadius: BorderRadius.circular(64),
           ),
           child: Row(
