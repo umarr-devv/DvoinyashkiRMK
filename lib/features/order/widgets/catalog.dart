@@ -1,5 +1,6 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/states/category.dart';
+import 'package:app/features/order/states/favorite.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,14 +35,38 @@ class _OrderCatalogSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
-      width: 320,
-      child: FTextField(
-        prefixBuilder: (context, style, states) => Padding(
-          padding: const EdgeInsets.only(left: 12),
-          child: Icon(FIcons.search),
-        ),
-        hint: 'Поиск',
+      width: 360,
+      child: Row(
+        spacing: 12,
+        children: [
+          Expanded(
+            child: FTextField(
+              prefixBuilder: (context, style, states) => Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Icon(FIcons.search),
+              ),
+              hint: 'Поиск',
+            ),
+          ),
+          ValueListenableBuilder(
+            valueListenable: favoriteOnly,
+            builder: (context, value, child) {
+              return FButton.icon(
+                onPress: () {
+                  favoriteOnly.value = !value;
+                },
+                child: value
+                    ? Icon(
+                        FluentIcons.star_24_filled,
+                        color: theme.custom.secondaryAccent,
+                      )
+                    : Icon(FluentIcons.star_24_regular),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
