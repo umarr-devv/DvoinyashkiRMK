@@ -2,7 +2,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/shared/theme/theme.dart';
-import 'package:app/utils/sctoll.dart';
+import 'package:app/utils/scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -20,6 +20,7 @@ class _AppScreenState extends State<AppScreen> {
   final appRoute = AppRouter();
 
   final usersCubit = UsersCubit();
+  final authCubit = AuthCubit();
 
   Future initCubits() async {
     await usersCubit.update();
@@ -41,7 +42,10 @@ class _AppScreenState extends State<AppScreen> {
               ? darkTheme.toFTheme()
               : lightTheme.toFTheme(),
           child: MultiBlocProvider(
-            providers: [BlocProvider.value(value: usersCubit)],
+            providers: [
+              BlocProvider.value(value: usersCubit),
+              BlocProvider.value(value: authCubit),
+            ],
             child: MaterialApp.router(
               title: 'Dvoinyashki RMK',
               theme: theme,
