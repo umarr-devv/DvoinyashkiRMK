@@ -10,7 +10,7 @@ environment:
 dependencies:
   animated_theme_switcher: ^2.0.10
   auto_route: ^11.1.0
-  bloc: ^9.0.0
+  bloc: ^9.2.0
   cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.8
   data_table_2: ^2.7.2
@@ -31,10 +31,12 @@ dependencies:
   get_it: ^9.2.0
   hive_ce: ^2.11.3
   hive_ce_flutter: ^2.3.1
+  hydrated_bloc: ^10.1.1
   intl: ^0.20.2
   json_annotation: ^4.9.0
   path_provider: ^2.1.5
   retrofit: ^4.5.0
+  retrofit_generator: ^10.2.1
   talker: ^5.1.9
   talker_bloc_logger: ^5.1.9
   talker_dio_logger: ^5.1.9
@@ -52,7 +54,6 @@ dev_dependencies:
     sdk: flutter
   json_serializable: ^6.9.5
   lean_builder: ^0.1.0-alpha.13
-  retrofit_generator: ^10.2.1
 
 flutter_launcher_icons:
   android: false
