@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/features/order/states/category.dart';
 import 'package:app/features/order/states/favorite.dart';
 import 'package:app/models/models.dart';
@@ -96,7 +97,12 @@ class _OrderCatalogCategories extends StatelessWidget {
                 ),
               ),
             ),
-            FButton.icon(onPress: () {}, child: Icon(FIcons.settings2)),
+            FButton.icon(
+              onPress: () {
+                PinnedCategoriesDialog(context).show();
+              },
+              child: Icon(FIcons.settings2),
+            ),
           ],
         );
       },
