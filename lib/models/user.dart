@@ -72,14 +72,14 @@ class DetailUserScheme extends UserScheme {
 }
 
 @JsonSerializable()
-class UserListSceheme {
-  UserListSceheme({required this.users});
+class UserListScheme {
+  UserListScheme({required this.users});
 
   @JsonKey(name: 'value')
   final List<UserScheme> users;
 
-  factory UserListSceheme.fromJson(Map<String, dynamic> json) =>
-      _$UserListScehemeFromJson(json);
+  factory UserListScheme.fromJson(Map<String, dynamic> json) =>
+      _$UserListSchemeFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserListScehemeToJson(this);
+  Map<String, dynamic> toJson() => _$UserListSchemeToJson(this);
 }

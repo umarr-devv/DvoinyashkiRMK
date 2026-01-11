@@ -10,7 +10,7 @@ abstract class RestClient {
   factory RestClient(Dio dio, {String? baseUrl}) = _RestClient;
 
   @GET('/Catalog_Сотрудники')
-  Future<UserListSceheme> getUsers({
+  Future<UserListScheme> getUsers({
     @Query('\$select') String select = 'Ref_Key,Description,ИНН,ШтрихКод',
     @Query('\$format') String format = 'json',
   });
@@ -21,6 +21,12 @@ abstract class RestClient {
     @Query('\$select')
     String select =
         'Ref_Key,Description,ИНН,ШтрихКод,ДолжностьОбмен,ПодразделениеОбмен,Фотография_Base64Data',
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/Catalog_КатегорииНоменклатуры')
+  Future<CategoryListScheme> getCategories({
+    @Query('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });
 }

@@ -43,12 +43,12 @@ Map<String, dynamic> _$DetailUserSchemeToJson(DetailUserScheme instance) =>
       'Фотография_Base64Data': instance.image,
     };
 
-UserListSceheme _$UserListScehemeFromJson(Map<String, dynamic> json) =>
-    UserListSceheme(
+UserListScheme _$UserListSchemeFromJson(Map<String, dynamic> json) =>
+    UserListScheme(
       users: (json['value'] as List<dynamic>)
           .map((e) => UserScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$UserListScehemeToJson(UserListSceheme instance) =>
+Map<String, dynamic> _$UserListSchemeToJson(UserListScheme instance) =>
     <String, dynamic>{'value': instance.users};

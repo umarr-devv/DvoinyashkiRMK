@@ -17,3 +17,17 @@ class CategoryScheme {
 
   Map<String, dynamic> toJson() => _$CategorySchemeToJson(this);
 }
+
+
+@JsonSerializable()
+class CategoryListScheme {
+  CategoryListScheme({required this.users});
+
+  @JsonKey(name: 'value')
+  final List<CategoryScheme> users;
+
+  factory CategoryListScheme.fromJson(Map<String, dynamic> json) =>
+      _$CategoryListSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CategoryListSchemeToJson(this);
+}
