@@ -13,8 +13,8 @@ CategoriesState _$CategoriesStateFromJson(Map<String, dynamic> json) =>
               ?.map((e) => CategoryScheme.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      selected:
-          (json['selected'] as List<dynamic>?)
+      pinned:
+          (json['pinned'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
@@ -26,6 +26,6 @@ CategoriesState _$CategoriesStateFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CategoriesStateToJson(CategoriesState instance) =>
     <String, dynamic>{
       'categories': instance.categories,
-      'selected': instance.selected,
+      'pinned': instance.pinned,
       'update': instance.update?.toIso8601String(),
     };

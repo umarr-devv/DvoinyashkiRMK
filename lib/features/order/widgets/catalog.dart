@@ -1,6 +1,11 @@
+import 'package:app/blocs/blocs.dart';
+import 'package:app/features/order/states/category.dart';
+import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
 class OrderCatalog extends StatelessWidget {
@@ -47,42 +52,82 @@ class _OrderCatalogCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
+    return BlocBuilder<CategoriesCubit, CategoriesState>(
+      bloc: BlocProvider.of<CategoriesCubit>(context),
+      builder: (context, state) {
+        return Row(
           spacing: 12,
           children: [
-            _OrderCatalogCategoriesItem(label: 'Торты'),
-            _OrderCatalogCategoriesItem(label: 'Выпечки'),
-            _OrderCatalogCategoriesItem(label: 'Кофе'),
-            _OrderCatalogCategoriesItem(label: 'Напитки'),
-            _OrderCatalogCategoriesItem(label: 'Десерт'),
-            _OrderCatalogCategoriesItem(label: 'Разное'),
-            _OrderCatalogCategoriesItem(label: 'На день рождение'),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 12,
+                  children:
+                      [_OrderCatalogCategoriesItem(null)] +
+                      state.pinnedCategories.map((category) {
+                        return _OrderCatalogCategoriesItem(category);
+                      }).toList(),
+                ),
+              ),
+            ),
+            FButton.icon(onPress: () {}, child: Icon(FIcons.settings2)),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
 class _OrderCatalogCategoriesItem extends StatelessWidget {
-  const _OrderCatalogCategoriesItem({required this.label});
+  const _OrderCatalogCategoriesItem(this.category);
 
-  final String label;
+  final CategoryScheme? category;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-      decoration: BoxDecoration(
-        color: theme.custom.muted,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Text(label),
+    return ValueListenableBuilder(
+      valueListenable: selectedCategory,
+      builder: (context, value, child) {
+        final selected = selectedCategory.value?.refKey == category?.refKey;
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              selectedCategory.value = category;
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+              decoration: BoxDecoration(
+                color: selected ? theme.custom.primary : theme.custom.muted,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                spacing: 4,
+                children: [
+                  if (category == null)
+                    Icon(
+                      FluentIcons.list_24_regular,
+                      size: 16,
+                      color: selected
+                          ? theme.custom.primaryForeground
+                          : theme.custom.foreground,
+                    ),
+                  Text(
+                    category?.name ?? 'Все',
+                    style: TextStyle(
+                      color: selected
+                          ? theme.custom.primaryForeground
+                          : theme.custom.foreground,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

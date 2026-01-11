@@ -37,29 +37,29 @@ class CategoriesCubit extends HydratedCubit<CategoriesState> {
     }
   }
 
-  void select(CategoryScheme category) {
-    final List<String> selected = List.from(state.selected);
-    final selectedCategory = selected.firstWhereLogTypeOrNull(
+  void pin(CategoryScheme category) {
+    final List<String> pinned = List.from(state.pinned);
+    final pinnedCategory = pinned.firstWhereLogTypeOrNull(
       (i) => i == category.refKey,
     );
-    if (selectedCategory != null) return;
+    if (pinnedCategory != null) return;
 
-    selected.add(category.refKey);
+    pinned.add(category.refKey);
 
-    final newState = state.copyWith(selected: selected);
+    final newState = state.copyWith(pinned: pinned);
     emit(CategoriesUpdate(newState));
   }
 
-  void unselect(CategoryScheme category) {
-    final List<String> selected = List.from(state.selected);
-    final selectedCategory = selected.firstWhereLogTypeOrNull(
+  void unpin(CategoryScheme category) {
+    final List<String> pinned = List.from(state.pinned);
+    final pinnedCategory = pinned.firstWhereLogTypeOrNull(
       (i) => i == category.refKey,
     );
-    if (selectedCategory == null) return;
+    if (pinnedCategory == null) return;
 
-    selected.remove(category.refKey);
+    pinned.remove(category.refKey);
 
-    final newState = state.copyWith(selected: selected);
+    final newState = state.copyWith(pinned: pinned);
     emit(CategoriesUpdate(newState));
   }
 

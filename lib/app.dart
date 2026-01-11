@@ -21,9 +21,11 @@ class _AppScreenState extends State<AppScreen> {
 
   final usersCubit = UsersCubit();
   final authCubit = AuthCubit();
+  final categoriesCubit = CategoriesCubit();
 
   Future initCubits() async {
     await usersCubit.update();
+    await categoriesCubit.update();
   }
 
   @override
@@ -44,6 +46,7 @@ class _AppScreenState extends State<AppScreen> {
           child: MultiBlocProvider(
             providers: [
               BlocProvider.value(value: usersCubit),
+               BlocProvider.value(value: categoriesCubit),
               BlocProvider.value(value: authCubit),
             ],
             child: MaterialApp.router(
