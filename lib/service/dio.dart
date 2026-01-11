@@ -5,18 +5,17 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 class DioConfigure {
   static String url = dotenv.env['API']!;
+  static String authorization = dotenv.env['authorization']!;
 
   static Dio init({Talker? talker}) {
-    final dio = Dio();
-    dio.options.baseUrl = url;
+    final dio = Dio(
+      BaseOptions(baseUrl: url, headers: {'Authorization': authorization}),
+    );
     dio.interceptors.add(
       TalkerDioLogger(
         settings: const TalkerDioLoggerSettings(printResponseData: false),
         talker: talker,
       ),
-    );
-    dio.interceptors.add(
-      InterceptorsWrapper(onRequest: (options, handler) async {}),
     );
     return dio;
   }
