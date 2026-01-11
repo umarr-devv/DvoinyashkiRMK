@@ -12,7 +12,13 @@ UsersState _$UsersStateFromJson(Map<String, dynamic> json) => UsersState(
           ?.map((e) => UserScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  update: json['update'] == null
+      ? null
+      : DateTime.parse(json['update'] as String),
 );
 
 Map<String, dynamic> _$UsersStateToJson(UsersState instance) =>
-    <String, dynamic>{'users': instance.users};
+    <String, dynamic>{
+      'users': instance.users,
+      'update': instance.update?.toIso8601String(),
+    };

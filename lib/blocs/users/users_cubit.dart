@@ -16,14 +16,19 @@ class UsersCubit extends HydratedCubit<UsersState> {
   final talker = GetIt.I<Talker>();
 
   Future update() async {
-    await forceUpdate();
+    if (state.update == null || DateTime.now().difference(state.update!) > Duration(minutes: 30)){
+      await forceUpdate();
+    }
   }
 
   Future forceUpdate() async {
     emit(UsersLoading(state));
     try {
       final response = await client.getUsers();
-      final newState = state.copyWith(response.users);
+      final newState = state.copyWith(
+        users: response.users,
+        update: DateTime.now(),
+      );
       emit(UsersLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
