@@ -1,9 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:app/blocs/auth/auth_cubit.dart';
 import 'package:app/core/router/router.dart';
+import 'package:app/features/menu/dialogs/dialogs.dart';
+import 'package:app/models/user.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
 class MenuNavBar extends StatelessWidget {
@@ -181,93 +187,125 @@ class _MenuNavBarUser extends StatelessWidget {
         );
       },
       builder: (context, controller, child) {
-        return Row(
-          spacing: 12,
-          children: [
-            FAvatar.raw(child: Icon(FluentIcons.person_24_regular)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Иван Генадьев',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: theme.custom.foreground,
+        return BlocConsumer<AuthCubit, AuthState>(
+          bloc: BlocProvider.of<AuthCubit>(context),
+          listener: (context, state) {
+            if (state is AuthLoggedOut) {
+              AutoRouter.of(context).replace(AuthRoute());
+            }
+          },
+          builder: (context, state) {
+            if (state.user != null) {
+              final user = state.user!;
+              return Row(
+                spacing: 12,
+                children: [
+                  _UserAvatar(user: user),
+                  _UserInfo(user: user),
+                  FButton.icon(
+                    onPress: controller.toggle,
+                    style: FButtonStyle.ghost(),
+                    child: Icon(
+                      FluentIcons.more_horizontal_24_filled,
+                      size: 24,
+                    ),
                   ),
-                ),
-                Text(
-                  'Кассир',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: theme.custom.mutedForeground,
-                  ),
-                ),
-              ],
-            ),
-            FButton.icon(
-              onPress: controller.toggle,
-              style: FButtonStyle.ghost(),
-              child: Icon(FluentIcons.more_horizontal_24_filled, size: 24),
-            ),
-
-            ThemeSwitcher(
-              builder: (context) {
-                final isDarkTheme = theme.brightness == Brightness.dark;
-                return FButton.icon(
-                  onPress: () {
-                    ThemeSwitcher.of(context).changeTheme(
-                      theme: isDarkTheme
-                          ? lightTheme.toTheme()
-                          : darkTheme.toTheme(),
-                      isReversed: !isDarkTheme,
-                    );
-                  },
-                  child: Icon(
-                    isDarkTheme
-                        ? FluentIcons.weather_moon_24_filled
-                        : FluentIcons.weather_sunny_24_filled,
-                  ),
-                );
-              },
-            ),
-          ],
+                  _ThemeSwitchButton(),
+                ],
+              );
+            } else {
+              return SizedBox();
+            }
+          },
         );
       },
     );
   }
 }
 
-class LogoutDialog {
-  void show(BuildContext context) {
-    showFDialog(
-      context: context,
-      builder: (context, style, animation) {
-        return FDialog(
-          direction: Axis.horizontal,
-          title: Text('Вы хотите выйти из своей учетной записи?'),
-          body: Text(
-            'Некоторые действия могут быть прерваны из-за выхода из учетной системы',
+class _ThemeSwitchButton extends StatelessWidget {
+  const _ThemeSwitchButton();
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ThemeSwitcher(
+      builder: (context) {
+        final isDarkTheme = theme.brightness == Brightness.dark;
+        return FButton.icon(
+          onPress: () {
+            ThemeSwitcher.of(context).changeTheme(
+              theme: isDarkTheme ? lightTheme.toTheme() : darkTheme.toTheme(),
+              isReversed: !isDarkTheme,
+            );
+          },
+          child: Icon(
+            isDarkTheme
+                ? FluentIcons.weather_moon_24_filled
+                : FluentIcons.weather_sunny_24_filled,
           ),
-          actions: [
-            FButton(
-              onPress: () {
-                AutoRouter.of(context).maybePop();
-              },
-              style: FButtonStyle.outline(),
-              child: Text('Отмена'),
-            ),
-            FButton(
-              onPress: () {
-                AutoRouter.of(context).replace(AuthRoute());
-              },
-              style: FButtonStyle.destructive(),
-              child: Text('Выйти'),
-            ),
-          ],
         );
       },
+    );
+  }
+}
+
+class _UserInfo extends StatelessWidget {
+  const _UserInfo({required this.user});
+
+  final DetailUserScheme user;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          user.description,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: theme.custom.foreground,
+          ),
+        ),
+        if (user.jobTitle?.isNotEmpty ?? false)
+          Text(
+            user.jobTitle!,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: theme.custom.mutedForeground,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _UserAvatar extends StatefulWidget {
+  const _UserAvatar({required this.user});
+
+  final DetailUserScheme user;
+
+  @override
+  State<_UserAvatar> createState() => _UserAvatarState();
+}
+
+class _UserAvatarState extends State<_UserAvatar> {
+  Uint8List? imageBytes;
+
+  @override
+  void initState() {
+    imageBytes = widget.user.imageBytes;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FAvatar.raw(
+      child: imageBytes?.isNotEmpty ?? false
+          ? Image.memory(imageBytes!, fit: BoxFit.cover, height: 48, width: 48)
+          : Icon(FluentIcons.person_24_regular),
     );
   }
 }
