@@ -31,53 +31,9 @@ class _AuthFormState extends State<AuthForm> {
           children: [
             _AuthFormUserSelect(user),
             _AuthFormUserPassword(password),
-            FButton(
-              onPress: () {
-                if (formKey.currentState?.validate() ?? false) {}
-                // AutoRouter.of(context).replace(MenuRoute());
-              },
-              child: Text('Войти'),
-            ),
+            _AuthFormSubmit(formKey: formKey, user: user, password: password),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _AuthFormUserPassword extends StatelessWidget {
-  const _AuthFormUserPassword(this.password);
-
-  final ValueNotifier<String> password;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      child: FTextFormField.password(
-        label: Row(
-          spacing: 6,
-          children: [
-            Icon(
-              FluentIcons.key_20_filled,
-              size: 20,
-              color: theme.custom.foreground,
-            ),
-            Text('Пароль'),
-          ],
-        ),
-        onSaved: (value) {
-          if (value != null) {
-            password.value = value;
-          }
-        },
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Необходимо ввести пароль';
-          }
-          return null;
-        },
-        hint: 'Введите пароль',
       ),
     );
   }
@@ -90,10 +46,27 @@ class _AuthFormUserSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<UsersCubit, UsersState>(
       bloc: BlocProvider.of<UsersCubit>(context),
       builder: (context, state) {
         return FSelect<UserScheme>.searchBuilder(
+          label: Row(
+            spacing: 4,
+            children: [
+              Icon(
+                FluentIcons.person_24_regular,
+                size: 18,
+                color: theme.custom.foreground,
+              ),
+              Text('Сотрудник'),
+            ],
+          ),
+          control: FSelectControl.managed(
+            onChange: (value) {
+              user.value = value;
+            },
+          ),
           validator: (value) {
             if (value == null) {
               return 'Необходимо выбрать сотрудика';
@@ -109,7 +82,7 @@ class _AuthFormUserSelect extends StatelessWidget {
                   (value) =>
                       FSelectItem(title: Text(value.description), value: value),
                 )
-                .take(5)
+                .take(10)
                 .toList();
           },
           format: (value) => value.description,
@@ -140,6 +113,101 @@ class _AuthFormUserSelect extends StatelessWidget {
               );
             }
           },
+        );
+      },
+    );
+  }
+}
+
+class _AuthFormUserPassword extends StatelessWidget {
+  const _AuthFormUserPassword(this.password);
+
+  final ValueNotifier<String> password;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      child: FTextFormField.password(
+        control: FTextFieldControl.managed(
+          onChange: (value) {
+            password.value = value.text;
+          },
+        ),
+        label: Row(
+          spacing: 4,
+          children: [
+            Icon(
+              FluentIcons.key_24_regular,
+              size: 18,
+              color: theme.custom.foreground,
+            ),
+            Text('Пароль'),
+          ],
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Необходимо ввести пароль';
+          }
+          return null;
+        },
+        hint: 'Введите пароль',
+      ),
+    );
+  }
+}
+
+class _AuthFormSubmit extends StatelessWidget {
+  const _AuthFormSubmit({
+    required this.formKey,
+    required this.user,
+    required this.password,
+  });
+
+  final GlobalKey<FormState> formKey;
+  final ValueNotifier<UserScheme?> user;
+  final ValueNotifier<String?> password;
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<AuthCubit>(context);
+    final theme = Theme.of(context);
+    return BlocBuilder<AuthCubit, AuthState>(
+      bloc: cubit,
+      builder: (context, state) {
+        return Column(
+          spacing: 8,
+          children: [
+            if (state is AuthInvalidPassword)
+              Text(
+                'Неправильный пароль',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: theme.custom.destructiveTextForeground,
+                ),
+              ),
+            if (state is AuthFailure)
+              Text(
+                'Произашла сетевая ошибка',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: theme.custom.destructiveTextForeground,
+                ),
+              ),
+            FButton(
+              onPress: () {
+                if ((formKey.currentState?.validate() ?? false) &&
+                    (user.value != null) &&
+                    (password.value?.isNotEmpty ?? false)) {
+                  cubit.login(user: user.value!, password: password.value!);
+                }
+              },
+              prefix: state is AuthLoading ? null : Icon(FIcons.logIn),
+              child: state is AuthLoading ? FCircularProgress() : Text('Войти'),
+            ),
+          ],
         );
       },
     );
