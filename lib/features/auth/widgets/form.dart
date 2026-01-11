@@ -5,6 +5,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:talker/talker.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key});
@@ -50,68 +51,86 @@ class _AuthFormUserSelect extends StatelessWidget {
     return BlocBuilder<UsersCubit, UsersState>(
       bloc: BlocProvider.of<UsersCubit>(context),
       builder: (context, state) {
-        return FSelect<UserScheme>.searchBuilder(
-          label: Row(
-            spacing: 4,
-            children: [
-              Icon(
-                FluentIcons.person_24_regular,
-                size: 18,
-                color: theme.custom.foreground,
+        return BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, authState) {
+            return FSelect<UserScheme>.searchBuilder(
+              label: Row(
+                spacing: 4,
+                children: [
+                  Icon(
+                    FluentIcons.person_24_regular,
+                    size: 18,
+                    color: theme.custom.foreground,
+                  ),
+                  Text('Сотрудник'),
+                ],
               ),
-              Text('Сотрудник'),
-            ],
-          ),
-          control: FSelectControl.managed(
-            onChange: (value) {
-              user.value = value;
-            },
-          ),
-          validator: (value) {
-            if (value == null) {
-              return 'Необходимо выбрать сотрудика';
-            }
-            return null;
-          },
-          onSaved: (value) {
-            user.value = value;
-          },
-          contentBuilder: (context, query, values) {
-            return values
-                .map(
-                  (value) =>
-                      FSelectItem(title: Text(value.description), value: value),
-                )
-                .take(10)
-                .toList();
-          },
-          format: (value) => value.description,
-          filter: (query) {
-            if (query.isNotEmpty) {
-              return state.users
-                  .where(
-                    (user) => user.description.toLowerCase().contains(
-                      query.toLowerCase(),
-                    ),
-                  )
-                  .toList();
-            }
-            return [];
-          },
-          hint: 'Выберите сотрудника',
-          searchFieldProperties: FSelectSearchFieldProperties(hint: 'Поиск'),
-          contentEmptyBuilder: (context, style) {
-            if (state is UsersLoading) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: FCircularProgress(),
-              );
-            } else {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text('Ничего не найдено'),
-              );
-            }
+              control: FSelectControl.managed(
+                onChange: (value) {
+                  user.value = value;
+                },
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Необходимо выбрать сотрудика';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                user.value = value;
+              },
+              contentBuilder: (context, query, values) {
+                return values
+                    .map((value) {
+                      final lastUser = authState.lastUsers
+                          .firstWhereLogTypeOrNull(
+                            (i) => i.refKey == value.refKey,
+                          );
+                      return FSelectItem(
+                        title: Text(value.description),
+                        prefix: lastUser != null
+                            ? Icon(
+                                FluentIcons.star_24_filled,
+                                color: theme.custom.secondaryAccent,
+                              )
+                            : null,
+                        value: value,
+                      );
+                    })
+                    .take(10)
+                    .toList();
+              },
+              format: (value) => value.description,
+              filter: (query) {
+                if (query.isNotEmpty) {
+                  return state.users
+                      .where(
+                        (user) => user.description.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ),
+                      )
+                      .toList();
+                }
+                return authState.lastUsers;
+              },
+              hint: 'Выберите сотрудника',
+              searchFieldProperties: FSelectSearchFieldProperties(
+                hint: 'Поиск',
+              ),
+              contentEmptyBuilder: (context, style) {
+                if (state is UsersLoading) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: FCircularProgress(),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text('Ничего не найдено'),
+                  );
+                }
+              },
+            );
           },
         );
       },
