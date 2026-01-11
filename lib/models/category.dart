@@ -21,10 +21,10 @@ class CategoryScheme {
 
 @JsonSerializable()
 class CategoryListScheme {
-  CategoryListScheme({required this.users});
+  CategoryListScheme({required this.categories});
 
   @JsonKey(name: 'value')
-  final List<CategoryScheme> users;
+  final List<CategoryScheme> categories;
 
   factory CategoryListScheme.fromJson(Map<String, dynamic> json) =>
       _$CategoryListSchemeFromJson(json);

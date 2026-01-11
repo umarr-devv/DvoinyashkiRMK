@@ -17,10 +17,10 @@ Map<String, dynamic> _$CategorySchemeToJson(CategoryScheme instance) =>
 
 CategoryListScheme _$CategoryListSchemeFromJson(Map<String, dynamic> json) =>
     CategoryListScheme(
-      users: (json['value'] as List<dynamic>)
+      categories: (json['value'] as List<dynamic>)
           .map((e) => CategoryScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$CategoryListSchemeToJson(CategoryListScheme instance) =>
-    <String, dynamic>{'value': instance.users};
+    <String, dynamic>{'value': instance.categories};
