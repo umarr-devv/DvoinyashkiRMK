@@ -1,8 +1,10 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/utils/sctoll.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -17,6 +19,18 @@ class AppScreen extends StatefulWidget {
 class _AppScreenState extends State<AppScreen> {
   final appRoute = AppRouter();
 
+  final usersCubit = UsersCubit();
+
+  Future initCubits() async {
+    await usersCubit.update();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initCubits();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
@@ -26,15 +40,18 @@ class _AppScreenState extends State<AppScreen> {
           data: theme.brightness == Brightness.dark
               ? darkTheme.toFTheme()
               : lightTheme.toFTheme(),
-          child: MaterialApp.router(
-            title: 'Dvoinyashki RMK',
-            theme: theme,
-            debugShowCheckedModeBanner: false,
-            scrollBehavior: CustomScrollBehavior(),
-            routerConfig: appRoute.config(
-              navigatorObservers: () => [
-                TalkerRouteObserver(GetIt.I<Talker>()),
-              ],
+          child: MultiBlocProvider(
+            providers: [BlocProvider.value(value: usersCubit)],
+            child: MaterialApp.router(
+              title: 'Dvoinyashki RMK',
+              theme: theme,
+              debugShowCheckedModeBanner: false,
+              scrollBehavior: CustomScrollBehavior(),
+              routerConfig: appRoute.config(
+                navigatorObservers: () => [
+                  TalkerRouteObserver(GetIt.I<Talker>()),
+                ],
+              ),
             ),
           ),
         );

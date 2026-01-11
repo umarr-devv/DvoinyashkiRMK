@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/app.dart';
+import 'package:app/client/client.dart';
 import 'package:app/data/repositories/repositories.dart';
 import 'package:app/service/service.dart';
 import 'package:dio/dio.dart';
@@ -41,6 +42,11 @@ Future initDependencies() async {
 
   GetIt.I.registerSingleton<SecureStorage>(secureStorage);
   GetIt.I.registerSingleton<GeneralStorage>(generalStorage);
+
+  final client = RestClient(dio);
+  GetIt.I.registerSingleton<RestClient>(client);
+
+  await HyratedStorageService.init();
 
   await windowManager.ensureInitialized();
 
