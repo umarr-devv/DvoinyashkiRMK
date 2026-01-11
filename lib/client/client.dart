@@ -14,4 +14,13 @@ abstract class RestClient {
     @Query('\$select') String select = 'Ref_Key,Description,ИНН,ШтрихКод',
     @Query('\$format') String format = 'json',
   });
+
+  @GET('/Catalog_Сотрудники(guid\'{ref_key}\')')
+  Future<DetailUserScheme> getUser({
+    @Path('ref_key') required String refKey,
+    @Query('\$select')
+    String select =
+        'Ref_Key,Description,ИНН,ШтрихКод,ДолжностьОбмен,ПодразделениеОбмен,Фотография_Base64Data',
+    @Query('\$format') String format = 'json',
+  });
 }
