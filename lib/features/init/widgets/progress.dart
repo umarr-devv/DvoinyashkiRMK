@@ -1,0 +1,50 @@
+import 'package:app/shared/icons/icons.dart';
+import 'package:app/shared/theme/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
+
+class InitProgress extends StatelessWidget {
+  const InitProgress({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      child: Column(
+        spacing: 12,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            spacing: 16,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomIcons.invert_icon(size: 64),
+              Transform.translate(
+                offset: Offset(0, 6),
+                child: CustomIcons.logo(
+                  size: 48,
+                  color: theme.custom.foreground,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 320,
+            child: FProgress(
+              style: (style) => style.copyWith(
+                fillDecoration: BoxDecoration(
+                  color: theme.custom.accent,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                trackDecoration: BoxDecoration(
+                  color: theme.custom.muted,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
