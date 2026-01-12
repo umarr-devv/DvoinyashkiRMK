@@ -12,8 +12,6 @@ class PriceTypeScheme {
   @JsonKey(name: 'Description')
   final String description;
 
-
-
   factory PriceTypeScheme.fromJson(Map<String, dynamic> json) =>
       _$PriceTypeSchemeFromJson(json);
 

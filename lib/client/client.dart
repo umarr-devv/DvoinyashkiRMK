@@ -29,4 +29,40 @@ abstract class RestClient {
     @Query('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });
+
+  @GET('/Catalog_Номенклатура')
+  Future<NomenclatureListScheme> getNomenclatures({
+    @Query('\$select')
+    String select =
+        'Ref_Key,Description,НаименованиеПолное,ИспользоватьХарактеристики',
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/Catalog_ХарактеристикиНоменклатуры')
+  Future<CharacteristicListScheme> getCharacteristics({
+    @Query('\$select')
+    String select = 'Ref_Key,Description,НаименованиеДляПечатии',
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/InformationRegister_ЦеныНоменклатуры')
+  Future<PriceListScheme> getPrices({
+    @Query('\$select')
+    String select =
+        'Period,ВидЦен_Key,Номенклатура_Key,Характеристика_Key,Цена',
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/Catalog_ВидыЦен')
+  Future<PriceTypeListScheme> getPriceTypes({
+    @Query('\$select') String select = 'Ref_Key,Description',
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/InformationRegister_ШтрихкодыНоменклатуры')
+  Future<BarcodeListScheme> getBarcodes({
+    @Query('\$select')
+    String select = 'Штрихкод,Номенклатура_Key,Характеристика_Key',
+    @Query('\$format') String format = 'json',
+  });
 }
