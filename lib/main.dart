@@ -58,5 +58,6 @@ Future initDependencies() async {
   windowManager.waitUntilReadyToShow(windowsOptions, () async {
     await windowManager.show();
     await windowManager.focus();
+    await windowManager.maximize();
   });
 }
