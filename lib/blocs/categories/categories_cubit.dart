@@ -63,6 +63,11 @@ class CategoriesCubit extends HydratedCubit<CategoriesState> {
     emit(CategoriesUpdate(newState));
   }
 
+  void switchShowEmpty() {
+    final newState = state.copyWith(showEmpty: !state.showEmpty);
+    emit(CategoriesUpdate(newState));
+  }
+
   @override
   CategoriesState? fromJson(Map<String, dynamic> json) {
     return CategoriesState.fromJson(json);

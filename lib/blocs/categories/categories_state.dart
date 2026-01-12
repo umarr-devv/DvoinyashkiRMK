@@ -5,31 +5,31 @@ class CategoriesState extends Equatable {
   const CategoriesState({
     this.categories = const [],
     this.pinned = const [],
+    this.showEmpty = true,
     this.update,
   });
 
   final List<CategoryScheme> categories;
   final List<String> pinned;
+  final bool showEmpty;
   final DateTime? update;
 
   List<CategoryScheme> get pinnedCategories {
-    if (pinned.isEmpty) {
-      return categories;
-    } else {
-      return categories
-          .where((category) => pinned.contains(category.refKey))
-          .toList();
-    }
+    return categories
+        .where((category) => pinned.contains(category.refKey))
+        .toList();
   }
 
   CategoriesState copyWith({
     List<CategoryScheme>? categories,
     List<String>? pinned,
+    bool? showEmpty,
     DateTime? update,
   }) {
     return CategoriesState(
       categories: categories ?? this.categories,
       pinned: pinned ?? this.pinned,
+      showEmpty: showEmpty ?? this.showEmpty,
       update: update ?? this.update,
     );
   }
@@ -37,6 +37,7 @@ class CategoriesState extends Equatable {
   CategoriesState.from(CategoriesState other)
     : categories = other.categories,
       pinned = other.pinned,
+      showEmpty = other.showEmpty,
       update = other.update;
 
   factory CategoriesState.fromJson(Map<String, dynamic> json) =>
@@ -45,7 +46,7 @@ class CategoriesState extends Equatable {
   Map<String, dynamic> toJson() => _$CategoriesStateToJson(this);
 
   @override
-  List<Object?> get props => [categories, pinned, update];
+  List<Object?> get props => [categories, pinned, update, showEmpty];
 }
 
 final class CategoriesInitial extends CategoriesState {}

@@ -1,5 +1,6 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/blocs/blocs.dart';
+import 'package:app/blocs/product_images/product_images_cubit.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/utils/scroll.dart';
@@ -24,11 +25,13 @@ class _AppScreenState extends State<AppScreen> {
   final categoriesCubit = CategoriesCubit();
   final productsCubit = ProductsCubit();
   final favoritesCubit = FavoritesCubit();
+  final productImagesCubit = ProductImagesCubit();
 
   Future initCubits() async {
     await usersCubit.update();
     await categoriesCubit.update();
     await productsCubit.update();
+    await productImagesCubit.update();
   }
 
   @override
@@ -53,6 +56,7 @@ class _AppScreenState extends State<AppScreen> {
               BlocProvider.value(value: productsCubit),
               BlocProvider.value(value: authCubit),
               BlocProvider.value(value: favoritesCubit),
+              BlocProvider.value(value: productImagesCubit),
             ],
             child: MaterialApp.router(
               title: 'Dvoinyashki RMK',

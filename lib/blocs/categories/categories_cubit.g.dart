@@ -18,6 +18,7 @@ CategoriesState _$CategoriesStateFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      showEmpty: json['show_empty'] as bool? ?? true,
       update: json['update'] == null
           ? null
           : DateTime.parse(json['update'] as String),
@@ -27,5 +28,6 @@ Map<String, dynamic> _$CategoriesStateToJson(CategoriesState instance) =>
     <String, dynamic>{
       'categories': instance.categories,
       'pinned': instance.pinned,
+      'show_empty': instance.showEmpty,
       'update': instance.update?.toIso8601String(),
     };

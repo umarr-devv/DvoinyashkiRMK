@@ -56,33 +56,51 @@ class PinnedCategoriesDialog {
       builder: (context, state) {
         return SingleChildScrollView(
           child: Column(
-            children: state.categories.map((category) {
-              return categoriesListItem(category, cubit);
-            }).toList(),
+            children:
+                [categoriesListItem(null, state.showEmpty, cubit)] +
+                state.categories.map((category) {
+                  return categoriesListItem(category, null, cubit);
+                }).toList(),
           ),
         );
       },
     );
   }
 
-  Widget categoriesListItem(CategoryScheme category, CategoriesCubit cubit) {
-    final pinned = cubit.state.pinned.contains(category.refKey);
+  Widget categoriesListItem(
+    CategoryScheme? category,
+    bool? showEmpty,
+    CategoriesCubit cubit,
+  ) {
+    final pinned =
+        cubit.state.pinned.contains(category?.refKey) || (showEmpty ?? false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(category.name),
+        Row(
+          spacing: 4,
+          children: [
+            if (category == null) Icon(Icons.close),
+            Text(category?.name ?? 'Без категорий'),
+          ],
+        ),
         Expanded(child: CustomDottedLine()),
         Transform.scale(
           scale: 0.75,
           child: FSwitch(
             value: pinned,
             onChange: (value) {
-              if (pinned) {
-                cubit.unpin(category);
+              if (category != null) {
+                if (pinned) {
+                  cubit.unpin(category);
+                } else {
+                  cubit.pin(category);
+                }
               } else {
-                cubit.pin(category);
+                cubit.switchShowEmpty();
               }
+
               selectedCategory.value = defaultSelectedCategory;
             },
           ),

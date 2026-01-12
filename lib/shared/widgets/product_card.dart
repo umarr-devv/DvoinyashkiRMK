@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:app/blocs/blocs.dart';
+import 'package:app/blocs/product_images/product_images_cubit.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -6,6 +9,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:talker/talker.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -28,7 +32,7 @@ class ProductCard extends StatelessWidget {
             flex: 5,
             child: Stack(
               children: [
-                _ProductCardImage(),
+                _ProductCardImage(nomenclature),
                 Align(
                   alignment: Alignment.topRight,
                   child: _ProductCatdFavoriteButton(nomenclature),
@@ -62,21 +66,50 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-class _ProductCardImage extends StatelessWidget {
-  const _ProductCardImage();
+class _ProductCardImage extends StatefulWidget {
+  const _ProductCardImage(this.nomenclature);
+
+  final NomenclatureScheme nomenclature;
+
+  @override
+  State<_ProductCardImage> createState() => _ProductCardImageState();
+}
+
+class _ProductCardImageState extends State<_ProductCardImage> {
+  Uint8List? imageBytes;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: theme.custom.muted,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Icon(FIcons.image, size: 64, color: theme.custom.mutedForeground),
+    return BlocBuilder<ProductImagesCubit, ProductImagesState>(
+      bloc: BlocProvider.of<ProductImagesCubit>(context),
+      builder: (context, state) {
+        imageBytes = state.images
+            .firstWhereLogTypeOrNull(
+              (i) => i.nomenclatureKey == widget.nomenclature.refKey,
+            )
+            ?.imageBytes;
+        return GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            margin: const EdgeInsets.all(8),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: theme.custom.muted,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: imageBytes != null
+                ? Image.memory(imageBytes!, fit: BoxFit.cover)
+                : Icon(
+                    FIcons.image,
+                    size: 64,
+                    color: theme.custom.mutedForeground,
+                  ),
+          ),
+        );
+      },
     );
   }
 }

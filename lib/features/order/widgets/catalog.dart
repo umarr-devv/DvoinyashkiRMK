@@ -76,6 +76,8 @@ class _OrderCatalogCategories extends StatelessWidget {
                         _OrderCatalogCategoriesItem(
                           SelectedCategoryData(favorite: true),
                         ),
+                        if (state.showEmpty)
+                        _OrderCatalogCategoriesItem(SelectedCategoryData()),
                       ] +
                       state.pinnedCategories.map((category) {
                         return _OrderCatalogCategoriesItem(
@@ -125,11 +127,13 @@ class _OrderCatalogCategoriesItem extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  if (data.category == null)
+                  if (data.category == null || data.all || data.favorite)
                     Icon(
                       data.all
                           ? FluentIcons.list_24_regular
-                          : FluentIcons.star_24_regular,
+                          : data.favorite
+                          ? FluentIcons.star_24_regular
+                          : Icons.close,
                       size: 14,
                       color: selected
                           ? theme.custom.primaryForeground
@@ -140,7 +144,7 @@ class _OrderCatalogCategoriesItem extends StatelessWidget {
                         ? 'Все'
                         : data.favorite
                         ? 'Избраные'
-                        : data.category?.name ?? '',
+                        : data.category?.name ?? 'Без категории',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: selected
