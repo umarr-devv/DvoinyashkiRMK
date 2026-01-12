@@ -12,6 +12,10 @@ class SelectedCategoryData {
   final bool favorite;
 }
 
-final defaultSelectedCategory = SelectedCategoryData(all: true);
+final allSelectedCategory = SelectedCategoryData(all: true);
 
-final selectedCategory = ValueNotifier<SelectedCategoryData>(defaultSelectedCategory);
+final favoriteSelectedCategory = SelectedCategoryData(favorite: true);
+
+final selectedCategory = ValueNotifier<SelectedCategoryData>(
+  allSelectedCategory,
+);

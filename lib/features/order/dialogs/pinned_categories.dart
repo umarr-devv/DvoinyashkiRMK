@@ -101,7 +101,7 @@ class PinnedCategoriesDialog {
                 cubit.switchShowEmpty();
               }
 
-              selectedCategory.value = defaultSelectedCategory;
+              selectedCategory.value = favoriteSelectedCategory;
             },
           ),
         ),

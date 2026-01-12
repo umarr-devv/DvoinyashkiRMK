@@ -72,12 +72,10 @@ class _OrderCatalogCategories extends StatelessWidget {
                   spacing: 12,
                   children:
                       [
-                        _OrderCatalogCategoriesItem(defaultSelectedCategory),
-                        _OrderCatalogCategoriesItem(
-                          SelectedCategoryData(favorite: true),
-                        ),
+                        _OrderCatalogCategoriesItem(allSelectedCategory),
+                        _OrderCatalogCategoriesItem(favoriteSelectedCategory),
                         if (state.showEmpty)
-                        _OrderCatalogCategoriesItem(SelectedCategoryData()),
+                          _OrderCatalogCategoriesItem(SelectedCategoryData()),
                       ] +
                       state.pinnedCategories.map((category) {
                         return _OrderCatalogCategoriesItem(
