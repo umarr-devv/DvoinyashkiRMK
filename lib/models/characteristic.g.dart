@@ -11,6 +11,7 @@ CharacteristicScheme _$CharacteristicSchemeFromJson(
 ) => CharacteristicScheme(
   refKey: json['Ref_Key'] as String,
   description: json['Description'] as String,
+  nomenclatureKey: json['Owner'] as String?,
   printName: json['НаименованиеДляПечати'] as String,
 );
 
@@ -19,6 +20,7 @@ Map<String, dynamic> _$CharacteristicSchemeToJson(
 ) => <String, dynamic>{
   'Ref_Key': instance.refKey,
   'Description': instance.description,
+  'Owner': instance.nomenclatureKey,
   'НаименованиеДляПечати': instance.printName,
 };
 

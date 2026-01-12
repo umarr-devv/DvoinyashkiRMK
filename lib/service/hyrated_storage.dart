@@ -4,10 +4,11 @@ import 'package:path_provider/path_provider.dart';
 
 class HyratedStorageService {
   static Future init() async {
-    HydratedBloc.storage = await HydratedStorage.build(
+    final storage = await HydratedStorage.build(
       storageDirectory: kIsWeb
           ? HydratedStorageDirectory.web
           : HydratedStorageDirectory((await getTemporaryDirectory()).path),
     );
+    HydratedBloc.storage = storage;
   }
 }

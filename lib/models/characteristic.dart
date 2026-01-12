@@ -7,6 +7,7 @@ class CharacteristicScheme {
   CharacteristicScheme({
     required this.refKey,
     required this.description,
+    required this.nomenclatureKey,
     required this.printName,
   });
 
@@ -15,6 +16,9 @@ class CharacteristicScheme {
 
   @JsonKey(name: 'Description')
   final String description;
+
+  @JsonKey(name: 'Owner')
+  final String? nomenclatureKey;
 
   @JsonKey(name: 'НаименованиеДляПечати')
   final String printName;
