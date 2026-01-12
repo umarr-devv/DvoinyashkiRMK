@@ -7,8 +7,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:talker/talker.dart';
 
 part 'products_cubit.g.dart';
-part 'products_utils.dart';
 part 'products_state.dart';
+part 'products_utils.dart';
 
 class ProductsCubit extends HydratedCubit<ProductsState> {
   ProductsCubit() : super(ProductsInitial());
