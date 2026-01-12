@@ -23,6 +23,7 @@ class _AppScreenState extends State<AppScreen> {
   final authCubit = AuthCubit();
   final categoriesCubit = CategoriesCubit();
   final productsCubit = ProductsCubit();
+  final favoritesCubit = FavoritesCubit();
 
   Future initCubits() async {
     await usersCubit.update();
@@ -51,6 +52,7 @@ class _AppScreenState extends State<AppScreen> {
               BlocProvider.value(value: categoriesCubit),
               BlocProvider.value(value: productsCubit),
               BlocProvider.value(value: authCubit),
+              BlocProvider.value(value: favoritesCubit),
             ],
             child: MaterialApp.router(
               title: 'Dvoinyashki RMK',
