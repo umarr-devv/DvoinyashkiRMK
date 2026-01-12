@@ -23,11 +23,11 @@ Map<String, dynamic> _$ProductImageSchemeToJson(ProductImageScheme instance) =>
 ProductImageListScheme _$ProductImageListSchemeFromJson(
   Map<String, dynamic> json,
 ) => ProductImageListScheme(
-  prices: (json['value'] as List<dynamic>)
+  productImages: (json['value'] as List<dynamic>)
       .map((e) => ProductImageScheme.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
 Map<String, dynamic> _$ProductImageListSchemeToJson(
   ProductImageListScheme instance,
-) => <String, dynamic>{'value': instance.prices};
+) => <String, dynamic>{'value': instance.productImages};

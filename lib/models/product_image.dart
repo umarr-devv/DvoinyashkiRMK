@@ -32,10 +32,10 @@ class ProductImageScheme {
 
 @JsonSerializable()
 class ProductImageListScheme {
-  ProductImageListScheme({required this.prices});
+  ProductImageListScheme({required this.productImages});
 
   @JsonKey(name: 'value')
-  final List<ProductImageScheme> prices;
+  final List<ProductImageScheme> productImages;
 
   factory ProductImageListScheme.fromJson(Map<String, dynamic> json) =>
       _$ProductImageListSchemeFromJson(json);
