@@ -65,4 +65,11 @@ abstract class RestClient {
     String select = 'Штрихкод,Номенклатура_Key,Характеристика_Key',
     @Query('\$format') String format = 'json',
   });
+
+    @GET('/Catalog_ТоварДляОбмена')
+  Future<ProductImageListScheme> getProductImages({
+    @Query('\$select')
+    String select = 'Номенклатура_Key,Характеристика_Key,Фотография_Base64Data',
+    @Query('\$format') String format = 'json',
+  });
 }
