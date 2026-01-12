@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:app/utils/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
@@ -53,16 +53,7 @@ class DetailUserScheme extends UserScheme {
   @JsonKey(name: 'Фотография_Base64Data')
   final String? image;
 
-  Uint8List? get imageBytes {
-    if (image == null || image!.isEmpty) return null;
-    try {
-      final cleanBase64 = image!.replaceAll(RegExp(r'\s+'), '');
-
-      return base64Decode(cleanBase64);
-    } catch (e) {
-      return null;
-    }
-  }
+  Uint8List? get imageBytes => stringToBytes(image);
 
   factory DetailUserScheme.fromJson(Map<String, dynamic> json) =>
       _$DetailUserSchemeFromJson(json);
