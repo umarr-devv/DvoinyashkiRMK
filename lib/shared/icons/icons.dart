@@ -5,10 +5,7 @@ import 'dart:ui';
 import 'package:flutter_svg/svg.dart';
 
 enum CustomIcons {
-  home,
-  search,
-  favorite,
-  settings,
+  som,
   logo,
   icon,
   invert_icon;

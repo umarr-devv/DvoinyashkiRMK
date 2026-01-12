@@ -88,10 +88,7 @@ flutter:
   assets:
     - ".env"
 
-    - "assets/svg/home.svg"
-    - "assets/svg/search.svg"
-    - "assets/svg/favorite.svg"
-    - "assets/svg/settings.svg"
+    - "assets/svg/som.svg"
     - "assets/svg/logo.svg"
     - "assets/svg/icon.svg"
     - "assets/svg/invert_icon.svg"
