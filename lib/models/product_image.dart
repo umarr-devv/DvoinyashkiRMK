@@ -11,7 +11,7 @@ class ProductImageScheme {
     required this.nomenclatureKey,
     required this.characteristicKey,
     required this.image,
-  });
+  }) : imageBytes = stringToBytes(image);
 
   @JsonKey(name: 'Номенклатура_Key')
   final String nomenclatureKey;
@@ -22,7 +22,8 @@ class ProductImageScheme {
   @JsonKey(name: 'Фотография_Base64Data')
   final String? image;
 
-  Uint8List? get imageBytes => stringToBytes(image);
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Uint8List? imageBytes;
 
   factory ProductImageScheme.fromJson(Map<String, dynamic> json) =>
       _$ProductImageSchemeFromJson(json);

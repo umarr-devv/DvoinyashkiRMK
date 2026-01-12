@@ -42,7 +42,7 @@ class DetailUserScheme extends UserScheme {
     required this.jobTitle,
     required this.department,
     required this.image,
-  });
+  }) : imageBytes = stringToBytes(image);
 
   @JsonKey(name: 'ДолжностьОбмен')
   final String? jobTitle;
@@ -53,7 +53,8 @@ class DetailUserScheme extends UserScheme {
   @JsonKey(name: 'Фотография_Base64Data')
   final String? image;
 
-  Uint8List? get imageBytes => stringToBytes(image);
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Uint8List? imageBytes;
 
   factory DetailUserScheme.fromJson(Map<String, dynamic> json) =>
       _$DetailUserSchemeFromJson(json);
