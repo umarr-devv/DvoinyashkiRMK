@@ -41,7 +41,7 @@ abstract class RestClient {
   @GET('/Catalog_ХарактеристикиНоменклатуры')
   Future<CharacteristicListScheme> getCharacteristics({
     @Query('\$select')
-    String select = 'Ref_Key,Description,НаименованиеДляПечатии',
+    String select = 'Ref_Key,Description,НаименованиеДляПечати',
     @Query('\$format') String format = 'json',
   });
 

@@ -9,9 +9,9 @@ part of 'nomenclature.dart';
 NomenclatureScheme _$NomenclatureSchemeFromJson(Map<String, dynamic> json) =>
     NomenclatureScheme(
       refKey: json['Ref_Key'] as String,
-      description: json['Description'] as String,
-      name: json['НаименованиеПолное'] as String,
-      useCharacteristic: json['ИспользоватьХарактеристики'] as bool,
+      description: json['Description'] as String?,
+      name: json['НаименованиеПолное'] as String?,
+      useCharacteristic: json['ИспользоватьХарактеристики'] as bool?,
     );
 
 Map<String, dynamic> _$NomenclatureSchemeToJson(NomenclatureScheme instance) =>

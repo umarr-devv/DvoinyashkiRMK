@@ -156,7 +156,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<CharacteristicListScheme> getCharacteristics({
-    String select = 'Ref_Key,Description,НаименованиеДляПечатии',
+    String select = 'Ref_Key,Description,НаименованиеДляПечати',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};

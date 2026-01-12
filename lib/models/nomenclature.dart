@@ -15,13 +15,13 @@ class NomenclatureScheme {
   final String refKey;
 
   @JsonKey(name: 'Description')
-  final String description;
+  final String? description;
 
   @JsonKey(name: 'НаименованиеПолное')
-  final String name;
+  final String? name;
 
   @JsonKey(name: 'ИспользоватьХарактеристики')
-  final bool useCharacteristic;
+  final bool? useCharacteristic;
 
   factory NomenclatureScheme.fromJson(Map<String, dynamic> json) =>
       _$NomenclatureSchemeFromJson(json);
