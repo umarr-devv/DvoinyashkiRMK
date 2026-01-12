@@ -1,4 +1,5 @@
 import 'package:app/client/client.dart';
+import 'package:app/core/consts/consts.dart';
 import 'package:app/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
@@ -16,7 +17,7 @@ class UsersCubit extends HydratedCubit<UsersState> {
   final talker = GetIt.I<Talker>();
 
   Future update() async {
-    if (state.update == null || DateTime.now().difference(state.update!) > Duration(minutes: 30)){
+    if (state.update == null || DateTime.now().difference(state.update!) > updateInterval){
       await forceUpdate();
     }
   }
