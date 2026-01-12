@@ -4,7 +4,7 @@ import 'package:app/features/order/states/category.dart';
 import 'package:app/features/order/states/favorite.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:app/shared/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -170,42 +170,48 @@ class _CatalogGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: (constraints.maxWidth / itemMinWidth).floor().clamp(
-              1,
-              10,
-            ),
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 0.75,
-          ),
-          itemBuilder: (context, index) {
-            return FCard(
-              image: CachedNetworkImage(
-                height: 96,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                imageUrl:
-                    'https://content3.flowwow-images.com/data/flowers/1000x1000/38/1720600418_7963038.jpg',
-              ),
-              title: Text('Торт'),
-              subtitle: Text('Обычный торт'),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [Text('720 сом')],
+    return BlocBuilder<ProductsCubit, ProductsState>(
+      bloc: BlocProvider.of<ProductsCubit>(context),
+      builder: (context, state) {
+        return ValueListenableBuilder(
+          valueListenable: selectedCategory,
+          builder: (context, value, child) {
+            final nomenclatures = state.nomenclatures
+                .where((i) => i.categoryKey == selectedCategory.value?.refKey)
+                .toList();
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: (constraints.maxWidth / itemMinWidth)
+                        .floor()
+                        .clamp(1, 10),
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 0.75,
                   ),
-                ],
-              ),
+                  itemBuilder: (context, index) {
+                    final nomenclature = nomenclatures[index];
+                    final prices = ProductsCubitUtils.getNomenclaturePrices(
+                      nomenclature: nomenclature,
+                      allPrices: state.prices,
+                    );
+                    final characteristics =
+                        ProductsCubitUtils.getNomenclatureCharacteristics(
+                          nomenclature: nomenclature,
+                          allCharacteristics: state.characteristics,
+                        );
+                    return ProductCard(
+                      nomenclature: nomenclatures[index],
+                      prices: prices,
+                      characteristics: characteristics,
+                    );
+                  },
+                  itemCount: nomenclatures.length,
+                );
+              },
             );
           },
-          itemCount: 64,
         );
       },
     );

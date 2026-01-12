@@ -1,6 +1,8 @@
 part of 'products_cubit.dart';
 
 class ProductsCubitUtils {
+  static const String mainPriceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c';
+
   static List<CharacteristicScheme> getNomenclatureCharacteristics({
     required NomenclatureScheme nomenclature,
     required List<CharacteristicScheme> allCharacteristics,
@@ -48,5 +50,11 @@ class ProductsCubitUtils {
     }
 
     return latestByType.values.toList();
+  }
+
+  static PriceScheme? getMainPrice(List<PriceScheme> prices) {
+    return prices.firstWhereLogTypeOrNull(
+      (i) => i.priceTypeKey == mainPriceTypeKey,
+    );
   }
 }
