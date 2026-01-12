@@ -11,6 +11,7 @@ NomenclatureScheme _$NomenclatureSchemeFromJson(Map<String, dynamic> json) =>
       refKey: json['Ref_Key'] as String,
       description: json['Description'] as String?,
       name: json['НаименованиеПолное'] as String?,
+      categoryKey: json['КатегорияНоменклатуры_Key'] as String?,
       useCharacteristic: json['ИспользоватьХарактеристики'] as bool?,
     );
 
@@ -19,6 +20,7 @@ Map<String, dynamic> _$NomenclatureSchemeToJson(NomenclatureScheme instance) =>
       'Ref_Key': instance.refKey,
       'Description': instance.description,
       'НаименованиеПолное': instance.name,
+      'КатегорияНоменклатуры_Key': instance.categoryKey,
       'ИспользоватьХарактеристики': instance.useCharacteristic,
     };
 

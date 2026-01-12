@@ -8,6 +8,7 @@ class NomenclatureScheme {
     required this.refKey,
     required this.description,
     required this.name,
+    required this.categoryKey,
     required this.useCharacteristic,
   });
 
@@ -19,6 +20,9 @@ class NomenclatureScheme {
 
   @JsonKey(name: 'НаименованиеПолное')
   final String? name;
+
+  @JsonKey(name: 'КатегорияНоменклатуры_Key')
+  final String? categoryKey;
 
   @JsonKey(name: 'ИспользоватьХарактеристики')
   final bool? useCharacteristic;

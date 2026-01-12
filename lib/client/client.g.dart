@@ -123,7 +123,7 @@ class _RestClient implements RestClient {
   @override
   Future<NomenclatureListScheme> getNomenclatures({
     String select =
-        'Ref_Key,Description,НаименованиеПолное,ИспользоватьХарактеристики',
+        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ИспользоватьХарактеристики',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
@@ -156,7 +156,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<CharacteristicListScheme> getCharacteristics({
-    String select = 'Ref_Key,Description,НаименованиеДляПечати',
+    String select = 'Ref_Key,Description,Owner,НаименованиеДляПечати',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};

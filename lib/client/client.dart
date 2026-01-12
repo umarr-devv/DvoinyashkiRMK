@@ -34,14 +34,14 @@ abstract class RestClient {
   Future<NomenclatureListScheme> getNomenclatures({
     @Query('\$select')
     String select =
-        'Ref_Key,Description,НаименованиеПолное,ИспользоватьХарактеристики',
+        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ИспользоватьХарактеристики',
     @Query('\$format') String format = 'json',
   });
 
   @GET('/Catalog_ХарактеристикиНоменклатуры')
   Future<CharacteristicListScheme> getCharacteristics({
     @Query('\$select')
-    String select = 'Ref_Key,Description,НаименованиеДляПечати',
+    String select = 'Ref_Key,Description,Owner,НаименованиеДляПечати',
     @Query('\$format') String format = 'json',
   });
 
