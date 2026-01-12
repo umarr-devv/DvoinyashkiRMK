@@ -38,19 +38,17 @@ class _OrderCatalogSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 320,
-      child: Expanded(
-        child: FTextField(
-          control: FTextFieldControl.managed(
-            onChange: (value) {
-              productSeachQuery.value = value.text;
-            },
-          ),
-          prefixBuilder: (context, style, states) => Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Icon(FIcons.search),
-          ),
-          hint: 'Поиск',
+      child: FTextField(
+        control: FTextFieldControl.managed(
+          onChange: (value) {
+            productSeachQuery.value = value.text;
+          },
         ),
+        prefixBuilder: (context, style, states) => Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: Icon(FIcons.search),
+        ),
+        hint: 'Поиск',
       ),
     );
   }
@@ -206,7 +204,6 @@ class _CatalogGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return BlocBuilder<ProductsCubit, ProductsState>(
       bloc: BlocProvider.of<ProductsCubit>(context),
       builder: (context, productState) {
