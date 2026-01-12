@@ -1,2 +1,2 @@
 export 'category.dart';
-export 'favorite.dart';
+export 'search_query.dart';

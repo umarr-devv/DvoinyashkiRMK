@@ -83,7 +83,7 @@ class PinnedCategoriesDialog {
               } else {
                 cubit.pin(category);
               }
-              selectedCategory.value = null;
+              selectedCategory.value = defaultSelectedCategory;
             },
           ),
         ),
