@@ -25,7 +25,7 @@ class OrderState extends Equatable {
   Map<String, dynamic> toJson() => _$OrderStateToJson(this);
 
   @override
-  List<Object?> get props => [currentOrder, saveOrders];
+  List<Object?> get props => [currentOrder?.items, saveOrders];
 }
 
 final class OrderInitial extends OrderState {}

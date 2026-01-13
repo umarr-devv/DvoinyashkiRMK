@@ -57,6 +57,14 @@ class OrderCubit extends HydratedCubit<OrderState> {
     emit(OrderUpdate(newState));
   }
 
+  void clearItems() {
+    if (state.currentOrder == null) return;
+    final newState = state.copyWith(
+      currentOrder: state.currentOrder!.copyWith(items: []),
+    );
+    emit(OrderUpdate(newState));
+  }
+
   void setCurrentOrder(OrderData order) {
     final newState = state.copyWith(currentOrder: order);
     emit(OrderUpdate(newState));
