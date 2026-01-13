@@ -57,7 +57,7 @@ class _AppScreenState extends State<AppScreen> {
               BlocProvider.value(value: productsCubit),
               BlocProvider.value(value: productImagesCubit),
               BlocProvider.value(value: authCubit),
-              BlocProvider.value(value: productImagesCubit),
+              BlocProvider.value(value: favoritesCubit),
               BlocProvider.value(value: orderCubit),
             ],
             child: MaterialApp.router(
