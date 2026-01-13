@@ -42,6 +42,7 @@ dependencies:
   talker_dio_logger: ^5.1.9
   talker_flutter: ^5.1.9
   talker_logger: ^5.1.9
+  uuid: ^4.5.2
   window_manager: ^0.5.1
 
 dev_dependencies:
