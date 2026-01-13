@@ -1,0 +1,85 @@
+import 'package:app/models/models.dart';
+import 'package:app/utils/undefined.dart';
+import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
+
+part 'order_cubit.g.dart';
+part 'order_data.dart';
+part 'order_state.dart';
+
+class OrderCubit extends HydratedCubit<OrderState> {
+  OrderCubit() : super(OrderInitial());
+
+  final uuid = Uuid();
+
+  void createOrderData() {
+    if (state.currentOrder == null) {
+      final newState = state.copyWith(
+        currentOrder: OrderData(
+          uniqueId: uuid.v7(),
+          items: [],
+          createAt: DateTime.now(),
+        ),
+      );
+      emit(OrderUpdate(newState));
+    }
+  }
+
+  void addItem(OrderItem item) {
+    if (state.currentOrder == null) createOrderData();
+    final currentOrder = state.currentOrder!;
+    final List<OrderItem> items = List.from(currentOrder.items);
+    items.add(item);
+    final newState = state.copyWith(
+      currentOrder: currentOrder.copyWith(items: items),
+    );
+    emit(OrderUpdate(newState));
+  }
+
+  void updateItem(OrderItem item) {
+    final currentOrder = state.currentOrder;
+    if (currentOrder == null) return;
+
+    final List<OrderItem> items = List.from(currentOrder.items);
+    final index = currentOrder.items.indexOf(item);
+
+    if (item.quantity <= 0) {
+      items.removeAt(index);
+    } else {
+      items[index] = item;
+    }
+
+    final newState = state.copyWith(
+      currentOrder: currentOrder.copyWith(items: items),
+    );
+    emit(OrderUpdate(newState));
+  }
+
+  void setCurrentOrder(OrderData order) {
+    final newState = state.copyWith(currentOrder: order);
+    emit(OrderUpdate(newState));
+  }
+
+  void saveOrder(OrderData order) {
+    final List<OrderData> saveOrders = List.from(state.saveOrders);
+    saveOrders.add(order);
+
+    final newState = state.copyWith(
+      currentOrder: undefined,
+      saveOrders: saveOrders,
+    );
+    emit(OrderUpdate(newState));
+  }
+
+  @override
+  OrderState? fromJson(Map<String, dynamic> json) {
+    return OrderState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(OrderState state) {
+    return state.toJson();
+  }
+}
