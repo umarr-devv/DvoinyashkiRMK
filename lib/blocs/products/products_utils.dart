@@ -33,7 +33,7 @@ class ProductsCubitUtils {
 
     for (final nomen in nomenclatures) {
       final chars = characteristics
-          .where((i) => i.nomenclatureKey == nomen.refKey)
+          .where((i) => i.owner == nomen.refKey || i.owner == nomen.categoryKey)
           .toList();
 
       if (chars.isNotEmpty) {

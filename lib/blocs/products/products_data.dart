@@ -35,6 +35,16 @@ class ProductData extends Equatable {
   PriceData? get sellPrice =>
       prices.firstWhereLogTypeOrNull((i) => i.type?.refKey == mainPriceTypeKey);
 
+  String get name {
+    if (characteristic != null) {
+      return "${nomenclature.name ?? ''} (${characteristic?.printName ?? ''})";
+    } else {
+      return nomenclature.name ?? 'Nameless';
+    }
+  }
+
+  String get uniqueId => nomenclature.refKey + (characteristic?.refKey ?? '');
+
   factory ProductData.fromJson(Map<String, dynamic> json) =>
       _$ProductDataFromJson(json);
 

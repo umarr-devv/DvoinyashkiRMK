@@ -1,8 +1,6 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/features/order/states/states.dart';
-import 'package:app/models/models.dart';
-import 'package:app/models/nomenclature.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -165,38 +163,38 @@ class _CatalogGrid extends StatelessWidget {
 
   final double itemMinWidth = 180;
 
-  List<NomenclatureScheme> getItems({
+  List<ProductData> getItems({
     required SelectedCategoryData? selectedCategory,
     required String? searchQuery,
     required List<String> favoriteKeys,
     required List<String> pinned,
-    required List<NomenclatureScheme> nomenclatures,
+    required List<ProductData> products,
   }) {
-    List<NomenclatureScheme> selectedCategoryItems = List.from(nomenclatures);
+    List<ProductData> selectedCategoryItems = List.from(products);
     if (selectedCategory?.category != null) {
       selectedCategoryItems = selectedCategoryItems
-          .where((i) => i.categoryKey == selectedCategory!.category!.refKey)
+          .where(
+            (i) =>
+                i.nomenclature.categoryKey ==
+                selectedCategory!.category!.refKey,
+          )
           .toList();
     } else if (selectedCategory?.all ?? false) {
       selectedCategoryItems = selectedCategoryItems
-          .where((i) => pinned.contains(i.categoryKey))
+          .where((i) => pinned.contains(i.nomenclature.categoryKey))
           .toList();
     } else if (selectedCategory?.favorite ?? false) {
       selectedCategoryItems = selectedCategoryItems
-          .where((i) => favoriteKeys.contains(i.refKey))
+          .where((i) => favoriteKeys.contains(i.nomenclature.refKey))
           .toList();
     }
 
-    List<NomenclatureScheme> searchQueryItems = List.from(
-      selectedCategoryItems,
-    );
+    List<ProductData> searchQueryItems = List.from(selectedCategoryItems);
 
     if (searchQuery?.isNotEmpty ?? false) {
       searchQueryItems = searchQueryItems
           .where(
-            (i) =>
-                i.name?.toLowerCase().contains(searchQuery!.toLowerCase()) ??
-                false,
+            (i) => i.name.toLowerCase().contains(searchQuery!.toLowerCase()),
           )
           .toList();
     }
@@ -224,14 +222,14 @@ class _CatalogGrid extends StatelessWidget {
                       builder: (context, searchQuery, child) {
                         return LayoutBuilder(
                           builder: (context, constraints) {
-                            final nomenclatures = getItems(
+                            final products = getItems(
                               selectedCategory: selectedCat,
                               searchQuery: searchQuery,
                               pinned: categoriesState.pinned,
                               favoriteKeys: favoriteState.favoriteKeys,
-                              nomenclatures: productState.nomenclatures,
+                              products: productState.products,
                             );
-                            if (nomenclatures.isEmpty) {
+                            if (products.isEmpty) {
                               return _GridEmptyItems(searchQuery: searchQuery);
                             }
                             return GridView.builder(
@@ -246,25 +244,9 @@ class _CatalogGrid extends StatelessWidget {
                                     childAspectRatio: 0.75,
                                   ),
                               itemBuilder: (context, index) {
-                                final nomenclature = nomenclatures[index];
-                                final prices =
-                                    ProductsCubitUtils.getNomenclaturePrices(
-                                      nomenclature: nomenclature,
-                                      allPrices: productState.prices,
-                                    );
-                                final characteristics =
-                                    ProductsCubitUtils.getNomenclatureCharacteristics(
-                                      nomenclature: nomenclature,
-                                      allCharacteristics:
-                                          productState.characteristics,
-                                    );
-                                return ProductCard(
-                                  nomenclature: nomenclatures[index],
-                                  prices: prices,
-                                  characteristics: characteristics,
-                                );
+                                return ProductCard(product: products[index]);
                               },
-                              itemCount: nomenclatures.length,
+                              itemCount: products.length,
                             );
                           },
                         );

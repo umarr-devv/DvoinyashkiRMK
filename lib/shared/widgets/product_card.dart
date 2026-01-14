@@ -12,16 +12,9 @@ import 'package:forui/forui.dart';
 import 'package:talker/talker.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    super.key,
-    required this.nomenclature,
-    required this.characteristics,
-    required this.prices,
-  });
+  const ProductCard({super.key, required this.product});
 
-  final NomenclatureScheme nomenclature;
-  final List<CharacteristicScheme> characteristics;
-  final List<PriceScheme> prices;
+  final ProductData product;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +25,10 @@ class ProductCard extends StatelessWidget {
             flex: 5,
             child: Stack(
               children: [
-                _ProductCardImage(nomenclature),
+                _ProductCardImage(product),
                 Align(
                   alignment: Alignment.topRight,
-                  child: _ProductCatdFavoriteButton(nomenclature),
+                  child: _ProductCatdFavoriteButton(product),
                 ),
               ],
             ),
@@ -48,11 +41,11 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _ProductCardTitle(nomenclature: nomenclature),
+                  _ProductCardTitle(product),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _ProductCardPrice(prices),
+                      _ProductCardPrice(product),
                       _ProductCardAddButton(),
                     ],
                   ),
@@ -66,17 +59,28 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-class _ProductCardImage extends StatefulWidget {
-  const _ProductCardImage(this.nomenclature);
+class _ProductCardImage extends StatelessWidget {
+  const _ProductCardImage(this.product);
 
-  final NomenclatureScheme nomenclature;
+  final ProductData product;
 
-  @override
-  State<_ProductCardImage> createState() => _ProductCardImageState();
-}
-
-class _ProductCardImageState extends State<_ProductCardImage> {
-  Uint8List? imageBytes;
+  Uint8List? imageBytes(List<ProductImageScheme> images) {
+    if (product.characteristic != null) {
+      return images
+          .firstWhereLogTypeOrNull(
+            (i) =>
+                i.nomenclatureKey == product.nomenclature.refKey &&
+                i.characteristicKey == product.characteristic?.refKey,
+          )
+          ?.imageBytes;
+    } else {
+      return images
+          .firstWhereLogTypeOrNull(
+            (i) => i.nomenclatureKey == product.nomenclature.refKey,
+          )
+          ?.imageBytes;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,30 +88,24 @@ class _ProductCardImageState extends State<_ProductCardImage> {
     return BlocBuilder<ProductImagesCubit, ProductImagesState>(
       bloc: BlocProvider.of<ProductImagesCubit>(context),
       builder: (context, state) {
-        imageBytes = state.images
-            .firstWhereLogTypeOrNull(
-              (i) => i.nomenclatureKey == widget.nomenclature.refKey,
-            )
-            ?.imageBytes;
-        return GestureDetector(
-          onTap: () {},
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: const EdgeInsets.all(8),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: theme.custom.muted,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: imageBytes != null
-                ? Image.memory(imageBytes!, fit: BoxFit.cover)
-                : Icon(
-                    FIcons.image,
-                    size: 64,
-                    color: theme.custom.mutedForeground,
-                  ),
+        final imageBytes_ = imageBytes(state.images);
+
+        return Container(
+          width: double.infinity,
+          height: double.infinity,
+          margin: const EdgeInsets.all(8),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: theme.custom.muted,
+            borderRadius: BorderRadius.circular(12),
           ),
+          child: imageBytes_ != null
+              ? Image.memory(imageBytes_, fit: BoxFit.cover)
+              : Icon(
+                  FIcons.image,
+                  size: 64,
+                  color: theme.custom.mutedForeground,
+                ),
         );
       },
     );
@@ -115,15 +113,15 @@ class _ProductCardImageState extends State<_ProductCardImage> {
 }
 
 class _ProductCardTitle extends StatelessWidget {
-  const _ProductCardTitle({required this.nomenclature});
+  const _ProductCardTitle(this.product);
 
-  final NomenclatureScheme nomenclature;
+  final ProductData product;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Text(
-      nomenclature.name ?? 'Без названия',
+      product.name,
       textAlign: TextAlign.start,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
@@ -137,9 +135,9 @@ class _ProductCardTitle extends StatelessWidget {
 }
 
 class _ProductCatdFavoriteButton extends StatelessWidget {
-  const _ProductCatdFavoriteButton(this.nomenclature);
+  const _ProductCatdFavoriteButton(this.product);
 
-  final NomenclatureScheme nomenclature;
+  final ProductData product;
 
   @override
   Widget build(BuildContext context) {
@@ -148,15 +146,15 @@ class _ProductCatdFavoriteButton extends StatelessWidget {
     return BlocBuilder<FavoritesCubit, FavoritesState>(
       bloc: cubit,
       builder: (context, state) {
-        final favorite = state.favoriteKeys.contains(nomenclature.refKey);
+        final favorite = state.favoriteKeys.contains(product.uniqueId);
         return Padding(
           padding: const EdgeInsets.all(12),
           child: FButton.icon(
             onPress: () {
               if (favorite) {
-                cubit.remove(nomenclature.refKey);
+                cubit.remove(product.uniqueId);
               } else {
-                cubit.add(nomenclature.refKey);
+                cubit.add(product.uniqueId);
               }
             },
             style: (style) => style.copyWith(
@@ -184,20 +182,19 @@ class _ProductCatdFavoriteButton extends StatelessWidget {
 }
 
 class _ProductCardPrice extends StatelessWidget {
-  const _ProductCardPrice(this.prices);
+  const _ProductCardPrice(this.product);
 
-  final List<PriceScheme> prices;
+  final ProductData product;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final mainPrice = ProductsCubitUtils.getMainPrice(prices);
-    if (mainPrice != null) {
+    if (product.sellPrice != null) {
       return Row(
         spacing: 2,
         children: [
           Text(
-            mainPrice.price.toStringAsFixed(0),
+            product.sellPrice!.price.price.toStringAsFixed(0),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
