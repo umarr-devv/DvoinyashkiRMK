@@ -6,27 +6,30 @@ part of 'products_cubit.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProductsState _$ProductsStateFromJson(
-  Map<String, dynamic> json,
-) => ProductsState(
-  nomenclatures:
-      (json['nomenclatures'] as List<dynamic>?)
-          ?.map((e) => NomenclatureScheme.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
-  characteristics:
-      (json['characteristics'] as List<dynamic>?)
-          ?.map((e) => CharacteristicScheme.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
+PriceData _$PriceDataFromJson(Map<String, dynamic> json) => PriceData(
+  price: PriceScheme.fromJson(json['price'] as Map<String, dynamic>),
+  type: json['type'] == null
+      ? null
+      : PriceTypeScheme.fromJson(json['type'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$PriceDataToJson(PriceData instance) => <String, dynamic>{
+  'price': instance.price,
+  'type': instance.type,
+};
+
+ProductData _$ProductDataFromJson(Map<String, dynamic> json) => ProductData(
+  nomenclature: NomenclatureScheme.fromJson(
+    json['nomenclature'] as Map<String, dynamic>,
+  ),
+  characteristic: json['characteristic'] == null
+      ? null
+      : CharacteristicScheme.fromJson(
+          json['characteristic'] as Map<String, dynamic>,
+        ),
   prices:
       (json['prices'] as List<dynamic>?)
-          ?.map((e) => PriceScheme.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
-  priceTypes:
-      (json['price_types'] as List<dynamic>?)
-          ?.map((e) => PriceTypeScheme.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => PriceData.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
   barcodes:
@@ -34,17 +37,30 @@ ProductsState _$ProductsStateFromJson(
           ?.map((e) => BarcodeScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
-  update: json['update'] == null
-      ? null
-      : DateTime.parse(json['update'] as String),
 );
+
+Map<String, dynamic> _$ProductDataToJson(ProductData instance) =>
+    <String, dynamic>{
+      'nomenclature': instance.nomenclature,
+      'characteristic': instance.characteristic,
+      'prices': instance.prices,
+      'barcodes': instance.barcodes,
+    };
+
+ProductsState _$ProductsStateFromJson(Map<String, dynamic> json) =>
+    ProductsState(
+      products:
+          (json['products'] as List<dynamic>?)
+              ?.map((e) => ProductData.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      update: json['update'] == null
+          ? null
+          : DateTime.parse(json['update'] as String),
+    );
 
 Map<String, dynamic> _$ProductsStateToJson(ProductsState instance) =>
     <String, dynamic>{
-      'nomenclatures': instance.nomenclatures,
-      'characteristics': instance.characteristics,
-      'prices': instance.prices,
-      'price_types': instance.priceTypes,
-      'barcodes': instance.barcodes,
+      'products': instance.products,
       'update': instance.update?.toIso8601String(),
     };

@@ -1,47 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'products_cubit.dart';
 
 @JsonSerializable()
 class ProductsState extends Equatable {
-  const ProductsState({
-    this.nomenclatures = const [],
-    this.characteristics = const [],
-    this.prices = const [],
-    this.priceTypes = const [],
-    this.barcodes = const [],
-    this.update,
-  });
+  const ProductsState({this.products = const [], this.update});
 
-  final List<NomenclatureScheme> nomenclatures;
-  final List<CharacteristicScheme> characteristics;
-  final List<PriceScheme> prices;
-  final List<PriceTypeScheme> priceTypes;
-  final List<BarcodeScheme> barcodes;
+  final List<ProductData> products;
   final DateTime? update;
 
-  ProductsState copyWith({
-    List<NomenclatureScheme>? nomenclatures,
-    List<CharacteristicScheme>? characteristics,
-    List<PriceScheme>? prices,
-    List<PriceTypeScheme>? priceTypes,
-    List<BarcodeScheme>? barcodes,
-    DateTime? update,
-  }) {
+  ProductsState copyWith({List<ProductData>? products, DateTime? update}) {
     return ProductsState(
-      nomenclatures: nomenclatures ?? this.nomenclatures,
-      characteristics: characteristics ?? this.characteristics,
-      prices: prices ?? this.prices,
-      priceTypes: priceTypes ?? this.priceTypes,
-      barcodes: barcodes ?? this.barcodes,
+      products: products ?? this.products,
       update: update ?? this.update,
     );
   }
 
   ProductsState.from(ProductsState other)
-    : nomenclatures = other.nomenclatures,
-      characteristics = other.characteristics,
-      prices = other.prices,
-      priceTypes = other.priceTypes,
-      barcodes = other.barcodes,
+    : products = other.products,
       update = other.update;
 
   factory ProductsState.fromJson(Map<String, dynamic> json) =>
@@ -50,14 +25,7 @@ class ProductsState extends Equatable {
   Map<String, dynamic> toJson() => _$ProductsStateToJson(this);
 
   @override
-  List<Object?> get props => [
-    nomenclatures,
-    characteristics,
-    prices,
-    priceTypes,
-    barcodes,
-    update,
-  ];
+  List<Object?> get props => [products, update];
 }
 
 final class ProductsInitial extends ProductsState {}

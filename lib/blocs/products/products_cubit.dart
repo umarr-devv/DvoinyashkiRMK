@@ -8,6 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:talker/talker.dart';
 
 part 'products_cubit.g.dart';
+part 'products_data.dart';
 part 'products_state.dart';
 part 'products_utils.dart';
 
@@ -32,12 +33,17 @@ class ProductsCubit extends HydratedCubit<ProductsState> {
       final prices = await client.getPrices();
       final priceTypes = await client.getPriceTypes();
       final barcodes = await client.getBarcodes();
-      final newState = state.copyWith(
+
+      final products = ProductsCubitUtils.getProducts(
         nomenclatures: nomenclatures.nomenclatures,
         characteristics: characteristics.characteristics,
         prices: prices.prices,
         priceTypes: priceTypes.priceTypes,
         barcodes: barcodes.barcodes,
+      );
+
+      final newState = state.copyWith(
+        products: products,
         update: DateTime.now(),
       );
       emit(ProductsLoaded(newState));

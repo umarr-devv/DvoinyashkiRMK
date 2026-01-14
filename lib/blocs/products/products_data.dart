@@ -1,0 +1,45 @@
+part of 'products_cubit.dart';
+
+@JsonSerializable()
+class PriceData extends Equatable {
+  const PriceData({required this.price, required this.type});
+
+  final PriceScheme price;
+  final PriceTypeScheme? type;
+
+  factory PriceData.fromJson(Map<String, dynamic> json) =>
+      _$PriceDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PriceDataToJson(this);
+
+  @override
+  List<Object?> get props => [price, type];
+}
+
+@JsonSerializable()
+class ProductData extends Equatable {
+  const ProductData({
+    required this.nomenclature,
+    this.characteristic,
+    this.prices = const [],
+    this.barcodes = const [],
+  });
+
+  final NomenclatureScheme nomenclature;
+  final CharacteristicScheme? characteristic;
+  final List<PriceData> prices;
+  final List<BarcodeScheme> barcodes;
+
+  static const String mainPriceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c';
+
+  PriceData? get sellPrice =>
+      prices.firstWhereLogTypeOrNull((i) => i.type?.refKey == mainPriceTypeKey);
+
+  factory ProductData.fromJson(Map<String, dynamic> json) =>
+      _$ProductDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductDataToJson(this);
+
+  @override
+  List<Object?> get props => [nomenclature, characteristic];
+}

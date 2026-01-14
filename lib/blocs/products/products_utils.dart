@@ -1,60 +1,84 @@
 part of 'products_cubit.dart';
 
 class ProductsCubitUtils {
-  static const String mainPriceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c';
-
-  static List<CharacteristicScheme> getNomenclatureCharacteristics({
-    required NomenclatureScheme nomenclature,
-    required List<CharacteristicScheme> allCharacteristics,
-  }) {
-    return allCharacteristics
-        .where((i) => i.nomenclatureKey == nomenclature.refKey)
-        .toList();
-  }
-
-  static List<PriceScheme> getNomenclaturePrices({
-    required NomenclatureScheme nomenclature,
-    required List<PriceScheme> allPrices,
-  }) {
-    final filtered = allPrices.where(
-      (scheme) => scheme.nomenclatureKey == nomenclature.refKey,
-    );
+  static List<PriceData> getActualPrices(
+    List<PriceScheme> prices,
+    List<PriceTypeScheme> priceTypes,
+  ) {
+    final priceTypeByKey = {for (final type in priceTypes) type.refKey: type};
 
     final Map<String, PriceScheme> latestByType = {};
 
-    for (var scheme in filtered) {
-      if (!latestByType.containsKey(scheme.priceTypeKey) ||
-          scheme.period.isAfter(latestByType[scheme.priceTypeKey]!.period)) {
-        latestByType[scheme.priceTypeKey] = scheme;
+    for (final price in prices) {
+      final existing = latestByType[price.priceTypeKey];
+
+      if (existing == null || price.period.isAfter(existing.period)) {
+        latestByType[price.priceTypeKey] = price;
       }
     }
 
-    return latestByType.values.toList();
+    return latestByType.entries.map((entry) {
+      return PriceData(price: entry.value, type: priceTypeByKey[entry.key]);
+    }).toList();
   }
 
-  static List<PriceScheme> getCharacteristicPrices({
-    required CharacteristicScheme characteristic,
-    required List<PriceScheme> allPrices,
+  static List<ProductData> getProducts({
+    required List<NomenclatureScheme> nomenclatures,
+    required List<CharacteristicScheme> characteristics,
+    required List<PriceScheme> prices,
+    required List<BarcodeScheme> barcodes,
+    required List<PriceTypeScheme> priceTypes,
   }) {
-    final filtered = allPrices.where(
-      (scheme) => scheme.characteristicKey == characteristic.refKey,
-    );
+    final List<ProductData> products = [];
 
-    final Map<String, PriceScheme> latestByType = {};
+    for (final nomen in nomenclatures) {
+      final chars = characteristics
+          .where((i) => i.nomenclatureKey == nomen.refKey)
+          .toList();
 
-    for (var scheme in filtered) {
-      if (!latestByType.containsKey(scheme.priceTypeKey) ||
-          scheme.period.isAfter(latestByType[scheme.priceTypeKey]!.period)) {
-        latestByType[scheme.priceTypeKey] = scheme;
+      if (chars.isNotEmpty) {
+        for (final char in chars) {
+          final prices_ = prices
+              .where(
+                (i) =>
+                    i.nomenclatureKey == nomen.refKey &&
+                    i.characteristicKey == char.refKey,
+              )
+              .toList();
+          final actualPrices = getActualPrices(prices_, priceTypes);
+          final barcodes_ = barcodes
+              .where(
+                (i) =>
+                    i.nomenclatureKey == nomen.refKey &&
+                    i.characteristicKey == char.refKey,
+              )
+              .toList();
+          final product = ProductData(
+            nomenclature: nomen,
+            characteristic: char,
+            prices: actualPrices,
+            barcodes: barcodes_,
+          );
+          products.add(product);
+        }
+      } else {
+        final prices_ = prices
+            .where((i) => i.nomenclatureKey == nomen.refKey)
+            .toList();
+        final actualPrices = getActualPrices(prices_, priceTypes);
+        final barcodes_ = barcodes
+            .where((i) => i.nomenclatureKey == nomen.refKey)
+            .toList();
+        final product = ProductData(
+          nomenclature: nomen,
+          characteristic: null,
+          prices: actualPrices,
+          barcodes: barcodes_,
+        );
+        products.add(product);
       }
     }
 
-    return latestByType.values.toList();
-  }
-
-  static PriceScheme? getMainPrice(List<PriceScheme> prices) {
-    return prices.firstWhereLogTypeOrNull(
-      (i) => i.priceTypeKey == mainPriceTypeKey,
-    );
+    return products;
   }
 }
