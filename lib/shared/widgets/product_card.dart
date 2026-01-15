@@ -17,7 +17,9 @@ class ProductCard extends StatelessWidget {
   final ProductData product;
 
   OrderItem? getOrderItem(OrderData? order) {
-    return order?.items.firstWhereLogTypeOrNull((i) => product == i.product);
+    return order?.items.firstWhereLogTypeOrNull(
+      (i) => product.uniqueId == i.product.uniqueId,
+    );
   }
 
   @override
@@ -25,6 +27,11 @@ class ProductCard extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<OrderCubit, OrderState>(
       bloc: BlocProvider.of<OrderCubit>(context),
+      buildWhen: (previous, current) {
+        final previousItem = getOrderItem(previous.currentOrder);
+        final currentItem = getOrderItem(current.currentOrder);
+        return previousItem?.quantity != currentItem?.quantity;
+      },
       builder: (context, state) {
         final orderItem = getOrderItem(state.currentOrder);
         return FTooltip(
@@ -263,37 +270,45 @@ class _ProductCardAddButton extends StatelessWidget {
     final cubit = BlocProvider.of<OrderCubit>(context);
     final theme = Theme.of(context);
     if (orderItem != null) {
-      return Row(
-        spacing: 6,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FButton.icon(
-            onPress: () {
-              cubit.updateItem(
-                orderItem!.copyWith(quantity: orderItem!.quantity - 1),
-              );
-            },
-            style: FButtonStyle.secondary(),
-            child: Icon(Icons.remove, size: 16),
+      return FCard.raw(
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Row(
+            spacing: 6,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FButton.icon(
+                onPress: () {
+                  if (orderItem?.quantity == 1) {
+                    cubit.deleteItem(orderItem!);
+                  }
+                  cubit.updateItem(
+                    orderItem!.copyWith(quantity: orderItem!.quantity - 1),
+                  );
+                },
+                style: FButtonStyle.secondary(),
+                child: Icon(Icons.remove, size: 16),
+              ),
+              Text(
+                orderItem!.quantity.toStringAsFixed(2),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: theme.custom.foreground,
+                ),
+              ),
+              FButton.icon(
+                onPress: () {
+                  cubit.updateItem(
+                    orderItem!.copyWith(quantity: orderItem!.quantity + 1),
+                  );
+                },
+                style: FButtonStyle.primary(),
+                child: Icon(Icons.add, size: 16),
+              ),
+            ],
           ),
-          Text(
-            orderItem!.quantity.toStringAsFixed(0),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: theme.custom.foreground,
-            ),
-          ),
-          FButton.icon(
-            onPress: () {
-              cubit.updateItem(
-                orderItem!.copyWith(quantity: orderItem!.quantity + 1),
-              );
-            },
-            style: FButtonStyle.primary(),
-            child: Icon(Icons.add, size: 16),
-          ),
-        ],
+        ),
       );
     } else {
       return FButton.icon(
