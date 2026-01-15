@@ -4,14 +4,12 @@ part of 'order_cubit.dart';
 @JsonSerializable()
 class OrderItem extends Equatable {
   const OrderItem({
-    required this.nomenclature,
-    required this.characteristic,
+    required this.product,
     required this.quantity,
     required this.price,
   });
 
-  final NomenclatureScheme nomenclature;
-  final CharacteristicScheme? characteristic;
+  final ProductData product;
   final double quantity;
   final double price;
 
@@ -22,8 +20,7 @@ class OrderItem extends Equatable {
     double? price,
   }) {
     return OrderItem(
-      nomenclature: nomenclature ?? this.nomenclature,
-      characteristic: characteristic ?? this.characteristic,
+      product: product,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
     );
@@ -35,7 +32,7 @@ class OrderItem extends Equatable {
   Map<String, dynamic> toJson() => _$OrderItemToJson(this);
 
   @override
-  List<Object?> get props => [nomenclature.refKey, characteristic?.refKey];
+  List<Object?> get props => [product.uniqueId];
 }
 
 @JsonSerializable()
@@ -49,6 +46,9 @@ class OrderData extends Equatable {
   final String uniqueId;
   final List<OrderItem> items;
   final DateTime createAt;
+
+  double get totalSum =>
+      items.map((i) => i.quantity * i.price).fold(0, (a, b) => a + b);
 
   OrderData copyWith({
     String? uniqueId,

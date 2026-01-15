@@ -7,21 +7,13 @@ part of 'order_cubit.dart';
 // **************************************************************************
 
 OrderItem _$OrderItemFromJson(Map<String, dynamic> json) => OrderItem(
-  nomenclature: NomenclatureScheme.fromJson(
-    json['nomenclature'] as Map<String, dynamic>,
-  ),
-  characteristic: json['characteristic'] == null
-      ? null
-      : CharacteristicScheme.fromJson(
-          json['characteristic'] as Map<String, dynamic>,
-        ),
+  product: ProductData.fromJson(json['product'] as Map<String, dynamic>),
   quantity: (json['quantity'] as num).toDouble(),
   price: (json['price'] as num).toDouble(),
 );
 
 Map<String, dynamic> _$OrderItemToJson(OrderItem instance) => <String, dynamic>{
-  'nomenclature': instance.nomenclature,
-  'characteristic': instance.characteristic,
+  'product': instance.product,
   'quantity': instance.quantity,
   'price': instance.price,
 };

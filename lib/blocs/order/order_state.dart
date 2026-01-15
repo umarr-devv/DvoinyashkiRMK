@@ -2,7 +2,7 @@
 part of 'order_cubit.dart';
 
 @JsonSerializable()
-class OrderState extends Equatable {
+class OrderState{
   const OrderState({this.currentOrder, this.saveOrders = const []});
 
   final OrderData? currentOrder;
@@ -23,9 +23,6 @@ class OrderState extends Equatable {
       _$OrderStateFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderStateToJson(this);
-
-  @override
-  List<Object?> get props => [currentOrder?.items, saveOrders];
 }
 
 final class OrderInitial extends OrderState {}

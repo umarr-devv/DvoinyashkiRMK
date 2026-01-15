@@ -1,3 +1,4 @@
+import 'package:app/blocs/blocs.dart';
 import 'package:app/models/models.dart';
 import 'package:app/utils/undefined.dart';
 import 'package:equatable/equatable.dart';
@@ -45,11 +46,26 @@ class OrderCubit extends HydratedCubit<OrderState> {
     final List<OrderItem> items = List.from(currentOrder.items);
     final index = currentOrder.items.indexOf(item);
 
-    if (item.quantity <= 0) {
+    if (item.quantity < 0) {
       items.removeAt(index);
     } else {
       items[index] = item;
     }
+
+    final newState = state.copyWith(
+      currentOrder: currentOrder.copyWith(items: items),
+    );
+    emit(OrderUpdate(newState));
+  }
+
+  void deleteItem(OrderItem item) {
+    final currentOrder = state.currentOrder;
+    if (currentOrder == null) return;
+
+    final List<OrderItem> items = List.from(currentOrder.items);
+    final index = currentOrder.items.indexOf(item);
+
+    items.removeAt(index);
 
     final newState = state.copyWith(
       currentOrder: currentOrder.copyWith(items: items),

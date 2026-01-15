@@ -16,45 +16,82 @@ class ProductCard extends StatelessWidget {
 
   final ProductData product;
 
+  OrderItem? getOrderItem(OrderData? order) {
+    return order?.items.firstWhereLogTypeOrNull((i) => product == i.product);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FCard.raw(
-      child: Column(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Stack(
+    final theme = Theme.of(context);
+    return BlocBuilder<OrderCubit, OrderState>(
+      bloc: BlocProvider.of<OrderCubit>(context),
+      builder: (context, state) {
+        final orderItem = getOrderItem(state.currentOrder);
+        return FTooltip(
+          hoverEnterDuration: Duration(milliseconds: 125),
+          tipBuilder: (context, controller) => Text(
+            product.name,
+            style: TextStyle(color: theme.custom.foreground),
+          ),
+          child: FCard.raw(
+            style: (style) {
+              if (orderItem != null) {
+                return style.copyWith(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: theme.custom.foreground,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                );
+              }
+              return style;
+            },
+            child: Column(
               children: [
-                _ProductCardImage(product),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: _ProductCatdFavoriteButton(product),
+                Expanded(
+                  flex: 5,
+                  child: Stack(
+                    children: [
+                      _ProductCardImage(product),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: _ProductCatdFavoriteButton(product),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    child: Stack(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _ProductCardTitle(product),
+                            _ProductCardPrice(product),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: _ProductCardAddButton(
+                            product: product,
+                            orderItem: orderItem,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _ProductCardTitle(product),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _ProductCardPrice(product),
-                      _ProductCardAddButton(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -97,7 +134,7 @@ class _ProductCardImage extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: theme.custom.muted,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(4),
           ),
           child: imageBytes_ != null
               ? Image.memory(imageBytes_, fit: BoxFit.cover)
@@ -196,7 +233,7 @@ class _ProductCardPrice extends StatelessWidget {
           Text(
             product.sellPrice!.price.price.toStringAsFixed(0),
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 22,
               fontWeight: FontWeight.w600,
               color: theme.custom.foreground,
             ),
@@ -216,14 +253,62 @@ class _ProductCardPrice extends StatelessWidget {
 }
 
 class _ProductCardAddButton extends StatelessWidget {
-  const _ProductCardAddButton();
+  const _ProductCardAddButton({required this.product, this.orderItem});
+
+  final ProductData product;
+  final OrderItem? orderItem;
 
   @override
   Widget build(BuildContext context) {
-    return FButton.icon(
-      onPress: () {},
-      style: FButtonStyle.outline(),
-      child: Icon(FIcons.plus),
-    );
+    final cubit = BlocProvider.of<OrderCubit>(context);
+    final theme = Theme.of(context);
+    if (orderItem != null) {
+      return Row(
+        spacing: 6,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FButton.icon(
+            onPress: () {
+              cubit.updateItem(
+                orderItem!.copyWith(quantity: orderItem!.quantity - 1),
+              );
+            },
+            style: FButtonStyle.secondary(),
+            child: Icon(Icons.remove, size: 16),
+          ),
+          Text(
+            orderItem!.quantity.toStringAsFixed(0),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: theme.custom.foreground,
+            ),
+          ),
+          FButton.icon(
+            onPress: () {
+              cubit.updateItem(
+                orderItem!.copyWith(quantity: orderItem!.quantity + 1),
+              );
+            },
+            style: FButtonStyle.primary(),
+            child: Icon(Icons.add, size: 16),
+          ),
+        ],
+      );
+    } else {
+      return FButton.icon(
+        onPress: () {
+          cubit.addItem(
+            OrderItem(
+              product: product,
+              quantity: 1,
+              price: product.sellPrice?.price.price.toDouble() ?? 0,
+            ),
+          );
+        },
+        style: FButtonStyle.outline(),
+        child: Icon(FIcons.plus),
+      );
+    }
   }
 }
