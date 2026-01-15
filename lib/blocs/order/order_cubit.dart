@@ -4,6 +4,7 @@ import 'package:app/utils/undefined.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'order_cubit.g.dart';
@@ -15,7 +16,7 @@ class OrderCubit extends HydratedCubit<OrderState> {
 
   final uuid = Uuid();
 
-  void createOrderData() {
+  void createOrder() {
     if (state.currentOrder == null) {
       final newState = state.copyWith(
         currentOrder: OrderData(
@@ -29,7 +30,7 @@ class OrderCubit extends HydratedCubit<OrderState> {
   }
 
   void addItem(OrderItem item) {
-    if (state.currentOrder == null) createOrderData();
+    if (state.currentOrder == null) createOrder();
     final currentOrder = state.currentOrder!;
     final List<OrderItem> items = List.from(currentOrder.items);
     items.add(item);
@@ -82,13 +83,33 @@ class OrderCubit extends HydratedCubit<OrderState> {
   }
 
   void setCurrentOrder(OrderData order) {
+    saveOrder();
+    deleteSaveOrder(order);
     final newState = state.copyWith(currentOrder: order);
     emit(OrderUpdate(newState));
   }
 
-  void saveOrder(OrderData order) {
+  void saveOrder() {
+    if (state.currentOrder == null) return;
     final List<OrderData> saveOrders = List.from(state.saveOrders);
-    saveOrders.add(order);
+    saveOrders.add(state.currentOrder!);
+
+    final newState = state.copyWith(
+      currentOrder: undefined,
+      saveOrders: saveOrders,
+    );
+    emit(OrderUpdate(newState));
+  }
+
+  void deleteSaveOrder(OrderData order) {
+    final List<OrderData> saveOrders = List.from(state.saveOrders);
+
+    final savedOrder = saveOrders.firstWhereLogTypeOrNull(
+      (i) => i.uniqueId == order.uniqueId,
+    );
+
+    if (savedOrder == null) return;
+    saveOrders.remove(savedOrder);
 
     final newState = state.copyWith(
       currentOrder: undefined,

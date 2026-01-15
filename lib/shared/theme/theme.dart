@@ -54,7 +54,9 @@ class CustomThemeData {
 
   Color get success => by(light: Color(0xFF16A34A), dark: Color(0xFF007e33));
 
-  Color get successForeground =>
+  Color get info => by(light: Color(0xff0d6efd), dark: Color(0xff0a58ca));
+
+  Color get actionForeground =>
       by(light: Color(0xFFFAFAFA), dark: Color(0xFFFAFAFA));
 
   Color get destructiveTextForeground => Color(0xFFEF4444);

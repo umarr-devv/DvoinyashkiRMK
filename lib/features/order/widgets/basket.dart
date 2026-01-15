@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -264,8 +265,33 @@ class _OrderBasketSubmitButton extends StatelessWidget {
               ),
               child: Text(
                 'Принять оплату',
-                style: TextStyle(color: theme.custom.successForeground),
+                style: TextStyle(color: theme.custom.actionForeground),
               ),
+            ),
+            Row(
+              spacing: 12,
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: FButton(
+                    onPress: () {
+                      SaveOrderDialog(context).show();
+                    },
+                    style: FButtonStyle.outline(),
+                    child: Text('Отложить'),
+                  ),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: FButton(
+                    onPress: () {
+                      SaveOrderListDialog(context).show();
+                    },
+                    style: FButtonStyle.secondary(),
+                    child: Text('Отложенные чеки'),
+                  ),
+                ),
+              ],
             ),
           ],
         );
