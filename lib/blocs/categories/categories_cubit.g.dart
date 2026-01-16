@@ -22,6 +22,7 @@ CategoriesState _$CategoriesStateFromJson(Map<String, dynamic> json) =>
       update: json['update'] == null
           ? null
           : DateTime.parse(json['update'] as String),
+      listView: json['list_view'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$CategoriesStateToJson(CategoriesState instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$CategoriesStateToJson(CategoriesState instance) =>
       'pinned': instance.pinned,
       'show_empty': instance.showEmpty,
       'update': instance.update?.toIso8601String(),
+      'list_view': instance.listView,
     };

@@ -85,7 +85,7 @@ class ProductCard extends StatelessWidget {
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: _ProductCardAddButton(
+                          child: ProductCardAddButton(
                             product: product,
                             orderItem: orderItem,
                           ),
@@ -259,8 +259,8 @@ class _ProductCardPrice extends StatelessWidget {
   }
 }
 
-class _ProductCardAddButton extends StatelessWidget {
-  const _ProductCardAddButton({required this.product, this.orderItem});
+class ProductCardAddButton extends StatelessWidget {
+  const ProductCardAddButton({super.key, required this.product, this.orderItem});
 
   final ProductData product;
   final OrderItem? orderItem;

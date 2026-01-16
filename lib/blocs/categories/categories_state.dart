@@ -7,12 +7,14 @@ class CategoriesState extends Equatable {
     this.pinned = const [],
     this.showEmpty = true,
     this.update,
+    this.listView = false,
   });
 
   final List<CategoryScheme> categories;
   final List<String> pinned;
   final bool showEmpty;
   final DateTime? update;
+  final bool listView;
 
   List<CategoryScheme> get pinnedCategories {
     return categories
@@ -25,12 +27,14 @@ class CategoriesState extends Equatable {
     List<String>? pinned,
     bool? showEmpty,
     DateTime? update,
+    bool? listView,
   }) {
     return CategoriesState(
       categories: categories ?? this.categories,
       pinned: pinned ?? this.pinned,
       showEmpty: showEmpty ?? this.showEmpty,
       update: update ?? this.update,
+      listView: listView ?? this.listView,
     );
   }
 
@@ -38,7 +42,8 @@ class CategoriesState extends Equatable {
     : categories = other.categories,
       pinned = other.pinned,
       showEmpty = other.showEmpty,
-      update = other.update;
+      update = other.update,
+      listView = other.listView;
 
   factory CategoriesState.fromJson(Map<String, dynamic> json) =>
       _$CategoriesStateFromJson(json);
@@ -46,7 +51,7 @@ class CategoriesState extends Equatable {
   Map<String, dynamic> toJson() => _$CategoriesStateToJson(this);
 
   @override
-  List<Object?> get props => [categories, pinned, update, showEmpty];
+  List<Object?> get props => [categories, pinned, update, showEmpty, listView];
 }
 
 final class CategoriesInitial extends CategoriesState {}

@@ -7,6 +7,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class OrderCatalog extends StatelessWidget {
   const OrderCatalog({super.key});
@@ -161,8 +162,6 @@ class _OrderCatalogCategoriesItem extends StatelessWidget {
 class _CatalogGrid extends StatelessWidget {
   const _CatalogGrid();
 
-  final double itemMinWidth = 180;
-
   List<ProductData> getItems({
     required SelectedCategoryData? selectedCategory,
     required String? searchQuery,
@@ -220,36 +219,21 @@ class _CatalogGrid extends StatelessWidget {
                     return ValueListenableBuilder(
                       valueListenable: productSeachQuery,
                       builder: (context, searchQuery, child) {
-                        return LayoutBuilder(
-                          builder: (context, constraints) {
-                            final products = getItems(
-                              selectedCategory: selectedCat,
-                              searchQuery: searchQuery,
-                              pinned: categoriesState.pinned,
-                              favoriteKeys: favoriteState.favoriteKeys,
-                              products: productState.products,
-                            );
-                            if (products.isEmpty) {
-                              return _GridEmptyItems(searchQuery: searchQuery);
-                            }
-                            return GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount:
-                                        (constraints.maxWidth / itemMinWidth)
-                                            .floor()
-                                            .clamp(1, 10),
-                                    crossAxisSpacing: 8,
-                                    mainAxisSpacing: 8,
-                                    childAspectRatio: 0.75,
-                                  ),
-                              itemBuilder: (context, index) {
-                                return ProductCard(product: products[index]);
-                              },
-                              itemCount: products.length,
-                            );
-                          },
+                        final products = getItems(
+                          selectedCategory: selectedCat,
+                          searchQuery: searchQuery,
+                          pinned: categoriesState.pinned,
+                          favoriteKeys: favoriteState.favoriteKeys,
+                          products: productState.products,
                         );
+                        if (products.isEmpty) {
+                          return _GridEmptyItems(searchQuery: searchQuery);
+                        }
+                        if (categoriesState.listView) {
+                          return _CatalogList(products);
+                        } else {
+                          return _CatalogTable(products);
+                        }
                       },
                     );
                   },
@@ -257,6 +241,116 @@ class _CatalogGrid extends StatelessWidget {
               },
             );
           },
+        );
+      },
+    );
+  }
+}
+
+class _CatalogTable extends StatelessWidget {
+  const _CatalogTable(this.products);
+
+  final List<ProductData> products;
+  final double itemMinWidth = 180;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: (constraints.maxWidth / itemMinWidth).floor().clamp(
+              1,
+              10,
+            ),
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 0.75,
+          ),
+          itemBuilder: (context, index) {
+            return ProductCard(product: products[index]);
+          },
+          itemCount: products.length,
+        );
+      },
+    );
+  }
+}
+
+class _CatalogList extends StatelessWidget {
+  const _CatalogList(this.products);
+
+  final List<ProductData> products;
+  OrderItem? getOrderItem(OrderData? order, ProductData product) {
+    return order?.items.firstWhereLogTypeOrNull(
+      (i) => product.uniqueId == i.product.uniqueId,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<OrderCubit>(context);
+    return BlocBuilder<OrderCubit, OrderState>(
+      bloc: cubit,
+      builder: (context, state) {
+        return Column(
+          spacing: 16,
+          children: [
+            Row(
+              children: [
+                Expanded(flex: 3, child: Text('Название')),
+                Expanded(flex: 2, child: Text('Тип')),
+                Expanded(flex: 2, child: Text('Цена')),
+                SizedBox(
+                  width: 150,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Text('Кол-во'),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  final item = products[index];
+                  final orderItem = getOrderItem(state.currentOrder, item);
+                  return Row(
+                    spacing: 12,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Text(item.nomenclature.name ?? ''),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(item.characteristic?.description ?? ''),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          item.sellPrice?.price.price.toStringAsFixed(2) ?? '',
+                        ),
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: ProductCardAddButton(
+                            product: item,
+                            orderItem: orderItem,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                separatorBuilder: (context, index) => CustomDottedLine(),
+                itemCount: products.length,
+              ),
+            ),
+          ],
         );
       },
     );

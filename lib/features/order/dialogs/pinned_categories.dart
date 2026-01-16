@@ -3,6 +3,7 @@ import 'package:app/features/order/states/states.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -56,56 +57,85 @@ class PinnedCategoriesDialog {
       builder: (context, state) {
         return SingleChildScrollView(
           child: Column(
-            children:
-                [categoriesListItem(null, state.showEmpty, cubit)] +
-                state.categories.map((category) {
-                  return categoriesListItem(category, null, cubit);
-                }).toList(),
+            spacing: 16,
+            children: [
+              catalogView(state.listView, cubit),
+              Column(
+                children:
+                    [categoriesListItem(null, state.showEmpty, cubit)] +
+                    state.categories.map((category) {
+                      return categoriesListItem(category, null, cubit);
+                    }).toList(),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget categoriesListItem(
-    CategoryScheme? category,
-    bool? showEmpty,
-    CategoriesCubit cubit,
-  ) {
-    final pinned =
-        cubit.state.pinned.contains(category?.refKey) || (showEmpty ?? false);
+  Widget catalogView(bool listView, CategoriesCubit cubit) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           spacing: 4,
-          children: [
-            if (category == null) Icon(Icons.close),
-            Text(category?.name ?? 'Без категорий'),
-          ],
+          children: [Icon(FluentIcons.list_20_regular), Text('В виде списка')],
         ),
         Expanded(child: CustomDottedLine()),
         Transform.scale(
           scale: 0.75,
           child: FSwitch(
-            value: pinned,
+            value: listView,
             onChange: (value) {
-              if (category != null) {
-                if (pinned) {
-                  cubit.unpin(category);
-                } else {
-                  cubit.pin(category);
-                }
-              } else {
-                cubit.switchShowEmpty();
-              }
-
-              selectedCategory.value = favoriteSelectedCategory;
+              cubit.switchListView();
             },
           ),
         ),
       ],
     );
   }
+}
+
+Widget categoriesListItem(
+  CategoryScheme? category,
+  bool? showEmpty,
+  CategoriesCubit cubit,
+) {
+  final pinned =
+      cubit.state.pinned.contains(category?.refKey) || (showEmpty ?? false);
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      Row(
+        spacing: 4,
+        children: [
+          if (category == null) Icon(Icons.close),
+          Text(category?.name ?? 'Без категорий'),
+        ],
+      ),
+      Expanded(child: CustomDottedLine()),
+      Transform.scale(
+        scale: 0.75,
+        child: FSwitch(
+          value: pinned,
+          onChange: (value) {
+            if (category != null) {
+              if (pinned) {
+                cubit.unpin(category);
+              } else {
+                cubit.pin(category);
+              }
+            } else {
+              cubit.switchShowEmpty();
+            }
+
+            selectedCategory.value = favoriteSelectedCategory;
+          },
+        ),
+      ),
+    ],
+  );
 }
