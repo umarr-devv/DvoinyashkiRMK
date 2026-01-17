@@ -298,9 +298,10 @@ class _CatalogList extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(flex: 3, child: Text('Название')),
-                Expanded(flex: 2, child: Text('Тип')),
-                Expanded(flex: 2, child: Text('Цена')),
+                Expanded(flex: 1, child: SizedBox()),
+                Expanded(flex: 6, child: Text('Название')),
+                Expanded(flex: 4, child: Text('Тип')),
+                Expanded(flex: 4, child: Text('Цена')),
                 SizedBox(
                   width: 150,
                   child: Align(
@@ -320,15 +321,22 @@ class _CatalogList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        flex: 3,
+                        flex: 1,
+                        child: ProductCatdFavoriteButton(
+                          item,
+                          padding: const EdgeInsets.all(0),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
                         child: Text(item.nomenclature.name ?? ''),
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 4,
                         child: Text(item.characteristic?.description ?? ''),
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 4,
                         child: Text(
                           item.sellPrice?.price.price.toStringAsFixed(2) ?? '',
                         ),

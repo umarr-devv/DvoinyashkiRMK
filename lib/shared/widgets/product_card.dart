@@ -64,27 +64,25 @@ class ProductCard extends StatelessWidget {
                       _ProductCardImage(product),
                       Align(
                         alignment: Alignment.topRight,
-                        child: _ProductCatdFavoriteButton(product),
+                        child: ProductCatdFavoriteButton(product),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
-                  flex: 5,
+                  flex: 6,
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8),
-                    child: Stack(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _ProductCardTitle(product),
-                            _ProductCardPrice(product),
-                          ],
-                        ),
+                        _ProductCardTitle(product),
+                        _ProductCardPrice(product),
+                        Expanded(child: SizedBox()),
                         Align(
-                          alignment: Alignment.bottomRight,
+                          alignment: Alignment.centerRight,
                           child: ProductCardAddButton(
                             product: product,
                             orderItem: orderItem,
@@ -178,10 +176,15 @@ class _ProductCardTitle extends StatelessWidget {
   }
 }
 
-class _ProductCatdFavoriteButton extends StatelessWidget {
-  const _ProductCatdFavoriteButton(this.product);
+class ProductCatdFavoriteButton extends StatelessWidget {
+  const ProductCatdFavoriteButton(
+    this.product, {
+    super.key,
+    this.padding = const EdgeInsets.all(12),
+  });
 
   final ProductData product;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +195,7 @@ class _ProductCatdFavoriteButton extends StatelessWidget {
       builder: (context, state) {
         final favorite = state.favoriteKeys.contains(product.uniqueId);
         return Padding(
-          padding: const EdgeInsets.all(12),
+          padding: padding,
           child: FButton.icon(
             onPress: () {
               if (favorite) {
@@ -260,7 +263,11 @@ class _ProductCardPrice extends StatelessWidget {
 }
 
 class ProductCardAddButton extends StatelessWidget {
-  const ProductCardAddButton({super.key, required this.product, this.orderItem});
+  const ProductCardAddButton({
+    super.key,
+    required this.product,
+    this.orderItem,
+  });
 
   final ProductData product;
   final OrderItem? orderItem;
