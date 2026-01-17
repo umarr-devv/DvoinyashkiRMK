@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:get_it/get_it.dart';
+import 'package:scaled_app/scaled_app.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class AppScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _AppScreenState extends State<AppScreen> {
   final productImagesCubit = ProductImagesCubit();
   final orderCubit = OrderCubit();
   final cashRegistersCubit = CashRegistersCubit();
+  final settingsCubit = SettingsCubit();
 
   Future initCubits() async {
     await usersCubit.update();
@@ -46,7 +48,9 @@ class _AppScreenState extends State<AppScreen> {
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
-      initTheme: lightTheme.toTheme(),
+      initTheme: settingsCubit.state.isDarkTheme
+          ? darkTheme.toTheme()
+          : lightTheme.toTheme(),
       builder: (context, theme) {
         return FTheme(
           data: theme.brightness == Brightness.dark
@@ -61,16 +65,20 @@ class _AppScreenState extends State<AppScreen> {
               BlocProvider.value(value: authCubit),
               BlocProvider.value(value: favoritesCubit),
               BlocProvider.value(value: orderCubit),
+              BlocProvider.value(value: settingsCubit),
             ],
-            child: MaterialApp.router(
-              title: 'Dvoinyashki RMK',
-              theme: theme,
-              debugShowCheckedModeBanner: false,
-              scrollBehavior: CustomScrollBehavior(),
-              routerConfig: appRoute.config(
-                navigatorObservers: () => [
-                  TalkerRouteObserver(GetIt.I<Talker>()),
-                ],
+            child: MediaQuery(
+              data: MediaQuery.of(context).scale(),
+              child: MaterialApp.router(
+                title: 'Dvoinyashki RMK',
+                theme: theme,
+                debugShowCheckedModeBanner: false,
+                scrollBehavior: CustomScrollBehavior(),
+                routerConfig: appRoute.config(
+                  navigatorObservers: () => [
+                    TalkerRouteObserver(GetIt.I<Talker>()),
+                  ],
+                ),
               ),
             ),
           ),

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 
-enum GeneralStorageKey { isDarkMode }
+enum GeneralStorageKey { scale }
 
 class GeneralStorage {
   late final Box box;

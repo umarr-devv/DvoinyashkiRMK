@@ -38,6 +38,7 @@ dependencies:
   path_provider: ^2.1.5
   retrofit: ^4.5.0
   retrofit_generator: ^10.2.1
+  scaled_app: ^2.3.0
   talker: ^5.1.9
   talker_bloc_logger: ^5.1.9
   talker_dio_logger: ^5.1.9

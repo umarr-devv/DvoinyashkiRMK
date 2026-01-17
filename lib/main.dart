@@ -8,12 +8,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:scaled_app/scaled_app.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   runZonedGuarded(
     () async {
+      ScaledWidgetsFlutterBinding.ensureInitialized(
+        scaleFactor: (deviceSize) {
+          return GetIt.I<GeneralStorage>().getValue(GeneralStorageKey.scale) ??
+              1;
+        },
+      );
       await initDependencies();
       runApp(AppScreen());
     },
@@ -26,8 +33,6 @@ Future<void> main() async {
 Future initDependencies() async {
   final talker = TalkerConfigure.init();
   GetIt.I.registerSingleton<Talker>(talker);
-
-  WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
 
@@ -51,6 +56,7 @@ Future initDependencies() async {
   await windowManager.ensureInitialized();
 
   final windowsOptions = const WindowOptions(
+    title: 'Двойняшкм РМК',
     titleBarStyle: TitleBarStyle.hidden,
     windowButtonVisibility: false,
   );
