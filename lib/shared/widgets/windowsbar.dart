@@ -16,20 +16,56 @@ class WindowBar extends StatefulWidget {
   State<WindowBar> createState() => _WindowBarState();
 }
 
-class _WindowBarState extends State<WindowBar> {
+class _WindowBarState extends State<WindowBar> with WindowListener {
   bool _isFullscreen = false;
   bool _isMaximized = true;
+
+  Future<void> _syncWindowState() async {
+    final newFullscreen = await windowManager.isFullScreen();
+    final newMaximized = await windowManager.isMaximized();
+
+    if (_isFullscreen != newFullscreen || _isMaximized != newMaximized) {
+      _isFullscreen = newFullscreen;
+      _isMaximized = newMaximized;
+      setState(() {});
+    }
+  }
+
+  @override
+  void onWindowMove() {
+    _syncWindowState();
+  }
+
+  @override
+  void onWindowMaximize() {
+    _syncWindowState();
+  }
+
+  @override
+  void onWindowMinimize() {
+    _syncWindowState();
+  }
+
+  @override
+  void onWindowDocked() {
+    _syncWindowState();
+  }
+
+  @override
+  void onWindowUnmaximize() {
+    _syncWindowState();
+  }
 
   @override
   void initState() {
     super.initState();
-    _syncWindowState();
+    windowManager.addListener(this);
   }
 
-  Future<void> _syncWindowState() async {
-    _isFullscreen = await windowManager.isFullScreen();
-    _isMaximized = await windowManager.isMaximized();
-    setState(() {});
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    super.dispose();
   }
 
   @override
@@ -65,7 +101,6 @@ class _WindowBarState extends State<WindowBar> {
               } else {
                 windowManager.maximize();
               }
-              _syncWindowState();
             },
             icon: _isMaximized
                 ? FluentIcons.square_multiple_24_regular
@@ -91,13 +126,15 @@ class WindowBarLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.only(top: 2, left: 16),
+      padding: const EdgeInsets.only(left: 16),
       child: Row(
         spacing: 6,
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CustomIcons.icon(size: 20, color: theme.custom.foreground),
-          CustomIcons.logo(size: 14, color: theme.custom.foreground),
+          CustomIcons.icon(size: 24, color: theme.custom.foreground),
+          Transform.translate(
+            offset: Offset(0, 2),
+            child: CustomIcons.logo(size: 18, color: theme.custom.foreground),
+          ),
         ],
       ),
     );
