@@ -1,3 +1,4 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/features/settings/widgets/widgets.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
@@ -10,14 +11,16 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          WindowBar(),
-          Expanded(
-            child: FScaffold(header: SettingsHeader(), child: SettingsBase()),
-          ),
-        ],
+    return ThemeSwitchingArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            WindowBar(),
+            Expanded(
+              child: FScaffold(header: SettingsHeader(), child: SettingsBase()),
+            ),
+          ],
+        ),
       ),
     );
   }

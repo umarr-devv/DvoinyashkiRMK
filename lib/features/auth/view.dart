@@ -35,7 +35,7 @@ class AuthScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Column(children: [WindowBar(), AuthActions()]),
+              Column(children: [WindowBar()]),
             ],
           ),
         ),

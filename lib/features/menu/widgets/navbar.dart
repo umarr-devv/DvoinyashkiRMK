@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/blocs/auth/auth_cubit.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/dialogs/dialogs.dart';
@@ -210,39 +209,12 @@ class _MenuNavBarUser extends StatelessWidget {
                       size: 24,
                     ),
                   ),
-                  _ThemeSwitchButton(),
                 ],
               );
             } else {
               return SizedBox();
             }
           },
-        );
-      },
-    );
-  }
-}
-
-class _ThemeSwitchButton extends StatelessWidget {
-  const _ThemeSwitchButton();
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ThemeSwitcher(
-      builder: (context) {
-        final isDarkTheme = theme.brightness == Brightness.dark;
-        return FButton.icon(
-          onPress: () {
-            ThemeSwitcher.of(context).changeTheme(
-              theme: isDarkTheme ? lightTheme.toTheme() : darkTheme.toTheme(),
-              isReversed: !isDarkTheme,
-            );
-          },
-          child: Icon(
-            isDarkTheme
-                ? FluentIcons.weather_moon_24_filled
-                : FluentIcons.weather_sunny_24_filled,
-          ),
         );
       },
     );

@@ -62,6 +62,7 @@ class _AppScreenState extends State<AppScreen> {
               BlocProvider.value(value: categoriesCubit),
               BlocProvider.value(value: productsCubit),
               BlocProvider.value(value: productImagesCubit),
+              BlocProvider.value(value: cashRegistersCubit),
               BlocProvider.value(value: authCubit),
               BlocProvider.value(value: favoritesCubit),
               BlocProvider.value(value: orderCubit),

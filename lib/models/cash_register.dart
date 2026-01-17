@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'cash_register.g.dart';
 
 @JsonSerializable()
-class CashRegisterScheme {
-  CashRegisterScheme({required this.refKey, required this.description});
+class CashRegisterScheme extends Equatable {
+  const CashRegisterScheme({required this.refKey, required this.description});
 
   @JsonKey(name: 'Ref_Key')
   final String refKey;
@@ -16,6 +17,9 @@ class CashRegisterScheme {
       _$CashRegisterSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$CashRegisterSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()

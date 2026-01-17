@@ -1,8 +1,11 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:app/blocs/blocs.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -39,6 +42,7 @@ class _WindowBarState extends State<WindowBar> {
         children: [
           DragToMoveArea(child: WindowBarLogo()),
           Expanded(child: DragToMoveArea(child: Container(height: 36))),
+          _ThemeSwithcer(),
           _WindowBarButton(
             onPressed: () {
               windowManager.setFullScreen(!_isFullscreen);
@@ -124,6 +128,44 @@ class _WindowBarButton extends StatelessWidget {
         ),
         icon: Icon(icon, size: 20),
       ),
+    );
+  }
+}
+
+class _ThemeSwithcer extends StatelessWidget {
+  const _ThemeSwithcer();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<SettingsCubit>(context);
+    final theme = Theme.of(context);
+    return ThemeSwitcher(
+      builder: (context) {
+        final isDarkTheme = theme.brightness == Brightness.dark;
+        return SizedBox(
+          height: 36,
+          width: 64,
+          child: IconButton(
+            style: IconButton.styleFrom(
+              shape: RoundedRectangleBorder(),
+              // hoverColor: color,
+            ),
+            onPressed: () {
+              ThemeSwitcher.of(context).changeTheme(
+                theme: isDarkTheme ? lightTheme.toTheme() : darkTheme.toTheme(),
+                isReversed: !isDarkTheme,
+              );
+              cubit.setSettings(isDarkTheme: !isDarkTheme);
+            },
+            icon: Icon(
+              isDarkTheme
+                  ? FluentIcons.weather_moon_24_filled
+                  : FluentIcons.weather_sunny_24_filled,
+              size: 20,
+            ),
+          ),
+        );
+      },
     );
   }
 }
