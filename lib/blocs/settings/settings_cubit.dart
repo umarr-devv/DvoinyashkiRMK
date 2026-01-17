@@ -1,5 +1,7 @@
+import 'package:app/data/repositories/general_storage.dart';
 import 'package:app/models/models.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -9,11 +11,16 @@ part 'settings_state.dart';
 class SettingsCubit extends HydratedCubit<SettingsState> {
   SettingsCubit() : super(SettingsInitial());
 
-  void setSettings(
+  final storage = GetIt.I<GeneralStorage>();
+
+  void setSettings({
     bool? isDarkTheme,
     double? scale,
     CashRegisterScheme? cashRegister,
-  ) {
+  }) {
+    if (scale != null) {
+      storage.setValue(GeneralStorageKey.scale, scale);
+    }
     final newState = state.copyWith(
       isDarkTheme: isDarkTheme,
       scale: scale,

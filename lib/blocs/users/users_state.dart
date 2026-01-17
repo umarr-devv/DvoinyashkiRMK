@@ -14,7 +14,9 @@ class UsersState extends Equatable {
     );
   }
 
-  UsersState.from(UsersState other) : users = other.users, update = other.update;
+  UsersState.from(UsersState other)
+    : users = other.users,
+      update = other.update;
 
   factory UsersState.fromJson(Map<String, dynamic> json) =>
       _$UsersStateFromJson(json);
