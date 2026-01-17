@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:app/blocs/auth/auth_cubit.dart';
+import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/dialogs/dialogs.dart';
 import 'package:app/models/user.dart';
@@ -240,15 +241,59 @@ class _UserInfo extends StatelessWidget {
             color: theme.custom.foreground,
           ),
         ),
-        if (user.jobTitle?.isNotEmpty ?? false)
-          Text(
-            user.jobTitle!,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: theme.custom.mutedForeground,
-            ),
-          ),
+        BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: BlocProvider.of<SettingsCubit>(context),
+          builder: (context, state) {
+            if (state.cashRegister != null) {
+              return RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Касса: ',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: theme.custom.mutedForeground,
+                      ),
+                    ),
+                    TextSpan(
+                      text: state.cashRegister!.description,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: theme.custom.foreground,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return GestureDetector(
+                onTap: () {
+                  AutoRouter.of(context).push(SettingsRoute());
+                },
+                child: Container(
+                  decoration: BoxDecoration(color: theme.custom.transparent),
+                  child: Row(
+                    spacing: 4,
+                    children: [
+                      Icon(
+                        Icons.error,
+                        size: 16,
+                        color: theme.custom.destructiveTextForeground,
+                      ),
+                      Text(
+                        'Не указана касса',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: theme.custom.destructiveTextForeground,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ],
     );
   }
