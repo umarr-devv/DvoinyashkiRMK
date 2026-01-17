@@ -75,7 +75,7 @@ abstract class RestClient {
 
   @GET('/Catalog_КассыККМ')
   Future<CashRegisterListScheme> getCashRegisters({
-    @Query('\$select') String select = 'Rer_Key,Description',
+    @Query('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });
 }

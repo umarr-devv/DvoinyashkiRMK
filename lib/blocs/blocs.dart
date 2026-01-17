@@ -1,4 +1,5 @@
 export 'auth/auth_cubit.dart';
+export 'cash_registers/cash_registers_cubit.dart';
 export 'categories/categories_cubit.dart';
 export 'favorites/favorites_cubit.dart';
 export 'order/order_cubit.dart';

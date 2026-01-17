@@ -27,12 +27,14 @@ class _AppScreenState extends State<AppScreen> {
   final favoritesCubit = FavoritesCubit();
   final productImagesCubit = ProductImagesCubit();
   final orderCubit = OrderCubit();
+  final cashRegistersCubit = CashRegistersCubit();
 
   Future initCubits() async {
     await usersCubit.update();
     await categoriesCubit.update();
     await productsCubit.update();
     await productImagesCubit.update();
+    await cashRegistersCubit.update();
   }
 
   @override

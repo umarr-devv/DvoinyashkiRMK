@@ -322,7 +322,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<CashRegisterListScheme> getCashRegisters({
-    String select = 'Rer_Key,Description',
+    String select = 'Ref_Key,Description',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
