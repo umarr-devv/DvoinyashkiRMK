@@ -1,6 +1,8 @@
 export 'barcode.dart';
+export 'cash_register.dart';
 export 'category.dart';
 export 'characteristic.dart';
+export 'check.dart';
 export 'nomenclature.dart';
 export 'price.dart';
 export 'price_type.dart';
