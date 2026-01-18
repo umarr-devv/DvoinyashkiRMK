@@ -33,10 +33,18 @@ class ChecksState extends Equatable {
 
 final class ChecksInitial extends ChecksState {}
 
-final class ChecksUpdate extends ChecksState {}
+final class ChecksUpdate extends ChecksState {
+  ChecksUpdate(super.state) : super.from();
+}
 
-final class ChecksLoading extends ChecksState {}
+final class ChecksLoading extends ChecksState {
+  ChecksLoading(super.state) : super.from();
+}
 
-final class ChecksLoaded extends ChecksState {}
+final class ChecksLoaded extends ChecksState {
+  ChecksLoaded(super.state) : super.from();
+}
 
-final class ChecksFailure extends ChecksState {}
+final class ChecksFailure extends ChecksState {
+  ChecksFailure(super.state) : super.from();
+}
