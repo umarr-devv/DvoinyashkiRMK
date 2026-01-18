@@ -354,31 +354,16 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<CheckListScheme> getChecks({
-    String select =
-        'Ref_Key,Number,Date,КассаККМ_Key,Кассир_Key,КассоваяСмена_Key,КлиентUDS,КодСкидкиUDS,СкидкаUDS,СуммаОплатUDS,Наличные,ОбменИННКассира,ОбменМагазин,ПолученоНаличными,ПолученоЭлектронно,Сдача,Статус,СуммаВключаетНДС,СуммаДокумента,ФормаОплаты,Состав',
-    required int top,
-    required int skip,
-    String orderBy = 'Date desc',
-    required String filter,
-    String format = 'json',
-  }) async {
+  Future<CheckListScheme> getChecks({required String fullPath}) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'$select': select,
-      r'$top': top,
-      r'$skip': skip,
-      r'$orderby': orderBy,
-      r'$filter': filter,
-      r'$format': format,
-    };
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<CheckListScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ЧекККМ',
+            '/Document_ЧекККМ${fullPath}',
             queryParameters: queryParameters,
             data: _data,
           )

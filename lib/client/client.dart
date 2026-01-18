@@ -79,15 +79,8 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
-  @GET('/Document_ЧекККМ')
+  @GET('/Document_ЧекККМ{fullPath}')
   Future<CheckListScheme> getChecks({
-    @Query('\$select')
-    String select =
-        'Ref_Key,Number,Date,КассаККМ_Key,Кассир_Key,КассоваяСмена_Key,КлиентUDS,КодСкидкиUDS,СкидкаUDS,СуммаОплатUDS,Наличные,ОбменИННКассира,ОбменМагазин,ПолученоНаличными,ПолученоЭлектронно,Сдача,Статус,СуммаВключаетНДС,СуммаДокумента,ФормаОплаты,Состав',
-    @Query('\$top') required int top,
-    @Query('\$skip') required int skip,
-    @Query('\$orderby') String orderBy = 'Date desc',
-    @Query('\$filter') required String filter,
-    @Query('\$format') String format = 'json',
+    @Path('fullPath') required String fullPath,
   });
 }
