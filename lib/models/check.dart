@@ -91,9 +91,21 @@ class CheckScheme {
   @JsonKey(name: 'Состав')
   final String itemsAsString;
 
-
   factory CheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CheckSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckSchemeToJson(this);
+}
+
+@JsonSerializable()
+class CheckListScheme {
+  CheckListScheme({required this.checks});
+
+  @JsonKey(name: 'value')
+  final List<CheckScheme> checks;
+
+  factory CheckListScheme.fromJson(Map<String, dynamic> json) =>
+      _$CheckListSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CheckListSchemeToJson(this);
 }

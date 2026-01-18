@@ -54,3 +54,13 @@ Map<String, dynamic> _$CheckSchemeToJson(CheckScheme instance) =>
       'ФормаОплаты': instance.paymentType,
       'Состав': instance.itemsAsString,
     };
+
+CheckListScheme _$CheckListSchemeFromJson(Map<String, dynamic> json) =>
+    CheckListScheme(
+      checks: (json['value'] as List<dynamic>)
+          .map((e) => CheckScheme.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$CheckListSchemeToJson(CheckListScheme instance) =>
+    <String, dynamic>{'value': instance.checks};
