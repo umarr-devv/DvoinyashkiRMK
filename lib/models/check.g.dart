@@ -22,12 +22,12 @@ CheckScheme _$CheckSchemeFromJson(Map<String, dynamic> json) => CheckScheme(
   shop: json['ОбменМагазин'] as String,
   cashPayment: (json['ПолученоНаличными'] as num).toDouble(),
   cashlessPayment: (json['ПолученоЭлектронно'] as num).toDouble(),
-  change: (json['Сдача'] as num).toDouble(),
+  change: json['Сдача'],
   status: json['Статус'] as String,
   includeNDS: json['СуммаВключаетНДС'] as bool,
   documentSum: (json['СуммаДокумента'] as num).toDouble(),
   paymentType: json['ФормаОплаты'] as String,
-  itemsAsString: json['Состав'] as String,
+  itemsAsString: json['Состав'] as String?,
 );
 
 Map<String, dynamic> _$CheckSchemeToJson(CheckScheme instance) =>

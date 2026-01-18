@@ -74,7 +74,7 @@ class CheckScheme {
   final double cashlessPayment;
 
   @JsonKey(name: 'Сдача')
-  final double change;
+  final dynamic change;
 
   @JsonKey(name: 'Статус')
   final String status;
@@ -89,7 +89,7 @@ class CheckScheme {
   final String paymentType;
 
   @JsonKey(name: 'Состав')
-  final String itemsAsString;
+  final String? itemsAsString;
 
   factory CheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CheckSchemeFromJson(json);
