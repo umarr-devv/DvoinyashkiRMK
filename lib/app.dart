@@ -31,7 +31,11 @@ class _AppScreenState extends State<AppScreen> {
   final cashRegistersCubit = CashRegistersCubit();
   final settingsCubit = SettingsCubit();
 
+  late final ChecksCubit checksCubit;
+
   Future initCubits() async {
+    checksCubit = ChecksCubit(settingsCubit);
+
     await usersCubit.update();
     await categoriesCubit.update();
     await productsCubit.update();
@@ -67,6 +71,7 @@ class _AppScreenState extends State<AppScreen> {
               BlocProvider.value(value: favoritesCubit),
               BlocProvider.value(value: orderCubit),
               BlocProvider.value(value: settingsCubit),
+              BlocProvider.value(value: checksCubit),
             ],
             child: MediaQuery(
               data: MediaQuery.of(context).scale(),
