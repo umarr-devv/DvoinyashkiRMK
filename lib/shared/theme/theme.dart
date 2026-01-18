@@ -65,6 +65,10 @@ class CustomThemeData {
 
   Color get textSelect => foreground.withValues(alpha: 0.075);
 
+  Color get rowOddColor => background.withValues(alpha: 0.5);
+
+  Color get rowEvenColor => muted.withValues(alpha: 0.75);
+
   ThemeData toTheme() {
     return ThemeData(
       useMaterial3: true,
