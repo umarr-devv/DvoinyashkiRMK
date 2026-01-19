@@ -18,8 +18,8 @@ class SellHistoryPagination extends StatelessWidget {
             control: FPaginationControl.managed(
               pages: 100,
               initial: state.pageNum,
-              showEdges: false,
-              siblings: 2,
+              showEdges: true,
+              siblings: 4,
               onChange: (page) {
                 cubit.setPageNum(page);
               },

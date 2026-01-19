@@ -2,6 +2,7 @@ import 'package:app/blocs/blocs.dart';
 import 'package:app/features/sell_history/dialogs/detail_check.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -25,12 +26,14 @@ class SellHistoryTable extends StatelessWidget {
           builder: (context, userStates) {
             return DataTable2(
               dividerThickness: 0,
+              columnSpacing: 8,
               columns: [
                 DataColumn2(label: Text('Номер')),
-                DataColumn2(label: Text('Кассир')),
+                DataColumn2(label: Text('Кассир'), fixedWidth: 320),
                 DataColumn2(label: Text('Сумма')),
-                DataColumn2(label: Text('Статус')),
                 DataColumn2(label: Text('Тип оплаты')),
+                DataColumn2(label: Text('Статус')),
+                DataColumn2(label: Text('Клиент')),
                 DataColumn2(label: Text('Дата'), numeric: true),
               ],
               rows: state.checks.map((check) {
@@ -51,11 +54,60 @@ class SellHistoryTable extends StatelessWidget {
                         : theme.custom.rowEvenColor,
                   ),
                   cells: [
-                    DataCell(Text(check.number)),
-                    DataCell(Text(user?.description ?? '')),
+                    DataCell(
+                      Row(
+                        spacing: 6,
+                        children: [
+                          Icon(FluentIcons.receipt_24_regular),
+                          Expanded(child: Text(check.number)),
+                        ],
+                      ),
+                    ),
+                    DataCell(
+                      user?.description != null
+                          ? Row(
+                              spacing: 6,
+                              children: [
+                                Icon(FluentIcons.person_24_regular),
+                                Expanded(
+                                  child: Text(
+                                    user!.description,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : SizedBox(),
+                    ),
                     DataCell(Text(check.documentSum.toStringAsFixed(0))),
-                    DataCell(Text(check.status)),
                     DataCell(Text(check.paymentType)),
+                    DataCell(
+                      Row(
+                        spacing: 4,
+                        children: [
+                          Icon(Icons.check),
+                          Expanded(child: Text(check.status)),
+                        ],
+                      ),
+                    ),
+                    DataCell(
+                      check.udsClient.isNotEmpty
+                          ? Row(
+                              spacing: 6,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(64),
+                                  child: Image.asset(
+                                    'assets/images/uds_icon.png',
+                                    height: 24,
+                                  ),
+                                ),
+                                Expanded(child: Text(check.udsClient)),
+                              ],
+                            )
+                          : Text(''),
+                    ),
                     DataCell(
                       Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
                     ),
