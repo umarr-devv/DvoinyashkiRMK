@@ -98,6 +98,74 @@ class CheckScheme {
 }
 
 @JsonSerializable()
+class CheckItemScheme {
+  CheckItemScheme({
+    required this.nomenclatureKey,
+    required this.characteriticKey,
+    required this.quantity,
+    required this.price,
+    required this.itemSum,
+  });
+
+  @JsonKey(name: 'Номенклатура_Key')
+  final String nomenclatureKey;
+
+  @JsonKey(name: 'Характеристика_Key')
+  final String? characteriticKey;
+
+  @JsonKey(name: 'Количество')
+  final double quantity;
+
+  @JsonKey(name: 'Цена')
+  final double price;
+
+  @JsonKey(name: 'Сумма')
+  final double itemSum;
+
+  factory CheckItemScheme.fromJson(Map<String, dynamic> json) =>
+      _$CheckItemSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CheckItemSchemeToJson(this);
+}
+
+@JsonSerializable()
+class DetailCheckScheme extends CheckScheme {
+  DetailCheckScheme({
+    required this.items,
+    required super.refKey,
+    required super.number,
+    required super.date,
+    required super.cashRegisterKey,
+    required super.userKey,
+    required super.cashRegisterSessionKey,
+    required super.udsClient,
+    required super.udsDiscountCode,
+    required super.udsDiscount,
+    required super.udsSumPayment,
+    required super.cash,
+    required super.userInn,
+    required super.shop,
+    required super.cashPayment,
+    required super.cashlessPayment,
+    required super.change,
+    required super.status,
+    required super.includeNDS,
+    required super.documentSum,
+    required super.paymentType,
+    required super.itemsAsString,
+  });
+
+  @JsonKey(name: 'Запасы')
+  final List<CheckItemScheme> items;
+
+  factory DetailCheckScheme.fromJson(Map<String, dynamic> json) =>
+      _$DetailCheckSchemeFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$DetailCheckSchemeToJson(this);
+}
+
+@JsonSerializable()
 class CheckListScheme {
   CheckListScheme({required this.checks});
 
