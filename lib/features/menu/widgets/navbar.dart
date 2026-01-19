@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:app/blocs/auth/auth_cubit.dart';
 import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/dialogs/dialogs.dart';

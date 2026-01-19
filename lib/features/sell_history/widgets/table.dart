@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/sell_history/dialogs/detail_check.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,6 @@ class SellHistoryTable extends StatelessWidget {
                 DataColumn2(label: Text('Статус')),
                 DataColumn2(label: Text('Тип оплаты')),
                 DataColumn2(label: Text('Дата'), numeric: true),
-                DataColumn2(label: SizedBox(), fixedWidth: 64, numeric: true),
               ],
               rows: state.checks.map((check) {
                 final user = userStates.users.firstWhereLogTypeOrNull(
@@ -39,7 +39,12 @@ class SellHistoryTable extends StatelessWidget {
                 );
                 final rowIndex = state.checks.indexOf(check);
                 return DataRow2(
-                  onTap: () {},
+                  onTap: () {
+                    DetailCheckDialog(
+                      refKey: check.refKey,
+                      rootContext: context,
+                    ).show();
+                  },
                   color: WidgetStatePropertyAll(
                     rowIndex.isOdd
                         ? theme.custom.rowOddColor
@@ -53,13 +58,6 @@ class SellHistoryTable extends StatelessWidget {
                     DataCell(Text(check.paymentType)),
                     DataCell(
                       Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
-                    ),
-                    DataCell(
-                      FButton.icon(
-                        onPress: () {},
-                        style: FButtonStyle.ghost(),
-                        child: Icon(Icons.info_outline),
-                      ),
                     ),
                   ],
                 );
