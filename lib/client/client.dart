@@ -85,8 +85,8 @@ abstract class RestClient {
   });
 
   @GET('/Document_ЧекККМ(guid\'{ref_key}\')')
-  Future<DetailUserScheme> getCheck({
+  Future<DetailCheckScheme> getCheck({
     @Path('ref_key') required String refKey,
-    @Query('\$select') @Query('\$format') String format = 'json',
+    @Query('\$format') String format = 'json',
   });
 }

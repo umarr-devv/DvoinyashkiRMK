@@ -381,15 +381,15 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<DetailUserScheme> getCheck({
+  Future<DetailCheckScheme> getCheck({
     required String refKey,
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'$select': format};
+    final queryParameters = <String, dynamic>{r'$format': format};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DetailUserScheme>(
+    final _options = _setStreamType<DetailCheckScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -400,9 +400,9 @@ class _RestClient implements RestClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late DetailUserScheme _value;
+    late DetailCheckScheme _value;
     try {
-      _value = DetailUserScheme.fromJson(_result.data!);
+      _value = DetailCheckScheme.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
