@@ -83,4 +83,10 @@ abstract class RestClient {
   Future<CheckListScheme> getChecks({
     @Path('fullPath') required String fullPath,
   });
+
+  @GET('/Document_ЧекККМ(guid\'{ref_key}\')')
+  Future<DetailUserScheme> getCheck({
+    @Path('ref_key') required String refKey,
+    @Query('\$select') @Query('\$format') String format = 'json',
+  });
 }
