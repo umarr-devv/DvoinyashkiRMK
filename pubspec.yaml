@@ -36,6 +36,7 @@ dependencies:
   intl: ^0.20.2
   json_annotation: ^4.9.0
   path_provider: ^2.1.5
+  pdf: ^3.11.3
   printing: ^5.14.2
   retrofit: ^4.5.0
   retrofit_generator: ^10.2.1
@@ -100,6 +101,7 @@ flutter:
     - "assets/images/splash_image.png"
     - "assets/images/splash_branding.png"
     - "assets/images/uds_icon.png"
+    - "assets/images/print_logo.png"
 
     - "assets/icon/icon.png"
 
