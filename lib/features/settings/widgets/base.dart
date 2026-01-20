@@ -4,6 +4,7 @@ import 'package:app/shared/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:printing/printing.dart';
 import 'package:scaled_app/scaled_app.dart';
 
 class SettingsBase extends StatelessWidget {
@@ -14,7 +15,12 @@ class SettingsBase extends StatelessWidget {
     return Column(
       spacing: 24,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [_CashRegisterSelect(), _ScaleSlider(), Row()],
+      children: [
+        _CashRegisterSelect(),
+        _PrinterSelect(),
+        _ScaleSlider(),
+        Row(),
+      ],
     );
   }
 }
@@ -45,6 +51,44 @@ class _CashRegisterSelect extends StatelessWidget {
                 items: {
                   for (var element in state.cashRegisters)
                     element.description: element,
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _PrinterSelect extends StatelessWidget {
+  const _PrinterSelect();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<SettingsCubit>(context);
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      bloc: cubit,
+      builder: (context, state) {
+        return FutureBuilder(
+          future: Printing.listPrinters(),
+          builder: (context, asyncSnapshot) {
+            return SizedBox(
+              width: 320,
+              child: FSelect<String>(
+                label: Text('Принтер'),
+                hint: 'Выберите принтер',
+                control: FSelectControl.managed(
+                  initial: state.printer,
+                  onChange: (value) {
+                    if (value != null) {
+                      cubit.setSettings(printer: value);
+                    }
+                  },
+                ),
+                items: {
+                  for (var element in asyncSnapshot.data ?? [])
+                    element.name: element.url,
                 },
               ),
             );

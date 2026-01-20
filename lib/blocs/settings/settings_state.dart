@@ -7,28 +7,33 @@ class SettingsState extends Equatable {
     this.isDarkTheme = false,
     this.scale = 1,
     this.cashRegister,
+    this.printer,
   });
 
   final bool isDarkTheme;
   final double scale;
   final CashRegisterScheme? cashRegister;
+  final String? printer;
 
   SettingsState copyWith({
     bool? isDarkTheme,
     double? scale,
     CashRegisterScheme? cashRegister,
+    String? printer,
   }) {
     return SettingsState(
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
       scale: scale ?? this.scale,
       cashRegister: cashRegister ?? this.cashRegister,
+      printer: printer ?? this.printer,
     );
   }
 
   SettingsState.from(SettingsState other)
     : isDarkTheme = other.isDarkTheme,
       scale = other.scale,
-      cashRegister = other.cashRegister;
+      cashRegister = other.cashRegister,
+      printer = other.printer;
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);

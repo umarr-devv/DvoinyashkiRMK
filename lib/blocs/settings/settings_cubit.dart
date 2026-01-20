@@ -17,6 +17,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     bool? isDarkTheme,
     double? scale,
     CashRegisterScheme? cashRegister,
+    String? printer,
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -25,6 +26,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       isDarkTheme: isDarkTheme,
       scale: scale,
       cashRegister: cashRegister,
+      printer: printer
     );
     emit(SettingsUpdate(newState));
   }

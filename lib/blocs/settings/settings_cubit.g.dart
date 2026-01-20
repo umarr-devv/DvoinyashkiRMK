@@ -15,6 +15,7 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
           : CashRegisterScheme.fromJson(
               json['cash_register'] as Map<String, dynamic>,
             ),
+      printer: json['printer'] as String?,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'is_dark_theme': instance.isDarkTheme,
       'scale': instance.scale,
       'cash_register': instance.cashRegister,
+      'printer': instance.printer,
     };
