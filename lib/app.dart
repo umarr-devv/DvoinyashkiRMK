@@ -51,45 +51,47 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ThemeProvider(
-      initTheme: settingsCubit.state.isDarkTheme
-          ? darkTheme.toTheme()
-          : lightTheme.toTheme(),
-      builder: (context, theme) {
-        return FTheme(
-          data: theme.brightness == Brightness.dark
-              ? darkTheme.toFTheme()
-              : lightTheme.toFTheme(),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: usersCubit),
-              BlocProvider.value(value: categoriesCubit),
-              BlocProvider.value(value: productsCubit),
-              BlocProvider.value(value: productImagesCubit),
-              BlocProvider.value(value: cashRegistersCubit),
-              BlocProvider.value(value: authCubit),
-              BlocProvider.value(value: favoritesCubit),
-              BlocProvider.value(value: orderCubit),
-              BlocProvider.value(value: settingsCubit),
-              BlocProvider.value(value: checksCubit),
-            ],
-            child: MediaQuery(
-              data: MediaQuery.of(context).scale(),
-              child: MaterialApp.router(
-                title: 'Dvoinyashki RMK',
-                theme: theme,
-                debugShowCheckedModeBanner: false,
-                scrollBehavior: CustomScrollBehavior(),
-                routerConfig: appRoute.config(
-                  navigatorObservers: () => [
-                    TalkerRouteObserver(GetIt.I<Talker>()),
-                  ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: usersCubit),
+        BlocProvider.value(value: categoriesCubit),
+        BlocProvider.value(value: productsCubit),
+        BlocProvider.value(value: productImagesCubit),
+        BlocProvider.value(value: cashRegistersCubit),
+        BlocProvider.value(value: authCubit),
+        BlocProvider.value(value: favoritesCubit),
+        BlocProvider.value(value: orderCubit),
+        BlocProvider.value(value: settingsCubit),
+        BlocProvider.value(value: checksCubit),
+      ],
+      child: ThemeProvider(
+        initTheme: settingsCubit.state.isDarkTheme
+            ? darkTheme.toTheme()
+            : lightTheme.toTheme(),
+        builder: (context, theme) {
+          return FTheme(
+            data: theme.brightness == Brightness.dark
+                ? darkTheme.toFTheme()
+                : lightTheme.toFTheme(),
+            child: FToaster(
+              child: MediaQuery(
+                data: MediaQuery.of(context).scale(),
+                child: MaterialApp.router(
+                  title: 'Dvoinyashki RMK',
+                  theme: theme,
+                  debugShowCheckedModeBanner: false,
+                  scrollBehavior: CustomScrollBehavior(),
+                  routerConfig: appRoute.config(
+                    navigatorObservers: () => [
+                      TalkerRouteObserver(GetIt.I<Talker>()),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
