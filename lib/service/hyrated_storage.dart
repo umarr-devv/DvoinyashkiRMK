@@ -9,10 +9,6 @@ class HyratedStorageService {
           ? HydratedStorageDirectory.web
           : HydratedStorageDirectory((await getTemporaryDirectory()).path),
     );
-    storage.clear();
-    storage.clear();
-    storage.clear();
-    storage.clear();
     HydratedBloc.storage = storage;
   }
 }
