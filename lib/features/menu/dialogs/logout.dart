@@ -1,4 +1,6 @@
 import 'package:app/blocs/auth/auth_cubit.dart';
+import 'package:app/blocs/notification/notification_cubit.dart';
+import 'package:app/service/toast.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +28,15 @@ class LogoutDialog {
             ),
             FButton(
               onPress: () async {
+                ToastService.showToast(
+                  context,
+                  notification: NotificationData(
+                    type: NotificationType.error,
+                    icon: FIcons.logOut,
+                    title: 'Выход',
+                    description: 'Выход из учетной записи',
+                  ),
+                );
                 await cubit.logout();
               },
               style: FButtonStyle.destructive(),

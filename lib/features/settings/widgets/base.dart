@@ -87,6 +87,9 @@ class _PrinterSelect extends StatelessWidget {
         return FutureBuilder(
           future: Printing.listPrinters(),
           builder: (context, asyncSnapshot) {
+            if (!asyncSnapshot.hasData) {
+              return SizedBox(height: 64);
+            }
             return SizedBox(
               width: 320,
               child: FSelect<String>(
@@ -182,7 +185,6 @@ class _ScaleSlider extends StatelessWidget {
                 onPress: () {
                   ScaledWidgetsFlutterBinding.instance.scaleFactor = (size) =>
                       state.scale;
-
                   ToastService.showToast(
                     context,
                     notification: NotificationData(

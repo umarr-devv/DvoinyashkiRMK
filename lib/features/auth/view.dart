@@ -19,7 +19,6 @@ class AuthScreen extends StatelessWidget {
       bloc: BlocProvider.of<AuthCubit>(context),
       listener: (context, state) {
         if (state is AuthLoggedIn && state.user != null) {
-          AutoRouter.of(context).push(MenuRoute());
           ToastService.showToast(
             context,
             notification: NotificationData(
@@ -30,6 +29,7 @@ class AuthScreen extends StatelessWidget {
                   'Пользователь ${state.user!.description} успешно авторизован',
             ),
           );
+          AutoRouter.of(context).replace(MenuRoute());
         }
       },
       child: ThemeSwitchingArea(

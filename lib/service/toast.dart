@@ -7,7 +7,8 @@ import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 
 class ToastService {
-  static FToastAlignment toastAlignment = FToastAlignment.bottomRight;
+  static FToastAlignment toastAlignment = FToastAlignment.bottomLeft;
+  static Duration toastDuration = Duration(seconds: 3);
 
   static IconData getDefaultIcon(NotificationType type) {
     switch (type) {
@@ -39,6 +40,7 @@ class ToastService {
     showRawFToast(
       context: context,
       alignment: toastAlignment,
+      duration: toastDuration,
       builder: (context, entry) {
         return getToast(context, notification: notification, entry: entry);
       },
