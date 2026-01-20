@@ -30,6 +30,7 @@ class _AppScreenState extends State<AppScreen> {
   final orderCubit = OrderCubit();
   final cashRegistersCubit = CashRegistersCubit();
   final settingsCubit = SettingsCubit();
+  final notificationCubit = NotificationCubit();
 
   late final ChecksCubit checksCubit;
 
@@ -63,6 +64,7 @@ class _AppScreenState extends State<AppScreen> {
         BlocProvider.value(value: orderCubit),
         BlocProvider.value(value: settingsCubit),
         BlocProvider.value(value: checksCubit),
+        BlocProvider.value(value: notificationCubit),
       ],
       child: ThemeProvider(
         initTheme: settingsCubit.state.isDarkTheme

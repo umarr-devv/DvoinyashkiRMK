@@ -1,5 +1,6 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/blocs/blocs.dart';
+import 'package:app/shared/dialogs/dialogs.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
@@ -79,6 +80,16 @@ class _WindowBarState extends State<WindowBar> with WindowListener {
           DragToMoveArea(child: WindowBarLogo()),
           Expanded(child: DragToMoveArea(child: Container(height: 36))),
           _ThemeSwithcer(),
+          _WindowBarButton(
+            onPressed: () {
+              NotificationSheetDialog(rootContext: context).show();
+            },
+            icon: FluentIcons.alert_24_regular,
+          ),
+          SizedBox(
+            height: 20,
+            child: VerticalDivider(color: theme.custom.border, width: 8),
+          ),
           _WindowBarButton(
             onPressed: () {
               windowManager.setFullScreen(!_isFullscreen);
@@ -196,8 +207,8 @@ class _ThemeSwithcer extends StatelessWidget {
             },
             icon: Icon(
               isDarkTheme
-                  ? FluentIcons.weather_moon_24_filled
-                  : FluentIcons.weather_sunny_24_filled,
+                  ? FluentIcons.weather_moon_24_regular
+                  : FluentIcons.weather_sunny_24_regular,
               size: 20,
             ),
           ),
