@@ -1,6 +1,8 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/models/models.dart';
+import 'package:app/service/toast.dart';
 import 'package:app/shared/theme/theme.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -45,7 +47,19 @@ class _CashRegisterSelect extends StatelessWidget {
                 control: FSelectControl.managed(
                   initial: settingsState.cashRegister,
                   onChange: (value) {
-                    cubit.setSettings(cashRegister: value);
+                    if (value != null) {
+                      cubit.setSettings(cashRegister: value);
+                      ToastService.showToast(
+                        context,
+                        notification: NotificationData(
+                          type: NotificationType.info,
+                          icon: FluentIcons.building_shop_24_regular,
+                          title: 'Выбрана касса',
+                          description:
+                              'Касса ${value.description} был избран для этого устройства',
+                        ),
+                      );
+                    }
                   },
                 ),
                 items: {
@@ -83,6 +97,15 @@ class _PrinterSelect extends StatelessWidget {
                   onChange: (value) {
                     if (value != null) {
                       cubit.setSettings(printer: value);
+                      ToastService.showToast(
+                        context,
+                        notification: NotificationData(
+                          type: NotificationType.info,
+                          icon: FluentIcons.print_24_regular,
+                          title: 'Выбран принтер',
+                          description: 'Принтер $value был избран по умолчанию',
+                        ),
+                      );
                     }
                   },
                 ),
@@ -159,6 +182,17 @@ class _ScaleSlider extends StatelessWidget {
                 onPress: () {
                   ScaledWidgetsFlutterBinding.instance.scaleFactor = (size) =>
                       state.scale;
+
+                  ToastService.showToast(
+                    context,
+                    notification: NotificationData(
+                      type: NotificationType.info,
+                      icon: FluentIcons.scale_fill_24_regular,
+                      title: 'Масштаб',
+                      description:
+                          'Масштаб программы был изменен на ${state.scale * 100}%',
+                    ),
+                  );
                 },
                 child: Icon(Icons.restart_alt),
               ),

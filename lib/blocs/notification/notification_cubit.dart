@@ -10,7 +10,7 @@ class NotificationCubit extends Cubit<NotificationState> {
 
   void add(NotificationData notification) {
     final List<NotificationData> notifications = List.from(state.notifications);
-    notifications.add(notification);
+    notifications.insert(0, notification);
     final newState = state.copyWith(notifications: notifications);
     emit(NotificationUpdate(newState));
   }

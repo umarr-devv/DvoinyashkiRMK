@@ -2,10 +2,12 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/auth/widgets/widgets.dart';
+import 'package:app/service/toast.dart';
 import 'package:app/shared/widgets/windowsbar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
 @RoutePage()
 class AuthScreen extends StatelessWidget {
@@ -16,8 +18,18 @@ class AuthScreen extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       bloc: BlocProvider.of<AuthCubit>(context),
       listener: (context, state) {
-        if (state is AuthLoggedIn){
+        if (state is AuthLoggedIn && state.user != null) {
           AutoRouter.of(context).push(MenuRoute());
+          ToastService.showToast(
+            context,
+            notification: NotificationData(
+              type: NotificationType.success,
+              icon: FIcons.logIn,
+              title: 'Авторизация',
+              description:
+                  'Пользователь ${state.user!.description} успешно авторизован',
+            ),
+          );
         }
       },
       child: ThemeSwitchingArea(
