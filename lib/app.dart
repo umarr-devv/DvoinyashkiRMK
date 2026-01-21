@@ -21,6 +21,7 @@ class AppScreen extends StatefulWidget {
 class _AppScreenState extends State<AppScreen> {
   final appRoute = AppRouter();
 
+  final structureUnitsCubit = StructureUnitsCubit();
   final usersCubit = UsersCubit();
   final authCubit = AuthCubit();
   final categoriesCubit = CategoriesCubit();
@@ -37,6 +38,7 @@ class _AppScreenState extends State<AppScreen> {
   Future initCubits() async {
     checksCubit = ChecksCubit(settingsCubit);
 
+    await structureUnitsCubit.update();
     await usersCubit.update();
     await categoriesCubit.update();
     await productsCubit.update();
@@ -54,6 +56,7 @@ class _AppScreenState extends State<AppScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider.value(value: structureUnitsCubit),
         BlocProvider.value(value: usersCubit),
         BlocProvider.value(value: categoriesCubit),
         BlocProvider.value(value: productsCubit),

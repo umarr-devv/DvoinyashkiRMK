@@ -7,4 +7,5 @@ export 'notification/notification_cubit.dart';
 export 'order/order_cubit.dart';
 export 'products/products_cubit.dart';
 export 'settings/settings_cubit.dart';
+export 'structure_units/structure_units_cubit.dart';
 export 'users/users_cubit.dart';
