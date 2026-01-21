@@ -7,4 +7,6 @@ export 'nomenclature.dart';
 export 'price.dart';
 export 'price_type.dart';
 export 'product_image.dart';
+export 'structure_unit.dart';
 export 'user.dart';
+export 'withdraw.dart';
