@@ -89,4 +89,15 @@ abstract class RestClient {
     @Path('ref_key') required String refKey,
     @Query('\$format') String format = 'json',
   });
+
+  @GET('/Catalog_СтруктурныеЕдиницы')
+  Future<StructureUnitListScheme> getStructureUnits({
+    @Path('ref_key') required String refKey,
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/Document_ВыемкаНаличных')
+  Future<WithdrawListScheme> getWithdraws({
+    @Path('fullPath') required String fullPath,
+  });
 }
