@@ -7,6 +7,7 @@ class WithdrawScheme {
   WithdrawScheme({
     required this.refKey,
     required this.number,
+    required this.date,
     required this.posted,
     required this.cashRegisyerKey,
     required this.commentary,
@@ -19,6 +20,9 @@ class WithdrawScheme {
 
   @JsonKey(name: 'Number')
   final String number;
+
+  @JsonKey(name: 'Date')
+  final DateTime date;
 
   @JsonKey(name: 'Posted')
   final bool posted;
@@ -48,9 +52,8 @@ class WithdrawListScheme {
   @JsonKey(name: 'value')
   final List<WithdrawScheme> withdraws;
 
-  factory WithdrawListScheme.fromJson(
-    Map<String, dynamic> json,
-  ) => _$WithdrawListSchemeFromJson(json);
+  factory WithdrawListScheme.fromJson(Map<String, dynamic> json) =>
+      _$WithdrawListSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$WithdrawListSchemeToJson(this);
 }
