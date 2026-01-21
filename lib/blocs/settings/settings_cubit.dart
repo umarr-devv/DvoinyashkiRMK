@@ -17,6 +17,8 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     bool? isDarkTheme,
     double? scale,
     CashRegisterScheme? cashRegister,
+    StructureUnitScheme? store,
+    StructureUnitScheme? subdivision,
     String? printer,
   }) {
     if (scale != null) {
@@ -26,7 +28,9 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       isDarkTheme: isDarkTheme,
       scale: scale,
       cashRegister: cashRegister,
-      printer: printer
+      store: store,
+      subdivision: subdivision,
+      printer: printer,
     );
     emit(SettingsUpdate(newState));
   }

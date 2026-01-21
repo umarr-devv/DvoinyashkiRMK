@@ -1,8 +1,7 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/core/consts/consts.dart';
 import 'package:app/models/models.dart';
-import 'package:app/service/toast.dart';
 import 'package:app/shared/theme/theme.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -19,6 +18,8 @@ class SettingsBase extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _CashRegisterSelect(),
+        _StoreSelect(),
+        _SubdivisionSelect(),
         _PrinterSelect(),
         _ScaleSlider(),
         Row(),
@@ -49,21 +50,98 @@ class _CashRegisterSelect extends StatelessWidget {
                   onChange: (value) {
                     if (value != null) {
                       cubit.setSettings(cashRegister: value);
-                      ToastService.showToast(
-                        context,
-                        notification: NotificationData(
-                          type: NotificationType.info,
-                          icon: FluentIcons.building_shop_24_regular,
-                          title: 'Выбрана касса',
-                          description:
-                              'Касса ${value.description} был избран для этого устройства',
-                        ),
-                      );
                     }
                   },
                 ),
                 items: {
                   for (var element in state.cashRegisters)
+                    element.description: element,
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _StoreSelect extends StatelessWidget {
+  const _StoreSelect();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<StructureUnitsCubit, StructureUnitsState>(
+      bloc: BlocProvider.of<StructureUnitsCubit>(context),
+      builder: (context, state) {
+        final cubit = BlocProvider.of<SettingsCubit>(context);
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: cubit,
+          builder: (context, settingsState) {
+            return SizedBox(
+              width: 320,
+              child: FSelect<StructureUnitScheme>.search(
+                label: Text('Магазина'),
+                hint: 'Выберите магазин',
+                control: FSelectControl.managed(
+                  initial: settingsState.store,
+                  onChange: (value) {
+                    if (value != null) {
+                      cubit.setSettings(store: value);
+                    }
+                  },
+                ),
+                searchFieldProperties: FSelectSearchFieldProperties(
+                  hint: 'Поиск',
+                ),
+                items: {
+                  for (var element
+                      in state.structureUnits
+                          .where((i) => i.type == storeStructureType)
+                          .toList())
+                    element.description: element,
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _SubdivisionSelect extends StatelessWidget {
+  const _SubdivisionSelect();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<StructureUnitsCubit, StructureUnitsState>(
+      bloc: BlocProvider.of<StructureUnitsCubit>(context),
+      builder: (context, state) {
+        final cubit = BlocProvider.of<SettingsCubit>(context);
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            return SizedBox(
+              width: 320,
+              child: FSelect<StructureUnitScheme>.search(
+                label: Text('Подразделение'),
+                hint: 'Выберите подразделение',
+                control: FSelectControl.managed(
+                  initial: settingsState.subdivision,
+                  onChange: (value) {
+                    if (value != null) {
+                      cubit.setSettings(subdivision: value);
+                    }
+                  },
+                ),
+                searchFieldProperties: FSelectSearchFieldProperties(
+                  hint: 'Поиск',
+                ),
+                items: {
+                  for (var element
+                      in state.structureUnits
+                          .where((i) => i.type == subdivisionStructureType)
+                          .toList())
                     element.description: element,
                 },
               ),
@@ -100,15 +178,6 @@ class _PrinterSelect extends StatelessWidget {
                   onChange: (value) {
                     if (value != null) {
                       cubit.setSettings(printer: value);
-                      ToastService.showToast(
-                        context,
-                        notification: NotificationData(
-                          type: NotificationType.info,
-                          icon: FluentIcons.print_24_regular,
-                          title: 'Выбран принтер',
-                          description: 'Принтер $value был избран по умолчанию',
-                        ),
-                      );
                     }
                   },
                 ),
@@ -185,16 +254,6 @@ class _ScaleSlider extends StatelessWidget {
                 onPress: () {
                   ScaledWidgetsFlutterBinding.instance.scaleFactor = (size) =>
                       state.scale;
-                  ToastService.showToast(
-                    context,
-                    notification: NotificationData(
-                      type: NotificationType.info,
-                      icon: FluentIcons.scale_fill_24_regular,
-                      title: 'Масштаб',
-                      description:
-                          'Масштаб программы был изменен на ${state.scale * 100}%',
-                    ),
-                  );
                 },
                 child: Icon(Icons.restart_alt),
               ),

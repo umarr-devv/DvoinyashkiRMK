@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'structure_unit.g.dart';
 
 @JsonSerializable()
-class StructureUnitScheme {
-  StructureUnitScheme({
+class StructureUnitScheme extends Equatable {
+  const StructureUnitScheme({
     required this.refKey,
     required this.description,
     required this.udsUID,
@@ -35,6 +36,9 @@ class StructureUnitScheme {
       _$StructureUnitSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$StructureUnitSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()
