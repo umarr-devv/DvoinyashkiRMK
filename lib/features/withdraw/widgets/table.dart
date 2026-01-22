@@ -1,6 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -33,8 +34,7 @@ class WithdrawTable extends StatelessWidget {
                     DataColumn2(label: Text('Касса')),
                     DataColumn2(label: Text('Магазин')),
                     DataColumn2(label: Text('Подразделение')),
-                    DataColumn2(label: Text('Сумма'), fixedWidth: 320),
-                    DataColumn2(label: Text('Комментарий')),
+                    DataColumn2(label: Text('Сумма'), numeric: true),
                     DataColumn2(label: Text('Дата'), numeric: true),
                   ],
                   rows: state.withdraws.map((withdraw) {
@@ -59,12 +59,25 @@ class WithdrawTable extends StatelessWidget {
                             : theme.custom.rowEvenColor,
                       ),
                       cells: [
-                        DataCell(Text(withdraw.number)),
+                        DataCell(
+                          Row(
+                            spacing: 6,
+                            children: [
+                              Icon(FluentIcons.money_24_regular),
+                              Expanded(child: Text(withdraw.number)),
+                            ],
+                          ),
+                        ),
                         DataCell(Text(cashRegister?.description ?? '')),
                         DataCell(Text(store?.description ?? '')),
                         DataCell(Text(subdivision?.description ?? '')),
-                        DataCell(Text(withdraw.documentSum.toStringAsFixed(2))),
-                        DataCell(Text(withdraw.commentary)),
+                        DataCell(
+                          Text(
+                            NumberFormat.currency(
+                              symbol: '',
+                            ).format(withdraw.documentSum),
+                          ),
+                        ),
                         DataCell(
                           Text(
                             DateFormat(

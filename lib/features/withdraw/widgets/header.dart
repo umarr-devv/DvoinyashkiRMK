@@ -12,7 +12,7 @@ class WithdrawHeader extends StatelessWidget {
     return FHeader.nested(
       title: Text('Выемки'),
       titleAlignment: Alignment.centerLeft,
-      prefixes: [Icon(FluentIcons.receipt_24_regular, size: 28)],
+      prefixes: [Icon(FluentIcons.money_24_regular, size: 28)],
       suffixes: [
         FButton.icon(
           onPress: () {

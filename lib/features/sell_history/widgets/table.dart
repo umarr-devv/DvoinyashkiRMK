@@ -30,10 +30,10 @@ class SellHistoryTable extends StatelessWidget {
               columns: [
                 DataColumn2(label: Text('Номер')),
                 DataColumn2(label: Text('Кассир'), fixedWidth: 320),
-                DataColumn2(label: Text('Сумма')),
                 DataColumn2(label: Text('Тип оплаты')),
                 DataColumn2(label: Text('Статус')),
                 DataColumn2(label: Text('Клиент')),
+                DataColumn2(label: Text('Сумма'), numeric: true),
                 DataColumn2(label: Text('Дата'), numeric: true),
               ],
               rows: state.checks.map((check) {
@@ -80,7 +80,7 @@ class SellHistoryTable extends StatelessWidget {
                             )
                           : SizedBox(),
                     ),
-                    DataCell(Text(check.documentSum.toStringAsFixed(0))),
+
                     DataCell(Text(check.paymentType)),
                     DataCell(
                       Row(
@@ -107,6 +107,13 @@ class SellHistoryTable extends StatelessWidget {
                               ],
                             )
                           : Text(''),
+                    ),
+                    DataCell(
+                      Text(
+                        NumberFormat.currency(
+                          symbol: '',
+                        ).format(check.documentSum),
+                      ),
                     ),
                     DataCell(
                       Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
