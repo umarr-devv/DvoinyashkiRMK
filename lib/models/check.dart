@@ -134,7 +134,7 @@ class CheckItemScheme {
 
 @JsonSerializable()
 class DetailCheckScheme extends CheckScheme {
-  DetailCheckScheme({
+  const DetailCheckScheme({
     required this.items,
     required super.refKey,
     required super.number,

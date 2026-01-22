@@ -97,7 +97,7 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
-  @GET('/Document_ВыемкаНаличных')
+  @GET('/Document_ВыемкаНаличных{fullPath}')
   Future<WithdrawListScheme> getWithdraws({
     @Path('fullPath') required String fullPath,
   });

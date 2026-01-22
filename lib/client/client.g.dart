@@ -450,7 +450,7 @@ class _RestClient implements RestClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ВыемкаНаличных',
+            '/Document_ВыемкаНаличных${fullPath}',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -34,9 +34,11 @@ class _AppScreenState extends State<AppScreen> {
   final notificationCubit = NotificationCubit();
 
   late final ChecksCubit checksCubit;
+  late final WithdrawsCubit withdrawsCubit;
 
   Future initCubits() async {
     checksCubit = ChecksCubit(settingsCubit);
+    withdrawsCubit = WithdrawsCubit(settingsCubit);
 
     await structureUnitsCubit.update();
     await usersCubit.update();
@@ -66,8 +68,9 @@ class _AppScreenState extends State<AppScreen> {
         BlocProvider.value(value: favoritesCubit),
         BlocProvider.value(value: orderCubit),
         BlocProvider.value(value: settingsCubit),
-        BlocProvider.value(value: checksCubit),
         BlocProvider.value(value: notificationCubit),
+        BlocProvider.value(value: checksCubit),
+        BlocProvider.value(value: withdrawsCubit),
       ],
       child: ThemeProvider(
         initTheme: settingsCubit.state.isDarkTheme
