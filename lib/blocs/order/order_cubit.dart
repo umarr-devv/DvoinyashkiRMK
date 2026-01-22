@@ -47,6 +47,8 @@ class OrderCubit extends HydratedCubit<OrderState> {
     final List<OrderItem> items = List.from(currentOrder.items);
     final index = currentOrder.items.indexOf(item);
 
+    if (index == -1) return;
+
     if (item.quantity < 0) {
       items.removeAt(index);
     } else {
