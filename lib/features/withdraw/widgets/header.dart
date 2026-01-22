@@ -15,6 +15,11 @@ class WithdrawHeader extends StatelessWidget {
       prefixes: [Icon(FluentIcons.money_24_regular, size: 28)],
       suffixes: [
         FButton.icon(
+          onPress: () {},
+          style: FButtonStyle.primary(),
+          child: Icon(Icons.add),
+        ),
+        FButton.icon(
           onPress: () {
             BlocProvider.of<WithdrawsCubit>(context).update();
           },
