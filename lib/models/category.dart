@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'category.g.dart';
 
 @JsonSerializable()
-class CategoryScheme {
-  CategoryScheme({required this.refKey, required this.name});
+class CategoryScheme extends Equatable{
+  const CategoryScheme({required this.refKey, required this.name});
 
   @JsonKey(name: 'Ref_Key')
   final String refKey;
@@ -16,6 +17,9 @@ class CategoryScheme {
       _$CategorySchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategorySchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 

@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'check.g.dart';
 
 @JsonSerializable()
-class CheckScheme {
-  CheckScheme({
+class CheckScheme extends Equatable {
+  const CheckScheme({
     required this.refKey,
     required this.number,
     required this.date,
@@ -95,6 +96,9 @@ class CheckScheme {
       _$CheckSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()

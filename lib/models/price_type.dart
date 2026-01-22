@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'price_type.g.dart';
 
 @JsonSerializable()
-class PriceTypeScheme {
-  PriceTypeScheme({required this.refKey, required this.description});
+class PriceTypeScheme extends Equatable {
+  const PriceTypeScheme({required this.refKey, required this.description});
 
   @JsonKey(name: 'Ref_Key')
   final String refKey;
@@ -16,6 +17,9 @@ class PriceTypeScheme {
       _$PriceTypeSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$PriceTypeSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()

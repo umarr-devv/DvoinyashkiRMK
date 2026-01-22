@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'barcode.g.dart';
 
 @JsonSerializable()
-class BarcodeScheme {
-  BarcodeScheme({
+class BarcodeScheme extends Equatable{
+  const BarcodeScheme({
     required this.barcode,
     required this.nomenclatureKey,
     required this.characteristicKey,
@@ -23,6 +24,9 @@ class BarcodeScheme {
       _$BarcodeSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$BarcodeSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [barcode, nomenclatureKey, characteristicKey];
 }
 
 @JsonSerializable()

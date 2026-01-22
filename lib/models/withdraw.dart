@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'withdraw.g.dart';
 
 @JsonSerializable()
-class WithdrawScheme {
-  WithdrawScheme({
+class WithdrawScheme extends Equatable{
+  const WithdrawScheme({
     required this.refKey,
     required this.number,
     required this.date,
@@ -43,6 +44,9 @@ class WithdrawScheme {
       _$WithdrawSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$WithdrawSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()

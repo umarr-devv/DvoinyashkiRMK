@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:app/utils/utils.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_image.g.dart';
 
 @JsonSerializable()
-class ProductImageScheme {
+// ignore: must_be_immutable
+class ProductImageScheme extends Equatable {
   ProductImageScheme({
     required this.nomenclatureKey,
     required this.characteristicKey,
@@ -29,6 +31,9 @@ class ProductImageScheme {
       _$ProductImageSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductImageSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [nomenclatureKey, characteristicKey, image];
 }
 
 @JsonSerializable()

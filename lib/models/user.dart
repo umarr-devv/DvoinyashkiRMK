@@ -1,13 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:app/utils/utils.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
 @JsonSerializable()
-class UserScheme {
-  UserScheme({
+class UserScheme extends Equatable {
+  const UserScheme({
     required this.refKey,
     required this.description,
     required this.inn,
@@ -30,9 +31,13 @@ class UserScheme {
       _$UserSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()
+// ignore: must_be_immutable
 class DetailUserScheme extends UserScheme {
   DetailUserScheme({
     required super.refKey,
@@ -61,6 +66,9 @@ class DetailUserScheme extends UserScheme {
 
   @override
   Map<String, dynamic> toJson() => _$DetailUserSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()

@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'nomenclature.g.dart';
 
 @JsonSerializable()
-class NomenclatureScheme {
-  NomenclatureScheme({
+class NomenclatureScheme extends Equatable{
+  const NomenclatureScheme({
     required this.refKey,
     required this.description,
     required this.name,
@@ -31,6 +32,9 @@ class NomenclatureScheme {
       _$NomenclatureSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$NomenclatureSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()

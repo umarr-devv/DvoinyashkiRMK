@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'characteristic.g.dart';
 
 @JsonSerializable()
-class CharacteristicScheme {
-  CharacteristicScheme({
+class CharacteristicScheme extends Equatable{
+  const CharacteristicScheme({
     required this.refKey,
     required this.description,
     required this.owner,
@@ -27,6 +28,9 @@ class CharacteristicScheme {
       _$CharacteristicSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$CharacteristicSchemeToJson(this);
+
+  @override
+  List<Object?> get props => [refKey];
 }
 
 @JsonSerializable()
