@@ -1,3 +1,4 @@
+export 'author.dart';
 export 'barcode.dart';
 export 'cash_register.dart';
 export 'category.dart';
