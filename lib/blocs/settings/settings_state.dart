@@ -51,7 +51,13 @@ class SettingsState extends Equatable {
   Map<String, dynamic> toJson() => _$SettingsStateToJson(this);
 
   @override
-  List<Object?> get props => [isDarkTheme, cashRegister, scale];
+  List<Object?> get props => [
+    isDarkTheme,
+    cashRegister,
+    scale,
+    store,
+    subdivision,
+  ];
 }
 
 final class SettingsInitial extends SettingsState {}
