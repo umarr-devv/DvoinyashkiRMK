@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'withdraw.g.dart';
 
 @JsonSerializable()
-class WithdrawScheme extends Equatable{
+class WithdrawScheme extends Equatable {
   const WithdrawScheme({
     required this.refKey,
     required this.number,
@@ -14,6 +14,7 @@ class WithdrawScheme extends Equatable{
     required this.commentary,
     required this.documentSum,
     required this.storeKey,
+    required this.subdivisionKey,
   });
 
   @JsonKey(name: 'Ref_Key')
@@ -39,6 +40,9 @@ class WithdrawScheme extends Equatable{
 
   @JsonKey(name: 'Магазин_Key')
   final String storeKey;
+
+  @JsonKey(name: 'Подразделение_Key')
+  final String subdivisionKey;
 
   factory WithdrawScheme.fromJson(Map<String, dynamic> json) =>
       _$WithdrawSchemeFromJson(json);

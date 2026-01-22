@@ -1,7 +1,9 @@
 import 'package:app/blocs/withdraws/withdraws_cubit.dart';
+import 'package:app/features/withdraw/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
 @RoutePage()
 class WithdrawScreen extends StatefulWidget {
@@ -12,7 +14,6 @@ class WithdrawScreen extends StatefulWidget {
 }
 
 class _WithdrawScreenState extends State<WithdrawScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -21,6 +22,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return FScaffold(
+      header: WithdrawHeader(),
+      footer: WithdrawPagination(),
+      child: WithdrawTable(),
+    );
   }
 }

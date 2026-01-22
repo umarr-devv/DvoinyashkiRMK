@@ -33,6 +33,10 @@ class WithdrawsState extends Equatable {
 
 final class WithdrawsInitial extends WithdrawsState {}
 
+final class WithdrawsUpdate extends WithdrawsState {
+  WithdrawsUpdate(super.state) : super.from();
+}
+
 final class WithdrawsLoading extends WithdrawsState {
   WithdrawsLoading(super.state) : super.from();
 }

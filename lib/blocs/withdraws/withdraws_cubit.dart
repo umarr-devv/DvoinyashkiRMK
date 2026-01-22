@@ -44,6 +44,13 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
     }
   }
 
+  Future setPageNum(int pageNum) async {
+    if (pageNum == state.pageNum) return;
+    final newState = state.copyWith(pageNum: pageNum);
+    emit(WithdrawsUpdate(newState));
+    await update();
+  }
+
   @override
   WithdrawsState? fromJson(Map<String, dynamic> json) {
     return WithdrawsState.fromJson(json);
