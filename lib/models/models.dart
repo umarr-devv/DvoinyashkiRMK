@@ -10,3 +10,4 @@ export 'product_image.dart';
 export 'structure_unit.dart';
 export 'user.dart';
 export 'withdraw.dart';
+export 'work_shift.dart';
