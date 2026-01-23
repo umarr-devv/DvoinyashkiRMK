@@ -7,6 +7,7 @@ class SettingsState extends Equatable {
     this.isDarkTheme = false,
     this.scale = 1,
     this.cashRegister,
+    this.author,
     this.store,
     this.subdivision,
     this.printer,
@@ -18,6 +19,7 @@ class SettingsState extends Equatable {
   final bool isDarkTheme;
   final double scale;
   final CashRegisterScheme? cashRegister;
+  final AuthorScheme? author;
   final StructureUnitScheme? store;
   final StructureUnitScheme? subdivision;
   final String? printer;
@@ -28,6 +30,7 @@ class SettingsState extends Equatable {
   SettingsState copyWith({
     bool? isDarkTheme,
     double? scale,
+    AuthorScheme? author,
     CashRegisterScheme? cashRegister,
     StructureUnitScheme? store,
     StructureUnitScheme? subdivision,
@@ -40,6 +43,7 @@ class SettingsState extends Equatable {
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
       scale: scale ?? this.scale,
       cashRegister: cashRegister ?? this.cashRegister,
+      author: author ?? this.author,
       store: store ?? this.store,
       subdivision: subdivision ?? this.subdivision,
       printer: printer ?? this.printer,
@@ -53,6 +57,7 @@ class SettingsState extends Equatable {
     : isDarkTheme = other.isDarkTheme,
       scale = other.scale,
       cashRegister = other.cashRegister,
+      author = other.author,
       store = other.store,
       subdivision = other.subdivision,
       printer = other.printer,
@@ -69,6 +74,7 @@ class SettingsState extends Equatable {
   List<Object?> get props => [
     isDarkTheme,
     cashRegister,
+    author,
     scale,
     store,
     subdivision,

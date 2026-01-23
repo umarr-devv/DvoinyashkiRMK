@@ -15,6 +15,9 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
           : CashRegisterScheme.fromJson(
               json['cash_register'] as Map<String, dynamic>,
             ),
+      author: json['author'] == null
+          ? null
+          : AuthorScheme.fromJson(json['author'] as Map<String, dynamic>),
       store: json['store'] == null
           ? null
           : StructureUnitScheme.fromJson(json['store'] as Map<String, dynamic>),
@@ -38,6 +41,7 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'is_dark_theme': instance.isDarkTheme,
       'scale': instance.scale,
       'cash_register': instance.cashRegister,
+      'author': instance.author,
       'store': instance.store,
       'subdivision': instance.subdivision,
       'printer': instance.printer,

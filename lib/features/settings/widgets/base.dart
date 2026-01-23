@@ -18,6 +18,7 @@ class SettingsBase extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _CashRegisterSelect(),
+        _AuthorSelect(),
         _StoreSelect(),
         _SubdivisionSelect(),
         _PrinterSelect(),
@@ -142,6 +143,46 @@ class _SubdivisionSelect extends StatelessWidget {
                       in state.structureUnits
                           .where((i) => i.type == subdivisionStructureType)
                           .toList())
+                    element.description: element,
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _AuthorSelect extends StatelessWidget {
+  const _AuthorSelect();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
+      builder: (context, state) {
+        final cubit = BlocProvider.of<SettingsCubit>(context);
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            return SizedBox(
+              width: 320,
+              child: FSelect<AuthorScheme>.search(
+                label: Text('Автор'),
+                hint: 'Выберите автора',
+                control: FSelectControl.managed(
+                  initial: settingsState.author,
+                  onChange: (value) {
+                    if (value != null) {
+                      cubit.setSettings(author: value);
+                    }
+                  },
+                ),
+                searchFieldProperties: FSelectSearchFieldProperties(
+                  hint: 'Поиск',
+                ),
+                items: {
+                  for (var element in state.authors)
                     element.description: element,
                 },
               ),

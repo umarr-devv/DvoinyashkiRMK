@@ -17,7 +17,11 @@ class SettingsScreen extends StatelessWidget {
           children: [
             WindowBar(),
             Expanded(
-              child: FScaffold(header: SettingsHeader(), child: SettingsBase()),
+              child: FScaffold(
+                header: SettingsHeader(),
+                footer: SettingsFooter(),
+                child: SettingsBase(),
+              ),
             ),
           ],
         ),
