@@ -1,7 +1,10 @@
 import 'package:app/blocs/work_shifts/work_shifts_cubit.dart';
+import 'package:app/features/work_time/widgets/table.dart';
+import 'package:app/features/work_time/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/widgets/scaffold.dart';
 
 @RoutePage()
 class WorkTimeScreen extends StatefulWidget {
@@ -20,6 +23,10 @@ class _WorkTimeScreenState extends State<WorkTimeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return FScaffold(
+      header: WorkTimeHeader(),
+      footer: WorkTimePagination(),
+      child: WorkTimeTable(),
+    );
   }
 }
