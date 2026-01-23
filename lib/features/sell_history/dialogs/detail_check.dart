@@ -78,8 +78,8 @@ class DetailCheckDialog {
 
   Widget itemsList(DetailCheckScheme check) {
     final theme = Theme.of(rootContext);
-    return BlocBuilder<ProductsCubit, ProductsState>(
-      bloc: BlocProvider.of<ProductsCubit>(rootContext),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, state) {
         return Material(
           type: MaterialType.transparency,
@@ -141,8 +141,8 @@ class DetailCheckDialog {
           label: Text('Статус'),
           child: Text(check.status),
         ),
-        BlocBuilder<UsersCubit, UsersState>(
-          bloc: BlocProvider.of<UsersCubit>(rootContext),
+        BlocBuilder<DataCubit, DataState>(
+          bloc: BlocProvider.of<DataCubit>(rootContext),
           builder: (context, state) {
             final user = state.users.firstWhereLogTypeOrNull(
               (i) => i.refKey == check.userKey,

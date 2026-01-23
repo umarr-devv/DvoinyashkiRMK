@@ -20,6 +20,9 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     StructureUnitScheme? store,
     StructureUnitScheme? subdivision,
     String? printer,
+    List<String>? pinnedCategories,
+    bool? showEmptyCategories,
+    bool? catalogListView,
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -31,6 +34,9 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       store: store,
       subdivision: subdivision,
       printer: printer,
+      pinnedCategories: pinnedCategories,
+      showEmptyCategories: showEmptyCategories,
+      catalogListView: catalogListView,
     );
     emit(SettingsUpdate(newState));
   }

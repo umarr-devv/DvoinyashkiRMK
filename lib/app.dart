@@ -1,6 +1,5 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/blocs/blocs.dart';
-import 'package:app/blocs/product_images/product_images_cubit.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/utils/scroll.dart';
@@ -21,15 +20,11 @@ class AppScreen extends StatefulWidget {
 class _AppScreenState extends State<AppScreen> {
   final appRoute = AppRouter();
 
-  final structureUnitsCubit = StructureUnitsCubit();
-  final usersCubit = UsersCubit();
+  final dataCubit = DataCubit();
+
   final authCubit = AuthCubit();
-  final categoriesCubit = CategoriesCubit();
-  final productsCubit = ProductsCubit();
   final favoritesCubit = FavoritesCubit();
-  final productImagesCubit = ProductImagesCubit();
   final orderCubit = OrderCubit();
-  final cashRegistersCubit = CashRegistersCubit();
   final settingsCubit = SettingsCubit();
   final notificationCubit = NotificationCubit();
 
@@ -37,15 +32,9 @@ class _AppScreenState extends State<AppScreen> {
   late final WithdrawsCubit withdrawsCubit;
 
   Future initCubits() async {
+    dataCubit.update();
     checksCubit = ChecksCubit(settingsCubit);
     withdrawsCubit = WithdrawsCubit(settingsCubit);
-
-    await structureUnitsCubit.update();
-    await usersCubit.update();
-    await categoriesCubit.update();
-    await productsCubit.update();
-    await productImagesCubit.update();
-    await cashRegistersCubit.update();
   }
 
   @override
@@ -58,12 +47,7 @@ class _AppScreenState extends State<AppScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: structureUnitsCubit),
-        BlocProvider.value(value: usersCubit),
-        BlocProvider.value(value: categoriesCubit),
-        BlocProvider.value(value: productsCubit),
-        BlocProvider.value(value: productImagesCubit),
-        BlocProvider.value(value: cashRegistersCubit),
+        BlocProvider.value(value: dataCubit),
         BlocProvider.value(value: authCubit),
         BlocProvider.value(value: favoritesCubit),
         BlocProvider.value(value: orderCubit),

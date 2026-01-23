@@ -24,6 +24,13 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
               json['subdivision'] as Map<String, dynamic>,
             ),
       printer: json['printer'] as String?,
+      pinnedCategories:
+          (json['pinned_categories'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      showEmptyCategories: json['show_empty_categories'] as bool? ?? false,
+      catalogListView: json['catalog_list_view'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -34,4 +41,7 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'store': instance.store,
       'subdivision': instance.subdivision,
       'printer': instance.printer,
+      'pinned_categories': instance.pinnedCategories,
+      'show_empty_categories': instance.showEmptyCategories,
+      'catalog_list_view': instance.catalogListView,
     };

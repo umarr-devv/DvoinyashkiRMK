@@ -1,6 +1,6 @@
 part of 'data_cubit.dart';
 
-class ProductsCubitUtils {
+class DataCubitUtils {
   static List<PriceData> getActualPrices(
     List<PriceScheme> prices,
     List<PriceTypeScheme> priceTypes,
@@ -54,11 +54,13 @@ class ProductsCubitUtils {
                     i.characteristicKey == char.refKey,
               )
               .toList();
-          final images_ = productImages.where(
-            (i) =>
-                i.nomenclatureKey == nomen.refKey &&
-                i.characteristicKey == char.refKey,
-          ).toList();
+          final images_ = productImages
+              .where(
+                (i) =>
+                    i.nomenclatureKey == nomen.refKey &&
+                    i.characteristicKey == char.refKey,
+              )
+              .toList();
           final product = ProductData(
             nomenclature: nomen,
             characteristic: char,
@@ -76,16 +78,15 @@ class ProductsCubitUtils {
         final barcodes_ = barcodes
             .where((i) => i.nomenclatureKey == nomen.refKey)
             .toList();
-        final images_ = productImages.where(
-            (i) =>
-                i.nomenclatureKey == nomen.refKey
-          ).toList();
+        final images_ = productImages
+            .where((i) => i.nomenclatureKey == nomen.refKey)
+            .toList();
         final product = ProductData(
           nomenclature: nomen,
           characteristic: null,
           prices: actualPrices,
           barcodes: barcodes_,
-          images: images_
+          images: images_,
         );
         products.add(product);
       }

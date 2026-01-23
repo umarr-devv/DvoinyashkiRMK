@@ -32,5 +32,5 @@ class AuthorListScheme {
   factory AuthorListScheme.fromJson(Map<String, dynamic> json) =>
       _$AuthorListSchemeFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AAuthorListSchemeToJson(this);
+  Map<String, dynamic> toJson() => _$AuthorListSchemeToJson(this);
 }

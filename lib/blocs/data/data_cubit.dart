@@ -39,7 +39,7 @@ class DataCubit extends HydratedCubit<DataState> {
       final users = await client.getUsers();
       final authors = await client.getAuthors();
 
-      final products = ProductsCubitUtils.getProducts(
+      final products = DataCubitUtils.getProducts(
         nomenclatures: nomenclatures.nomenclatures,
         characteristics: characteristics.characteristics,
         prices: prices.prices,

@@ -1,8 +1,4 @@
-import 'dart:typed_data';
-
 import 'package:app/blocs/blocs.dart';
-import 'package:app/blocs/product_images/product_images_cubit.dart';
-import 'package:app/models/models.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -106,50 +102,25 @@ class _ProductCardImage extends StatelessWidget {
 
   final ProductData product;
 
-  Uint8List? imageBytes(List<ProductImageScheme> images) {
-    if (product.characteristic != null) {
-      return images
-          .firstWhereLogTypeOrNull(
-            (i) =>
-                i.nomenclatureKey == product.nomenclature.refKey &&
-                i.characteristicKey == product.characteristic?.refKey,
-          )
-          ?.imageBytes;
-    } else {
-      return images
-          .firstWhereLogTypeOrNull(
-            (i) => i.nomenclatureKey == product.nomenclature.refKey,
-          )
-          ?.imageBytes;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<ProductImagesCubit, ProductImagesState>(
-      bloc: BlocProvider.of<ProductImagesCubit>(context),
-      builder: (context, state) {
-        final imageBytes_ = imageBytes(state.images);
 
-        return Container(
-          width: double.infinity,
-          height: double.infinity,
-          margin: const EdgeInsets.all(8),
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: theme.custom.muted,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: imageBytes_ != null
-              ? Image.memory(imageBytes_, fit: BoxFit.cover)
-              : Icon(
-                  FIcons.image,
-                  size: 64,
-                  color: theme.custom.mutedForeground,
-                ),
-        );
-      },
+    final productImage = product.images.isNotEmpty ? product.images[0] : null;
+    final imageBytes = productImage?.imageBytes;
+
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      margin: const EdgeInsets.all(8),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: theme.custom.muted,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: imageBytes != null
+          ? Image.memory(imageBytes, fit: BoxFit.cover)
+          : Icon(FIcons.image, size: 64, color: theme.custom.mutedForeground),
     );
   }
 }

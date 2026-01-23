@@ -33,8 +33,8 @@ class _CashRegisterSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CashRegistersCubit, CashRegistersState>(
-      bloc: BlocProvider.of<CashRegistersCubit>(context),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
       builder: (context, state) {
         final cubit = BlocProvider.of<SettingsCubit>(context);
         return BlocBuilder<SettingsCubit, SettingsState>(
@@ -71,8 +71,8 @@ class _StoreSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StructureUnitsCubit, StructureUnitsState>(
-      bloc: BlocProvider.of<StructureUnitsCubit>(context),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
       builder: (context, state) {
         final cubit = BlocProvider.of<SettingsCubit>(context);
         return BlocBuilder<SettingsCubit, SettingsState>(
@@ -115,8 +115,8 @@ class _SubdivisionSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StructureUnitsCubit, StructureUnitsState>(
-      bloc: BlocProvider.of<StructureUnitsCubit>(context),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
       builder: (context, state) {
         final cubit = BlocProvider.of<SettingsCubit>(context);
         return BlocBuilder<SettingsCubit, SettingsState>(

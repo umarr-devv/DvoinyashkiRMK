@@ -48,8 +48,8 @@ class _AuthFormUserSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<UsersCubit, UsersState>(
-      bloc: BlocProvider.of<UsersCubit>(context),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
       builder: (context, state) {
         return BlocBuilder<AuthCubit, AuthState>(
           builder: (context, authState) {
@@ -118,7 +118,7 @@ class _AuthFormUserSelect extends StatelessWidget {
                 hint: 'Поиск',
               ),
               contentEmptyBuilder: (context, style) {
-                if (state is UsersLoading) {
+                if (state is DataLoading) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     child: FCircularProgress(),

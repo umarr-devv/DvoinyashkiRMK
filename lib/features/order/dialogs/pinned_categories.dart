@@ -51,30 +51,41 @@ class PinnedCategoriesDialog {
   }
 
   Widget categoriesList() {
-    final cubit = BlocProvider.of<CategoriesCubit>(rootContext);
-    return BlocBuilder<CategoriesCubit, CategoriesState>(
-      bloc: cubit,
+    final cubit = BlocProvider.of<SettingsCubit>(rootContext);
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, state) {
-        return SingleChildScrollView(
-          child: Column(
-            spacing: 16,
-            children: [
-              catalogView(state.listView, cubit),
-              Column(
-                children:
-                    [categoriesListItem(null, state.showEmpty, cubit)] +
-                    state.categories.map((category) {
-                      return categoriesListItem(category, null, cubit);
-                    }).toList(),
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: cubit,
+          builder: (context, settingsState) {
+            return SingleChildScrollView(
+              child: Column(
+                spacing: 16,
+                children: [
+                  catalogView(settingsState.catalogListView, cubit),
+                  Column(
+                    children:
+                        [
+                          categoriesListItem(
+                            null,
+                            settingsState.showEmptyCategories,
+                            cubit,
+                          ),
+                        ] +
+                        state.categories.map((category) {
+                          return categoriesListItem(category, null, cubit);
+                        }).toList(),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
 
-  Widget catalogView(bool listView, CategoriesCubit cubit) {
+  Widget catalogView(bool listView, SettingsCubit cubit) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -89,53 +100,64 @@ class PinnedCategoriesDialog {
           child: FSwitch(
             value: listView,
             onChange: (value) {
-              cubit.switchListView();
+              cubit.setSettings(catalogListView: value);
             },
           ),
         ),
       ],
     );
   }
-}
 
-Widget categoriesListItem(
-  CategoryScheme? category,
-  bool? showEmpty,
-  CategoriesCubit cubit,
-) {
-  final pinned =
-      cubit.state.pinned.contains(category?.refKey) || (showEmpty ?? false);
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      Row(
-        spacing: 4,
-        children: [
-          if (category == null) Icon(Icons.close),
-          Text(category?.name ?? 'Без категорий'),
-        ],
-      ),
-      Expanded(child: CustomDottedLine()),
-      Transform.scale(
-        scale: 0.75,
-        child: FSwitch(
-          value: pinned,
-          onChange: (value) {
-            if (category != null) {
-              if (pinned) {
-                cubit.unpin(category);
-              } else {
-                cubit.pin(category);
-              }
-            } else {
-              cubit.switchShowEmpty();
-            }
-
-            selectedCategory.value = favoriteSelectedCategory;
-          },
+  Widget categoriesListItem(
+    CategoryScheme? category,
+    bool? showEmpty,
+    SettingsCubit cubit,
+  ) {
+    final pinned =
+        cubit.state.pinnedCategories.contains(category?.refKey) ||
+        (showEmpty ?? false);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          spacing: 4,
+          children: [
+            if (category == null) Icon(Icons.close),
+            Text(category?.name ?? 'Без категорий'),
+          ],
         ),
-      ),
-    ],
-  );
+        Expanded(child: CustomDottedLine()),
+        Transform.scale(
+          scale: 0.75,
+          child: FSwitch(
+            value: pinned,
+            onChange: (value) {
+              if (category != null) {
+                if (pinned) {
+                  final List<String> pinnedCategories = List.from(
+                    cubit.state.pinnedCategories,
+                  );
+                  pinnedCategories.remove(category.refKey);
+                  cubit.setSettings(pinnedCategories: pinnedCategories);
+                } else {
+                  final List<String> pinnedCategories = List.from(
+                    cubit.state.pinnedCategories,
+                  );
+                  pinnedCategories.add(category.refKey);
+                  cubit.setSettings(pinnedCategories: pinnedCategories);
+                }
+              } else {
+                cubit.setSettings(
+                  showEmptyCategories: cubit.state.showEmptyCategories,
+                );
+              }
+
+              selectedCategory.value = favoriteSelectedCategory;
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }

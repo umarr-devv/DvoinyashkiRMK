@@ -10,6 +10,9 @@ class SettingsState extends Equatable {
     this.store,
     this.subdivision,
     this.printer,
+    this.pinnedCategories = const [],
+    this.showEmptyCategories = false,
+    this.catalogListView = false,
   });
 
   final bool isDarkTheme;
@@ -18,6 +21,9 @@ class SettingsState extends Equatable {
   final StructureUnitScheme? store;
   final StructureUnitScheme? subdivision;
   final String? printer;
+  final List<String> pinnedCategories;
+  final bool showEmptyCategories;
+  final bool catalogListView;
 
   SettingsState copyWith({
     bool? isDarkTheme,
@@ -26,6 +32,9 @@ class SettingsState extends Equatable {
     StructureUnitScheme? store,
     StructureUnitScheme? subdivision,
     String? printer,
+    List<String>? pinnedCategories,
+    bool? showEmptyCategories,
+    bool? catalogListView,
   }) {
     return SettingsState(
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
@@ -34,6 +43,9 @@ class SettingsState extends Equatable {
       store: store ?? this.store,
       subdivision: subdivision ?? this.subdivision,
       printer: printer ?? this.printer,
+      pinnedCategories: pinnedCategories ?? this.pinnedCategories,
+      showEmptyCategories: showEmptyCategories ?? this.showEmptyCategories,
+      catalogListView: catalogListView ?? this.catalogListView,
     );
   }
 
@@ -43,7 +55,10 @@ class SettingsState extends Equatable {
       cashRegister = other.cashRegister,
       store = other.store,
       subdivision = other.subdivision,
-      printer = other.printer;
+      printer = other.printer,
+      pinnedCategories = other.pinnedCategories,
+      showEmptyCategories = other.showEmptyCategories,
+      catalogListView = other.catalogListView;
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);
@@ -57,6 +72,9 @@ class SettingsState extends Equatable {
     scale,
     store,
     subdivision,
+    pinnedCategories,
+    showEmptyCategories,
+    catalogListView,
   ];
 }
 

@@ -21,8 +21,8 @@ class SellHistoryTable extends StatelessWidget {
         if (state is ChecksLoading) {
           return FCircularProgress();
         }
-        return BlocBuilder<UsersCubit, UsersState>(
-          bloc: BlocProvider.of<UsersCubit>(context),
+        return BlocBuilder<DataCubit, DataState>(
+          bloc: BlocProvider.of<DataCubit>(context),
           builder: (context, userStates) {
             return DataTable2(
               dividerThickness: 0,

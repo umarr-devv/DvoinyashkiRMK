@@ -58,39 +58,51 @@ class _OrderCatalogCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CategoriesCubit, CategoriesState>(
-      bloc: BlocProvider.of<CategoriesCubit>(context),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
       builder: (context, state) {
-        return Row(
-          spacing: 12,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  spacing: 12,
-                  children:
-                      [
-                        _OrderCatalogCategoriesItem(allSelectedCategory),
-                        _OrderCatalogCategoriesItem(favoriteSelectedCategory),
-                        if (state.showEmpty)
-                          _OrderCatalogCategoriesItem(SelectedCategoryData()),
-                      ] +
-                      state.pinnedCategories.map((category) {
-                        return _OrderCatalogCategoriesItem(
-                          SelectedCategoryData(category: category),
-                        );
-                      }).toList(),
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: BlocProvider.of<SettingsCubit>(context),
+          builder: (context, settingsState) {
+            final pinnedCategories = state.categories
+                .where((i) => settingsState.pinnedCategories.contains(i.refKey))
+                .toList();
+            return Row(
+              spacing: 12,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      spacing: 12,
+                      children:
+                          [
+                            _OrderCatalogCategoriesItem(allSelectedCategory),
+                            _OrderCatalogCategoriesItem(
+                              favoriteSelectedCategory,
+                            ),
+                            if (settingsState.showEmptyCategories)
+                              _OrderCatalogCategoriesItem(
+                                SelectedCategoryData(),
+                              ),
+                          ] +
+                          pinnedCategories.map((category) {
+                            return _OrderCatalogCategoriesItem(
+                              SelectedCategoryData(category: category),
+                            );
+                          }).toList(),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            FButton.icon(
-              onPress: () {
-                PinnedCategoriesDialog(context).show();
-              },
-              child: Icon(FIcons.settings2),
-            ),
-          ],
+                FButton.icon(
+                  onPress: () {
+                    PinnedCategoriesDialog(context).show();
+                  },
+                  child: Icon(FIcons.settings2),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -203,14 +215,12 @@ class _CatalogGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductsCubit, ProductsState>(
-      bloc: BlocProvider.of<ProductsCubit>(context),
-      builder: (context, productState) {
-        if (productState is ProductsLoading) {
-          return Center(child: FCircularProgress());
-        }
-        return BlocBuilder<CategoriesCubit, CategoriesState>(
-          builder: (context, categoriesState) {
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
+      builder: (context, state) {
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: BlocProvider.of<SettingsCubit>(context),
+          builder: (context, settingsState) {
             return BlocBuilder<FavoritesCubit, FavoritesState>(
               builder: (context, favoriteState) {
                 return ValueListenableBuilder(
@@ -222,14 +232,14 @@ class _CatalogGrid extends StatelessWidget {
                         final products = getItems(
                           selectedCategory: selectedCat,
                           searchQuery: searchQuery,
-                          pinned: categoriesState.pinned,
+                          pinned: settingsState.pinnedCategories,
                           favoriteKeys: favoriteState.favoriteKeys,
-                          products: productState.products,
+                          products: state.products,
                         );
                         if (products.isEmpty) {
                           return _GridEmptyItems(searchQuery: searchQuery);
                         }
-                        if (categoriesState.listView) {
+                        if (settingsState.catalogListView) {
                           return _CatalogList(products);
                         } else {
                           return _CatalogTable(products);

@@ -20,11 +20,11 @@ class WithdrawTable extends StatelessWidget {
         if (state is WithdrawsLoading) {
           return FCircularProgress();
         }
-        return BlocBuilder<CashRegistersCubit, CashRegistersState>(
-          bloc: BlocProvider.of<CashRegistersCubit>(context),
+        return BlocBuilder<DataCubit, DataState>(
+          bloc: BlocProvider.of<DataCubit>(context),
           builder: (context, cashRegisterState) {
-            return BlocBuilder<StructureUnitsCubit, StructureUnitsState>(
-              bloc: BlocProvider.of<StructureUnitsCubit>(context),
+            return BlocBuilder<DataCubit, DataState>(
+              bloc: BlocProvider.of<DataCubit>(context),
               builder: (context, structureUnitState) {
                 return DataTable2(
                   dividerThickness: 0,
