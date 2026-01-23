@@ -16,3 +16,13 @@ Map<String, dynamic> _$AuthorSchemeToJson(AuthorScheme instance) =>
       'Ref_Key': instance.refKey,
       'Description': instance.description,
     };
+
+AuthorListScheme _$AuthorListSchemeFromJson(Map<String, dynamic> json) =>
+    AuthorListScheme(
+      authors: (json['value'] as List<dynamic>)
+          .map((e) => AuthorScheme.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$AuthorListSchemeToJson(AuthorListScheme instance) =>
+    <String, dynamic>{'value': instance.authors};

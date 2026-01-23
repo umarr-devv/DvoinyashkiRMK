@@ -13,7 +13,6 @@ class AuthorScheme extends Equatable {
   @JsonKey(name: 'Description')
   final String description;
 
-  
   factory AuthorScheme.fromJson(Map<String, dynamic> json) =>
       _$AuthorSchemeFromJson(json);
 
@@ -21,4 +20,17 @@ class AuthorScheme extends Equatable {
 
   @override
   List<Object?> get props => [refKey];
+}
+
+@JsonSerializable()
+class AuthorListScheme {
+  const AuthorListScheme({required this.authors});
+
+  @JsonKey(name: 'value')
+  final List<AuthorScheme> authors;
+
+  factory AuthorListScheme.fromJson(Map<String, dynamic> json) =>
+      _$AuthorListSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AAuthorListSchemeToJson(this);
 }

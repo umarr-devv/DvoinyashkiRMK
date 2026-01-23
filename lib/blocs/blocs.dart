@@ -10,3 +10,4 @@ export 'settings/settings_cubit.dart';
 export 'structure_units/structure_units_cubit.dart';
 export 'users/users_cubit.dart';
 export 'withdraws/withdraws_cubit.dart';
+export 'data/data_cubit.dart';

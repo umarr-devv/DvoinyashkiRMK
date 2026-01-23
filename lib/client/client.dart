@@ -97,6 +97,12 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
+  @GET('/Catalog_Пользователи')
+  Future<AuthorListScheme> getAuthors({
+    @Path('\$select') String select = 'Ref_Key,Description',
+    @Query('\$format') String format = 'json',
+  });
+
   @GET('/Document_ВыемкаНаличных{fullPath}')
   Future<WithdrawListScheme> getWithdraws({
     @Path('fullPath') required String fullPath,
