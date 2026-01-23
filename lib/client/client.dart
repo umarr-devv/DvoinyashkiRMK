@@ -107,4 +107,9 @@ abstract class RestClient {
   Future<WithdrawListScheme> getWithdraws({
     @Path('fullPath') required String fullPath,
   });
+
+  @GET('/Document_ОтчетОРозничныхПродажах{fullPath}')
+  Future<WorkShiftListScheme> getWorkShifts({
+    @Path('fullPath') required String fullPath,
+  });
 }

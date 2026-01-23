@@ -30,11 +30,13 @@ class _AppScreenState extends State<AppScreen> {
 
   late final ChecksCubit checksCubit;
   late final WithdrawsCubit withdrawsCubit;
+  late final WorkShiftsCubit workShiftsCubit;
 
   Future initCubits() async {
     dataCubit.update();
     checksCubit = ChecksCubit(settingsCubit);
     withdrawsCubit = WithdrawsCubit(settingsCubit);
+    workShiftsCubit = WorkShiftsCubit(settingsCubit);
   }
 
   @override
@@ -55,6 +57,7 @@ class _AppScreenState extends State<AppScreen> {
         BlocProvider.value(value: notificationCubit),
         BlocProvider.value(value: checksCubit),
         BlocProvider.value(value: withdrawsCubit),
+        BlocProvider.value(value: workShiftsCubit),
       ],
       child: ThemeProvider(
         initTheme: settingsCubit.state.isDarkTheme

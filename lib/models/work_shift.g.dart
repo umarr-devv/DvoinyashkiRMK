@@ -12,6 +12,7 @@ WorkShiftScheme _$WorkShiftSchemeFromJson(Map<String, dynamic> json) =>
       number: json['Number'] as String,
       date: DateTime.parse(json['Date'] as String),
       posted: json['Posted'] as bool,
+      userKey: json['Ответственный_Key'] as String,
       authorKey: json['Автор_Key'] as String,
       cashRegisterKey: json['КассаККМ_Key'] as String,
       cashRegisterShiftKey: json['КассоваяСмена_Key'] as String,
@@ -32,6 +33,7 @@ Map<String, dynamic> _$WorkShiftSchemeToJson(WorkShiftScheme instance) =>
       'Number': instance.number,
       'Date': instance.date.toIso8601String(),
       'Posted': instance.posted,
+      'Ответственный_Key': instance.userKey,
       'Автор_Key': instance.authorKey,
       'КассаККМ_Key': instance.cashRegisterKey,
       'КассоваяСмена_Key': instance.cashRegisterShiftKey,
@@ -43,3 +45,14 @@ Map<String, dynamic> _$WorkShiftSchemeToJson(WorkShiftScheme instance) =>
       'СтруктурнаяЕдиница_Key': instance.structureUnitKey,
       'СуммаДокумента': instance.documentSum,
     };
+
+WorkShiftListScheme _$WorkShiftListSchemeFromJson(Map<String, dynamic> json) =>
+    WorkShiftListScheme(
+      workShifts: (json['value'] as List<dynamic>)
+          .map((e) => WorkShiftScheme.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$WorkShiftListSchemeToJson(
+  WorkShiftListScheme instance,
+) => <String, dynamic>{'value': instance.workShifts};

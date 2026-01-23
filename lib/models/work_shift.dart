@@ -10,6 +10,7 @@ class WorkShiftScheme extends Equatable {
     required this.number,
     required this.date,
     required this.posted,
+    required this.userKey,
     required this.authorKey,
     required this.cashRegisterKey,
     required this.cashRegisterShiftKey,
@@ -33,6 +34,9 @@ class WorkShiftScheme extends Equatable {
 
   @JsonKey(name: 'Posted')
   final bool posted;
+
+  @JsonKey(name: 'Ответственный_Key')
+  final String userKey;
 
   @JsonKey(name: 'Автор_Key')
   final String authorKey;
@@ -71,4 +75,16 @@ class WorkShiftScheme extends Equatable {
 
   @override
   List<Object?> get props => [refKey];
+}
+@JsonSerializable()
+class WorkShiftListScheme {
+  WorkShiftListScheme({required this.workShifts});
+
+  @JsonKey(name: 'value')
+  final List<WorkShiftScheme> workShifts;
+
+  factory WorkShiftListScheme.fromJson(Map<String, dynamic> json) =>
+      _$WorkShiftListSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WorkShiftListSchemeToJson(this);
 }
