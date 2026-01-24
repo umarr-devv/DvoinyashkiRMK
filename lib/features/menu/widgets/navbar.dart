@@ -61,7 +61,7 @@ class _NavBarTabs extends StatelessWidget {
             index: 3,
           ),
           _NavBarTabsItem(
-            icon: FluentIcons.chart_person_24_regular,
+            icon: FluentIcons.data_bar_vertical_24_regular,
             label: 'Статистика',
             index: 4,
           ),

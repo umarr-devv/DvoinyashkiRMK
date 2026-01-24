@@ -41,6 +41,7 @@ dependencies:
   retrofit: ^4.5.0
   retrofit_generator: ^10.2.1
   scaled_app: ^2.3.0
+  syncfusion_flutter_charts: ^32.1.24
   talker: ^5.1.9
   talker_bloc_logger: ^5.1.9
   talker_dio_logger: ^5.1.9
