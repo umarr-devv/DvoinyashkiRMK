@@ -1,5 +1,4 @@
 import 'package:app/blocs/work_shifts/work_shifts_cubit.dart';
-import 'package:app/features/work_time/widgets/table.dart';
 import 'package:app/features/work_time/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';

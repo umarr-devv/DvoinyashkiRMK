@@ -6,7 +6,7 @@ part 'statistic.g.dart';
 class StatisticCheckScheme {
   const StatisticCheckScheme({
     required this.date,
-    required this.userRefKey,
+    required this.userKey,
     required this.udsClient,
     required this.documentSum,
     required this.composition,
@@ -16,7 +16,7 @@ class StatisticCheckScheme {
   final DateTime date;
 
   @JsonKey(name: 'Кассир_Key')
-  final String userRefKey;
+  final String userKey;
 
   @JsonKey(name: 'КлиентUDS')
   final String udsClient;

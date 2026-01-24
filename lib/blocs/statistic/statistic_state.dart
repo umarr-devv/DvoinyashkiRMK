@@ -3,24 +3,58 @@ part of 'statistic_cubit.dart';
 
 @JsonSerializable()
 class StatisticState extends Equatable {
-  const StatisticState({this.checks = const [], this.checkSums = const []});
+  const StatisticState({
+    this.checks = const [],
+    this.checkSums = const [],
+    this.userSums = const [],
+    required this.startDate,
+    required this.endDate,
+    required this.isHourInterval,
+  });
 
   final List<StatisticCheckScheme> checks;
-  final List<StatisticCheckSumAggregate> checkSums;
+  final List<StatisticCheckSumData> checkSums;
+  final List<StatisticUserData> userSums;
+
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool isHourInterval;
+
+  List<String> get udsClients => checks
+      .where((i) => i.udsClient.isNotEmpty)
+      .map((i) => i.udsClient)
+      .toList();
+
+  Set get uniqueUdsClient => Set.from(udsClients);
+
+  double get totalSum =>
+      checks.map((i) => i.documentSum).fold(0, (a, b) => a + b);
 
   StatisticState copyWith({
     List<StatisticCheckScheme>? checks,
-    List<StatisticCheckSumAggregate>? checkSums,
+    List<StatisticCheckSumData>? checkSums,
+    List<StatisticUserData>? userSums,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isHourInterval,
   }) {
     return StatisticState(
       checks: checks ?? this.checks,
       checkSums: checkSums ?? this.checkSums,
+      userSums: userSums ?? this.userSums,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      isHourInterval: isHourInterval ?? this.isHourInterval,
     );
   }
 
   StatisticState.from(StatisticState other)
     : checks = other.checks,
-      checkSums = other.checkSums;
+      checkSums = other.checkSums,
+      userSums = other.userSums,
+      startDate = other.startDate,
+      endDate = other.endDate,
+      isHourInterval = other.isHourInterval;
 
   factory StatisticState.fromJson(Map<String, dynamic> json) =>
       _$StatisticStateFromJson(json);
@@ -28,10 +62,23 @@ class StatisticState extends Equatable {
   Map<String, dynamic> toJson() => _$StatisticStateToJson(this);
 
   @override
-  List<Object?> get props => [checks, checkSums];
+  List<Object?> get props => [
+    checks,
+    checkSums,
+    userSums,
+    startDate,
+    endDate,
+    isHourInterval,
+  ];
 }
 
-final class StatisticInitial extends StatisticState {}
+final class StatisticInitial extends StatisticState {
+  const StatisticInitial({
+    required super.startDate,
+    required super.endDate,
+    required super.isHourInterval,
+  });
+}
 
 final class StatisticUpdate extends StatisticState {
   StatisticUpdate(super.state) : super.from();

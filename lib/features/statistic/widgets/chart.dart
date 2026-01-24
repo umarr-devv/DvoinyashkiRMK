@@ -1,75 +1,83 @@
-import 'dart:math';
-
+import 'package:app/blocs/blocs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class RevenueChartPage extends StatelessWidget {
-  final random = Random();
-
-  double nextIntInRange(int min, int max) {
-    return min + random.nextInt(max - min + 1).toDouble();
-  }
-
-  List<RevenueData> get chartData => [
-    RevenueData(DateTime(2025, 1, 1), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 2), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 3), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 4), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 5), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 6), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 7), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 8), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 9), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 10), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 11), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 12), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 13), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 14), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 15), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 16), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 17), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 18), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 19), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 20), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 21), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 22), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 23), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 24), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 25), nextIntInRange(2000, 10000)),
-    RevenueData(DateTime(2025, 1, 26), nextIntInRange(2000, 10000)),
-  ];
+class StatisticChart extends StatelessWidget {
+  const StatisticChart({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SfCartesianChart(
-      primaryXAxis: DateTimeAxis(
-        intervalType: DateTimeIntervalType.days,
-        dateFormat: DateFormat('dd.MM.yyyy'),
-      ),
-      primaryYAxis: NumericAxis(),
-      series: <CartesianSeries>[
-        ColumnSeries<RevenueData, DateTime>(
-          dataSource: chartData,
-          color: theme.custom.secondaryAccent,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(6),
-            topRight: Radius.circular(6),
+    return BlocBuilder<StatisticCubit, StatisticState>(
+      bloc: BlocProvider.of<StatisticCubit>(context),
+      builder: (context, state) {
+        if (state is StatisticLoading) {
+          return FCircularProgress();
+        }
+        return SfCartesianChart(
+          primaryXAxis: DateTimeAxis(
+            intervalType: state.isHourInterval ? DateTimeIntervalType.hours : DateTimeIntervalType.days,
+            dateFormat: state.isHourInterval ? DateFormat('HH:mm') : DateFormat('dd.MM.yyyy'),
           ),
-
-          xValueMapper: (RevenueData data, _) => data.date,
-          yValueMapper: (RevenueData data, _) => data.revenue,
-        ),
-      ],
+          primaryYAxis: NumericAxis(),
+          tooltipBehavior: TooltipBehavior(
+            enable: true,
+            color: theme.custom.muted,
+            builder: (data, point, series, pointIndex, seriesIndex) {
+              return _ChartTooltip(data);
+            },
+          ),
+          series: <CartesianSeries>[
+            ColumnSeries<StatisticCheckSumData, DateTime>(
+              dataSource: state.checkSums,
+              color: theme.custom.secondaryAccent,
+              animationDuration: 250,
+              enableTooltip: true,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(6),
+                topRight: Radius.circular(6),
+              ),
+              xValueMapper: (StatisticCheckSumData data, _) => data.period,
+              yValueMapper: (StatisticCheckSumData data, _) => data.totalSum,
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-class RevenueData {
-  final DateTime date;
-  final double revenue;
+class _ChartTooltip extends StatelessWidget {
+  const _ChartTooltip(this.checkSum);
 
-  RevenueData(this.date, this.revenue);
+  final StatisticCheckSumData checkSum;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        spacing: 8,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FLabel(
+            label: Text('Дата'),
+            axis: Axis.vertical,
+            child: Text(DateFormat('dd.MM.yyyy').format(checkSum.period)),
+          ),
+          FLabel(
+            label: Text('Сумма'),
+            axis: Axis.vertical,
+            child: Text(
+              NumberFormat.currency(symbol: '').format(checkSum.totalSum),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

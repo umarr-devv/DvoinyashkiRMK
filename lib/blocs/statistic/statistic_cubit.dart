@@ -13,7 +13,14 @@ part 'statistic_data.dart';
 part 'statistic_state.dart';
 
 class StatisticCubit extends HydratedCubit<StatisticState> {
-  StatisticCubit(this.settingsCubit) : super(StatisticInitial());
+  StatisticCubit(this.settingsCubit)
+    : super(
+        StatisticInitial(
+          startDate: DateTime.now().subtract(Duration(days: 31)),
+          endDate: DateTime.now(),
+          isHourInterval: false,
+        ),
+      );
 
   final SettingsCubit settingsCubit;
 
@@ -22,26 +29,44 @@ class StatisticCubit extends HydratedCubit<StatisticState> {
 
   CashRegisterScheme? get cashRegister => settingsCubit.state.cashRegister;
 
-  Future update(DateTime? start, DateTime? end) async {
+  Future update() async {
     if (cashRegister == null) return;
     emit(StatisticLoading(state));
     try {
       final Map<String, dynamic> params = {
         '\$select': "Date,Кассир_Key,КлиентUDS,СуммаДокумента,Состав",
         '\$filter':
-            "КассаККМ_Key eq guid'${cashRegister!.refKey}' and Date ge datetime'$start' and Date le datetime '$end'",
+            "КассаККМ_Key eq guid'${cashRegister!.refKey}' and Date ge ${to1CODataDateTime(state.startDate)} and Date le ${to1CODataDateTime(state.endDate)}",
         '\$format': 'json',
       };
 
       final response = await client.getCheckStatistics(
         fullPath: buildODataQuery(params),
       );
-      final newState = state.copyWith(checks: response.checks, checkSums: StatisticCheckSumAggregate.aggregateByDay(response.checks));
+
+      final isHourInterval =
+          state.endDate.difference(state.startDate) < Duration(days: 5);
+      final checkSums = isHourInterval
+          ? StatisticCheckSumData.aggregateByHour(response.checks)
+          : StatisticCheckSumData.aggregateByDay(response.checks);
+
+      final newState = state.copyWith(
+        checks: response.checks,
+        checkSums: checkSums,
+        userSums: StatisticUserData.aggregateByUser(response.checks),
+        isHourInterval: isHourInterval,
+      );
       emit(StatisticLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
       emit(StatisticFailure(state));
     }
+  }
+
+  Future setDate({DateTime? startDate, DateTime? endDate}) async {
+    final newState = state.copyWith(startDate: startDate, endDate: endDate);
+    emit(StatisticUpdate(newState));
+    await update();
   }
 
   @override

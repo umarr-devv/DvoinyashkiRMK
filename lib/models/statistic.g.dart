@@ -10,7 +10,7 @@ StatisticCheckScheme _$StatisticCheckSchemeFromJson(
   Map<String, dynamic> json,
 ) => StatisticCheckScheme(
   date: DateTime.parse(json['Date'] as String),
-  userRefKey: json['Кассир_Key'] as String,
+  userKey: json['Кассир_Key'] as String,
   udsClient: json['КлиентUDS'] as String,
   documentSum: (json['СуммаДокумента'] as num).toDouble(),
   composition: json['Состав'] as String,
@@ -20,7 +20,7 @@ Map<String, dynamic> _$StatisticCheckSchemeToJson(
   StatisticCheckScheme instance,
 ) => <String, dynamic>{
   'Date': instance.date.toIso8601String(),
-  'Кассир_Key': instance.userRefKey,
+  'Кассир_Key': instance.userKey,
   'КлиентUDS': instance.udsClient,
   'СуммаДокумента': instance.documentSum,
   'Состав': instance.composition,

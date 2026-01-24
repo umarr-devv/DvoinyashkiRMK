@@ -5,3 +5,10 @@ String buildODataQuery(Map<String, dynamic> params) {
     return '$key=$value';
   }).join('&')}';
 }
+
+String to1CODataDateTime(DateTime dt) {
+  final iso = dt.toIso8601String();
+  final cleaned = iso.split('.').first.replaceAll('Z', '');
+
+  return "datetime'$cleaned'";
+}

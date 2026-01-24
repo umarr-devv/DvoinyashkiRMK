@@ -1,13 +1,13 @@
 part of 'statistic_cubit.dart';
 
 @JsonSerializable()
-class StatisticCheckSumAggregate {
-  StatisticCheckSumAggregate({required this.period, required this.totalSum});
+class StatisticCheckSumData {
+  StatisticCheckSumData({required this.period, required this.totalSum});
 
   final DateTime period;
   final double totalSum;
 
-  static List<StatisticCheckSumAggregate> aggregateByDay(
+  static List<StatisticCheckSumData> aggregateByDay(
     List<StatisticCheckScheme> items,
   ) {
     final Map<DateTime, double> map = {};
@@ -23,14 +23,12 @@ class StatisticCheckSumAggregate {
     }
 
     return map.entries
-        .map(
-          (e) => StatisticCheckSumAggregate(period: e.key, totalSum: e.value),
-        )
+        .map((e) => StatisticCheckSumData(period: e.key, totalSum: e.value))
         .toList()
       ..sort((a, b) => a.period.compareTo(b.period));
   }
 
-  static List<StatisticCheckSumAggregate> aggregateByHour(
+  static List<StatisticCheckSumData> aggregateByHour(
     List<StatisticCheckScheme> items,
   ) {
     final Map<DateTime, double> map = {};
@@ -51,15 +49,59 @@ class StatisticCheckSumAggregate {
     }
 
     return map.entries
-        .map(
-          (e) => StatisticCheckSumAggregate(period: e.key, totalSum: e.value),
-        )
+        .map((e) => StatisticCheckSumData(period: e.key, totalSum: e.value))
         .toList()
       ..sort((a, b) => a.period.compareTo(b.period));
   }
 
-  factory StatisticCheckSumAggregate.fromJson(Map<String, dynamic> json) =>
-      _$StatisticCheckSumAggregateFromJson(json);
+  factory StatisticCheckSumData.fromJson(Map<String, dynamic> json) =>
+      _$StatisticCheckSumDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$StatisticCheckSumAggregateToJson(this);
+  Map<String, dynamic> toJson() => _$StatisticCheckSumDataToJson(this);
+}
+
+@JsonSerializable()
+class StatisticUserData {
+  StatisticUserData({
+    required this.userKey,
+    required this.checkCount,
+    required this.totalSum,
+  });
+
+  final String userKey;
+  final int checkCount;
+  final double totalSum;
+
+  static List<StatisticUserData> aggregateByUser(
+    List<StatisticCheckScheme> checks,
+  ) {
+    final Map<String, StatisticUserData> map = {};
+
+    for (final check in checks) {
+      final userId = check.userKey;
+
+      if (map.containsKey(userId)) {
+        final existing = map[userId]!;
+
+        map[userId] = StatisticUserData(
+          userKey: userId,
+          checkCount: existing.checkCount + 1,
+          totalSum: existing.totalSum + check.documentSum,
+        );
+      } else {
+        map[userId] = StatisticUserData(
+          userKey: userId,
+          checkCount: 1,
+          totalSum: check.documentSum,
+        );
+      }
+    }
+
+    return map.values.toList();
+  }
+
+  factory StatisticUserData.fromJson(Map<String, dynamic> json) =>
+      _$StatisticUserDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StatisticUserDataToJson(this);
 }
