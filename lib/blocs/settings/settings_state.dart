@@ -73,6 +73,7 @@ class SettingsState extends Equatable {
   @override
   List<Object?> get props => [
     isDarkTheme,
+    printer,
     cashRegister,
     author,
     scale,
