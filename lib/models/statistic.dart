@@ -34,14 +34,14 @@ class StatisticCheckScheme {
 }
 
 @JsonSerializable()
-class StaticticCheckListScheme {
-  StaticticCheckListScheme({required this.checks});
+class StatisticCheckListScheme {
+  StatisticCheckListScheme({required this.checks});
 
   @JsonKey(name: 'value')
   final List<StatisticCheckScheme> checks;
 
-  factory StaticticCheckListScheme.fromJson(Map<String, dynamic> json) =>
-      _$StaticticCheckListSchemeFromJson(json);
+  factory StatisticCheckListScheme.fromJson(Map<String, dynamic> json) =>
+      _$StatisticCheckListSchemeFromJson(json);
 
-  Map<String, dynamic> toJson() => _$StaticticCheckListSchemeToJson(this);
+  Map<String, dynamic> toJson() => _$StatisticCheckListSchemeToJson(this);
 }

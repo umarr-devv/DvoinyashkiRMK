@@ -112,4 +112,9 @@ abstract class RestClient {
   Future<WorkShiftListScheme> getWorkShifts({
     @Path('fullPath') required String fullPath,
   });
+
+  @GET('/Document_ЧекККМ{fullPath}')
+  Future<StatisticCheckListScheme> getCheckStatistics({
+    @Path('fullPath') required String fullPath,
+  });
 }

@@ -26,14 +26,14 @@ Map<String, dynamic> _$StatisticCheckSchemeToJson(
   'Состав': instance.composition,
 };
 
-StaticticCheckListScheme _$StaticticCheckListSchemeFromJson(
+StatisticCheckListScheme _$StatisticCheckListSchemeFromJson(
   Map<String, dynamic> json,
-) => StaticticCheckListScheme(
+) => StatisticCheckListScheme(
   checks: (json['value'] as List<dynamic>)
       .map((e) => StatisticCheckScheme.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
-Map<String, dynamic> _$StaticticCheckListSchemeToJson(
-  StaticticCheckListScheme instance,
+Map<String, dynamic> _$StatisticCheckListSchemeToJson(
+  StatisticCheckListScheme instance,
 ) => <String, dynamic>{'value': instance.checks};
