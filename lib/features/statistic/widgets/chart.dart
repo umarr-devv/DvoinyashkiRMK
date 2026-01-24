@@ -20,27 +20,37 @@ class StatisticChart extends StatelessWidget {
         }
         return SfCartesianChart(
           primaryXAxis: DateTimeAxis(
-            intervalType: state.isHourInterval ? DateTimeIntervalType.hours : DateTimeIntervalType.days,
-            dateFormat: state.isHourInterval ? DateFormat('HH:mm') : DateFormat('dd.MM.yyyy'),
+            intervalType: state.isHourInterval
+                ? DateTimeIntervalType.hours
+                : DateTimeIntervalType.days,
+            dateFormat: state.isHourInterval
+                ? DateFormat('HH:mm')
+                : DateFormat('dd.MM.yy'),
           ),
-          primaryYAxis: NumericAxis(),
+          primaryYAxis: NumericAxis(
+            numberFormat: NumberFormat.currency(symbol: '', decimalDigits: 0),
+          ),
           tooltipBehavior: TooltipBehavior(
             enable: true,
             color: theme.custom.muted,
             builder: (data, point, series, pointIndex, seriesIndex) {
-              return _ChartTooltip(data);
+              return _ChartTooltip(data, state.isHourInterval);
             },
           ),
           series: <CartesianSeries>[
             ColumnSeries<StatisticCheckSumData, DateTime>(
               dataSource: state.checkSums,
-              color: theme.custom.secondaryAccent,
               animationDuration: 250,
               enableTooltip: true,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(6),
                 topRight: Radius.circular(6),
               ),
+              pointColorMapper: (datum, index) {
+                final ratio = datum.totalSum / (state.avgDaySum * 2);
+                final alpha = (0.5 + ratio * 0.5).clamp(0.5, 1.0);
+                return theme.custom.secondaryAccent.withValues(alpha: alpha);
+              },
               xValueMapper: (StatisticCheckSumData data, _) => data.period,
               yValueMapper: (StatisticCheckSumData data, _) => data.totalSum,
             ),
@@ -52,9 +62,10 @@ class StatisticChart extends StatelessWidget {
 }
 
 class _ChartTooltip extends StatelessWidget {
-  const _ChartTooltip(this.checkSum);
+  const _ChartTooltip(this.checkSum, this.isHourInterval);
 
   final StatisticCheckSumData checkSum;
+  final bool isHourInterval;
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +74,16 @@ class _ChartTooltip extends StatelessWidget {
       child: Column(
         spacing: 8,
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FLabel(
-            label: Text('Дата'),
+            label: Text('Время'),
             axis: Axis.vertical,
-            child: Text(DateFormat('dd.MM.yyyy').format(checkSum.period)),
+            child: Text(
+              DateFormat(
+                isHourInterval ? 'HH:mm dd.MM.yyyy' : 'dd.MM.yyyy',
+              ).format(checkSum.period),
+            ),
           ),
           FLabel(
             label: Text('Сумма'),

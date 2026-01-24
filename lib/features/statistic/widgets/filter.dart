@@ -15,9 +15,10 @@ class StaticticFilter extends StatelessWidget {
       builder: (context, state) {
         return Row(
           spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-              width: 320,
+              width: 240,
               child: FDateField.calendar(
                 control: FDateFieldControl.managed(
                   initial: state.startDate,
@@ -28,14 +29,14 @@ class StaticticFilter extends StatelessWidget {
                   },
                 ),
                 start: DateTime.now().subtract(Duration(days: 90)),
-                end: DateTime.now(),
+                end: state.endDate,
                 label: const Text('Начало'),
                 format: DateFormat('dd.MM.yyyy'),
                 hint: 'Выберите дату',
               ),
             ),
             SizedBox(
-              width: 320,
+              width: 240,
               child: FDateField.calendar(
                 control: FDateFieldControl.managed(
                   initial: state.endDate,
@@ -51,6 +52,45 @@ class StaticticFilter extends StatelessWidget {
                 format: DateFormat('dd.MM.yyyy'),
                 hint: 'Выберите дату',
               ),
+            ),
+            Expanded(child: SizedBox()),
+            FButton(
+              onPress: () {
+                cubit.setDate(
+                  startDate: DateTime.now().subtract(Duration(days: 31)),
+                  endDate: DateTime.now(),
+                );
+              },
+              style: FButtonStyle.outline(),
+              child: Text('Месяц'),
+            ),
+            FButton(
+              onPress: () {
+                cubit.setDate(
+                  startDate: DateTime.now().subtract(Duration(days: 7)),
+                  endDate: DateTime.now(),
+                );
+              },
+              style: FButtonStyle.outline(),
+              child: Text('Неделя'),
+            ),
+            FButton(
+              onPress: () {
+                cubit.setDate(
+                  startDate: DateTime.now().copyWith(
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                  ),
+                  endDate: DateTime.now().copyWith(
+                    hour: 23,
+                    minute: 59,
+                    second: 59,
+                  ),
+                );
+              },
+              style: FButtonStyle.outline(),
+              child: Text('Сегодня'),
             ),
           ],
         );

@@ -49,8 +49,12 @@ class _CashRegisterSelect extends StatelessWidget {
                 control: FSelectControl.managed(
                   initial: settingsState.cashRegister,
                   onChange: (value) {
-                    if (value != null) {
+                    if (value != null && value != settingsState.cashRegister) {
                       cubit.setSettings(cashRegister: value);
+                      BlocProvider.of<ChecksCubit>(context).update();
+                      BlocProvider.of<WithdrawsCubit>(context).update();
+                      BlocProvider.of<StatisticCubit>(context).update();
+                      BlocProvider.of<WorkShiftsCubit>(context).update();
                     }
                   },
                 ),

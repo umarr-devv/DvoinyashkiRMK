@@ -20,6 +20,18 @@ class StatisticState extends Equatable {
   final DateTime endDate;
   final bool isHourInterval;
 
+  List<StatisticUserData> get filtredUserSums {
+    final List<StatisticUserData> copy = List.from(userSums);
+    copy.sort((a, b) {
+      if (a.totalSum < b.totalSum) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return copy;
+  }
+
   List<String> get udsClients => checks
       .where((i) => i.udsClient.isNotEmpty)
       .map((i) => i.udsClient)
@@ -29,6 +41,12 @@ class StatisticState extends Equatable {
 
   double get totalSum =>
       checks.map((i) => i.documentSum).fold(0, (a, b) => a + b);
+
+  double get avgCheckSum => totalSum / checks.length;
+
+  double get avgDaySum => totalSum / checkSums.length;
+
+  double get udsPercent => uniqueUdsClient.length / checks.length;
 
   StatisticState copyWith({
     List<StatisticCheckScheme>? checks,

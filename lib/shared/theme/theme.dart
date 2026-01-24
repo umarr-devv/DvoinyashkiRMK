@@ -69,6 +69,12 @@ class CustomThemeData {
 
   Color get rowEvenColor => muted.withValues(alpha: 0.75);
 
+  Color get gold => Color(0xffe8b904);
+
+  Color get silver => Color(0xffc6c6c6);
+
+  Color get bronze => Color(0xffd08d4c);
+
   ThemeData toTheme() {
     return ThemeData(
       useMaterial3: true,
