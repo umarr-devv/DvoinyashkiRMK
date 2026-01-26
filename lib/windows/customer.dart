@@ -1,4 +1,5 @@
 import 'package:app/shared/theme/theme.dart';
+import 'package:app/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 import 'package:screen_retriever/screen_retriever.dart';
@@ -10,11 +11,7 @@ class CustomerWindow extends StatelessWidget {
   static Future<void> initWindow() async {
     await windowManager.ensureInitialized();
 
-    final windowsOptions = const WindowOptions(
-      title: 'Двойняшкм РМК',
-      titleBarStyle: TitleBarStyle.hidden,
-      windowButtonVisibility: false,
-    );
+    final windowsOptions = const WindowOptions(title: 'Двойняшкм РМК');
 
     windowManager.waitUntilReadyToShow(windowsOptions, () async {
       final screens = await screenRetriever.getAllDisplays();
@@ -36,7 +33,11 @@ class CustomerWindow extends StatelessWidget {
         theme: lightTheme.toTheme(),
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
-          return Scaffold(body: Text('text'));
+          return Scaffold(body: Column(children: [
+              
+
+            ],
+          ));
         },
       ),
     );
