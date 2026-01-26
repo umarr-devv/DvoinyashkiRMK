@@ -8,45 +8,49 @@ import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
-class WithdrawTable extends StatelessWidget {
-  const WithdrawTable({super.key});
+class MovementTable extends StatelessWidget {
+  const MovementTable({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<WithdrawsCubit, WithdrawsState>(
-      bloc: BlocProvider.of<WithdrawsCubit>(context),
+    return BlocBuilder<MovementsCubit, MovementsState>(
+      bloc: BlocProvider.of<MovementsCubit>(context),
       builder: (context, state) {
-        if (state is WithdrawsLoading) {
+        if (state is MovementsLoading) {
           return FCircularProgress();
         }
         return BlocBuilder<DataCubit, DataState>(
           bloc: BlocProvider.of<DataCubit>(context),
-          builder: (context, dataCubit) {
+          builder: (context, dataState) {
             return DataTable2(
               dividerThickness: 0,
               columnSpacing: 8,
               columns: [
                 DataColumn2(label: Text('Номер')),
-                DataColumn2(label: Text('Касса')),
-                DataColumn2(label: Text('Магазин')),
-                DataColumn2(label: Text('Подразделение')),
+                DataColumn2(label: Text('Сотрудник')),
+                DataColumn2(label: Text('Резерв')),
+                DataColumn2(label: Text('Получатель')),
                 DataColumn2(label: Text('Сумма'), numeric: true),
+                DataColumn2(label: Text('Статус'), numeric: true),
                 DataColumn2(label: Text('Дата'), numeric: true),
               ],
-              rows: state.withdraws.map((withdraw) {
-                final cashRegister = dataCubit.cashRegisters
-                    .firstWhereLogTypeOrNull(
-                      (i) => i.refKey == withdraw.cashRegisyerKey,
-                    );
-                final store = dataCubit.structureUnits.firstWhereLogTypeOrNull(
-                  (i) => i.refKey == withdraw.storeKey,
+              rows: state.movements.map((movement) {
+                final user = dataState.users.firstWhereLogTypeOrNull(
+                  (i) => i.refKey == movement.userKey,
                 );
-                final subdivision = dataCubit.structureUnits
+                final reserve = dataState.structureUnits
                     .firstWhereLogTypeOrNull(
-                      (i) => i.refKey == withdraw.subdivisionKey,
+                      (i) => i.refKey == movement.reserveStructureUnitKey,
                     );
-                final rowIndex = state.withdraws.indexOf(withdraw);
+                final recipient = dataState.structureUnits
+                    .firstWhereLogTypeOrNull(
+                      (i) => i.refKey == movement.recipientStructureUnitKey,
+                    );
+                final status = state.statuses.firstWhereLogTypeOrNull(
+                  (i) => i.refKey == movement.statusKey,
+                );
+                final rowIndex = state.movements.indexOf(movement);
                 return DataRow2(
                   onTap: () {},
                   color: WidgetStatePropertyAll(
@@ -59,24 +63,33 @@ class WithdrawTable extends StatelessWidget {
                       Row(
                         spacing: 6,
                         children: [
-                          Icon(FluentIcons.money_24_regular),
-                          Expanded(child: Text(withdraw.number)),
+                          Icon(FluentIcons.box_24_regular),
+                          Expanded(child: Text(movement.number)),
                         ],
                       ),
                     ),
-                    DataCell(Text(cashRegister?.description ?? '')),
-                    DataCell(Text(store?.description ?? '')),
-                    DataCell(Text(subdivision?.description ?? '')),
+                    DataCell(
+                      Row(
+                        spacing: 6,
+                        children: [
+                          Icon(FluentIcons.person_24_regular),
+                          Text(user?.description ?? ''),
+                        ],
+                      ),
+                    ),
+                    DataCell(Text(reserve?.description ?? '')),
+                    DataCell(Text(recipient?.description ?? '')),
                     DataCell(
                       Text(
                         NumberFormat.currency(
                           symbol: '',
-                        ).format(withdraw.documentSum),
+                        ).format(movement.documentSum),
                       ),
                     ),
+                    DataCell(Text(status?.description ?? '')),
                     DataCell(
                       Text(
-                        DateFormat('HH:mm dd.MM.yyyy').format(withdraw.date),
+                        DateFormat('HH:mm dd.MM.yyyy').format(movement.date),
                       ),
                     ),
                   ],

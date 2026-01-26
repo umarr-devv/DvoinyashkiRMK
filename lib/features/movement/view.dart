@@ -1,7 +1,9 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/movement/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
 @RoutePage()
 class MovementScreen extends StatefulWidget {
@@ -20,6 +22,10 @@ class _MovementScreenState extends State<MovementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return FScaffold(
+      header: MovementHeader(),
+      footer: MovementPagination(),
+      child: MovementTable(),
+    );
   }
 }
