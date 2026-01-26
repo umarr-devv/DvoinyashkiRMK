@@ -27,8 +27,8 @@ class MovementsCubit extends HydratedCubit<MovementsState> {
     try {
       final Map<String, dynamic> params = {
         '\$select':
-            "Ref_Key,Number,Date,Posted,Автор_Key,Ответственный_Key"
-            "СостояниеЗаказа_Key,СтруктурнаяЕдиницаРезерв_Key"
+            "Ref_Key,Number,Date,Posted,Автор_Key,Ответственный_Key,"
+            "СостояниеЗаказа_Key,СтруктурнаяЕдиницаРезерв_Key,"
             "СтруктурнаяЕдиницаПолучатель_Key,ДатаПеремещения,СуммаДокумента",
         '\$top': state.limit.toString(),
         '\$skip': state.offset.toString(),
