@@ -4,12 +4,14 @@ import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/dialogs/dialogs.dart';
 import 'package:app/models/user.dart';
+import 'package:app/service/service.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:get_it/get_it.dart';
 
 class MenuNavBar extends StatelessWidget {
   const MenuNavBar({super.key});
@@ -161,9 +163,16 @@ class _MenuNavBarUser extends StatelessWidget {
                 },
               ),
               FTile(
+                prefix: const Icon(FIcons.appWindow),
+                title: const Text('Второе окно'),
+                onPress: () async {
+                  final window = GetIt.I<WindowService>();
+                  await window.show();
+                },
+              ),
+              FTile(
                 prefix: const Icon(FIcons.headphones),
                 title: const Text('Поддержка'),
-                suffix: Icon(FIcons.chevronRight),
                 onPress: () {},
               ),
               FTile(
