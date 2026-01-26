@@ -130,7 +130,7 @@ abstract class RestClient {
   });
 
   @GET('/Catalog_СостоянияЗаказовНаПеремещение')
-  Future<MovementListScheme> getMovementsStatuses({
+  Future<MovementStatusListScheme> getMovementsStatuses({
     @Path('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });

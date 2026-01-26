@@ -17,6 +17,7 @@ MovementScheme _$MovementSchemeFromJson(Map<String, dynamic> json) =>
       statusKey: json['СостояниеЗаказа_Key'] as String,
       recipientStructureUnitKey:
           json['СтруктурнаяЕдиницаПолучатель_Key'] as String,
+      reserveStructureUnitKey: json['СтруктурнаяЕдиницаРезерв_Key'] as String,
       movementDate: DateTime.parse(json['ДатаПеремещения'] as String),
       documentSum: (json['СуммаДокумента'] as num).toDouble(),
     );
@@ -30,6 +31,7 @@ Map<String, dynamic> _$MovementSchemeToJson(MovementScheme instance) =>
       'Автор_Key': instance.authorKey,
       'Ответственный_Key': instance.userKey,
       'СостояниеЗаказа_Key': instance.statusKey,
+      'СтруктурнаяЕдиницаРезерв_Key': instance.reserveStructureUnitKey,
       'СтруктурнаяЕдиницаПолучатель_Key': instance.recipientStructureUnitKey,
       'ДатаПеремещения': instance.movementDate.toIso8601String(),
       'СуммаДокумента': instance.documentSum,
@@ -66,6 +68,7 @@ DetailMovementScheme _$DetailMovementSchemeFromJson(
   userKey: json['Ответственный_Key'] as String,
   statusKey: json['СостояниеЗаказа_Key'] as String,
   recipientStructureUnitKey: json['СтруктурнаяЕдиницаПолучатель_Key'] as String,
+  reserveStructureUnitKey: json['СтруктурнаяЕдиницаРезерв_Key'] as String,
   movementDate: DateTime.parse(json['ДатаПеремещения'] as String),
   documentSum: (json['СуммаДокумента'] as num).toDouble(),
   items: (json['Запасы'] as List<dynamic>)
@@ -83,6 +86,7 @@ Map<String, dynamic> _$DetailMovementSchemeToJson(
   'Автор_Key': instance.authorKey,
   'Ответственный_Key': instance.userKey,
   'СостояниеЗаказа_Key': instance.statusKey,
+  'СтруктурнаяЕдиницаРезерв_Key': instance.reserveStructureUnitKey,
   'СтруктурнаяЕдиницаПолучатель_Key': instance.recipientStructureUnitKey,
   'ДатаПеремещения': instance.movementDate.toIso8601String(),
   'СуммаДокумента': instance.documentSum,
@@ -112,3 +116,15 @@ Map<String, dynamic> _$MovementStatusSchemeToJson(
   'Ref_Key': instance.refKey,
   'Description': instance.description,
 };
+
+MovementStatusListScheme _$MovementStatusListSchemeFromJson(
+  Map<String, dynamic> json,
+) => MovementStatusListScheme(
+  statuses: (json['value'] as List<dynamic>)
+      .map((e) => MovementStatusScheme.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$MovementStatusListSchemeToJson(
+  MovementStatusListScheme instance,
+) => <String, dynamic>{'value': instance.statuses};

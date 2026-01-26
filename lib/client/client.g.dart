@@ -611,7 +611,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<MovementListScheme> getMovementsStatuses({
+  Future<MovementStatusListScheme> getMovementsStatuses({
     String select = 'Ref_Key,Description',
     String format = 'json',
   }) async {
@@ -619,7 +619,7 @@ class _RestClient implements RestClient {
     final queryParameters = <String, dynamic>{r'$format': format};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<MovementListScheme>(
+    final _options = _setStreamType<MovementStatusListScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -630,9 +630,9 @@ class _RestClient implements RestClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late MovementListScheme _value;
+    late MovementStatusListScheme _value;
     try {
-      _value = MovementListScheme.fromJson(_result.data!);
+      _value = MovementStatusListScheme.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

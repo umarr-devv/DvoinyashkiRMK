@@ -14,6 +14,7 @@ class MovementScheme extends Equatable {
     required this.userKey,
     required this.statusKey,
     required this.recipientStructureUnitKey,
+    required this.reserveStructureUnitKey,
     required this.movementDate,
     required this.documentSum,
   });
@@ -37,6 +38,9 @@ class MovementScheme extends Equatable {
 
   @JsonKey(name: 'СостояниеЗаказа_Key')
   final String statusKey;
+
+  @JsonKey(name: 'СтруктурнаяЕдиницаРезерв_Key')
+  final String reserveStructureUnitKey;
 
   @JsonKey(name: 'СтруктурнаяЕдиницаПолучатель_Key')
   final String recipientStructureUnitKey;
@@ -102,6 +106,7 @@ class DetailMovementScheme extends MovementScheme {
     required super.userKey,
     required super.statusKey,
     required super.recipientStructureUnitKey,
+    required super.reserveStructureUnitKey,
     required super.movementDate,
     required super.documentSum,
     required this.items,
@@ -150,4 +155,18 @@ class MovementStatusScheme extends Equatable {
 
   @override
   List<Object?> get props => [refKey];
+}
+
+
+@JsonSerializable()
+class MovementStatusListScheme {
+  const MovementStatusListScheme({required this.statuses});
+
+  @JsonKey(name: 'value')
+  final List<MovementStatusScheme> statuses;
+
+  factory MovementStatusListScheme.fromJson(Map<String, dynamic> json) =>
+      _$MovementStatusListSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MovementStatusListSchemeToJson(this);
 }
