@@ -117,4 +117,21 @@ abstract class RestClient {
   Future<StatisticCheckListScheme> getCheckStatistics({
     @Path('fullPath') required String fullPath,
   });
+
+  @GET('/Document_ЗаказНаПеремещение{fullPath}')
+  Future<MovementListScheme> getMovements({
+    @Path('fullPath') required String fullPath,
+  });
+
+  @GET('/Document_ЗаказНаПеремещение(guid\'{ref_key}\')')
+  Future<DetailCheckScheme> getMovement({
+    @Path('ref_key') required String refKey,
+    @Query('\$format') String format = 'json',
+  });
+
+  @GET('/Catalog_СостоянияЗаказовНаПеремещение')
+  Future<MovementListScheme> getMovementsStatuses({
+    @Path('\$select') String select = 'Ref_Key,Description',
+    @Query('\$format') String format = 'json',
+  });
 }
