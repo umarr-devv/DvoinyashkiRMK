@@ -13,6 +13,8 @@ class OrderItem extends Equatable {
   final double quantity;
   final double price;
 
+  double get totalSum => quantity * price;
+
   OrderItem copyWith({
     NomenclatureScheme? nomenclature,
     CharacteristicScheme? characteristic,

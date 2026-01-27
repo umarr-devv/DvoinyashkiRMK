@@ -1,5 +1,4 @@
 import 'package:app/shared/theme/theme.dart';
-import 'package:app/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 import 'package:screen_retriever/screen_retriever.dart';

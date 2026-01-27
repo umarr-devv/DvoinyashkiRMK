@@ -1,8 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -69,102 +70,93 @@ class _OrderBasketTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<OrderCubit>(context);
-    final theme = Theme.of(context);
     return BlocBuilder<OrderCubit, OrderState>(
       bloc: cubit,
       builder: (context, state) {
-        return DataTable2(
-          dividerThickness: 0,
-          dataRowHeight: 42,
-          columnSpacing: 8,
-          columns: [
-            DataColumn2(label: Text('Название')),
-            DataColumn2(label: Text('Цена'), numeric: true, fixedWidth: 100),
-            DataColumn2(label: Text('Кол-во'), numeric: true, fixedWidth: 100),
-            DataColumn2(label: SizedBox(), fixedWidth: 24),
-          ],
-          rows:
-              state.currentOrder?.items.map((i) {
-                return DataRow2(
-                  cells: [
-                    DataCell(
-                      FTooltip(
-                        tipBuilder: (context, controller) => Text(
-                          i.product.name,
-                          style: TextStyle(color: theme.custom.foreground),
-                        ),
-                        child: Row(
-                          spacing: 4,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                i.product.name,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      FTextField(
-                        textAlign: TextAlign.right,
-                        control: FTextFieldControl.lifted(
-                          value: TextEditingValue(
-                            text: i.price.toStringAsFixed(2),
-                          ),
-                          onChange: (value) {},
-                        ),
-                        inputFormatters: [
-                          CurrencyInputFormatter(
-                            thousandSeparator: ThousandSeparator.Space,
-                            mantissaLength: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                    DataCell(_TableQuantity(i)),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          cubit.deleteItem(i);
-                        },
-                        child: Container(
-                          padding: const EdgeInsetsGeometry.all(4),
-                          decoration: BoxDecoration(
-                            color: theme.custom.muted,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Icon(Icons.close, size: 16),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList() ??
-              [],
+        return ListView.separated(
+          itemBuilder: (context, index) {
+            final item = state.currentOrder?.items[index];
+            if (item != null) {
+              return _ProductOrderCard(item);
+            }
+            return SizedBox();
+          },
+          separatorBuilder: (context, index) {
+            return CustomDottedLine();
+          },
+          itemCount: state.currentOrder?.items.length ?? 0,
         );
       },
     );
   }
 }
 
-class _TableQuantity extends StatefulWidget {
-  const _TableQuantity(this.item);
+class _ProductOrderCard extends StatelessWidget {
+  const _ProductOrderCard(this.item);
+
+  final OrderItem item;
+
+  Uint8List? get imageBytes {
+    if (item.product.images.isNotEmpty) {
+      return item.product.images[0].imageBytes;
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(
+          item.product.name,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: theme.custom.foreground,
+          ),
+        ),
+      ),
+      subtitle: _ProductOrderItemQuantity(item),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            'Цена: ${item.price.toStringAsFixed(0)}',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: theme.custom.foreground,
+            ),
+          ),
+          Text(
+            'Сумма: ${item.totalSum.toStringAsFixed(0)}',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w500,
+              color: theme.custom.foreground,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProductOrderItemQuantity extends StatefulWidget {
+  const _ProductOrderItemQuantity(this.item);
 
   final OrderItem item;
 
   @override
-  State<_TableQuantity> createState() => _TableQuantityState();
+  State<_ProductOrderItemQuantity> createState() =>
+      _ProductOrderItemQuantityState();
 }
 
-class _TableQuantityState extends State<_TableQuantity> {
+class _ProductOrderItemQuantityState extends State<_ProductOrderItemQuantity> {
   late final TextEditingController _controller;
 
   @override
@@ -176,7 +168,7 @@ class _TableQuantityState extends State<_TableQuantity> {
   }
 
   @override
-  void didUpdateWidget(covariant _TableQuantity oldWidget) {
+  void didUpdateWidget(covariant _ProductOrderItemQuantity oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     final newText = widget.item.quantity.toStringAsFixed(2);
@@ -198,21 +190,47 @@ class _TableQuantityState extends State<_TableQuantity> {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<OrderCubit>(context);
-    return FTextField(
-      textAlign: TextAlign.right,
-      control: FTextFieldControl.managed(
-        controller: _controller,
-        onChange: (value) {
-          final value_ = double.tryParse(value.text);
-          if (value_ != null) {
-            cubit.updateItem(widget.item.copyWith(quantity: value_));
-          }
-        },
-      ),
-      inputFormatters: [
-        CurrencyInputFormatter(
-          thousandSeparator: ThousandSeparator.Space,
-          mantissaLength: 2,
+    return Row(
+      spacing: 8,
+      children: [
+        FButton.icon(
+          onPress: () {
+            cubit.updateItem(
+              widget.item.copyWith(quantity: widget.item.quantity - 1),
+            );
+          },
+          style: FButtonStyle.secondary(),
+          child: Icon(Icons.remove),
+        ),
+        SizedBox(
+          width: 80,
+          child: FTextField(
+            textAlign: TextAlign.right,
+            control: FTextFieldControl.managed(
+              controller: _controller,
+              onChange: (value) {
+                final value_ = double.tryParse(value.text);
+                if (value_ != null) {
+                  cubit.updateItem(widget.item.copyWith(quantity: value_));
+                }
+              },
+            ),
+            inputFormatters: [
+              CurrencyInputFormatter(
+                thousandSeparator: ThousandSeparator.Space,
+                mantissaLength: 2,
+              ),
+            ],
+          ),
+        ),
+        FButton.icon(
+          onPress: () {
+            cubit.updateItem(
+              widget.item.copyWith(quantity: widget.item.quantity + 1),
+            );
+          },
+          style: FButtonStyle.primary(),
+          child: Icon(Icons.add),
         ),
       ],
     );
