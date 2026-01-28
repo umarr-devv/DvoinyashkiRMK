@@ -20,12 +20,12 @@ MovementsState _$MovementsStateFromJson(Map<String, dynamic> json) =>
               )
               .toList() ??
           const [],
-      pageNum: (json['page_num'] as num?)?.toInt() ?? 0,
+      pageNum: (json['pageNum'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$MovementsStateToJson(MovementsState instance) =>
     <String, dynamic>{
       'movements': instance.movements,
       'statuses': instance.statuses,
-      'page_num': instance.pageNum,
+      'pageNum': instance.pageNum,
     };

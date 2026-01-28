@@ -11,7 +11,7 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
       ? null
       : DetailUserScheme.fromJson(json['user'] as Map<String, dynamic>),
   lastUsers:
-      (json['last_users'] as List<dynamic>?)
+      (json['lastUsers'] as List<dynamic>?)
           ?.map((e) => DetailUserScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
@@ -19,5 +19,5 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) => AuthState(
 
 Map<String, dynamic> _$AuthStateToJson(AuthState instance) => <String, dynamic>{
   'user': instance.user,
-  'last_users': instance.lastUsers,
+  'lastUsers': instance.lastUsers,
 };

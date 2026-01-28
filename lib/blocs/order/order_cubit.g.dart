@@ -19,25 +19,25 @@ Map<String, dynamic> _$OrderItemToJson(OrderItem instance) => <String, dynamic>{
 };
 
 OrderData _$OrderDataFromJson(Map<String, dynamic> json) => OrderData(
-  uniqueId: json['unique_id'] as String,
+  uniqueId: json['uniqueId'] as String,
   items: (json['items'] as List<dynamic>)
       .map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
       .toList(),
-  createAt: DateTime.parse(json['create_at'] as String),
+  createAt: DateTime.parse(json['createAt'] as String),
 );
 
 Map<String, dynamic> _$OrderDataToJson(OrderData instance) => <String, dynamic>{
-  'unique_id': instance.uniqueId,
+  'uniqueId': instance.uniqueId,
   'items': instance.items,
-  'create_at': instance.createAt.toIso8601String(),
+  'createAt': instance.createAt.toIso8601String(),
 };
 
 OrderState _$OrderStateFromJson(Map<String, dynamic> json) => OrderState(
-  currentOrder: json['current_order'] == null
+  currentOrder: json['currentOrder'] == null
       ? null
-      : OrderData.fromJson(json['current_order'] as Map<String, dynamic>),
+      : OrderData.fromJson(json['currentOrder'] as Map<String, dynamic>),
   saveOrders:
-      (json['save_orders'] as List<dynamic>?)
+      (json['saveOrders'] as List<dynamic>?)
           ?.map((e) => OrderData.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
@@ -45,6 +45,6 @@ OrderState _$OrderStateFromJson(Map<String, dynamic> json) => OrderState(
 
 Map<String, dynamic> _$OrderStateToJson(OrderState instance) =>
     <String, dynamic>{
-      'current_order': instance.currentOrder,
-      'save_orders': instance.saveOrders,
+      'currentOrder': instance.currentOrder,
+      'saveOrders': instance.saveOrders,
     };

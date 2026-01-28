@@ -12,8 +12,8 @@ ChecksState _$ChecksStateFromJson(Map<String, dynamic> json) => ChecksState(
           ?.map((e) => CheckScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
-  pageNum: (json['page_num'] as num?)?.toInt() ?? 0,
+  pageNum: (json['pageNum'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$ChecksStateToJson(ChecksState instance) =>
-    <String, dynamic>{'checks': instance.checks, 'page_num': instance.pageNum};
+    <String, dynamic>{'checks': instance.checks, 'pageNum': instance.pageNum};

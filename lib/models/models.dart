@@ -11,6 +11,7 @@ export 'price_type.dart';
 export 'product_image.dart';
 export 'statistic.dart';
 export 'structure_unit.dart';
+export 'uds_customer.dart';
 export 'user.dart';
 export 'withdraw.dart';
 export 'work_shift.dart';

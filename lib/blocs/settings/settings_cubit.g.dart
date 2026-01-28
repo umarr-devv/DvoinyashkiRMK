@@ -8,12 +8,12 @@ part of 'settings_cubit.dart';
 
 SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
     SettingsState(
-      isDarkTheme: json['is_dark_theme'] as bool? ?? false,
+      isDarkTheme: json['isDarkTheme'] as bool? ?? false,
       scale: (json['scale'] as num?)?.toDouble() ?? 1,
-      cashRegister: json['cash_register'] == null
+      cashRegister: json['cashRegister'] == null
           ? null
           : CashRegisterScheme.fromJson(
-              json['cash_register'] as Map<String, dynamic>,
+              json['cashRegister'] as Map<String, dynamic>,
             ),
       author: json['author'] == null
           ? null
@@ -28,24 +28,24 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
             ),
       printer: json['printer'] as String?,
       pinnedCategories:
-          (json['pinned_categories'] as List<dynamic>?)
+          (json['pinnedCategories'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      showEmptyCategories: json['show_empty_categories'] as bool? ?? false,
-      catalogListView: json['catalog_list_view'] as bool? ?? false,
+      showEmptyCategories: json['showEmptyCategories'] as bool? ?? false,
+      catalogListView: json['catalogListView'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
     <String, dynamic>{
-      'is_dark_theme': instance.isDarkTheme,
+      'isDarkTheme': instance.isDarkTheme,
       'scale': instance.scale,
-      'cash_register': instance.cashRegister,
+      'cashRegister': instance.cashRegister,
       'author': instance.author,
       'store': instance.store,
       'subdivision': instance.subdivision,
       'printer': instance.printer,
-      'pinned_categories': instance.pinnedCategories,
-      'show_empty_categories': instance.showEmptyCategories,
-      'catalog_list_view': instance.catalogListView,
+      'pinnedCategories': instance.pinnedCategories,
+      'showEmptyCategories': instance.showEmptyCategories,
+      'catalogListView': instance.catalogListView,
     };

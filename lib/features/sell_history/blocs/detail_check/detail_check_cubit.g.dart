@@ -8,7 +8,7 @@ part of 'detail_check_cubit.dart';
 
 DetailCheckState _$DetailCheckStateFromJson(Map<String, dynamic> json) =>
     DetailCheckState(
-      refKey: json['ref_key'] as String,
+      refKey: json['refKey'] as String,
       check: json['check'] == null
           ? null
           : DetailCheckScheme.fromJson(json['check'] as Map<String, dynamic>),
@@ -19,7 +19,7 @@ DetailCheckState _$DetailCheckStateFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$DetailCheckStateToJson(DetailCheckState instance) =>
     <String, dynamic>{
-      'ref_key': instance.refKey,
+      'refKey': instance.refKey,
       'check': instance.check,
       'update': instance.update?.toIso8601String(),
     };

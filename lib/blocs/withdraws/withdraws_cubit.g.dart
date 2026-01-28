@@ -13,11 +13,11 @@ WithdrawsState _$WithdrawsStateFromJson(Map<String, dynamic> json) =>
               ?.map((e) => WithdrawScheme.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      pageNum: (json['page_num'] as num?)?.toInt() ?? 0,
+      pageNum: (json['pageNum'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$WithdrawsStateToJson(WithdrawsState instance) =>
     <String, dynamic>{
       'withdraws': instance.withdraws,
-      'page_num': instance.pageNum,
+      'pageNum': instance.pageNum,
     };

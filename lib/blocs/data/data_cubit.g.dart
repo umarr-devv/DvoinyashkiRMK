@@ -55,7 +55,7 @@ Map<String, dynamic> _$ProductDataToJson(ProductData instance) =>
 
 DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
   cashRegisters:
-      (json['cash_registers'] as List<dynamic>?)
+      (json['cashRegisters'] as List<dynamic>?)
           ?.map((e) => CashRegisterScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
@@ -80,7 +80,7 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
           .toList() ??
       const [],
   priceTypes:
-      (json['price_types'] as List<dynamic>?)
+      (json['priceTypes'] as List<dynamic>?)
           ?.map((e) => PriceTypeScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
@@ -90,12 +90,12 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
           .toList() ??
       const [],
   structureUnits:
-      (json['structure_units'] as List<dynamic>?)
+      (json['structureUnits'] as List<dynamic>?)
           ?.map((e) => StructureUnitScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
   productImages:
-      (json['product_images'] as List<dynamic>?)
+      (json['productImages'] as List<dynamic>?)
           ?.map((e) => ProductImageScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
@@ -120,15 +120,15 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
 );
 
 Map<String, dynamic> _$DataStateToJson(DataState instance) => <String, dynamic>{
-  'cash_registers': instance.cashRegisters,
+  'cashRegisters': instance.cashRegisters,
   'categories': instance.categories,
   'nomenclatures': instance.nomenclatures,
   'characteristics': instance.characteristics,
   'prices': instance.prices,
-  'price_types': instance.priceTypes,
+  'priceTypes': instance.priceTypes,
   'barcodes': instance.barcodes,
-  'structure_units': instance.structureUnits,
-  'product_images': instance.productImages,
+  'structureUnits': instance.structureUnits,
+  'productImages': instance.productImages,
   'users': instance.users,
   'authors': instance.authors,
   'products': instance.products,
