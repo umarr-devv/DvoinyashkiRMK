@@ -9,13 +9,16 @@ enum GeneralStorageKey { scale }
 class GeneralStorage {
   late final Box box;
 
+  final String storageName = 'dvoinyashki_rmk';
+
   Future init() async {
     Directory? dir;
+
     if (!kIsWeb && (Platform.isWindows || Platform.isMacOS)) {
-      dir = await getApplicationDocumentsDirectory();
+      dir = await getTemporaryDirectory();
     }
     await Hive.initFlutter(dir?.path);
-    box = await Hive.openBox('general_storage');
+    box = await Hive.openBox(storageName);
   }
 
   Future setValue(GeneralStorageKey key, dynamic value) async {
