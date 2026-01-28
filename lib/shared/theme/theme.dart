@@ -26,6 +26,8 @@ class CustomThemeData {
 
   Color get foreground => by(light: Color(0xFF09090B), dark: Color(0xFFFAFAFA));
 
+  Color get invertForeground => by(light: Color(0xFFFAFAFA), dark: Color(0xFFFAFAFA));
+
   Color get primary => by(light: Color(0xFF18181B), dark: Color(0xFFFAFAFA));
 
   Color get primaryForeground =>
@@ -74,6 +76,8 @@ class CustomThemeData {
   Color get silver => Color(0xffc6c6c6);
 
   Color get bronze => Color(0xffd08d4c);
+
+  Color get uds => Color(0xff6950cb);
 
   ThemeData toTheme() {
     return ThemeData(

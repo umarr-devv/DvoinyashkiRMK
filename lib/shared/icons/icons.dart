@@ -8,7 +8,8 @@ enum CustomIcons {
   som,
   logo,
   icon,
-  invert_icon;
+  invert_icon,
+  qr;
 
   String get assetName => '$name.svg';
 

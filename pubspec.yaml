@@ -31,6 +31,7 @@ dependencies:
   flutter_svg: ^2.2.0
   forui: ^0.17.0
   get_it: ^9.2.0
+  group_button: ^5.3.4
   hive_ce: ^2.11.3
   hive_ce_flutter: ^2.3.1
   hydrated_bloc: ^10.1.1
@@ -100,6 +101,7 @@ flutter:
     - "assets/svg/logo.svg"
     - "assets/svg/icon.svg"
     - "assets/svg/invert_icon.svg"
+    - "assets/svg/qr.svg"
 
     - "assets/images/splash_image.png"
     - "assets/images/splash_branding.png"

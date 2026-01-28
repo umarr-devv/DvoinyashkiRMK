@@ -272,7 +272,9 @@ class _OrderBasketSubmitButton extends StatelessWidget {
               ],
             ),
             FButton(
-              onPress: () {},
+              onPress: () {
+                PaymentDialog(context).show();
+              },
               style: (style) => style.copyWith(
                 decoration: FWidgetStateMap.all(
                   BoxDecoration(
