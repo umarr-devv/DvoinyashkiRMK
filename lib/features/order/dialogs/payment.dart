@@ -1,10 +1,16 @@
+import 'dart:math';
+
+import 'package:app/blocs/blocs.dart';
+import 'package:app/features/order/blocs/uds_customer/uds_customer_cubit.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:group_button/group_button.dart';
+import 'package:intl/intl.dart';
 
 class PaymentTypeData {
   PaymentTypeData({required this.label, required this.icon});
@@ -17,6 +23,8 @@ class PaymentDialog {
   PaymentDialog(this.rootContext);
 
   final BuildContext rootContext;
+
+  final udsCubit = UdsCustomerCubit();
 
   final List<PaymentTypeData> paymentTypes = [
     PaymentTypeData(label: 'Наличные', icon: FluentIcons.money_24_regular),
@@ -39,7 +47,8 @@ class PaymentDialog {
                   _title(),
                   _paymentType(),
                   _paymentSum(),
-                  _udsClient(),
+                  _UDSCustomerSelect(udsCubit),
+                  _UdsCustomerPoints(udsCubit),
                   _acceptButton(),
                 ],
               ),
@@ -146,30 +155,6 @@ class PaymentDialog {
     );
   }
 
-  Widget _udsClient() {
-    final theme = Theme.of(rootContext);
-    return FTextField(
-      label: Row(
-        spacing: 6,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(64),
-            child: Image.asset('assets/images/uds_icon.png', height: 20),
-          ),
-          Text('UDS'),
-        ],
-      ),
-      prefixBuilder: (context, style, states) => Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: CustomIcons.qr(size: 20, color: theme.custom.mutedForeground),
-      ),
-      hint: 'Введите UDS-код клиента',
-      description: Text(
-        'Отсканируйте UDS-код у клиента или введите ее вручную',
-      ),
-    );
-  }
-
   Widget _acceptButton() {
     final theme = Theme.of(rootContext);
     return Padding(
@@ -189,6 +174,212 @@ class PaymentDialog {
           style: TextStyle(color: theme.custom.invertForeground),
         ),
       ),
+    );
+  }
+}
+
+class _UDSCustomerSelect extends StatefulWidget {
+  const _UDSCustomerSelect(this.udsCubit);
+
+  final UdsCustomerCubit udsCubit;
+
+  @override
+  State<_UDSCustomerSelect> createState() => _UDSCustomerSelectState();
+}
+
+class _UDSCustomerSelectState extends State<_UDSCustomerSelect> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<UdsCustomerCubit, UdsCustomerState>(
+      bloc: widget.udsCubit,
+      builder: (context, state) {
+        return FTextField(
+          label: Text('UDS код'),
+          hint: 'Введите UDS-код',
+          description: Text('Отсканируйте QR-код или же введите ее ручную'),
+          error: state is UdsCustomerFailure
+              ? Text('Клиент с таким кодом не найден')
+              : null,
+          prefixBuilder: (context, style, states) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 8, right: 4),
+              child: Builder(
+                builder: (context) {
+                  if (state is UdsCustomerLoading) {
+                    return FCircularProgress();
+                  } else if (state is UdsCustomerLoaded) {
+                    if (state.customer!.user.avatar?.isNotEmpty ?? false) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(64),
+                        child: Image.network(
+                          state.customer!.user.avatar!,
+                          height: 24,
+                          width: 24,
+                        ),
+                      );
+                    } else {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(64),
+                        child: Image.asset(
+                          'assets/images/uds_icon.png',
+                          height: 24,
+                          width: 24,
+                        ),
+                      );
+                    }
+                  } else {
+                    return CustomIcons.qr(
+                      color: theme.custom.mutedForeground,
+                      size: 20,
+                    );
+                  }
+                },
+              ),
+            );
+          },
+          suffixBuilder: (context, style, states) {
+            if (state is UdsCustomerLoaded) {
+              return FButton.icon(
+                onPress: () {
+                  widget.udsCubit.clear();
+                  controller.clear();
+                },
+                style: FButtonStyle.ghost(),
+                child: Icon(Icons.close),
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+          control: state is UdsCustomerLoaded
+              ? FTextFieldControl.lifted(
+                  value: TextEditingValue(
+                    text: state.customer!.user.displayName,
+                  ),
+                  onChange: (value) {},
+                )
+              : FTextFieldControl.managed(
+                  controller: controller,
+                  onChange: (value) {
+                    if (state is! UdsCustomerLoading &&
+                        value.text.length == 6) {
+                      widget.udsCubit.findCustomer(value.text);
+                    }
+                  },
+                ),
+          maxLength: 6,
+        );
+      },
+    );
+  }
+}
+
+class _UdsCustomerPoints extends StatefulWidget {
+  const _UdsCustomerPoints(this.udsCubit);
+
+  final UdsCustomerCubit udsCubit;
+
+  @override
+  State<_UdsCustomerPoints> createState() => _UdsCustomerPointsState();
+}
+
+class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<OrderCubit, OrderState>(
+      bloc: BlocProvider.of<OrderCubit>(context),
+      builder: (context, orderState) {
+        return BlocBuilder<UdsCustomerCubit, UdsCustomerState>(
+          bloc: widget.udsCubit,
+          builder: (context, udsState) {
+            if (udsState is UdsCustomerLoaded) {
+              final user = udsState.customer!.user;
+              final maxUsePoints = min(
+                (orderState.currentOrder?.totalSum ?? 0) *
+                    user.participant.membershipTier.maxScoresDiscount /
+                    100,
+                user.participant.points,
+              );
+              final customerGet =
+                  (orderState.currentOrder?.totalSum ?? 0) *
+                  user.participant.membershipTier.rate /
+                  100;
+              return Column(
+                spacing: 24,
+                children: [
+                  Row(
+                    spacing: 12,
+                    children: [
+                      Expanded(
+                        child: FCard(
+                          child: FLabel(
+                            label: Text('Кол-во баллов'),
+                            axis: Axis.vertical,
+                            child: Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(user.participant.points),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: FCard(
+                          child: FLabel(
+                            label: Text('Можно потратить'),
+                            axis: Axis.vertical,
+                            child: Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(maxUsePoints),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: FCard(
+                          child: FLabel(
+                            label: Text('Клиент получит'),
+                            axis: Axis.vertical,
+                            child: Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(customerGet),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  FTextField(
+                    label: Text('Использовать баллы'),
+                    control: FTextFieldControl.managed(controller: controller),
+                  ),
+                ],
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        );
+      },
     );
   }
 }

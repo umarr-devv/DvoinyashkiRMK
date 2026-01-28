@@ -1,5 +1,6 @@
 import 'package:app/client/clients.dart';
 import 'package:app/models/models.dart';
+import 'package:app/utils/undefined.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
@@ -23,5 +24,10 @@ class UdsCustomerCubit extends Cubit<UdsCustomerState> {
       talker.error(exc, st);
       emit(UdsCustomerFailure(state));
     }
+  }
+
+  void clear() {
+    final newState = state.copyWith(undefined);
+    emit(UdsCustomerClear(newState));
   }
 }

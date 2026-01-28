@@ -5,8 +5,10 @@ class UdsCustomerState extends Equatable {
 
   final UDSCustomerScheme? customer;
 
-  UdsCustomerState copyWith(UDSCustomerScheme? customer) {
-    return UdsCustomerState(customer: customer ?? this.customer);
+  UdsCustomerState copyWith(Object? customer) {
+    return UdsCustomerState(
+      customer: undefCompare<UDSCustomerScheme>(customer, this.customer)
+    );
   }
 
   UdsCustomerState.from(UdsCustomerState other) : customer = other.customer;
@@ -24,6 +26,11 @@ final class UdsCustomerLoading extends UdsCustomerState {
 final class UdsCustomerLoaded extends UdsCustomerState {
   UdsCustomerLoaded(super.state) : super.from();
 }
+
+final class UdsCustomerClear extends UdsCustomerState {
+  UdsCustomerClear(super.state) : super.from();
+}
+
 
 final class UdsCustomerFailure extends UdsCustomerState {
   UdsCustomerFailure(super.state) : super.from();
