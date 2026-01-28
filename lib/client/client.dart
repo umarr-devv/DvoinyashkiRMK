@@ -92,14 +92,14 @@ abstract class RestClient {
 
   @GET('/Catalog_СтруктурныеЕдиницы')
   Future<StructureUnitListScheme> getStructureUnits({
-    @Path('\$select')
+    @Query('\$select')
     String select = 'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key',
     @Query('\$format') String format = 'json',
   });
 
   @GET('/Catalog_Пользователи')
   Future<AuthorListScheme> getAuthors({
-    @Path('\$select') String select = 'Ref_Key,Description',
+    @Query('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });
 
@@ -131,7 +131,7 @@ abstract class RestClient {
 
   @GET('/Catalog_СостоянияЗаказовНаПеремещение')
   Future<MovementStatusListScheme> getMovementsStatuses({
-    @Path('\$select') String select = 'Ref_Key,Description',
+    @Query('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });
 }

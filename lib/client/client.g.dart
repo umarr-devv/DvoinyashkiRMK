@@ -416,7 +416,10 @@ class _RestClient implements RestClient {
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'$format': format};
+    final queryParameters = <String, dynamic>{
+      r'$select': select,
+      r'$format': format,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<StructureUnitListScheme>(
@@ -446,7 +449,10 @@ class _RestClient implements RestClient {
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'$format': format};
+    final queryParameters = <String, dynamic>{
+      r'$select': select,
+      r'$format': format,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<AuthorListScheme>(
@@ -616,7 +622,10 @@ class _RestClient implements RestClient {
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'$format': format};
+    final queryParameters = <String, dynamic>{
+      r'$select': select,
+      r'$format': format,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<MovementStatusListScheme>(
