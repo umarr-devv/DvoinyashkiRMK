@@ -12,7 +12,14 @@ class DioConfigure {
 
   static Dio init({Talker? talker}) {
     final dio = Dio(
-      BaseOptions(baseUrl: url, headers: {'Authorization': authorization}),
+      BaseOptions(
+        baseUrl: url,
+        headers: {
+          'Authorization': authorization,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      ),
     );
     dio.interceptors.add(
       TalkerDioLogger(

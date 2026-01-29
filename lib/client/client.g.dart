@@ -659,7 +659,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
     final _options = _setStreamType<SessionScheme>(
-      Options(method: 'PATCH', headers: _headers, extra: _extra)
+      Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/Document_КассоваяСмена',
@@ -690,7 +690,7 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
     final _options = _setStreamType<WorkShiftScheme>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/Document_ОтчетОРозничныхПродажах(guid\'${refKey}\')',

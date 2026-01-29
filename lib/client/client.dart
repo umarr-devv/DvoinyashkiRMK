@@ -135,12 +135,12 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
-  @PATCH('/Document_КассоваяСмена')
+  @POST('/Document_КассоваяСмена')
   Future<SessionScheme> createSession({
     @Body() required CreateSessionScheme data,
   });
 
-  @POST('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')')
+  @PATCH('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')')
   Future<WorkShiftScheme> patchWotkShift({
     @Path('refKey') required String refKey,
     @Body() required UpdateWorkShiftScheme data,
