@@ -134,4 +134,15 @@ abstract class RestClient {
     @Query('\$select') String select = 'Ref_Key,Description',
     @Query('\$format') String format = 'json',
   });
+
+  @PATCH('/Document_КассоваяСмена')
+  Future<SessionScheme> createSession({
+    @Body() required CreateSessionScheme data,
+  });
+
+  @POST('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')')
+  Future<WorkShiftScheme> patchWotkShift({
+    @Path('refKey') required String refKey,
+    @Body() required UpdateWorkShiftScheme data,
+  });
 }
