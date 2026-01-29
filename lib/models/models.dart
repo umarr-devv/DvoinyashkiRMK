@@ -4,6 +4,7 @@ export 'cash_register.dart';
 export 'category.dart';
 export 'characteristic.dart';
 export 'check.dart';
+export 'create_check.dart';
 export 'movement.dart';
 export 'nomenclature.dart';
 export 'price.dart';
