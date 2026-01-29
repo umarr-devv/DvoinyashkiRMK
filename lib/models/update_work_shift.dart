@@ -31,7 +31,7 @@ class UpdateWorkShiftScheme {
   final String operationKey = '43f6fc4d-4a0d-11ed-a839-18d6c704b66b';
 
   @JsonKey(name: 'СтатусКассовойСмены')
-  final String status;
+  final String? status;
 
   factory UpdateWorkShiftScheme.fromJson(Map<String, dynamic> json) =>
       _$UpdateWorkShiftSchemeFromJson(json);

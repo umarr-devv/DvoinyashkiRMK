@@ -6,7 +6,6 @@ part 'create_session.g.dart';
 class CreateSessionScheme {
   CreateSessionScheme({
     required this.date,
-    required this.status,
     required this.cashRegisterKey,
     required this.start,
     required this.end,
@@ -23,9 +22,6 @@ class CreateSessionScheme {
 
   @JsonKey(name: 'НомерСменыККТ')
   final int sessionNumberKKT = 1;
-
-  @JsonKey(name: 'Статус')
-  final String status;
 
   @JsonKey(name: 'КассаККМ_Key')
   final String cashRegisterKey;

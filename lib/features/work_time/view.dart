@@ -1,3 +1,4 @@
+import 'package:app/blocs/blocs.dart';
 import 'package:app/blocs/work_shifts/work_shifts_cubit.dart';
 import 'package:app/features/work_time/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
@@ -18,6 +19,7 @@ class _WorkTimeScreenState extends State<WorkTimeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<WorkShiftsCubit>(context).update();
+    BlocProvider.of<SessionCubit>(context).getCurrentWorkShift();
   }
 
   @override
