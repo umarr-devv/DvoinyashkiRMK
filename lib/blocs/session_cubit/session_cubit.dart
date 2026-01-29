@@ -41,8 +41,10 @@ class SessionCubit extends Cubit<SessionState> {
           cashRegisterKey: cashRegister!.refKey,
           start: DateTime.now(),
           end: DateTime.now().copyWith(hour: 23, minute: 59),
+          status: CreateSessionScheme.openStatus,
         ),
       );
+      await client.postSession(refKey: session.refKey);
       final workShift = await _getWorkShiftBySession(session.refKey);
 
       await client.patchWotkShift(
@@ -66,8 +68,12 @@ class SessionCubit extends Cubit<SessionState> {
     emit(SessionLoading(state));
     try {
       final workShift = await _getWorkShiftByCashRegister();
-      final newState = state.copyWith(workShift);
-      emit(SessionLoaded(newState));
+      if (workShift != null && workShift.status == WorkShiftScheme.openStatus) {
+        final newState = state.copyWith(workShift);
+        emit(SessionLoaded(newState));
+      } else {
+        emit(SessionLoaded(state));
+      }
     } catch (exc, st) {
       talker.error(exc, st);
       emit(SessionFailure(state));
@@ -95,7 +101,7 @@ class SessionCubit extends Cubit<SessionState> {
     if (cashRegister == null) return null;
     final Map<String, dynamic> params = {
       '\$top': '1',
-      '\$filter': 'КассоваяСмена_Key eq guid\'${cashRegister!.refKey}\'',
+      '\$filter': 'КассаККМ_Key eq guid\'${cashRegister!.refKey}\'',
       '\$orderby': 'Date desc',
       '\$format': 'json',
     };

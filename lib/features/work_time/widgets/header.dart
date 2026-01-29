@@ -17,6 +17,7 @@ class WorkTimeHeader extends StatelessWidget {
         FButton.icon(
           onPress: () {
             BlocProvider.of<WorkShiftsCubit>(context).update();
+            BlocProvider.of<SessionCubit>(context).getCurrentWorkShift();
           },
           child: Icon(FIcons.refreshCw),
         ),

@@ -140,6 +140,9 @@ abstract class RestClient {
     @Body() required CreateSessionScheme data,
   });
 
+  @POST('/Document_КассоваяСмена(guid\'{refKey}\')/Post')
+  Future postSession({@Path('refKey') required String refKey});
+
   @PATCH('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')')
   Future<WorkShiftScheme> patchWotkShift({
     @Path('refKey') required String refKey,

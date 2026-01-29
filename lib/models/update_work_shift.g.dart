@@ -14,6 +14,11 @@ UpdateWorkShiftScheme _$UpdateWorkShiftSchemeFromJson(
   subdivisionKey: json['Подразделение_Key'] as String,
   storeKey: json['СтруктурнаяЕдиница_Key'] as String,
   status: json['СтатусКассовойСмены'] as String?,
+  articleKey:
+      json['Статья_Key'] as String? ?? '436b4222-3377-11ed-91a8-a068f8f3337c',
+  operationKey:
+      json['ХозяйственнаяОперация_Key'] as String? ??
+      '43f6fc4d-4a0d-11ed-a839-18d6c704b66b',
 );
 
 Map<String, dynamic> _$UpdateWorkShiftSchemeToJson(
@@ -22,6 +27,8 @@ Map<String, dynamic> _$UpdateWorkShiftSchemeToJson(
   'Автор_Key': instance.authorKey,
   'Ответственный_Key': instance.userKey,
   'Подразделение_Key': instance.subdivisionKey,
+  'Статья_Key': instance.articleKey,
   'СтруктурнаяЕдиница_Key': instance.storeKey,
+  'ХозяйственнаяОперация_Key': instance.operationKey,
   'СтатусКассовойСмены': ?instance.status,
 };

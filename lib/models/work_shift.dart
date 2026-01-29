@@ -68,6 +68,10 @@ class WorkShiftScheme extends Equatable {
   @JsonKey(name: 'СуммаДокумента')
   final double documentSum;
 
+  static String get openStatus => 'Открыта';
+
+  static String get closeStatus => 'Закрыто';
+
   factory WorkShiftScheme.fromJson(Map<String, dynamic> json) =>
       _$WorkShiftSchemeFromJson(json);
 
@@ -76,6 +80,7 @@ class WorkShiftScheme extends Equatable {
   @override
   List<Object?> get props => [refKey];
 }
+
 @JsonSerializable()
 class WorkShiftListScheme {
   WorkShiftListScheme({required this.workShifts});

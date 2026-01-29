@@ -10,6 +10,8 @@ class UpdateWorkShiftScheme {
     required this.subdivisionKey,
     required this.storeKey,
     required this.status,
+    this.articleKey = '436b4222-3377-11ed-91a8-a068f8f3337c',
+    this.operationKey = '43f6fc4d-4a0d-11ed-a839-18d6c704b66b',
   });
 
   @JsonKey(name: 'Автор_Key')
@@ -22,13 +24,13 @@ class UpdateWorkShiftScheme {
   final String subdivisionKey;
 
   @JsonKey(name: 'Статья_Key')
-  final String articleKey = '436b4222-3377-11ed-91a8-a068f8f3337c';
+  final String articleKey;
 
   @JsonKey(name: 'СтруктурнаяЕдиница_Key')
   final String storeKey;
 
   @JsonKey(name: 'ХозяйственнаяОперация_Key')
-  final String operationKey = '43f6fc4d-4a0d-11ed-a839-18d6c704b66b';
+  final String operationKey;
 
   @JsonKey(name: 'СтатусКассовойСмены')
   final String? status;

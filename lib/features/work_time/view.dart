@@ -27,7 +27,12 @@ class _WorkTimeScreenState extends State<WorkTimeScreen> {
     return FScaffold(
       header: WorkTimeHeader(),
       footer: WorkTimePagination(),
-      child: WorkTimeTable(),
+      child: Column(
+        children: [
+          WorkTimeSession(),
+          Expanded(child: WorkTimeTable()),
+        ],
+      ),
     );
   }
 }
