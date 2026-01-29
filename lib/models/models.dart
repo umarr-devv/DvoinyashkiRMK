@@ -10,6 +10,7 @@ export 'nomenclature.dart';
 export 'price.dart';
 export 'price_type.dart';
 export 'product_image.dart';
+export 'session.dart';
 export 'statistic.dart';
 export 'structure_unit.dart';
 export 'uds_customer.dart';
