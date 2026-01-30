@@ -144,8 +144,11 @@ abstract class RestClient {
   Future postSession({@Path('refKey') required String refKey});
 
   @PATCH('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')')
-  Future<WorkShiftScheme> patchWotkShift({
+  Future patchWorkShift({
     @Path('refKey') required String refKey,
     @Body() required UpdateWorkShiftScheme data,
   });
+
+  @POST('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')/Post')
+  Future postWorkShift({@Path('refKey') required String refKey});
 }

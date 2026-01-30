@@ -5,9 +5,12 @@ class SessionState extends Equatable {
 
   final WorkShiftScheme? currentWorkShift;
 
-  SessionState copyWith(WorkShiftScheme? currentWorkShift) {
+  SessionState copyWith(Object? currentWorkShift) {
     return SessionState(
-      currentWorkShift: currentWorkShift ?? this.currentWorkShift,
+      currentWorkShift: undefCompare<WorkShiftScheme>(
+        currentWorkShift,
+        this.currentWorkShift,
+      ),
     );
   }
 

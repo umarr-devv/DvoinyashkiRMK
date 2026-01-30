@@ -24,7 +24,7 @@ class SessionCubit extends Cubit<SessionState> {
   StructureUnitScheme? get subdivision => settingsCubit.state.subdivision;
   UserScheme? get user => authCubit.state.user;
 
-  Future create() async {
+  Future start() async {
     if (cashRegister == null ||
         author == null ||
         store == null ||
@@ -47,7 +47,7 @@ class SessionCubit extends Cubit<SessionState> {
       await client.postSession(refKey: session.refKey);
       final workShift = await _getWorkShiftBySession(session.refKey);
 
-      await client.patchWotkShift(
+      await client.patchWorkShift(
         refKey: workShift!.refKey,
         data: UpdateWorkShiftScheme(
           authorKey: author!.refKey,
@@ -57,7 +57,32 @@ class SessionCubit extends Cubit<SessionState> {
           status: null,
         ),
       );
+      await getCurrentWorkShift();
       emit(SessionLoaded(state));
+    } catch (exc, st) {
+      talker.error(exc, st);
+      emit(SessionFailure(state));
+    }
+  }
+
+  Future end() async {
+    if (state.currentWorkShift == null) return;
+    emit(SessionLoading(state));
+    try {
+      DateTime? endDate;
+      if (state.currentWorkShift!.workShiftEnd?.isAfter(DateTime.now()) ?? false){
+        endDate = DateTime.now();
+      }
+      await client.patchWorkShift(
+        refKey: state.currentWorkShift!.refKey,
+        data: UpdateWorkShiftScheme(
+          status: WorkShiftScheme.closeStatus,
+          workShiftEnd: endDate,
+        ),
+      );
+      await client.postWorkShift(refKey: state.currentWorkShift!.refKey);
+      final newState = state.copyWith(undefined);
+      emit(SessionLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
       emit(SessionFailure(state));
@@ -72,7 +97,8 @@ class SessionCubit extends Cubit<SessionState> {
         final newState = state.copyWith(workShift);
         emit(SessionLoaded(newState));
       } else {
-        emit(SessionLoaded(state));
+        final newState = state.copyWith(undefined);
+        emit(SessionLoaded(newState));
       }
     } catch (exc, st) {
       talker.error(exc, st);
@@ -109,9 +135,11 @@ class SessionCubit extends Cubit<SessionState> {
       fullPath: buildODataQuery(params),
     );
     if (response.workShifts.isNotEmpty) {
-      return response.workShifts[0];
-    } else {
-      return null;
+      final workShift = response.workShifts[0];
+      if (workShift.status == WorkShiftScheme.openStatus) {
+        return response.workShifts[0];
+      }
     }
+    return null;
   }
 }

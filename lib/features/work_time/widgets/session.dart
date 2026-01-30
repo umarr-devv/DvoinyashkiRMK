@@ -16,12 +16,17 @@ class WorkTimeSession extends StatelessWidget {
         if (state.currentWorkShift != null) {
           return FCard(
             child: Row(
-              spacing: 24,
+              spacing: 32,
               children: [
                 FLabel(
-                  label: Text('Текущая сессия'),
+                  label: Text('Текущая смена'),
                   axis: Axis.vertical,
                   child: Text(state.currentWorkShift!.number),
+                ),
+                FLabel(
+                  label: Text('Статус'),
+                  axis: Axis.vertical,
+                  child: Text(state.currentWorkShift!.status),
                 ),
                 FLabel(
                   label: Text('Начало'),
@@ -33,12 +38,36 @@ class WorkTimeSession extends StatelessWidget {
                   ),
                 ),
                 Expanded(child: SizedBox()),
-                FButton(onPress: () {}, child: Text('Завершить')),
+                FButton(
+                  onPress: () {
+                    cubit.end();
+                  },
+                  prefix: state is SessionLoading ? FCircularProgress() : null,
+                  child: Text('Завершить'),
+                ),
               ],
             ),
           );
         } else {
-          return SizedBox();
+          return FCard(
+            child: Row(
+              children: [
+                FLabel(
+                  label: Text('Текущая смена'),
+                  axis: Axis.vertical,
+                  child: Text('Не начата'),
+                ),
+                Expanded(child: SizedBox()),
+                FButton(
+                  onPress: () {
+                    cubit.start();
+                  },
+                  prefix: state is SessionLoading ? FCircularProgress() : null,
+                  child: Text('Начать'),
+                ),
+              ],
+            ),
+          );
         }
       },
     );

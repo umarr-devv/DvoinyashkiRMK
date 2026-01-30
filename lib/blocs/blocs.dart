@@ -5,7 +5,7 @@ export 'favorites/favorites_cubit.dart';
 export 'movements/movements_cubit.dart';
 export 'notification/notification_cubit.dart';
 export 'order/order_cubit.dart';
-export 'session_cubit/session_cubit.dart';
+export 'session/session_cubit.dart';
 export 'settings/settings_cubit.dart';
 export 'statistic/statistic_cubit.dart';
 export 'withdraws/withdraws_cubit.dart';
