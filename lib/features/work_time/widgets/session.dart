@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/work_time/dialogs/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -40,7 +41,7 @@ class WorkTimeSession extends StatelessWidget {
                 Expanded(child: SizedBox()),
                 FButton(
                   onPress: () {
-                    cubit.end();
+                    EndSessionDialog(context).show();
                   },
                   prefix: state is SessionLoading ? FCircularProgress() : null,
                   child: Text('Завершить'),
@@ -60,7 +61,7 @@ class WorkTimeSession extends StatelessWidget {
                 Expanded(child: SizedBox()),
                 FButton(
                   onPress: () {
-                    cubit.start();
+                    StartSessionDialog(context).show();
                   },
                   prefix: state is SessionLoading ? FCircularProgress() : null,
                   child: Text('Начать'),
