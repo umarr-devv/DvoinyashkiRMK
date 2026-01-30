@@ -10,23 +10,36 @@ CreateCheckScheme _$CreateCheckSchemeFromJson(Map<String, dynamic> json) =>
     CreateCheckScheme(
       date: DateTime.parse(json['Date'] as String),
       authorKey: json['Автор_Key'] as String,
+      currencyKey:
+          json['ВалютаДокумента_Key'] as String? ??
+          '02e351c0-7e12-11ed-a847-18d6c704b66b',
+      priceTypeKey:
+          json['ВидЦен_Key'] as String? ??
+          '021f4fa7-3377-11ed-91a8-a068f8f3337c',
+      orgKey:
+          json['Организация_Key'] as String? ??
+          '021f4fa6-3377-11ed-91a8-a068f8f3337c',
+      operationKey:
+          json['ХозяйственнаяОперация_Key'] as String? ??
+          '43f6fc97-4a0d-11ed-a839-18d6c704b66b',
+      posted: json['Posted'] as bool? ?? false,
       cashRegisterKey: json['КассаККМ_Key'] as String,
       userKey: json['Кассир_Key'] as String,
       sessionKey: json['КассоваяСмена_Key'] as String,
       sessionNumber: (json['НомерСменыККМ'] as num).toInt(),
       udsCustomer: json['КлиентUDS'] as String?,
       udsDiscountCode: json['КодСкидкиUDS'] as String?,
-      udsDiscount: (json['СкидкаUDS'] as num).toDouble(),
-      comment: json['Комментарий'] as String,
+      udsDiscount: (json['СкидкаUDS'] as num?)?.toDouble(),
+      comment: json['Комментарий'] as String?,
       responsibleKey: json['Ответственный_Key'] as String,
       subdivisionKey: json['Подразделение_Key'] as String,
-      customer: json['Покупатель'] as String,
+      customer: json['Покупатель'] as String?,
       employeersDebtKey: json['СотрудникДолг_Key'] as String?,
       cash: (json['Наличные'] as num).toDouble(),
       getCash: (json['ПолученоНаличными'] as num).toDouble(),
       getCashless: (json['ПолученоЭлектронно'] as num).toDouble(),
       cashless: (json['СуммаБезналичнойОплаты'] as num).toDouble(),
-      udsPayment: (json['СуммаОплатUDS'] as num).toDouble(),
+      udsPayment: (json['СуммаОплатUDS'] as num?)?.toDouble(),
       paymentForm: json['ФормаОплаты'] as String,
       change: (json['Сдача'] as num).toDouble(),
       storeKey: json['СтруктурнаяЕдиница_Key'] as String,
@@ -38,7 +51,10 @@ CreateCheckScheme _$CreateCheckSchemeFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CreateCheckSchemeToJson(CreateCheckScheme instance) =>
     <String, dynamic>{
       'Date': instance.date.toIso8601String(),
+      'Posted': instance.posted,
       'Автор_Key': instance.authorKey,
+      'ВалютаДокумента_Key': instance.currencyKey,
+      'ВидЦен_Key': instance.priceTypeKey,
       'КассаККМ_Key': instance.cashRegisterKey,
       'Кассир_Key': instance.userKey,
       'КассоваяСмена_Key': instance.sessionKey,
@@ -47,6 +63,7 @@ Map<String, dynamic> _$CreateCheckSchemeToJson(CreateCheckScheme instance) =>
       'КодСкидкиUDS': instance.udsDiscountCode,
       'СкидкаUDS': instance.udsDiscount,
       'Комментарий': instance.comment,
+      'Организация_Key': instance.orgKey,
       'Ответственный_Key': instance.responsibleKey,
       'Подразделение_Key': instance.subdivisionKey,
       'Покупатель': instance.customer,
@@ -59,6 +76,7 @@ Map<String, dynamic> _$CreateCheckSchemeToJson(CreateCheckScheme instance) =>
       'ФормаОплаты': instance.paymentForm,
       'Сдача': instance.change,
       'СтруктурнаяЕдиница_Key': instance.storeKey,
+      'ХозяйственнаяОперация_Key': instance.operationKey,
       'Запасы': instance.items,
     };
 
@@ -73,7 +91,13 @@ CreateCheckItemScheme _$CreateCheckItemSchemeFromJson(
   price: (json['Цена'] as num).toDouble(),
   totalSum: (json['Сумма'] as num).toDouble(),
   allSum: (json['Всего'] as num).toDouble(),
-  unitKey: json['ЕдиницаИзмерения'] as String,
+  unitKey: json['ЕдиницаИзмерения'] as String?,
+  ndsKey:
+      json['СтавкаНДС_Key'] as String? ??
+      '436b4216-3377-11ed-91a8-a068f8f3337c',
+  unitType:
+      json['ЕдиницаИзмерения_Type'] as String? ??
+      'StandardODATA.Catalog_КлассификаторЕдиницИзмерения',
 );
 
 Map<String, dynamic> _$CreateCheckItemSchemeToJson(
@@ -87,5 +111,7 @@ Map<String, dynamic> _$CreateCheckItemSchemeToJson(
   'Цена': instance.price,
   'Сумма': instance.totalSum,
   'Всего': instance.allSum,
+  'СтавкаНДС_Key': instance.ndsKey,
   'ЕдиницаИзмерения': instance.unitKey,
+  'ЕдиницаИзмерения_Type': instance.unitType,
 };

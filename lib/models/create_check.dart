@@ -2,11 +2,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'create_check.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: true)
 class CreateCheckScheme {
   CreateCheckScheme({
     required this.date,
     required this.authorKey,
+    this.currencyKey = '02e351c0-7e12-11ed-a847-18d6c704b66b',
+    this.priceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c',
+    this.orgKey = '021f4fa6-3377-11ed-91a8-a068f8f3337c',
+    this.operationKey = '43f6fc97-4a0d-11ed-a839-18d6c704b66b',
+    this.posted = false,
     required this.cashRegisterKey,
     required this.userKey,
     required this.sessionKey,
@@ -33,16 +38,16 @@ class CreateCheckScheme {
   final DateTime date;
 
   @JsonKey(name: 'Posted')
-  final bool posted = false;
+  final bool posted;
 
   @JsonKey(name: 'Автор_Key')
   final String authorKey;
 
   @JsonKey(name: 'ВалютаДокумента_Key')
-  final String currencyKey = '02e351c0-7e12-11ed-a847-18d6c704b66';
+  final String currencyKey;
 
   @JsonKey(name: 'ВидЦен_Key')
-  final String priceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c';
+  final String priceTypeKey;
 
   @JsonKey(name: 'КассаККМ_Key')
   final String cashRegisterKey;
@@ -63,13 +68,13 @@ class CreateCheckScheme {
   final String? udsDiscountCode;
 
   @JsonKey(name: 'СкидкаUDS')
-  final double udsDiscount;
+  final double? udsDiscount;
 
   @JsonKey(name: 'Комментарий')
-  final String comment;
+  final String? comment;
 
   @JsonKey(name: 'Организация_Key')
-  final String orgKey = "021f4fa6-3377-11ed-91a8-a068f8f3337c";
+  final String orgKey;
 
   @JsonKey(name: 'Ответственный_Key')
   final String responsibleKey;
@@ -78,7 +83,7 @@ class CreateCheckScheme {
   final String subdivisionKey;
 
   @JsonKey(name: 'Покупатель')
-  final String customer;
+  final String? customer;
 
   @JsonKey(name: 'СотрудникДолг_Key')
   final String? employeersDebtKey;
@@ -99,7 +104,7 @@ class CreateCheckScheme {
   final double cashless;
 
   @JsonKey(name: 'СуммаОплатUDS')
-  final double udsPayment;
+  final double? udsPayment;
 
   @JsonKey(name: 'ФормаОплаты')
   final String paymentForm;
@@ -114,7 +119,7 @@ class CreateCheckScheme {
   final String storeKey;
 
   @JsonKey(name: 'ХозяйственнаяОперация_Key')
-  final String operationKey = '43f6fc97-4a0d-11ed-a839-18d6c704b66b';
+  final String operationKey;
 
   @JsonKey(name: 'Запасы')
   final List<CreateCheckItemScheme> items;
@@ -137,6 +142,8 @@ class CreateCheckItemScheme {
     required this.totalSum,
     required this.allSum,
     required this.unitKey,
+    this.ndsKey = '436b4216-3377-11ed-91a8-a068f8f3337c',
+    this.unitType = 'StandardODATA.Catalog_КлассификаторЕдиницИзмерения',
   });
 
   @JsonKey(name: 'LineNumber')
@@ -164,13 +171,13 @@ class CreateCheckItemScheme {
   final double allSum;
 
   @JsonKey(name: 'СтавкаНДС_Key')
-  final String ndsKey = '436b4216-3377-11ed-91a8-a068f8f3337c';
+  final String ndsKey;
 
   @JsonKey(name: 'ЕдиницаИзмерения')
-  final String unitKey;
+  final String? unitKey;
 
   @JsonKey(name: 'ЕдиницаИзмерения_Type')
-  final String unitType = 'StandardODATA.Catalog_КлассификаторЕдиницИзмерения';
+  final String unitType;
 
   factory CreateCheckItemScheme.fromJson(Map<String, dynamic> json) =>
       _$CreateCheckItemSchemeFromJson(json);

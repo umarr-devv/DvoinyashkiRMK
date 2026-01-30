@@ -10,6 +10,7 @@ class NomenclatureScheme extends Equatable{
     required this.description,
     required this.name,
     required this.categoryKey,
+    required this.unitKey,
     required this.useCharacteristic,
   });
 
@@ -24,6 +25,9 @@ class NomenclatureScheme extends Equatable{
 
   @JsonKey(name: 'КатегорияНоменклатуры_Key')
   final String? categoryKey;
+
+  @JsonKey(name: 'ЕдиницаИзмерения_Key')
+  final String? unitKey;
 
   @JsonKey(name: 'ИспользоватьХарактеристики')
   final bool? useCharacteristic;

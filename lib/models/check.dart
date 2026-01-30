@@ -92,6 +92,9 @@ class CheckScheme extends Equatable {
   @JsonKey(name: 'Состав')
   final String? itemsAsString;
 
+  static String get cashPaymentType => 'Наличные';
+  static String get cashlessPaymentType => 'Безналичные';
+
   factory CheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CheckSchemeFromJson(json);
 
