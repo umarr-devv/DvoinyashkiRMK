@@ -123,7 +123,7 @@ class _RestClient implements RestClient {
   @override
   Future<NomenclatureListScheme> getNomenclatures({
     String select =
-        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ИспользоватьХарактеристики',
+        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ЕдиницаИзмерения_Key,ИспользоватьХарактеристики',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
@@ -736,6 +736,55 @@ class _RestClient implements RestClient {
           .compose(
             _dio.options,
             '/Document_ОтчетОРозничныхПродажах(guid\'${refKey}\')/Post',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<CheckScheme> createCheck({required CreateCheckScheme data}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _options = _setStreamType<CheckScheme>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/Document_ЧекККМ',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CheckScheme _value;
+    try {
+      _value = CheckScheme.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<dynamic> postCheck({required String refKey}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<dynamic>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/Document_ЧекККМ(guid\'${refKey}\')/Post',
             queryParameters: queryParameters,
             data: _data,
           )

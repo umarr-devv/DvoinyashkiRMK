@@ -34,7 +34,7 @@ abstract class RestClient {
   Future<NomenclatureListScheme> getNomenclatures({
     @Query('\$select')
     String select =
-        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ИспользоватьХарактеристики',
+        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ЕдиницаИзмерения_Key,ИспользоватьХарактеристики',
     @Query('\$format') String format = 'json',
   });
 
@@ -151,4 +151,10 @@ abstract class RestClient {
 
   @POST('/Document_ОтчетОРозничныхПродажах(guid\'{refKey}\')/Post')
   Future postWorkShift({@Path('refKey') required String refKey});
+
+  @POST('/Document_ЧекККМ')
+  Future<CheckScheme> createCheck({@Body() required CreateCheckScheme data});
+
+  @POST('/Document_ЧекККМ(guid\'{refKey}\')/Post')
+  Future postCheck({@Path('refKey') required String refKey});
 }
