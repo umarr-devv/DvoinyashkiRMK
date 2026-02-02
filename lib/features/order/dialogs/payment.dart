@@ -1,193 +1,449 @@
 import 'dart:math';
 
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/order/blocs/create_check/create_check_cubit.dart';
 import 'package:app/features/order/blocs/uds_customer/uds_customer_cubit.dart';
+import 'package:app/models/models.dart';
+import 'package:app/service/toast.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:forui/forui.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
 
-class PaymentTypeData {
-  PaymentTypeData({required this.label, required this.icon});
-
-  final String label;
-  final IconData icon;
-}
-
-class PaymentDialog {
-  PaymentDialog(this.rootContext);
+class PaymentDialog extends StatefulWidget {
+  const PaymentDialog(this.rootContext, {super.key});
 
   final BuildContext rootContext;
-
-  final udsCubit = UdsCustomerCubit();
-
-  final List<PaymentTypeData> paymentTypes = [
-    PaymentTypeData(label: 'Наличные', icon: FluentIcons.money_24_regular),
-    PaymentTypeData(label: 'Безналичные', icon: FluentIcons.payment_24_regular),
-  ];
 
   void show() {
     showFDialog(
       context: rootContext,
+      barrierDismissible: false,
       builder: (context, style, animation) {
-        return FDialog.raw(
-          builder: (context, style) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                spacing: 24,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _title(),
-                  _paymentType(),
-                  _paymentSum(),
-                  _UDSCustomerSelect(udsCubit),
-                  _UdsCustomerPoints(udsCubit),
-                  _acceptButton(),
-                ],
-              ),
-            );
-          },
-        );
+        return this;
       },
     );
   }
 
-  FHeader _title() {
-    return FHeader.nested(
-      prefixes: [Icon(FluentIcons.calculator_20_filled)],
-      title: Text('Принять оплату'),
-      titleAlignment: Alignment.centerLeft,
-      suffixes: [
-        FButton.icon(
-          onPress: () {
-            AutoRouter.of(rootContext).maybePop();
-          },
-          child: Icon(Icons.close),
-        ),
-      ],
+  @override
+  State<PaymentDialog> createState() => _PaymentDialogState();
+}
+
+class _PaymentDialogState extends State<PaymentDialog> {
+  final formKey = GlobalKey<FormState>();
+
+  late final UdsCustomerCubit udsCustomerCubit;
+  late final CreateCheckCubit createCheckCubit;
+
+  void initCubits() {
+    final settingsCubit = BlocProvider.of<SettingsCubit>(widget.rootContext);
+    final authCubit = BlocProvider.of<AuthCubit>(widget.rootContext);
+    final sessionCubit = BlocProvider.of<SessionCubit>(widget.rootContext);
+    final orderCubit = BlocProvider.of<OrderCubit>(widget.rootContext);
+
+    udsCustomerCubit = UdsCustomerCubit();
+    createCheckCubit = CreateCheckCubit(
+      settingsCubit,
+      authCubit,
+      sessionCubit,
+      orderCubit,
+      udsCustomerCubit,
     );
+    createCheckCubit.init();
   }
 
-  Widget _paymentType() {
-    final theme = Theme.of(rootContext);
-    return FLabel(
-      label: Text('Тип оплаты'),
-      axis: Axis.vertical,
-      child: GroupButton<PaymentTypeData>(
-        isRadio: true,
-        buttons: paymentTypes,
-        buttonBuilder: (selected, value, context) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-            decoration: BoxDecoration(
-              color: selected ? theme.custom.info : theme.custom.muted,
-              borderRadius: BorderRadius.circular(8),
+  @override
+  void initState() {
+    initCubits();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dataCubit = BlocProvider.of<DataCubit>(widget.rootContext);
+    return BlocListener<CreateCheckCubit, CreateCheckState>(
+      bloc: createCheckCubit,
+      listener: (context, state) {
+        if (state is CreateCheckLoaded) {
+          ToastService.showToast(
+            widget.rootContext,
+            notification: NotificationData(
+              type: NotificationType.success,
+              title: 'Чек пробит',
+              description:
+                  'Баллы ${state.udsPoints} Получено ${state.customerPay}',
             ),
-            child: Row(
-              spacing: 6,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  value.icon,
-                  color: selected
-                      ? theme.custom.invertForeground
-                      : theme.custom.foreground,
+          );
+          BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
+          AutoRouter.of(context).maybePop();
+        }
+      },
+      child: FDialog.raw(
+        builder: (context, style) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: createCheckCubit),
+              BlocProvider.value(value: udsCustomerCubit),
+              BlocProvider.value(value: dataCubit),
+            ],
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  spacing: 24,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _DialogHeader(),
+                    _DialogGeneralInfo(),
+                    _PaymentTypeSelect(),
+                    _PaymentSum(),
+                    _CustomerSelect(),
+                    _UdsCustomerPoints(),
+                    _DialogAccept(formKey),
+                  ],
                 ),
-                Text(
-                  value.label,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: selected
-                        ? theme.custom.invertForeground
-                        : theme.custom.foreground,
-                  ),
-                ),
-              ],
+              ),
             ),
           );
         },
       ),
     );
   }
+}
 
-  Widget _paymentSum() {
-    return Column(
-      spacing: 12,
-      children: [
-        Row(
+class _DialogHeader extends StatelessWidget {
+  const _DialogHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return FHeader.nested(
+      prefixes: [Icon(FluentIcons.calculator_24_regular)],
+      title: Text('Пробить чек'),
+      titleAlignment: Alignment.centerLeft,
+      suffixes: [
+        FButton.icon(
+          onPress: () {
+            AutoRouter.of(context).maybePop();
+          },
+          child: Icon(Icons.close),
+        ),
+      ],
+    );
+  }
+}
+
+class _DialogGeneralInfo extends StatelessWidget {
+  const _DialogGeneralInfo();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+      bloc: BlocProvider.of<CreateCheckCubit>(context),
+      builder: (context, state) {
+        return Row(
           spacing: 12,
           children: [
             Expanded(
               child: FCard(
                 child: FLabel(
-                  label: Text('Сумма'),
+                  label: Text('Сумма к оплате'),
                   axis: Axis.vertical,
-                  child: Text('2000', style: TextStyle(fontSize: 24)),
+                  child: Text(
+                    NumberFormat.currency(
+                      symbol: '',
+                    ).format(state.totalSumToPay),
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
               ),
             ),
-            Expanded(
-              child: FCard(
-                child: FLabel(
-                  label: Text('Сдача'),
-                  axis: Axis.vertical,
-                  child: Text('0', style: TextStyle(fontSize: 24)),
+            if (state.paymentType == cashPaymentType)
+              Expanded(
+                child: FCard(
+                  child: FLabel(
+                    label: Text('Сдача'),
+                    axis: Axis.vertical,
+                    child: Text(
+                      NumberFormat.currency(symbol: '').format(state.change),
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: state.change < 0
+                            ? theme.custom.destructiveTextForeground
+                            : theme.custom.foreground,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
           ],
-        ),
-        FTextFormField(
-          label: Text('Сумма к оплате'),
-          control: FTextFieldControl.managed(
-            initial: TextEditingValue(text: '2000'),
-            onChange: (value) {},
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _acceptButton() {
-    final theme = Theme.of(rootContext);
-    return Padding(
-      padding: const EdgeInsets.only(top: 24),
-      child: FButton(
-        onPress: () {},
-        style: (style) => style.copyWith(
-          decoration: FWidgetStateMap.all(
-            BoxDecoration(
-              color: theme.custom.success,
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        child: Text(
-          'Принять оплату',
-          style: TextStyle(color: theme.custom.invertForeground),
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
-class _UDSCustomerSelect extends StatefulWidget {
-  const _UDSCustomerSelect(this.udsCubit);
+class _DialogAccept extends StatelessWidget {
+  const _DialogAccept(this.formKey);
 
-  final UdsCustomerCubit udsCubit;
+  final GlobalKey<FormState> formKey;
 
   @override
-  State<_UDSCustomerSelect> createState() => _UDSCustomerSelectState();
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<CreateCheckCubit>(context);
+    final theme = Theme.of(context);
+    return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+      bloc: cubit,
+      builder: (context, state) {
+        return FButton(
+          onPress: () {
+            if (formKey.currentState?.validate() ?? false) {
+              cubit.create();
+            }
+          },
+          prefix: state is CreateCheckLoading ? FCircularProgress() : null,
+          style: (style) => style.copyWith(
+            decoration: FWidgetStateMap.all(
+              BoxDecoration(
+                color: theme.custom.success,
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+          child: Text('Пробить'),
+        );
+      },
+    );
+  }
 }
 
-class _UDSCustomerSelectState extends State<_UDSCustomerSelect> {
+class _PaymentTypeSelect extends StatefulWidget {
+  const _PaymentTypeSelect();
+
+  @override
+  State<_PaymentTypeSelect> createState() => _PaymentTypeSelectState();
+}
+
+class _PaymentTypeSelectState extends State<_PaymentTypeSelect> {
+  late final GroupButtonController controller;
+
+  @override
+  void initState() {
+    final paymentType = BlocProvider.of<CreateCheckCubit>(
+      context,
+    ).state.paymentType;
+    controller = GroupButtonController(
+      selectedIndex: paymentTypesList.indexOf(paymentType),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return GroupButton<PaymentTypeData>(
+      buttons: paymentTypesList,
+      controller: controller,
+      onSelected: (value, index, isSelected) {
+        BlocProvider.of<CreateCheckCubit>(
+          context,
+        ).setPaymentType(paymentTypesList[index]);
+      },
+      buttonBuilder: (selected, value, context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+          decoration: BoxDecoration(
+            color: selected ? theme.custom.info : theme.custom.muted,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Row(
+            spacing: 8,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                value.icon,
+                size: 20,
+                color: selected
+                    ? theme.custom.invertForeground
+                    : theme.custom.foreground,
+              ),
+              Text(
+                value.label,
+                style: TextStyle(
+                  color: selected
+                      ? theme.custom.invertForeground
+                      : theme.custom.foreground,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PaymentSum extends StatefulWidget {
+  const _PaymentSum();
+
+  @override
+  State<_PaymentSum> createState() => _PaymentSumState();
+}
+
+class _PaymentSumState extends State<_PaymentSum> {
+  final controller = TextEditingController();
+
+  @override
+  void initState() {
+    controller.text = BlocProvider.of<CreateCheckCubit>(
+      context,
+    ).state.customerPay.toStringAsFixed(2);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<CreateCheckCubit>(context);
+    return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+      bloc: BlocProvider.of(context),
+      builder: (context, state) {
+        if (state.paymentType != cashPaymentType) {
+          return SizedBox();
+        }
+        return FTextFormField(
+          label: Text('Получено от клиента'),
+          inputFormatters: [
+            CurrencyInputFormatter(thousandSeparator: ThousandSeparator.None),
+          ],
+          autovalidateMode: AutovalidateMode.always,
+          validator: (value) {
+            if (state.change < 0) {
+              return 'Недостаточно средств для оплаты';
+            }
+            return null;
+          },
+          control: FTextFieldControl.managed(
+            controller: controller,
+            onChange: (value) {
+              if (double.tryParse(value.text) != null) {
+                cubit.setCustomerPay(double.tryParse(value.text)!);
+              }
+            },
+          ),
+          suffixBuilder: (context, style, states) => FButton.icon(
+            onPress: () {
+              controller.text = state.totalSumToPay.toStringAsFixed(2);
+              cubit.setCustomerPay(state.totalSumToPay);
+            },
+            style: FButtonStyle.ghost(),
+            child: Icon(Icons.sync),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _CustomerSelect extends StatelessWidget {
+  const _CustomerSelect();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+      bloc: BlocProvider.of<CreateCheckCubit>(context),
+      buildWhen: (previous, current) {
+        return previous.paymentType != current.paymentType;
+      },
+      builder: (context, state) {
+        if (state.paymentType == debtPaymentType) {
+          return _DebtCustomerSelect();
+        }
+        return _UdsCustomerSelect();
+      },
+    );
+  }
+}
+
+class _DebtCustomerSelect extends StatefulWidget {
+  const _DebtCustomerSelect();
+
+  @override
+  State<_DebtCustomerSelect> createState() => _DebtCustomerSelectState();
+}
+
+class _DebtCustomerSelectState extends State<_DebtCustomerSelect> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
+      builder: (context, state) {
+        return FSelect<UserScheme>.searchBuilder(
+          label: Text('Сотрудник'),
+          hint: 'Выберите сотрудника, чтобы оформить долг',
+          autovalidateMode: AutovalidateMode.always,
+          validator: (value) {
+            if (value == null) {
+              return 'Необходимо выбрать сотрудника для оформления долга';
+            }
+            return null;
+          },
+          contentEmptyBuilder: (context, style) => Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text('Ничего не найдено'),
+          ),
+          searchFieldProperties: FSelectSearchFieldProperties(
+            hint: 'Введите код сотрудника',
+          ),
+          format: (i) => i.description,
+          filter: (query) {
+            return state.users.where((user) => user.barcode == query);
+          },
+          contentBuilder: (context, query, values) {
+            if (query.isEmpty) {
+              return [];
+            }
+            return state.users.where((user) => user.barcode == query).map((
+              user,
+            ) {
+              return FSelectItem(title: Text(user.description), value: user);
+            }).toList();
+          },
+        );
+      },
+    );
+  }
+}
+
+class _UdsCustomerSelect extends StatefulWidget {
+  const _UdsCustomerSelect();
+
+  @override
+  State<_UdsCustomerSelect> createState() => _UdsCustomerSelectState();
+}
+
+class _UdsCustomerSelectState extends State<_UdsCustomerSelect> {
   final controller = TextEditingController();
 
   @override
@@ -199,8 +455,9 @@ class _UDSCustomerSelectState extends State<_UDSCustomerSelect> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cubit = BlocProvider.of<UdsCustomerCubit>(context);
     return BlocBuilder<UdsCustomerCubit, UdsCustomerState>(
-      bloc: widget.udsCubit,
+      bloc: cubit,
       builder: (context, state) {
         return FTextField(
           label: Text('UDS код'),
@@ -250,7 +507,7 @@ class _UDSCustomerSelectState extends State<_UDSCustomerSelect> {
             if (state is UdsCustomerLoaded) {
               return FButton.icon(
                 onPress: () {
-                  widget.udsCubit.clear();
+                  cubit.clear();
                   controller.clear();
                 },
                 style: FButtonStyle.ghost(),
@@ -272,7 +529,7 @@ class _UDSCustomerSelectState extends State<_UDSCustomerSelect> {
                   onChange: (value) {
                     if (state is! UdsCustomerLoading &&
                         value.text.length == 6) {
-                      widget.udsCubit.findCustomer(value.text);
+                      cubit.findCustomer(value.text);
                     }
                   },
                 ),
@@ -284,16 +541,14 @@ class _UDSCustomerSelectState extends State<_UDSCustomerSelect> {
 }
 
 class _UdsCustomerPoints extends StatefulWidget {
-  const _UdsCustomerPoints(this.udsCubit);
-
-  final UdsCustomerCubit udsCubit;
+  const _UdsCustomerPoints();
 
   @override
   State<_UdsCustomerPoints> createState() => _UdsCustomerPointsState();
 }
 
 class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
-  final controller = TextEditingController();
+  final controller = TextEditingController(text: '0.00');
 
   @override
   void dispose() {
@@ -303,22 +558,26 @@ class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OrderCubit, OrderState>(
-      bloc: BlocProvider.of<OrderCubit>(context),
-      builder: (context, orderState) {
+    final cubit = BlocProvider.of<UdsCustomerCubit>(context);
+    return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+      bloc: BlocProvider.of<CreateCheckCubit>(context),
+      builder: (context, checkState) {
+        if (checkState.paymentType == debtPaymentType) {
+          return SizedBox();
+        }
         return BlocBuilder<UdsCustomerCubit, UdsCustomerState>(
-          bloc: widget.udsCubit,
+          bloc: cubit,
           builder: (context, udsState) {
             if (udsState is UdsCustomerLoaded) {
               final user = udsState.customer!.user;
               final maxUsePoints = min(
-                (orderState.currentOrder?.totalSum ?? 0) *
+                checkState.totalSum *
                     user.participant.membershipTier.maxScoresDiscount /
                     100,
                 user.participant.points,
               );
               final customerGet =
-                  (orderState.currentOrder?.totalSum ?? 0) *
+                  checkState.totalSumToPay *
                   user.participant.membershipTier.rate /
                   100;
               return Column(
@@ -368,9 +627,31 @@ class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
                       ),
                     ],
                   ),
-                  FTextField(
+                  FTextFormField(
                     label: Text('Использовать баллы'),
-                    control: FTextFieldControl.managed(controller: controller),
+                    inputFormatters: [CurrencyInputFormatter()],
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (value) {
+                      if (value != null) {
+                        final value_ = double.tryParse(value);
+                        if (value_ != null) {
+                          if (value_ > maxUsePoints) {
+                            return 'Клиент не сможет потратить столько баллов';
+                          }
+                        }
+                      }
+                      return null;
+                    },
+                    control: FTextFieldControl.managed(
+                      controller: controller,
+                      onChange: (value) {
+                        if (double.tryParse(value.text) != null) {
+                          BlocProvider.of<CreateCheckCubit>(
+                            context,
+                          ).setUdsPoints(double.tryParse(value.text)!);
+                        }
+                      },
+                    ),
                   ),
                 ],
               );

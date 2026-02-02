@@ -10,18 +10,6 @@ CreateCheckScheme _$CreateCheckSchemeFromJson(Map<String, dynamic> json) =>
     CreateCheckScheme(
       date: DateTime.parse(json['Date'] as String),
       authorKey: json['Автор_Key'] as String,
-      currencyKey:
-          json['ВалютаДокумента_Key'] as String? ??
-          '02e351c0-7e12-11ed-a847-18d6c704b66b',
-      priceTypeKey:
-          json['ВидЦен_Key'] as String? ??
-          '021f4fa7-3377-11ed-91a8-a068f8f3337c',
-      orgKey:
-          json['Организация_Key'] as String? ??
-          '021f4fa6-3377-11ed-91a8-a068f8f3337c',
-      operationKey:
-          json['ХозяйственнаяОперация_Key'] as String? ??
-          '43f6fc97-4a0d-11ed-a839-18d6c704b66b',
       posted: json['Posted'] as bool? ?? false,
       cashRegisterKey: json['КассаККМ_Key'] as String,
       userKey: json['Кассир_Key'] as String,
@@ -46,6 +34,20 @@ CreateCheckScheme _$CreateCheckSchemeFromJson(Map<String, dynamic> json) =>
       items: (json['Запасы'] as List<dynamic>)
           .map((e) => CreateCheckItemScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
+      documentSum: (json['СуммаДокумента'] as num).toDouble(),
+      currencyKey:
+          json['ВалютаДокумента_Key'] as String? ??
+          '02e351c0-7e12-11ed-a847-18d6c704b66b',
+      priceTypeKey:
+          json['ВидЦен_Key'] as String? ??
+          '021f4fa7-3377-11ed-91a8-a068f8f3337c',
+      orgKey:
+          json['Организация_Key'] as String? ??
+          '021f4fa6-3377-11ed-91a8-a068f8f3337c',
+      operationKey:
+          json['ХозяйственнаяОперация_Key'] as String? ??
+          '43f6fc97-4a0d-11ed-a839-18d6c704b66b',
+      status: json['Статус'] as String? ?? 'Пробит',
     );
 
 Map<String, dynamic> _$CreateCheckSchemeToJson(CreateCheckScheme instance) =>
@@ -75,9 +77,11 @@ Map<String, dynamic> _$CreateCheckSchemeToJson(CreateCheckScheme instance) =>
       'СуммаОплатUDS': instance.udsPayment,
       'ФормаОплаты': instance.paymentForm,
       'Сдача': instance.change,
+      'Статус': instance.status,
       'СтруктурнаяЕдиница_Key': instance.storeKey,
       'ХозяйственнаяОперация_Key': instance.operationKey,
       'Запасы': instance.items,
+      'СуммаДокумента': instance.documentSum,
     };
 
 CreateCheckItemScheme _$CreateCheckItemSchemeFromJson(

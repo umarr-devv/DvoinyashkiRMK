@@ -7,10 +7,6 @@ class CreateCheckScheme {
   CreateCheckScheme({
     required this.date,
     required this.authorKey,
-    this.currencyKey = '02e351c0-7e12-11ed-a847-18d6c704b66b',
-    this.priceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c',
-    this.orgKey = '021f4fa6-3377-11ed-91a8-a068f8f3337c',
-    this.operationKey = '43f6fc97-4a0d-11ed-a839-18d6c704b66b',
     this.posted = false,
     required this.cashRegisterKey,
     required this.userKey,
@@ -33,6 +29,12 @@ class CreateCheckScheme {
     required this.change,
     required this.storeKey,
     required this.items,
+    required this.documentSum,
+    this.currencyKey = '02e351c0-7e12-11ed-a847-18d6c704b66b',
+    this.priceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c',
+    this.orgKey = '021f4fa6-3377-11ed-91a8-a068f8f3337c',
+    this.operationKey = '43f6fc97-4a0d-11ed-a839-18d6c704b66b',
+    this.status  = 'Пробит',
   });
   @JsonKey(name: 'Date')
   final DateTime date;
@@ -113,7 +115,7 @@ class CreateCheckScheme {
   final double change;
 
   @JsonKey(name: 'Статус')
-  final String status = 'Пробит';
+  final String status;
 
   @JsonKey(name: 'СтруктурнаяЕдиница_Key')
   final String storeKey;
@@ -123,6 +125,9 @@ class CreateCheckScheme {
 
   @JsonKey(name: 'Запасы')
   final List<CreateCheckItemScheme> items;
+
+  @JsonKey(name: 'СуммаДокумента')
+  final double documentSum;
 
   factory CreateCheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CreateCheckSchemeFromJson(json);
