@@ -76,8 +76,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
             notification: NotificationData(
               type: NotificationType.success,
               title: 'Чек пробит',
-              description:
-                  'Баллы ${state.udsPoints} Получено ${state.customerPay}',
+              description: '',
             ),
           );
           BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
