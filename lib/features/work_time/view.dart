@@ -18,7 +18,6 @@ class _WorkTimeScreenState extends State<WorkTimeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<WorkShiftsCubit>(context).update();
-    BlocProvider.of<SessionCubit>(context).getCurrentWorkShift();
   }
 
   @override

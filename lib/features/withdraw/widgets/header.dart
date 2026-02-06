@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/withdraw/dialogs/dialogs.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,9 @@ class WithdrawHeader extends StatelessWidget {
       prefixes: [Icon(FluentIcons.money_24_regular, size: 28)],
       suffixes: [
         FButton.icon(
-          onPress: () {},
+          onPress: () {
+            CreateWithdrawDialog(context).show();
+          },
           style: FButtonStyle.primary(),
           child: Icon(Icons.add),
         ),
