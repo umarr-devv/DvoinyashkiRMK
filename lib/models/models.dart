@@ -6,6 +6,7 @@ export 'characteristic.dart';
 export 'check.dart';
 export 'create_check.dart';
 export 'create_session.dart';
+export 'create_withdraw.dart';
 export 'movement.dart';
 export 'nomenclature.dart';
 export 'price.dart';
