@@ -157,4 +157,12 @@ abstract class RestClient {
 
   @POST('/Document_ЧекККМ(guid\'{refKey}\')/Post')
   Future postCheck({@Path('refKey') required String refKey});
+
+  @POST('/Document_ВыемкаНаличных')
+  Future<WithdrawScheme> createWithdraw({
+    @Body() required CreateWithdrawScheme data,
+  });
+
+  @POST('/Document_ВыемкаНаличных(guid\'{refKey}\')/Post')
+  Future postWithdraw({@Path('refKey') required String refKey});
 }
