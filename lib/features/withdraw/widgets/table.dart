@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/withdraw/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -48,7 +49,9 @@ class WithdrawTable extends StatelessWidget {
                     );
                 final rowIndex = state.withdraws.indexOf(withdraw);
                 return DataRow2(
-                  onTap: () {},
+                  onTap: () {
+                    DetailWithdrawDialog(context, withdraw: withdraw).show();
+                  },
                   color: WidgetStatePropertyAll(
                     rowIndex.isOdd
                         ? theme.custom.rowOddColor
