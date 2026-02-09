@@ -184,3 +184,16 @@ class CheckListScheme {
 
   Map<String, dynamic> toJson() => _$CheckListSchemeToJson(this);
 }
+
+@JsonSerializable()
+class OnlyCheckItemsScheme {
+  OnlyCheckItemsScheme({required this.items});
+
+  @JsonKey(name: 'Запасы')
+  final List<CheckItemScheme> items;
+
+  factory OnlyCheckItemsScheme.fromJson(Map<String, dynamic> json) =>
+      _$OnlyCheckItemsSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OnlyCheckItemsSchemeToJson(this);
+}

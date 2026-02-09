@@ -64,19 +64,19 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
   }
 
   Future create() async {
-    // if (cashRegister == null ||
-    //     author == null ||
-    //     store == null ||
-    //     subdivision == null ||
-    //     user == null ||
-    //     workShift == null ||
-    //     order == null) {
-    //   return;
-    // }
+    if (cashRegister == null ||
+        author == null ||
+        store == null ||
+        subdivision == null ||
+        user == null ||
+        workShift == null ||
+        order == null) {
+      return;
+    }
     emit(CreateCheckLoading(state));
     try {
       await Future.delayed(Duration(seconds: 2));
-
+      await _cashCheck();
       emit(CreateCheckLoaded(state));
     } catch (exc, st) {
       talker.error(exc, st);

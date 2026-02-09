@@ -136,3 +136,15 @@ CheckListScheme _$CheckListSchemeFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CheckListSchemeToJson(CheckListScheme instance) =>
     <String, dynamic>{'value': instance.checks};
+
+OnlyCheckItemsScheme _$OnlyCheckItemsSchemeFromJson(
+  Map<String, dynamic> json,
+) => OnlyCheckItemsScheme(
+  items: (json['Запасы'] as List<dynamic>)
+      .map((e) => CheckItemScheme.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$OnlyCheckItemsSchemeToJson(
+  OnlyCheckItemsScheme instance,
+) => <String, dynamic>{'Запасы': instance.items};
