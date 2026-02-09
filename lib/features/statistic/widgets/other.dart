@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/dotted_line.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -9,19 +10,90 @@ import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
-class StatisticOther extends StatelessWidget {
+class StatisticOther extends StatefulWidget {
   const StatisticOther({super.key});
+
+  @override
+  State<StatisticOther> createState() => _StatisticOtherState();
+}
+
+class _StatisticOtherState extends State<StatisticOther> {
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 480,
+      width: 560,
       height: double.infinity,
       child: FCard.raw(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: _StatisticUsers()),
-            _StatisticTotal(),
+            Container(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                spacing: 12,
+                children: [
+                  Expanded(
+                    child: FButton(
+                      onPress: () {
+                        setState(() {
+                          index = 0;
+                        });
+                      },
+                      style: index == 0
+                          ? FButtonStyle.primary()
+                          : FButtonStyle.secondary(),
+                      child: Text('Сотрудники'),
+                    ),
+                  ),
+                  Expanded(
+                    child: FButton(
+                      onPress: () {
+                        setState(() {
+                          index = 1;
+                        });
+                      },
+                      style: index == 1
+                          ? FButtonStyle.primary()
+                          : FButtonStyle.secondary(),
+                      child: Text('Номенклатура'),
+                    ),
+                  ),
+                  Expanded(
+                    child: FButton(
+                      onPress: () {
+                        setState(() {
+                          index = 2;
+                        });
+                      },
+                      style: index == 2
+                          ? FButtonStyle.primary()
+                          : FButtonStyle.secondary(),
+                      child: Text('Категории'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Builder(
+                builder: (context) {
+                  if (index == 0) {
+                    return Column(
+                      children: [
+                        Expanded(child: _StatisticUsers()),
+                        _StatisticTotal(),
+                      ],
+                    );
+                  } else if (index == 1) {
+                    return _NomencaltureStatistic();
+                  } else {
+                    return _CategoryStatistic();
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -210,6 +282,155 @@ class _StatisticTotalItem extends StatelessWidget {
           child: child,
         ),
       ],
+    );
+  }
+}
+
+class _NomencaltureStatistic extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<StatisticCubit, StatisticState>(
+      bloc: BlocProvider.of<StatisticCubit>(context),
+      builder: (context, state) {
+        if (state is StatisticAltLoading) {
+          return FCircularProgress();
+        }
+        return BlocBuilder<DataCubit, DataState>(
+          bloc: BlocProvider.of<DataCubit>(context),
+          builder: (context, dataState) {
+            return DataTable2(
+              columnSpacing: 2,
+              dividerThickness: 0,
+              columns: [
+                DataColumn2(label: Text('Название'), fixedWidth: 160),
+                DataColumn2(label: Text('Характеристика')),
+                DataColumn2(label: Text('Кол-во'), numeric: true),
+                DataColumn2(label: Text('Сумма'), numeric: true),
+              ],
+              rows: state.items.map((item) {
+                final nomenclature = dataState.nomenclatures
+                    .firstWhereLogTypeOrNull(
+                      (i) => i.refKey == item.nomenclatureKey,
+                    );
+                final characteristic = dataState.characteristics
+                    .firstWhereLogTypeOrNull(
+                      (i) => i.refKey == item.characteristicKey,
+                    );
+                final int index = state.items.indexOf(item);
+                return DataRow2(
+                  onTap: () {},
+                  color: WidgetStatePropertyAll(
+                    index.isOdd
+                        ? theme.custom.rowOddColor
+                        : theme.custom.rowEvenColor,
+                  ),
+                  cells: [
+                    DataCell(Text(nomenclature?.name ?? '')),
+                    DataCell(Text(characteristic?.description ?? '')),
+                    DataCell(
+                      Text(
+                        NumberFormat.currency(
+                          symbol: '',
+                        ).format(item.totalQuantity),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        NumberFormat.currency(symbol: '').format(item.totalSum),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _CategoryStatistic extends StatelessWidget {
+  Map<String?, List<StatisticItemData>> getCategoryData(
+    List<StatisticItemData> items,
+    List<NomenclatureScheme> nomens,
+  ) {
+    final Map<String?, List<StatisticItemData>> data = {};
+
+    for (final i in items) {
+      final nomen = nomens.firstWhereLogTypeOrNull(
+        (j) => j.refKey == i.nomenclatureKey,
+      );
+      if (nomen == null) {
+        continue;
+      }
+      final categoryKey = nomen.categoryKey;
+      data.putIfAbsent(categoryKey, () => []);
+      data[categoryKey]!.add(i);
+    }
+
+    return data;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<StatisticCubit, StatisticState>(
+      bloc: BlocProvider.of<StatisticCubit>(context),
+      builder: (context, state) {
+        if (state is StatisticAltLoading) {
+          return FCircularProgress();
+        }
+        return BlocBuilder<DataCubit, DataState>(
+          bloc: BlocProvider.of<DataCubit>(context),
+          builder: (context, dataState) {
+            final data = getCategoryData(state.items, dataState.nomenclatures);
+            return DataTable2(
+              columnSpacing: 2,
+              dividerThickness: 0,
+              columns: [
+                DataColumn2(label: Text('Название'), fixedWidth: 160),
+                DataColumn2(label: Text('Кол-во'), numeric: true),
+                DataColumn2(label: Text('Сумма'), numeric: true),
+              ],
+              rows: data.entries.map((item) {
+                final key = item.key;
+                final value = item.value;
+
+                final totalQuantity = value.fold(
+                  0.0,
+                  (a, b) => a + b.totalQuantity,
+                );
+                final totalSum = value.fold(0.0, (a, b) => a + b.totalSum);
+                final int index = data.keys.toList().indexOf(key);
+                final category = dataState.categories.firstWhereLogTypeOrNull(
+                  (i) => i.refKey == key,
+                );
+                return DataRow2(
+                  onTap: () {},
+                  color: WidgetStatePropertyAll(
+                    index.isOdd
+                        ? theme.custom.rowOddColor
+                        : theme.custom.rowEvenColor,
+                  ),
+                  cells: [
+                    DataCell(Text(category?.name ?? '')),
+                    DataCell(
+                      Text(
+                        NumberFormat.currency(symbol: '').format(totalQuantity),
+                      ),
+                    ),
+                    DataCell(
+                      Text(NumberFormat.currency(symbol: '').format(totalSum)),
+                    ),
+                  ],
+                );
+              }).toList(),
+            );
+          },
+        );
+      },
     );
   }
 }
