@@ -7,6 +7,7 @@ class StatisticState extends Equatable {
     this.checks = const [],
     this.checkSums = const [],
     this.userSums = const [],
+    this.items = const [],
     required this.startDate,
     required this.endDate,
     required this.isHourInterval,
@@ -15,6 +16,7 @@ class StatisticState extends Equatable {
   final List<StatisticCheckScheme> checks;
   final List<StatisticCheckSumData> checkSums;
   final List<StatisticUserData> userSums;
+  final List<StatisticItemData> items;
 
   final DateTime startDate;
   final DateTime endDate;
@@ -52,6 +54,7 @@ class StatisticState extends Equatable {
     List<StatisticCheckScheme>? checks,
     List<StatisticCheckSumData>? checkSums,
     List<StatisticUserData>? userSums,
+    List<StatisticItemData>? items,
     DateTime? startDate,
     DateTime? endDate,
     bool? isHourInterval,
@@ -62,6 +65,7 @@ class StatisticState extends Equatable {
       userSums: userSums ?? this.userSums,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      items: items ?? this.items,
       isHourInterval: isHourInterval ?? this.isHourInterval,
     );
   }
@@ -70,6 +74,7 @@ class StatisticState extends Equatable {
     : checks = other.checks,
       checkSums = other.checkSums,
       userSums = other.userSums,
+      items = other.items,
       startDate = other.startDate,
       endDate = other.endDate,
       isHourInterval = other.isHourInterval;
@@ -84,6 +89,7 @@ class StatisticState extends Equatable {
     checks,
     checkSums,
     userSums,
+    items,
     startDate,
     endDate,
     isHourInterval,
@@ -108,6 +114,14 @@ final class StatisticLoading extends StatisticState {
 
 final class StatisticLoaded extends StatisticState {
   StatisticLoaded(super.state) : super.from();
+}
+
+final class StatisticAltLoading extends StatisticState {
+  StatisticAltLoading(super.state) : super.from();
+}
+
+final class StatisticAltLoaded extends StatisticState {
+  StatisticAltLoaded(super.state) : super.from();
 }
 
 final class StatisticFailure extends StatisticState {

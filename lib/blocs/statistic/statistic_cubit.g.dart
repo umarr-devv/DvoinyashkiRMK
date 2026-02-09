@@ -34,6 +34,22 @@ Map<String, dynamic> _$StatisticUserDataToJson(StatisticUserData instance) =>
       'totalSum': instance.totalSum,
     };
 
+StatisticItemData _$StatisticItemDataFromJson(Map<String, dynamic> json) =>
+    StatisticItemData(
+      nomenclatureKey: json['nomenclatureKey'] as String,
+      characteristicKey: json['characteristicKey'] as String?,
+      totalSum: (json['totalSum'] as num).toDouble(),
+      totalQuantity: (json['totalQuantity'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$StatisticItemDataToJson(StatisticItemData instance) =>
+    <String, dynamic>{
+      'nomenclatureKey': instance.nomenclatureKey,
+      'characteristicKey': instance.characteristicKey,
+      'totalQuantity': instance.totalQuantity,
+      'totalSum': instance.totalSum,
+    };
+
 StatisticState _$StatisticStateFromJson(
   Map<String, dynamic> json,
 ) => StatisticState(
@@ -54,6 +70,11 @@ StatisticState _$StatisticStateFromJson(
           ?.map((e) => StatisticUserData.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  items:
+      (json['items'] as List<dynamic>?)
+          ?.map((e) => StatisticItemData.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
   startDate: DateTime.parse(json['startDate'] as String),
   endDate: DateTime.parse(json['endDate'] as String),
   isHourInterval: json['isHourInterval'] as bool,
@@ -64,6 +85,7 @@ Map<String, dynamic> _$StatisticStateToJson(StatisticState instance) =>
       'checks': instance.checks,
       'checkSums': instance.checkSums,
       'userSums': instance.userSums,
+      'items': instance.items,
       'startDate': instance.startDate.toIso8601String(),
       'endDate': instance.endDate.toIso8601String(),
       'isHourInterval': instance.isHourInterval,

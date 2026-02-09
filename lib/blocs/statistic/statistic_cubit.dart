@@ -57,6 +57,34 @@ class StatisticCubit extends HydratedCubit<StatisticState> {
         isHourInterval: isHourInterval,
       );
       emit(StatisticLoaded(newState));
+      await getItemsStatistic();
+    } catch (exc, st) {
+      talker.error(exc, st);
+      emit(StatisticFailure(state));
+    }
+  }
+
+  Future getItemsStatistic() async {
+    if (cashRegister == null) return;
+    emit(StatisticAltLoading(state));
+    try {
+      final Map<String, dynamic> params = {
+        '\$select': "Запасы",
+        '\$filter':
+            "КассаККМ_Key eq guid'${cashRegister!.refKey}' and Date ge ${to1CODataDateTime(state.startDate)} and Date le ${to1CODataDateTime(state.endDate)}",
+        '\$format': 'json',
+      };
+
+      final response = await client.getChecksItems(
+        fullPath: buildODataQuery(params),
+      );
+
+      final List<CheckItemScheme> items = response.items
+          .expand((i) => i.items)
+          .toList();
+      final items_ = StatisticItemData.aggregateByNomen(items);
+      final newState = state.copyWith(items: items_);
+      emit(StatisticAltLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
       emit(StatisticFailure(state));

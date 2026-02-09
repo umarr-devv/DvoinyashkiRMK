@@ -148,3 +148,15 @@ OnlyCheckItemsScheme _$OnlyCheckItemsSchemeFromJson(
 Map<String, dynamic> _$OnlyCheckItemsSchemeToJson(
   OnlyCheckItemsScheme instance,
 ) => <String, dynamic>{'Запасы': instance.items};
+
+OnlyCheckItemsListScheme _$OnlyCheckItemsListSchemeFromJson(
+  Map<String, dynamic> json,
+) => OnlyCheckItemsListScheme(
+  items: (json['value'] as List<dynamic>)
+      .map((e) => OnlyCheckItemsScheme.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$OnlyCheckItemsListSchemeToJson(
+  OnlyCheckItemsListScheme instance,
+) => <String, dynamic>{'value': instance.items};

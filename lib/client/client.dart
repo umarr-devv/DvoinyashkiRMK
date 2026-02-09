@@ -85,7 +85,7 @@ abstract class RestClient {
   });
 
   @GET('/Document_ЧекККМ{fullPath}')
-  Future<OnlyCheckItemsScheme> getChecksItems({
+  Future<OnlyCheckItemsListScheme> getChecksItems({
     @Path('fullPath') required String fullPath,
   });
 

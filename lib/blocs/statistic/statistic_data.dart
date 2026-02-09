@@ -105,3 +105,51 @@ class StatisticUserData {
 
   Map<String, dynamic> toJson() => _$StatisticUserDataToJson(this);
 }
+
+@JsonSerializable()
+class StatisticItemData {
+  StatisticItemData({
+    required this.nomenclatureKey,
+    required this.characteristicKey,
+    required this.totalSum,
+    required this.totalQuantity,
+  });
+
+  final String nomenclatureKey;
+  final String? characteristicKey;
+  final double totalQuantity;
+  final double totalSum;
+
+  static List<StatisticItemData> aggregateByNomen(List<CheckItemScheme> items) {
+    final Map<String, StatisticItemData> map = {};
+
+    for (final item in items) {
+      final key = '${item.nomenclatureKey}|${item.characteriticKey}';
+
+      if (map.containsKey(key)) {
+        final existing = map[key]!;
+
+        map[key] = StatisticItemData(
+          nomenclatureKey: existing.nomenclatureKey,
+          characteristicKey: existing.characteristicKey,
+          totalQuantity: existing.totalQuantity + item.quantity,
+          totalSum: existing.totalSum + item.itemSum,
+        );
+      } else {
+        map[key] = StatisticItemData(
+          nomenclatureKey: item.nomenclatureKey,
+          characteristicKey: item.characteriticKey,
+          totalQuantity: item.quantity,
+          totalSum: item.itemSum,
+        );
+      }
+    }
+
+    return map.values.toList();
+  }
+
+  factory StatisticItemData.fromJson(Map<String, dynamic> json) =>
+      _$StatisticItemDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StatisticItemDataToJson(this);
+}
