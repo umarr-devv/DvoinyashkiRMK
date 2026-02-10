@@ -1,5 +1,4 @@
 import 'package:app/blocs/blocs.dart';
-import 'package:app/core/consts/consts.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +42,34 @@ class _CashRegisterSelect extends StatelessWidget {
           builder: (context, settingsState) {
             return SizedBox(
               width: 320,
-              child: FSelect<CashRegisterScheme>(
+              child: FSelect<CashRegisterScheme>.searchBuilder(
                 label: Text('Касса'),
                 hint: 'Выберите кассу',
+                contentEmptyBuilder: (context, style) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text('Ничего не найдено'),
+                ),
+                searchFieldProperties: FSelectSearchFieldProperties(
+                  hint: 'Поиск',
+                ),
+                format: (value) => value.description,
+                filter: (query) => state.cashRegisters,
+                contentBuilder: (context, query, values) {
+                  if (query.length < 2) {
+                    return [];
+                  }
+                  return values
+                      .where(
+                        (i) => i.description.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ),
+                      )
+                      .map(
+                        (j) =>
+                            FSelectItem(title: Text(j.description), value: j),
+                      )
+                      .toList();
+                },
                 control: FSelectControl.managed(
                   initial: settingsState.cashRegister,
                   onChange: (value) {
@@ -58,10 +82,6 @@ class _CashRegisterSelect extends StatelessWidget {
                     }
                   },
                 ),
-                items: {
-                  for (var element in state.cashRegisters)
-                    element.description: element,
-                },
               ),
             );
           },
@@ -85,7 +105,7 @@ class _StoreSelect extends StatelessWidget {
           builder: (context, settingsState) {
             return SizedBox(
               width: 320,
-              child: FSelect<StructureUnitScheme>.search(
+              child: FSelect<StructureUnitScheme>.searchBuilder(
                 label: Text('Магазина'),
                 hint: 'Выберите магазин',
                 control: FSelectControl.managed(
@@ -98,15 +118,30 @@ class _StoreSelect extends StatelessWidget {
                     }
                   },
                 ),
+                contentEmptyBuilder: (context, style) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text('Ничего не найдено'),
+                ),
                 searchFieldProperties: FSelectSearchFieldProperties(
                   hint: 'Поиск',
                 ),
-                items: {
-                  for (var element
-                      in state.structureUnits
-                          .where((i) => i.type == storeStructureType)
-                          .toList())
-                    element.description: element,
+                format: (value) => value.description,
+                filter: (query) => state.structureUnits,
+                contentBuilder: (context, query, values) {
+                  if (query.length < 2) {
+                    return [];
+                  }
+                  return values
+                      .where(
+                        (i) => i.description.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ),
+                      )
+                      .map(
+                        (j) =>
+                            FSelectItem(title: Text(j.description), value: j),
+                      )
+                      .toList();
                 },
               ),
             );
@@ -130,7 +165,7 @@ class _SubdivisionSelect extends StatelessWidget {
           builder: (context, settingsState) {
             return SizedBox(
               width: 320,
-              child: FSelect<StructureUnitScheme>.search(
+              child: FSelect<StructureUnitScheme>.searchBuilder(
                 label: Text('Подразделение'),
                 hint: 'Выберите подразделение',
                 control: FSelectControl.managed(
@@ -141,15 +176,30 @@ class _SubdivisionSelect extends StatelessWidget {
                     }
                   },
                 ),
+                contentEmptyBuilder: (context, style) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text('Ничего не найдено'),
+                ),
                 searchFieldProperties: FSelectSearchFieldProperties(
                   hint: 'Поиск',
                 ),
-                items: {
-                  for (var element
-                      in state.structureUnits
-                          .where((i) => i.type == subdivisionStructureType)
-                          .toList())
-                    element.description: element,
+                format: (value) => value.description,
+                filter: (query) => state.structureUnits,
+                contentBuilder: (context, query, values) {
+                  if (query.length < 2) {
+                    return [];
+                  }
+                  return values
+                      .where(
+                        (i) => i.description.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ),
+                      )
+                      .map(
+                        (j) =>
+                            FSelectItem(title: Text(j.description), value: j),
+                      )
+                      .toList();
                 },
               ),
             );
@@ -173,7 +223,7 @@ class _AuthorSelect extends StatelessWidget {
           builder: (context, settingsState) {
             return SizedBox(
               width: 320,
-              child: FSelect<AuthorScheme>.search(
+              child: FSelect<AuthorScheme>.searchBuilder(
                 label: Text('Автор'),
                 hint: 'Выберите автора',
                 control: FSelectControl.managed(
@@ -184,12 +234,30 @@ class _AuthorSelect extends StatelessWidget {
                     }
                   },
                 ),
+                contentEmptyBuilder: (context, style) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text('Ничего не найдено'),
+                ),
                 searchFieldProperties: FSelectSearchFieldProperties(
                   hint: 'Поиск',
                 ),
-                items: {
-                  for (var element in state.authors)
-                    element.description: element,
+                format: (value) => value.description,
+                filter: (query) => state.authors,
+                contentBuilder: (context, query, values) {
+                  if (query.length < 2) {
+                    return [];
+                  }
+                  return values
+                      .where(
+                        (i) => i.description.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ),
+                      )
+                      .map(
+                        (j) =>
+                            FSelectItem(title: Text(j.description), value: j),
+                      )
+                      .toList();
                 },
               ),
             );
