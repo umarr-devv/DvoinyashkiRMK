@@ -21,7 +21,7 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
 
   CashRegisterScheme? get cashRegister => settingsCubit.state.cashRegister;
 
-  Future update() async {
+  Future update({bool updateCash = false}) async {
     if (cashRegister == null) return;
     emit(WithdrawsLoading(state));
     try {
@@ -36,6 +36,20 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
       final response = await client.getWithdraws(
         fullPath: buildODataQuery(params),
       );
+
+      if (updateCash) {
+        final Map<String, dynamic> params = {
+          '\$filter': 'КассаККМ_Key eq guid\'${cashRegister!.refKey}\'',
+          '\$select': 'КассаККМ_Key,СуммаBalance',
+        };
+        final cashResponse = await client.getCash(
+          fullPath: buildODataQuery(params),
+        );
+        if (cashResponse.cashes.isNotEmpty) {
+          final newState = state.copyWith(cash: cashResponse.cashes[0]);
+          emit(WithdrawsLoaded(newState));
+        }
+      }
       final newState = state.copyWith(withdraws: response.withdraws);
       emit(WithdrawsLoaded(newState));
     } catch (exc, st) {

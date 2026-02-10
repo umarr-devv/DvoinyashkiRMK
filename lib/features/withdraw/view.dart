@@ -17,7 +17,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<WithdrawsCubit>(context).update();
+    BlocProvider.of<WithdrawsCubit>(context).update(updateCash: true);
   }
 
   @override

@@ -175,4 +175,7 @@ abstract class RestClient {
   Future<WarehouseItemListScheme> getWarehouseItems({
     @Path('full_path') required String fullPath,
   });
+
+  @GET('/AccumulationRegister_ДенежныеСредстваВКассахККМ/Balance(){full_path}')
+  Future<CashListScheme> getCash({@Path('full_path') required String fullPath});
 }

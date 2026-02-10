@@ -3,9 +3,14 @@ part of 'withdraws_cubit.dart';
 
 @JsonSerializable()
 class WithdrawsState extends Equatable {
-  const WithdrawsState({this.withdraws = const [], this.pageNum = 0});
+  const WithdrawsState({
+    this.withdraws = const [],
+    this.cash,
+    this.pageNum = 0,
+  });
 
   final List<WithdrawScheme> withdraws;
+  final CashScheme? cash;
   final int pageNum;
 
   final int limit = 20;
@@ -16,15 +21,21 @@ class WithdrawsState extends Equatable {
 
   Map<String, dynamic> toJson() => _$WithdrawsStateToJson(this);
 
-  WithdrawsState copyWith({List<WithdrawScheme>? withdraws, int? pageNum}) {
+  WithdrawsState copyWith({
+    List<WithdrawScheme>? withdraws,
+    CashScheme? cash,
+    int? pageNum,
+  }) {
     return WithdrawsState(
       withdraws: withdraws ?? this.withdraws,
+      cash: cash ?? this.cash,
       pageNum: pageNum ?? this.pageNum,
     );
   }
 
   WithdrawsState.from(WithdrawsState other)
     : withdraws = other.withdraws,
+      cash = other.cash,
       pageNum = other.pageNum;
 
   @override

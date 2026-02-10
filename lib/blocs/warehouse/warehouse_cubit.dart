@@ -1,12 +1,12 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
 import 'package:app/models/models.dart';
-import 'package:app/models/structure_unit.dart';
+import 'package:app/utils/utils.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:app/utils/utils.dart';
+
 part 'warehouse_state.dart';
 
 class WarehouseCubit extends Cubit<WarehouseState> {
