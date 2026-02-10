@@ -170,4 +170,9 @@ abstract class RestClient {
 
   @POST('/Document_ВыемкаНаличных(guid\'{refKey}\')/Post')
   Future postWithdraw({@Path('refKey') required String refKey});
+
+  @GET('/AccumulationRegister_ЗапасыНаСкладах/Balance(){full_path}')
+  Future<WarehouseItemListScheme> getWarehouseItems({
+    @Path('full_path') required String fullPath,
+  });
 }
