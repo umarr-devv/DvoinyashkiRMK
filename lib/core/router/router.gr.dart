@@ -139,6 +139,22 @@ class StatisticRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [WarehouseScreen]
+class WarehouseRoute extends PageRouteInfo<void> {
+  const WarehouseRoute({List<PageRouteInfo>? children})
+    : super(WarehouseRoute.name, initialChildren: children);
+
+  static const String name = 'WarehouseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const WarehouseScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [WithdrawScreen]
 class WithdrawRoute extends PageRouteInfo<void> {
   const WithdrawRoute({List<PageRouteInfo>? children})

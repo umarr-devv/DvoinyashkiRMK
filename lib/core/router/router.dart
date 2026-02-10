@@ -1,3 +1,4 @@
+import 'package:app/features/warehouse/view.dart';
 import 'package:app/features/auth/view.dart';
 import 'package:app/features/init/view.dart';
 import 'package:app/features/menu/view.dart';
@@ -26,6 +27,7 @@ class AppRouter extends RootStackRouter {
       children: [
         AutoRoute(page: OrderRoute.page),
         AutoRoute(page: SellHistoryRoute.page),
+        AutoRoute(page: WarehouseRoute.page),
         AutoRoute(page: WithdrawRoute.page),
         AutoRoute(page: MovementRoute.page),
         AutoRoute(page: StatisticRoute.page),

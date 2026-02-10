@@ -19,6 +19,7 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     BlocProvider.of<SessionCubit>(context).getCurrentWorkShift();
+    BlocProvider.of<WarehouseCubit>(context).update();
     super.initState();
   }
 
@@ -28,6 +29,7 @@ class _MenuScreenState extends State<MenuScreen> {
       routes: [
         OrderRoute(),
         SellHistoryRoute(),
+        WarehouseRoute(),
         WithdrawRoute(),
         MovementRoute(),
         StatisticRoute(),

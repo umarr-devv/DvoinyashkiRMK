@@ -10,3 +10,4 @@ export 'settings/settings_cubit.dart';
 export 'statistic/statistic_cubit.dart';
 export 'withdraws/withdraws_cubit.dart';
 export 'work_shifts/work_shifts_cubit.dart';
+export 'warehouse/warehouse_cubit.dart';

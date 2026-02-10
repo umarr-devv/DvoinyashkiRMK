@@ -93,6 +93,8 @@ class _StoreSelect extends StatelessWidget {
                   onChange: (value) {
                     if (value != null) {
                       cubit.setSettings(store: value);
+                      BlocProvider.of<MovementsCubit>(context).update();
+                      BlocProvider.of<WarehouseCubit>(context).update();
                     }
                   },
                 ),
