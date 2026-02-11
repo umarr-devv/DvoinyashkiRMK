@@ -39,13 +39,18 @@ class DataCubitUtils {
 
       if (chars.isNotEmpty) {
         for (final char in chars) {
-          final prices_ = prices
+          List<PriceScheme> prices_ = prices
               .where(
                 (i) =>
                     i.nomenclatureKey == nomen.refKey &&
                     i.characteristicKey == char.refKey,
               )
               .toList();
+          if (prices_.isEmpty) {
+            prices_ = prices
+                .where((i) => i.nomenclatureKey == nomen.refKey)
+                .toList();
+          }
           final actualPrices = getActualPrices(prices_, priceTypes);
           final barcodes_ = barcodes
               .where(

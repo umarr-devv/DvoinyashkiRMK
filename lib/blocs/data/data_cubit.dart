@@ -34,7 +34,6 @@ class DataCubit extends HydratedCubit<DataState> {
       final prices = await client.getPrices();
       final priceTypes = await client.getPriceTypes();
       final barcodes = await client.getBarcodes();
-      // final productImages = await client.getProductImages();
       final structureUnits = await client.getStructureUnits();
       final users = await client.getUsers();
       final authors = await client.getAuthors();
@@ -57,7 +56,6 @@ class DataCubit extends HydratedCubit<DataState> {
         priceTypes: priceTypes.priceTypes,
         barcodes: barcodes.barcodes,
         structureUnits: structureUnits.structureUnits,
-        // productImages: productImages.productImages,
         users: users.users,
         authors: authors.authors,
         products: products,
