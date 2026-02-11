@@ -11,6 +11,7 @@ CheckScheme _$CheckSchemeFromJson(Map<String, dynamic> json) => CheckScheme(
   number: json['Number'] as String,
   date: DateTime.parse(json['Date'] as String),
   cashRegisterKey: json['КассаККМ_Key'] as String,
+  structureUnitKey: json['СтруктурнаяЕдиница_Key'] as String,
   userKey: json['Кассир_Key'] as String,
   cashRegisterSessionKey: json['КассоваяСмена_Key'] as String,
   udsClient: json['КлиентUDS'] as String,
@@ -36,6 +37,7 @@ Map<String, dynamic> _$CheckSchemeToJson(CheckScheme instance) =>
       'Number': instance.number,
       'Date': instance.date.toIso8601String(),
       'КассаККМ_Key': instance.cashRegisterKey,
+      'СтруктурнаяЕдиница_Key': instance.structureUnitKey,
       'Кассир_Key': instance.userKey,
       'КассоваяСмена_Key': instance.cashRegisterSessionKey,
       'КлиентUDS': instance.udsClient,
@@ -99,6 +101,7 @@ DetailCheckScheme _$DetailCheckSchemeFromJson(Map<String, dynamic> json) =>
       documentSum: (json['СуммаДокумента'] as num).toDouble(),
       paymentType: json['ФормаОплаты'] as String,
       itemsAsString: json['Состав'] as String?,
+      structureUnitKey: json['СтруктурнаяЕдиница_Key'] as String,
     );
 
 Map<String, dynamic> _$DetailCheckSchemeToJson(DetailCheckScheme instance) =>
@@ -107,6 +110,7 @@ Map<String, dynamic> _$DetailCheckSchemeToJson(DetailCheckScheme instance) =>
       'Number': instance.number,
       'Date': instance.date.toIso8601String(),
       'КассаККМ_Key': instance.cashRegisterKey,
+      'СтруктурнаяЕдиница_Key': instance.structureUnitKey,
       'Кассир_Key': instance.userKey,
       'КассоваяСмена_Key': instance.cashRegisterSessionKey,
       'КлиентUDS': instance.udsClient,

@@ -9,7 +9,7 @@ part of 'warehouse_item.dart';
 WarehouseItemScheme _$WarehouseItemSchemeFromJson(Map<String, dynamic> json) =>
     WarehouseItemScheme(
       nomenclatureKey: json['Номенклатура_Key'] as String,
-      characteristicKey: json['Характеристика_Key'] as String,
+      characteristicKey: json['Характеристика_Key'] as String?,
       quantity: (json['КоличествоBalance'] as num).toDouble(),
     );
 

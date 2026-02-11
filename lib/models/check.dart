@@ -10,6 +10,7 @@ class CheckScheme extends Equatable {
     required this.number,
     required this.date,
     required this.cashRegisterKey,
+    required this.structureUnitKey,
     required this.userKey,
     required this.cashRegisterSessionKey,
     required this.udsClient,
@@ -40,6 +41,9 @@ class CheckScheme extends Equatable {
 
   @JsonKey(name: 'КассаККМ_Key')
   final String cashRegisterKey;
+
+  @JsonKey(name: 'СтруктурнаяЕдиница_Key')
+  final String structureUnitKey;
 
   @JsonKey(name: 'Кассир_Key')
   final String userKey;
@@ -160,6 +164,7 @@ class DetailCheckScheme extends CheckScheme {
     required super.documentSum,
     required super.paymentType,
     required super.itemsAsString,
+    required super.structureUnitKey,
   });
 
   @JsonKey(name: 'Запасы')

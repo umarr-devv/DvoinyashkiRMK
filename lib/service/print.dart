@@ -1,5 +1,7 @@
-
+import 'package:app/blocs/blocs.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -7,15 +9,19 @@ import 'package:printing/printing.dart';
 import 'package:talker/talker.dart';
 
 class PrintService {
-  PrintService(this.printerUrl);
+  PrintService({this.printerUrl});
 
-  final String printerUrl;
+  final String? printerUrl;
   final talker = GetIt.I<Talker>();
 
-  Future print(PrintScheme scheme) async {
+  Future print(PrintScheme scheme, BuildContext context) async {
+    final cubit = BlocProvider.of<SettingsCubit>(context);
+    if (cubit.state.printer == null) {
+      return;
+    }
     try {
       await Printing.directPrintPdf(
-        printer: Printer(url: printerUrl),
+        printer: Printer(url: printerUrl ?? cubit.state.printer!),
         onLayout: (pageFormat) async {
           return await scheme.init(pageFormat);
         },
