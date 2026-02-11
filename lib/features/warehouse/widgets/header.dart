@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/warehouse/states/states.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,21 @@ class WarehouseHeader extends StatelessWidget {
       title: Text('Склад'),
       titleAlignment: Alignment.centerLeft,
       suffixes: [
+        SizedBox(
+          width: 320,
+          child: FTextField(
+            prefixBuilder: (context, style, states) => Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Icon(FIcons.search),
+            ),
+            hint: 'Поиск',
+            control: FTextFieldControl.managed(
+              onChange: (value) {
+                warehouseSearch.value = value.text;
+              },
+            ),
+          ),
+        ),
         FButton.icon(
           onPress: () {
             BlocProvider.of<WarehouseCubit>(context).update();

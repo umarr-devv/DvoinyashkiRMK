@@ -7,6 +7,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
+import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
 class ProductCard extends StatelessWidget {
@@ -56,7 +57,7 @@ class ProductCard extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  flex: 5,
+                  flex: 4,
                   child: Stack(
                     children: [
                       _ProductCardImage(product),
@@ -78,6 +79,7 @@ class ProductCard extends StatelessWidget {
                       children: [
                         _ProductCardTitle(product),
                         _ProductCardPrice(product),
+                        _ProductWarehouse(product),
                         Expanded(child: SizedBox()),
                         Align(
                           alignment: Alignment.centerRight,
@@ -123,7 +125,7 @@ class _ProductCardImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: image != null
-              ? Image.file(File(image!), fit: BoxFit.cover)
+              ? Image.file(File(image), fit: BoxFit.cover)
               : Icon(
                   FIcons.image,
                   size: 64,
@@ -240,6 +242,29 @@ class _ProductCardPrice extends StatelessWidget {
       );
     }
     return SizedBox();
+  }
+}
+
+class _ProductWarehouse extends StatelessWidget {
+  const _ProductWarehouse(this.product);
+
+  final ProductData product;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final warehouseItem = product.warehouseItem(context);
+    return Container(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        'В Складе: ${NumberFormat.decimalPattern().format(warehouseItem?.quantity ?? 0)}',
+        style: TextStyle(
+          color: (warehouseItem?.quantity ?? 0) < 0
+              ? theme.custom.destructiveTextForeground
+              : theme.custom.foreground,
+        ),
+      ),
+    );
   }
 }
 

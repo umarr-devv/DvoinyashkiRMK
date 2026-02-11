@@ -1,5 +1,4 @@
 import 'package:app/blocs/blocs.dart';
-import 'package:app/core/consts/consts.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/features/order/states/states.dart';
 import 'package:app/models/models.dart';
@@ -176,7 +175,8 @@ class _OrderCatalogCategoriesItem extends StatelessWidget {
 class _CatalogGrid extends StatelessWidget {
   const _CatalogGrid();
 
-  List<ProductData> getItems({
+  List<ProductData> getItems(
+    BuildContext context, {
     required SelectedCategoryData? selectedCategory,
     required String? searchQuery,
     required List<String> favoriteKeys,
@@ -187,12 +187,7 @@ class _CatalogGrid extends StatelessWidget {
     List<ProductData> warehouseProducts = [];
 
     for (final i in warehouseItems) {
-      final item = products.firstWhereLogTypeOrNull(
-        (j) =>
-            j.nomenclature.refKey == i.nomenclatureKey &&
-            (i.characteristicKey == emptyRefKey ||
-                i.characteristicKey == j.characteristic?.refKey),
-      );
+      final item = i.product(context);
       if (item != null) {
         warehouseProducts.add(item);
       }
@@ -213,7 +208,7 @@ class _CatalogGrid extends StatelessWidget {
           .toList();
     } else if (selectedCategory?.favorite ?? false) {
       selectedCategoryItems = selectedCategoryItems
-          .where((i) => favoriteKeys.contains(i.nomenclature.refKey))
+          .where((i) => favoriteKeys.contains(i.uniqueId))
           .toList();
     }
 
@@ -249,6 +244,7 @@ class _CatalogGrid extends StatelessWidget {
                           valueListenable: productSeachQuery,
                           builder: (context, searchQuery, child) {
                             final products = getItems(
+                              context,
                               selectedCategory: selectedCat,
                               searchQuery: searchQuery,
                               pinned: settingsState.pinnedCategories,
@@ -297,7 +293,7 @@ class _CatalogTable extends StatelessWidget {
             ),
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 0.75,
+            childAspectRatio: 0.65,
           ),
           itemBuilder: (context, index) {
             return ProductCard(product: products[index]);

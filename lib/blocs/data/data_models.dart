@@ -1,6 +1,5 @@
 part of 'data_cubit.dart';
 
-
 @JsonSerializable()
 class PriceData extends Equatable {
   const PriceData({required this.price, required this.type});
@@ -46,7 +45,13 @@ class ProductData extends Equatable {
     }
   }
 
-  String get uniqueId => nomenclature.refKey + (characteristic?.refKey ?? '');
+  String get uniqueId => nomenclature.refKey + (characteristic?.refKey ?? emptyRefKey);
+
+  WarehouseItemScheme? warehouseItem(BuildContext context) {
+    final items = BlocProvider.of<WarehouseCubit>(context).state.items;
+
+    return items.firstWhereLogTypeOrNull((i) => i.uniqueId == uniqueId);
+  }
 
   factory ProductData.fromJson(Map<String, dynamic> json) =>
       _$ProductDataFromJson(json);
