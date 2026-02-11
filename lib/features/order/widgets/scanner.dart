@@ -14,11 +14,8 @@ class OrderScanner extends StatefulWidget {
 }
 
 class _OrderScannerState extends State<OrderScanner> {
-  final focusNode = FocusNode();
-
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).requestFocus(focusNode);
     final orderCubit = BlocProvider.of<OrderCubit>(context);
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(context),
@@ -29,8 +26,7 @@ class _OrderScannerState extends State<OrderScanner> {
             return BarcodeKeyboardListener(
               bufferDuration: const Duration(milliseconds: 200),
               onBarcodeScanned: (value) async {
-                FocusScope.of(context).requestFocus(focusNode);
-                if (value.length < 4){
+                if (value.length < 4) {
                   return;
                 }
                 if (!ModalRoute.of(context)!.isCurrent) {

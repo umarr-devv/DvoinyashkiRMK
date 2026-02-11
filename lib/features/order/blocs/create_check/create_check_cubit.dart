@@ -63,6 +63,11 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     emit(CreateCheckUpdate(newState));
   }
 
+  void setDebtUser(UserScheme user) {
+    final newState = state.copyWith(debtUser: user);
+    emit(CreateCheckUpdate(newState));
+  }
+
   Future create() async {
     if (cashRegister == null ||
         author == null ||

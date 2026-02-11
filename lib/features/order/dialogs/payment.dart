@@ -10,11 +10,13 @@ import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:forui/forui.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
+import 'package:talker/talker.dart';
 
 class PaymentDialog extends StatefulWidget {
   const PaymentDialog(this.rootContext, {super.key});
@@ -100,7 +102,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _DialogHeader(),
+                    Column(children: [PaymentScanner(), _DialogHeader()]),
                     _DialogGeneralInfo(),
                     _PaymentTypeSelect(),
                     _PaymentSum(),
@@ -114,6 +116,54 @@ class _PaymentDialogState extends State<PaymentDialog> {
           );
         },
       ),
+    );
+  }
+}
+
+class PaymentScanner extends StatefulWidget {
+  const PaymentScanner({super.key});
+
+  @override
+  State<PaymentScanner> createState() => _PaymentScannerState();
+}
+
+class _PaymentScannerState extends State<PaymentScanner> {
+  final focusNode = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<CreateCheckCubit>(context);
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
+      builder: (context, dataState) {
+        return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+          bloc: cubit,
+          builder: (context, state) {
+            return BarcodeKeyboardListener(
+              bufferDuration: const Duration(milliseconds: 200),
+              onBarcodeScanned: (value) async {
+                if (value.length < 2) {
+                  return;
+                }
+                if (cubit.state.paymentType == cashPaymentType ||
+                    cubit.state.paymentType == cashlessPaymentType) {
+                  BlocProvider.of<UdsCustomerCubit>(
+                    context,
+                  ).findCustomer(value);
+                } else if (cubit.state.paymentType == debtPaymentType) {
+                  final user = dataState.users.firstWhereLogTypeOrNull(
+                    (i) => i.barcode == value,
+                  );
+                  if (user != null) {
+                    cubit.setDebtUser(user);
+                  }
+                }
+              },
+              child: SizedBox(),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -395,39 +445,57 @@ class _DebtCustomerSelectState extends State<_DebtCustomerSelect> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<CreateCheckCubit>(context);
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(context),
-      builder: (context, state) {
-        return FSelect<UserScheme>.searchBuilder(
-          label: Text('Сотрудник'),
-          hint: 'Выберите сотрудника, чтобы оформить долг',
-          autovalidateMode: AutovalidateMode.always,
-          validator: (value) {
-            if (value == null) {
-              return 'Необходимо выбрать сотрудника для оформления долга';
-            }
-            return null;
-          },
-          contentEmptyBuilder: (context, style) => Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Text('Ничего не найдено'),
-          ),
-          searchFieldProperties: FSelectSearchFieldProperties(
-            hint: 'Введите код сотрудника',
-          ),
-          format: (i) => i.description,
-          filter: (query) {
-            return state.users.where((user) => user.barcode == query);
-          },
-          contentBuilder: (context, query, values) {
-            if (query.isEmpty) {
-              return [];
-            }
-            return state.users.where((user) => user.barcode == query).map((
-              user,
-            ) {
-              return FSelectItem(title: Text(user.description), value: user);
-            }).toList();
+      builder: (context, dataState) {
+        return BlocBuilder<CreateCheckCubit, CreateCheckState>(
+          bloc: cubit,
+          builder: (context, state) {
+            return FSelect<UserScheme>.searchBuilder(
+              label: Text('Сотрудник'),
+              hint: 'Выберите сотрудника, чтобы оформить долг',
+              autovalidateMode: AutovalidateMode.always,
+              control: FSelectControl.lifted(
+                value: state.debtUser,
+                onChange: (value) {
+                  if (value != null) {
+                    cubit.setDebtUser(value);
+                  }
+                },
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'Необходимо выбрать сотрудника для оформления долга';
+                }
+                return null;
+              },
+              contentEmptyBuilder: (context, style) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text('Ничего не найдено'),
+              ),
+              searchFieldProperties: FSelectSearchFieldProperties(
+                hint: 'Введите код сотрудника',
+              ),
+              format: (i) => i.description,
+              filter: (query) {
+                return dataState.users.where((user) => user.barcode == query);
+              },
+              contentBuilder: (context, query, values) {
+                if (query.isEmpty) {
+                  return [];
+                }
+                return dataState.users
+                    .where((user) => user.barcode == query)
+                    .map((user) {
+                      return FSelectItem(
+                        title: Text(user.description),
+                        value: user,
+                      );
+                    })
+                    .toList();
+              },
+            );
           },
         );
       },
