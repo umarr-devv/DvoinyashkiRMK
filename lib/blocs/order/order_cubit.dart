@@ -76,6 +76,20 @@ class OrderCubit extends HydratedCubit<OrderState> {
     emit(OrderUpdate(newState));
   }
 
+  void adaptiveAdd(OrderItem item, double addQuantity) {
+    if (state.currentOrder == null) createOrder();
+    final currentOrder = state.currentOrder!;
+    final List<OrderItem> items = List.from(currentOrder.items);
+
+    final item0 = items.firstWhereLogTypeOrNull((i) => i == item);
+
+    if (item0 != null) {
+      updateItem(item.copyWith(quantity: item0.quantity + addQuantity));
+    } else {
+      addItem(item);
+    }
+  }
+
   void clearItems() {
     if (state.currentOrder == null) return;
     final newState = state.copyWith(

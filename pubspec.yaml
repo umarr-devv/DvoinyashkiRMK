@@ -21,6 +21,7 @@ dependencies:
   fluentui_system_icons: ^1.1.273
   flutter:
     sdk: flutter
+  flutter_barcode_listener: ^0.1.4
   flutter_bloc: ^9.1.1
   flutter_dotenv: ^6.0.0
   flutter_localizations:

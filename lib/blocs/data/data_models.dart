@@ -45,7 +45,8 @@ class ProductData extends Equatable {
     }
   }
 
-  String get uniqueId => nomenclature.refKey + (characteristic?.refKey ?? emptyRefKey);
+  String get uniqueId =>
+      nomenclature.refKey + (characteristic?.refKey ?? emptyRefKey);
 
   WarehouseItemScheme? warehouseItem(BuildContext context) {
     final items = BlocProvider.of<WarehouseCubit>(context).state.items;
@@ -59,5 +60,5 @@ class ProductData extends Equatable {
   Map<String, dynamic> toJson() => _$ProductDataToJson(this);
 
   @override
-  List<Object?> get props => [nomenclature, characteristic];
+  List<Object?> get props => [uniqueId];
 }

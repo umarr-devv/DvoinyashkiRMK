@@ -17,6 +17,7 @@ class _OrderScreenState extends State<OrderScreen> {
       children: [
         Expanded(child: OrderCatalog()),
         OrderBasket(),
+        OrderScanner(),
       ],
     );
   }
