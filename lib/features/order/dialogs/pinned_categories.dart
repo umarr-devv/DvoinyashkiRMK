@@ -149,10 +149,9 @@ class PinnedCategoriesDialog {
                 }
               } else {
                 cubit.setSettings(
-                  showEmptyCategories: cubit.state.showEmptyCategories,
+                  showEmptyCategories: !cubit.state.showEmptyCategories,
                 );
               }
-
               selectedCategory.value = favoriteSelectedCategory;
             },
           ),

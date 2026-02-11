@@ -1,6 +1,8 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/core/consts/consts.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/features/order/states/states.dart';
+import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -180,8 +182,23 @@ class _CatalogGrid extends StatelessWidget {
     required List<String> favoriteKeys,
     required List<String> pinned,
     required List<ProductData> products,
+    required List<WarehouseItemScheme> warehouseItems,
   }) {
-    List<ProductData> selectedCategoryItems = List.from(products);
+    List<ProductData> warehouseProducts = [];
+
+    for (final i in warehouseItems) {
+      final item = products.firstWhereLogTypeOrNull(
+        (j) =>
+            j.nomenclature.refKey == i.nomenclatureKey &&
+            (i.characteristicKey == emptyRefKey ||
+                i.characteristicKey == j.characteristic?.refKey),
+      );
+      if (item != null) {
+        warehouseProducts.add(item);
+      }
+    }
+
+    List<ProductData> selectedCategoryItems = List.from(warehouseProducts);
     if (selectedCategory?.category != null) {
       selectedCategoryItems = selectedCategoryItems
           .where(
@@ -218,32 +235,37 @@ class _CatalogGrid extends StatelessWidget {
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(context),
       builder: (context, state) {
-        return BlocBuilder<SettingsCubit, SettingsState>(
-          bloc: BlocProvider.of<SettingsCubit>(context),
-          builder: (context, settingsState) {
-            return BlocBuilder<FavoritesCubit, FavoritesState>(
-              builder: (context, favoriteState) {
-                return ValueListenableBuilder(
-                  valueListenable: selectedCategory,
-                  builder: (context, selectedCat, child) {
+        return BlocBuilder<WarehouseCubit, WarehouseState>(
+          builder: (context, warehouseState) {
+            return BlocBuilder<SettingsCubit, SettingsState>(
+              bloc: BlocProvider.of<SettingsCubit>(context),
+              builder: (context, settingsState) {
+                return BlocBuilder<FavoritesCubit, FavoritesState>(
+                  builder: (context, favoriteState) {
                     return ValueListenableBuilder(
-                      valueListenable: productSeachQuery,
-                      builder: (context, searchQuery, child) {
-                        final products = getItems(
-                          selectedCategory: selectedCat,
-                          searchQuery: searchQuery,
-                          pinned: settingsState.pinnedCategories,
-                          favoriteKeys: favoriteState.favoriteKeys,
-                          products: state.products,
+                      valueListenable: selectedCategory,
+                      builder: (context, selectedCat, child) {
+                        return ValueListenableBuilder(
+                          valueListenable: productSeachQuery,
+                          builder: (context, searchQuery, child) {
+                            final products = getItems(
+                              selectedCategory: selectedCat,
+                              searchQuery: searchQuery,
+                              pinned: settingsState.pinnedCategories,
+                              favoriteKeys: favoriteState.favoriteKeys,
+                              products: state.products,
+                              warehouseItems: warehouseState.items,
+                            );
+                            if (products.isEmpty) {
+                              return _GridEmptyItems(searchQuery: searchQuery);
+                            }
+                            if (settingsState.catalogListView) {
+                              return _CatalogList(products);
+                            } else {
+                              return _CatalogTable(products);
+                            }
+                          },
                         );
-                        if (products.isEmpty) {
-                          return _GridEmptyItems(searchQuery: searchQuery);
-                        }
-                        if (settingsState.catalogListView) {
-                          return _CatalogList(products);
-                        } else {
-                          return _CatalogTable(products);
-                        }
                       },
                     );
                   },
