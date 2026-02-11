@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/blocs/blocs.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -106,21 +108,29 @@ class _ProductCardImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final productImage = product.images.isNotEmpty ? product.images[0] : null;
-    final imageBytes = productImage?.imageBytes;
-
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      margin: const EdgeInsets.all(8),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: theme.custom.muted,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: imageBytes != null
-          ? Image.memory(imageBytes, fit: BoxFit.cover)
-          : Icon(FIcons.image, size: 64, color: theme.custom.mutedForeground),
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(context),
+      buildWhen: (previous, current) => current is DataAltLoaded,
+      builder: (context, state) {
+        final image = state.productImages[product.nomenclature.refKey];
+        return Container(
+          width: double.infinity,
+          height: double.infinity,
+          margin: const EdgeInsets.all(8),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: theme.custom.muted,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: image != null
+              ? Image.file(File(image!), fit: BoxFit.cover)
+              : Icon(
+                  FIcons.image,
+                  size: 64,
+                  color: theme.custom.mutedForeground,
+                ),
+        );
+      },
     );
   }
 }

@@ -95,10 +95,10 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
           .toList() ??
       const [],
   productImages:
-      (json['productImages'] as List<dynamic>?)
-          ?.map((e) => ProductImageScheme.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
+      (json['productImages'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ) ??
+      const {},
   users:
       (json['users'] as List<dynamic>?)
           ?.map((e) => UserScheme.fromJson(e as Map<String, dynamic>))

@@ -289,7 +289,7 @@ class _RestClient implements RestClient {
 
   @override
   Future<ProductImageListScheme> getProductImages({
-    String select = 'Номенклатура_Key,Характеристика_Key,Фотография_Base64Data',
+    String select = 'Ref_Key,ФотоДляОбмена_Base64Data',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
@@ -303,7 +303,7 @@ class _RestClient implements RestClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Catalog_ТоварДляОбмена',
+            '/Catalog_Номенклатура',
             queryParameters: queryParameters,
             data: _data,
           )

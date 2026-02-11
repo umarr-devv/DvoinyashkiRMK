@@ -12,7 +12,7 @@ class DataState extends Equatable {
     this.priceTypes = const [],
     this.barcodes = const [],
     this.structureUnits = const [],
-    this.productImages = const [],
+    this.productImages = const {},
     this.users = const [],
     this.authors = const [],
     this.products = const [],
@@ -26,7 +26,7 @@ class DataState extends Equatable {
   final List<PriceTypeScheme> priceTypes;
   final List<BarcodeScheme> barcodes;
   final List<StructureUnitScheme> structureUnits;
-  final List<ProductImageScheme> productImages;
+  final Map<String, String> productImages;
   final List<UserScheme> users;
   final List<AuthorScheme> authors;
 
@@ -43,7 +43,7 @@ class DataState extends Equatable {
     List<PriceTypeScheme>? priceTypes,
     List<BarcodeScheme>? barcodes,
     List<StructureUnitScheme>? structureUnits,
-    List<ProductImageScheme>? productImages,
+    Map<String, String>? productImages,
     List<UserScheme>? users,
     List<AuthorScheme>? authors,
     List<ProductData>? products,
@@ -72,7 +72,7 @@ class DataState extends Equatable {
       nomenclatures = other.nomenclatures,
       characteristics = other.characteristics,
       prices = other.prices,
-      priceTypes=other.priceTypes,
+      priceTypes = other.priceTypes,
       barcodes = other.barcodes,
       structureUnits = other.structureUnits,
       productImages = other.productImages,
@@ -112,6 +112,14 @@ final class DataLoading extends DataState {
 
 final class DataLoaded extends DataState {
   DataLoaded(super.state) : super.from();
+}
+
+final class DataAltLoading extends DataState {
+  DataAltLoading(super.state) : super.from();
+}
+
+final class DataAltLoaded extends DataState {
+  DataAltLoaded(super.state) : super.from();
 }
 
 final class DataFailure extends DataState {

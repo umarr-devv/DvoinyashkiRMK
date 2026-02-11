@@ -59,19 +59,11 @@ class DataCubitUtils {
                     i.characteristicKey == char.refKey,
               )
               .toList();
-          final images_ = productImages
-              .where(
-                (i) =>
-                    i.nomenclatureKey == nomen.refKey &&
-                    i.characteristicKey == char.refKey,
-              )
-              .toList();
           final product = ProductData(
             nomenclature: nomen,
             characteristic: char,
             prices: actualPrices,
             barcodes: barcodes_,
-            images: images_,
           );
           products.add(product);
         }

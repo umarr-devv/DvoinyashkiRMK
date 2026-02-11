@@ -9,19 +9,13 @@ part 'product_image.g.dart';
 @JsonSerializable()
 // ignore: must_be_immutable
 class ProductImageScheme extends Equatable {
-  ProductImageScheme({
-    required this.nomenclatureKey,
-    required this.characteristicKey,
-    required this.image,
-  }) : imageBytes = stringToBytes(image);
+  ProductImageScheme({required this.nomenclatureKey, required this.image})
+    : imageBytes = stringToBytes(image);
 
-  @JsonKey(name: 'Номенклатура_Key')
+  @JsonKey(name: 'Ref_Key')
   final String nomenclatureKey;
 
-  @JsonKey(name: 'Характеристика_Key')
-  final String characteristicKey;
-
-  @JsonKey(name: 'Фотография_Base64Data')
+  @JsonKey(name: 'ФотоДляОбмена_Base64Data')
   final String? image;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -33,7 +27,7 @@ class ProductImageScheme extends Equatable {
   Map<String, dynamic> toJson() => _$ProductImageSchemeToJson(this);
 
   @override
-  List<Object?> get props => [nomenclatureKey, characteristicKey, image];
+  List<Object?> get props => [nomenclatureKey, image];
 }
 
 @JsonSerializable()

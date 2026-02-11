@@ -1,5 +1,6 @@
 import 'package:app/client/client.dart';
 import 'package:app/models/models.dart';
+import 'package:app/utils/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -62,10 +63,29 @@ class DataCubit extends HydratedCubit<DataState> {
         update: DateTime.now(),
       );
       emit(DataLoaded(newState));
+      await updateAlt();
     } catch (exc, st) {
       talker.error(exc, st);
       emit(DataFailure(state));
     }
+  }
+
+  Future updateAlt() async {
+    emit(DataAltLoading(state));
+    final response = await client.getProductImages();
+
+    final Map<String,String> productImages = {};
+
+    for (final i in response.productImages){
+      
+      if (i.image?.isNotEmpty ?? false){
+        final filePath = await saveImageToCache(i.imageBytes!, i.nomenclatureKey);
+        productImages[i.nomenclatureKey] = filePath;
+      }
+    }
+
+    final newState = state.copyWith(productImages: productImages);
+    emit(DataAltLoaded(newState));
   }
 
   @override

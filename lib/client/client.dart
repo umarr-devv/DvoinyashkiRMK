@@ -66,10 +66,10 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
-  @GET('/Catalog_ТоварДляОбмена')
+  @GET('/Catalog_Номенклатура')
   Future<ProductImageListScheme> getProductImages({
     @Query('\$select')
-    String select = 'Номенклатура_Key,Характеристика_Key,Фотография_Base64Data',
+    String select = 'Ref_Key,ФотоДляОбмена_Base64Data',
     @Query('\$format') String format = 'json',
   });
 

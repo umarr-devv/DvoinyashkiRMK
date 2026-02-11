@@ -8,16 +8,14 @@ part of 'product_image.dart';
 
 ProductImageScheme _$ProductImageSchemeFromJson(Map<String, dynamic> json) =>
     ProductImageScheme(
-      nomenclatureKey: json['Номенклатура_Key'] as String,
-      characteristicKey: json['Характеристика_Key'] as String,
-      image: json['Фотография_Base64Data'] as String?,
+      nomenclatureKey: json['Ref_Key'] as String,
+      image: json['ФотоДляОбмена_Base64Data'] as String?,
     );
 
 Map<String, dynamic> _$ProductImageSchemeToJson(ProductImageScheme instance) =>
     <String, dynamic>{
-      'Номенклатура_Key': instance.nomenclatureKey,
-      'Характеристика_Key': instance.characteristicKey,
-      'Фотография_Base64Data': instance.image,
+      'Ref_Key': instance.nomenclatureKey,
+      'ФотоДляОбмена_Base64Data': instance.image,
     };
 
 ProductImageListScheme _$ProductImageListSchemeFromJson(
