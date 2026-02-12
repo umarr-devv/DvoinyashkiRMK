@@ -36,6 +36,7 @@ CreateCheckScheme _$CreateCheckSchemeFromJson(Map<String, dynamic> json) =>
           .toList(),
       documentSum: (json['СуммаДокумента'] as num).toDouble(),
       debt: (json['Долг'] as num).toDouble(),
+      isCashlessPayment: json['БезналичныйРасчет'] as bool,
       currencyKey:
           json['ВалютаДокумента_Key'] as String? ??
           '02e351c0-7e12-11ed-a847-18d6c704b66b',
@@ -72,6 +73,7 @@ Map<String, dynamic> _$CreateCheckSchemeToJson(CreateCheckScheme instance) =>
       'Покупатель': instance.customer,
       'СотрудникДолг_Key': instance.employeersDebtKey,
       'Долг': instance.debt,
+      'БезналичныйРасчет': instance.isCashlessPayment,
       'Наличные': instance.cash,
       'ПолученоНаличными': instance.getCash,
       'ПолученоЭлектронно': instance.getCashless,

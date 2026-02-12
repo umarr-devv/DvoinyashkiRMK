@@ -81,7 +81,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     }
     emit(CreateCheckLoading(state));
     try {
-      final data = _createScheme();
+      final CreateCheckScheme data = _createCashScheme();
       final check = await client.createCheck(data: data);
       await client.postCheck(refKey: check.refKey);
       final newState = state.copyWith(check: check);
@@ -118,13 +118,13 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     }
   }
 
-  CreateCheckScheme _createScheme() {
+  CreateCheckScheme _createCashScheme() {
     return CreateCheckScheme(
       date: DateTime.now(),
       authorKey: author!.refKey,
       cashRegisterKey: cashRegister!.refKey,
       userKey: user!.refKey,
-      sessionKey: workShift!.cashRegisterShiftKey,
+      sessionKey: workShift!.refKey,
       sessionNumber: 1,
       udsCustomer: udsCustomer?.user.displayName,
       udsDiscountCode: udsCode,
@@ -135,24 +135,17 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       customer: udsCustomer?.user.displayName,
       employeersDebtKey: state.debtUser?.refKey,
       debt: state.paymentType == debtPaymentType ? state.totalSum : 0,
-      cash: state.paymentType == cashPaymentType
-          ? state.totalSum - state.udsPoints
-          : 0,
-      getCash: state.paymentType == cashPaymentType
-          ? state.totalSum - state.udsPoints
-          : 0,
+      isCashlessPayment: false,
+      cash: state.totalSumToPay,
+      getCash: state.totalSumToPay,
       documentSum: state.totalSum,
-      getCashless: state.paymentType == cashlessPaymentType
-          ? state.totalSum - state.udsPoints
-          : 0,
-      cashless: state.paymentType == cashlessPaymentType
-          ? state.totalSum - state.udsPoints
-          : 0,
+      getCashless: 0,
+      cashless: 0,
       udsPayment: state.udsPoints,
       paymentForm: state.paymentType == cashPaymentType
           ? CheckScheme.cashPaymentType
           : CheckScheme.cashlessPaymentType,
-      change: state.change,
+      change: 0,
       storeKey: store!.refKey,
       items: order!.items.map((item) {
         final index = order!.items.indexOf(item);
