@@ -152,8 +152,8 @@ class _PaymentScannerState extends State<PaymentScanner> {
           bloc: cubit,
           builder: (context, state) {
             return BarcodeKeyboardListener(
-              bufferDuration: const Duration(milliseconds: 200),
               onBarcodeScanned: (value) async {
+                focusNode.requestFocus();
                 if (value.length < 2) {
                   return;
                 }
