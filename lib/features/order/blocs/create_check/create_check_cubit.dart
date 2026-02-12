@@ -86,7 +86,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       await client.postCheck(refKey: check.refKey);
       final newState = state.copyWith(check: check);
       emit(CreateCheckLoaded(newState));
-      if (udsCode != null || udsCustomer != null) {
+      if (udsCode != null || udsCustomer != null || store!.udsUID.isNotEmpty) {
         await udsPoints();
       }
     } catch (exc, st) {
@@ -101,7 +101,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
         data: UDSTransactionScheme(
           code: udsCode!,
           cashier: UDSTransactionCashierScheme(
-            externalId: '1075',
+            externalId: store!.udsUID,
             name: store!.description,
           ),
           receipt: UDSTransactionReceiptScheme(
@@ -134,6 +134,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       subdivisionKey: subdivision!.refKey,
       customer: udsCustomer?.user.displayName,
       employeersDebtKey: state.debtUser?.refKey,
+      debt: state.paymentType == debtPaymentType ? state.totalSum : 0,
       cash: state.paymentType == cashPaymentType
           ? state.totalSum - state.udsPoints
           : 0,

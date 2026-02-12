@@ -430,10 +430,17 @@ class _CustomerSelect extends StatelessWidget {
         return previous.paymentType != current.paymentType;
       },
       builder: (context, state) {
-        if (state.paymentType == debtPaymentType) {
-          return _DebtCustomerSelect();
-        }
-        return _UdsCustomerSelect();
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          bloc: BlocProvider.of<SettingsCubit>(context),
+          builder: (context, settingsState) {
+            if (state.paymentType == debtPaymentType) {
+              return _DebtCustomerSelect();
+            } else if (settingsState.store?.udsUID.isNotEmpty ?? false) {
+              return _UdsCustomerSelect();
+            }
+            return SizedBox();
+          },
+        );
       },
     );
   }

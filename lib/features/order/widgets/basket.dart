@@ -246,6 +246,8 @@ class _OrderBasketSubmitButton extends StatelessWidget {
     return BlocBuilder<OrderCubit, OrderState>(
       bloc: BlocProvider.of<OrderCubit>(context),
       builder: (context, state) {
+        final bool notEmptyOrder =
+            state.currentOrder?.items.isNotEmpty ?? false;
         return Column(
           spacing: 12,
           children: [
@@ -273,12 +275,16 @@ class _OrderBasketSubmitButton extends StatelessWidget {
             ),
             FButton(
               onPress: () {
-                PaymentDialog(context).show();
+                if (notEmptyOrder) {
+                  PaymentDialog(context).show();
+                }
               },
               style: (style) => style.copyWith(
                 decoration: FWidgetStateMap.all(
                   BoxDecoration(
-                    color: theme.custom.success,
+                    color: notEmptyOrder
+                        ? theme.custom.success
+                        : theme.custom.success.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),

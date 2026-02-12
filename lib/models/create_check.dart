@@ -30,6 +30,7 @@ class CreateCheckScheme {
     required this.storeKey,
     required this.items,
     required this.documentSum,
+    required this.debt,
     this.currencyKey = '02e351c0-7e12-11ed-a847-18d6c704b66b',
     this.priceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c',
     this.orgKey = '021f4fa6-3377-11ed-91a8-a068f8f3337c',
@@ -91,7 +92,7 @@ class CreateCheckScheme {
   final String? employeersDebtKey;
 
   @JsonKey(name: 'Долг')
-  final double debt = 0;
+  final double debt;
 
   @JsonKey(name: 'Наличные')
   final double cash;
