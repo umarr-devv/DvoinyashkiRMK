@@ -1,4 +1,3 @@
-import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
 import 'package:app/models/models.dart';
 import 'package:app/utils/odata_query.dart';
@@ -52,7 +51,7 @@ class DetailSessionCubit extends Cubit<DetailSessionState> {
       WarehouseItemListScheme? endWarehouseItems;
       CashListScheme? endCash;
       if (workShift.workShiftEnd != null) {
-        final workShiftEnd = workShift.workShiftEnd!.add(Duration(minutes: 10));
+        final workShiftEnd = workShift.workShiftEnd!.add(Duration(minutes: 1));
         endWarehouseItems = await client.getWarehouseItemsWithPeriod(
           period: workShiftEnd,
           fullPath: buildODataQuery(warehouseItemsParams),

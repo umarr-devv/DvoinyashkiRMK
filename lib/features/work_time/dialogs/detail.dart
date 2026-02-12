@@ -1,6 +1,8 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/work_time/blocs/blocs.dart';
 import 'package:app/models/models.dart';
+import 'package:app/service/print.dart';
+import 'package:app/service/print_schemes/session.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -8,7 +10,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
-import 'package:forui/widgets/dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
@@ -220,7 +221,6 @@ class DetailSessionDialog {
   }
 
   Widget cashInfo(String label, List<CashScheme> cashes, DataState state) {
-    final theme = Theme.of(rootContext);
     return FAccordionItem(
       title: Text(label),
       child: SizedBox(
@@ -326,7 +326,24 @@ class DetailSessionDialog {
   Widget actions() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: [FButton(onPress: () {}, child: Text('Печать'))],
+      children: [
+        FButton(
+          onPress: () {
+            PrintService(
+              printerUrl: BlocProvider.of<SettingsCubit>(
+                rootContext,
+              ).state.printer,
+            ).print(
+              PrintSessionScheme(
+                session: cubit.state,
+                dataState: BlocProvider.of<DataCubit>(rootContext).state,
+              ),
+              rootContext,
+            );
+          },
+          child: Text('Печать'),
+        ),
+      ],
     );
   }
 }
