@@ -25,7 +25,7 @@ class PrintService {
         onLayout: (pageFormat) async {
           return await scheme.init(pageFormat);
         },
-        usePrinterSettings: true,
+        usePrinterSettings: false,
       );
     } catch (exc, st) {
       talker.error(exc, st);
@@ -36,21 +36,26 @@ class PrintService {
 abstract class PrintScheme {
   PrintScheme();
 
-  final pdf = pw.Document();
-
   late pw.Font font;
-  late pw.MemoryImage logo;
+  late pw.ImageProvider logo;
+
+  Future<void> prepareResources() async {
+    font = await fontFromAssetBundle(
+      'assets/fonts/Manrope/Manrope-SemiBold.ttf',
+    );
+    logo = await imageFromAssetBundle('assets/images/print_logo.png');
+  }
 
   Future<Uint8List> init(PdfPageFormat pageFormat) async {
-    final fontData = await rootBundle.load(
-      "assets/fonts/Manrope/Manrope-Regular.ttf",
+    final pdf = pw.Document(compress: false, pageMode: PdfPageMode.fullscreen);
+    await prepareResources();
+    pdf.addPage(
+      pw.Page(
+        pageFormat: pageFormat,
+        theme: pw.ThemeData.withFont(base: font, bold: font),
+        build: (context) => build(),
+      ),
     );
-    final logoData = await rootBundle.load('assets/images/print_logo.png');
-
-    font = pw.Font.ttf(fontData.buffer.asByteData());
-    logo = pw.MemoryImage(logoData.buffer.asUint8List());
-
-    pdf.addPage(pw.Page(pageFormat: pageFormat, build: (context) => build()));
     return await pdf.save();
   }
 

@@ -168,7 +168,13 @@ class DetailCheckDialog {
         ),
         FButton(
           onPress: () {
-            PrintService().print(PrintCheckScheme(check: check), rootContext);
+            PrintService().print(
+              PrintCheckScheme(
+                check: check,
+                dataState: BlocProvider.of<DataCubit>(rootContext).state,
+              ),
+              rootContext,
+            );
           },
           child: Text('Печать'),
         ),

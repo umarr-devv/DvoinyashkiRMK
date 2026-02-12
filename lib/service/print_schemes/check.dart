@@ -1,35 +1,44 @@
+import 'package:app/blocs/blocs.dart';
 import 'package:app/models/models.dart';
 import 'package:app/service/print.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:talker_flutter/talker_flutter.dart';
 
 class PrintCheckScheme extends PrintScheme {
-  PrintCheckScheme({required this.check});
+  PrintCheckScheme({required this.check, required this.dataState});
 
   final DetailCheckScheme check;
+  final DataState dataState;
 
   @override
   pw.Widget build() {
+    final store = dataState.structureUnits.firstWhereLogTypeOrNull(
+      (i) => i.refKey == check.structureUnitKey,
+    );
+    final user = dataState.users.firstWhereLogTypeOrNull(
+      (i) => i.refKey == check.userKey,
+    );
     return pw.Theme(
       data: pw.ThemeData(
-        defaultTextStyle: pw.TextStyle(font: font, fontSize: 10),
+        defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
       ),
       child: pw.Padding(
-        padding: pw.EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: pw.EdgeInsets.symmetric(vertical: 16, horizontal: 4),
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Image(logo, width: 128),
             pw.SizedBox(height: 32),
-            pw.Text(
-              'Номер чека: ${check.number}',
-              style: pw.TextStyle(
-                font: font,
-                fontSize: 16,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-            pw.SizedBox(height: 12),
+            pw.Text('Номер чека: ${check.number}'),
+            pw.SizedBox(height: 24),
             pw.Table(
+              columnWidths: {
+                0: pw.FlexColumnWidth(2),
+                1: pw.FlexColumnWidth(),
+                2: pw.FlexColumnWidth(),
+                3: pw.FlexColumnWidth(),
+              },
               children:
                   [
                     pw.TableRow(
@@ -42,9 +51,13 @@ class PrintCheckScheme extends PrintScheme {
                     ),
                   ] +
                   check.items.map((item) {
+                    final nomenclature = dataState.nomenclatures
+                        .firstWhereLogTypeOrNull(
+                          (i) => i.refKey == item.nomenclatureKey,
+                        );
                     return pw.TableRow(
                       children: [
-                        pw.Text(item.nomenclatureKey),
+                        pw.Text(nomenclature?.description ?? ''),
                         pw.Text(item.price.toString()),
                         pw.Text(item.quantity.toString()),
                         pw.Text(item.itemSum.toString()),
@@ -52,68 +65,26 @@ class PrintCheckScheme extends PrintScheme {
                     );
                   }).toList(),
             ),
-            pw.SizedBox(height: 12),
-            pw.Text(
-              'Магазин: ${check.structureUnitKey}',
-              style: pw.TextStyle(
-                font: font,
-                fontSize: 12,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-            pw.Text(
-              'Кассир: ${check.userKey}',
-              style: pw.TextStyle(
-                font: font,
-                fontSize: 12,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
+            pw.SizedBox(height: 24),
+            pw.Text('Магазин: ${store?.description}'),
+            pw.Text('Кассир: ${user?.description}'),
             if (check.udsClient.isNotEmpty)
-              pw.Text(
-                'Клиент: ${check.udsClient}',
-                style: pw.TextStyle(
-                  font: font,
-                  fontSize: 12,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-            if (check.udsSumPayment.isNotEmpty)
-              pw.Text(
-                'UDS-баллы: ${check.udsSumPayment}',
-                style: pw.TextStyle(
-                  font: font,
-                  fontSize: 12,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
+              pw.Text('Клиент: ${check.udsClient}'),
+            if (check.udsClient.isNotEmpty)
+              pw.Text('Использованные UDS-баллы: ${check.udsSumPayment}'),
+            pw.Text('Сумма: ${check.documentSum}'),
             pw.Text(
-              'Сумма: ${check.documentSum}',
-              style: pw.TextStyle(
-                font: font,
-                fontSize: 12,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-            pw.Text(
-              'Дата: ${check.date}',
-              style: pw.TextStyle(
-                font: font,
-                fontSize: 12,
-                fontWeight: pw.FontWeight.bold,
-              ),
+              'Дата: ${DateFormat('HH:mm dd.MM.yyyy').format(check.date)}',
             ),
             pw.SizedBox(height: 32),
             pw.Center(
               child: pw.Text(
                 'Спасибо за покупку',
-                style: pw.TextStyle(
-                  font: font,
-                  fontSize: 14,
-                  fontWeight: pw.FontWeight.bold,
-                ),
+                style: pw.TextStyle(font: font, fontSize: 13),
               ),
             ),
+            pw.SizedBox(height: 128),
+            pw.Text('____'),
           ],
         ),
       ),
