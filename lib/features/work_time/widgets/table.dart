@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/work_time/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -49,6 +50,9 @@ class WorkTimeTable extends StatelessWidget {
                         ? theme.custom.rowOddColor
                         : theme.custom.rowEvenColor,
                   ),
+                  onTap: () {
+                    DetailSessionDialog(context, workShift.refKey).show();
+                  },
                   cells: [
                     DataCell(
                       Row(

@@ -68,8 +68,7 @@ abstract class RestClient {
 
   @GET('/Catalog_Номенклатура')
   Future<ProductImageListScheme> getProductImages({
-    @Query('\$select')
-    String select = 'Ref_Key,ФотоДляОбмена_Base64Data',
+    @Query('\$select') String select = 'Ref_Key,ФотоДляОбмена_Base64Data',
     @Query('\$format') String format = 'json',
   });
 
@@ -158,7 +157,9 @@ abstract class RestClient {
   Future postWorkShift({@Path('refKey') required String refKey});
 
   @POST('/Document_ЧекККМ')
-  Future<DetailCheckScheme> createCheck({@Body() required CreateCheckScheme data});
+  Future<DetailCheckScheme> createCheck({
+    @Body() required CreateCheckScheme data,
+  });
 
   @POST('/Document_ЧекККМ(guid\'{refKey}\')/Post')
   Future postCheck({@Path('refKey') required String refKey});
@@ -176,6 +177,27 @@ abstract class RestClient {
     @Path('full_path') required String fullPath,
   });
 
+  @GET(
+    '/AccumulationRegister_ЗапасыНаСкладах/Balance(Period=\'{period}\'){full_path}',
+  )
+  Future<WarehouseItemListScheme> getWarehouseItemsWithPeriod({
+    @Path('period') required DateTime period,
+    @Path('full_path') required String fullPath,
+  });
+
   @GET('/AccumulationRegister_ДенежныеСредстваВКассахККМ/Balance(){full_path}')
   Future<CashListScheme> getCash({@Path('full_path') required String fullPath});
+
+  @GET(
+    '/AccumulationRegister_ДенежныеСредстваВКассахККМ/Balance(Period=\'{period}\'){full_path}',
+  )
+  Future<CashListScheme> getCashWithPeriod({
+    @Path('period') required DateTime period,
+    @Path('full_path') required String fullPath,
+  });
+
+  @GET('/Document_ОтчетОРозничныхПродажах(guid\'{ref_key}\')')
+  Future<DetailWorkShiftScheme> getWorkShift({
+    @Path('ref_key') required String refKey,
+  });
 }

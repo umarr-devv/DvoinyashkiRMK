@@ -93,3 +93,66 @@ class WorkShiftListScheme {
 
   Map<String, dynamic> toJson() => _$WorkShiftListSchemeToJson(this);
 }
+
+@JsonSerializable()
+class WorkShiftItemScheme {
+  WorkShiftItemScheme({
+    required this.quantity,
+    required this.nomenclatureKey,
+    required this.characteristicKey,
+    required this.price,
+    required this.totalSum,
+  });
+
+  @JsonKey(name: 'Количество')
+  final double quantity;
+
+  @JsonKey(name: 'Номенклатура_Key')
+  final String nomenclatureKey;
+
+  @JsonKey(name: 'Характеристика_Key')
+  final String characteristicKey;
+
+  @JsonKey(name: 'Цена')
+  final double price;
+
+
+  @JsonKey(name: 'Сумма')
+  final double totalSum;
+
+  factory WorkShiftItemScheme.fromJson(Map<String, dynamic> json) =>
+      _$WorkShiftItemSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WorkShiftItemSchemeToJson(this);
+}
+
+@JsonSerializable()
+class DetailWorkShiftScheme extends WorkShiftScheme {
+  const DetailWorkShiftScheme({
+    required super.refKey,
+    required super.number,
+    required super.date,
+    required super.posted,
+    required super.userKey,
+    required super.authorKey,
+    required super.cashRegisterKey,
+    required super.cashRegisterShiftKey,
+    required super.commentary,
+    required super.workShiftStart,
+    required super.workShiftEnd,
+    required super.status,
+    required super.articleKey,
+    required super.structureUnitKey,
+    required super.documentSum,
+    required this.items,
+  });
+
+  @JsonKey(name: 'Запасы')
+  final List<WorkShiftItemScheme> items;
+
+  factory DetailWorkShiftScheme.fromJson(Map<String, dynamic> json) =>
+      _$DetailWorkShiftSchemeFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$DetailWorkShiftSchemeToJson(this);
+}

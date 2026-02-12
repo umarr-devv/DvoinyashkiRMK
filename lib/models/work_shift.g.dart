@@ -56,3 +56,68 @@ WorkShiftListScheme _$WorkShiftListSchemeFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$WorkShiftListSchemeToJson(
   WorkShiftListScheme instance,
 ) => <String, dynamic>{'value': instance.workShifts};
+
+WorkShiftItemScheme _$WorkShiftItemSchemeFromJson(Map<String, dynamic> json) =>
+    WorkShiftItemScheme(
+      quantity: (json['Количество'] as num).toDouble(),
+      nomenclatureKey: json['Номенклатура_Key'] as String,
+      characteristicKey: json['Характеристика_Key'] as String,
+      price: (json['Цена'] as num).toDouble(),
+      totalSum: (json['Сумма'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$WorkShiftItemSchemeToJson(
+  WorkShiftItemScheme instance,
+) => <String, dynamic>{
+  'Количество': instance.quantity,
+  'Номенклатура_Key': instance.nomenclatureKey,
+  'Характеристика_Key': instance.characteristicKey,
+  'Цена': instance.price,
+  'Сумма': instance.totalSum,
+};
+
+DetailWorkShiftScheme _$DetailWorkShiftSchemeFromJson(
+  Map<String, dynamic> json,
+) => DetailWorkShiftScheme(
+  refKey: json['Ref_Key'] as String,
+  number: json['Number'] as String,
+  date: DateTime.parse(json['Date'] as String),
+  posted: json['Posted'] as bool,
+  userKey: json['Ответственный_Key'] as String,
+  authorKey: json['Автор_Key'] as String,
+  cashRegisterKey: json['КассаККМ_Key'] as String,
+  cashRegisterShiftKey: json['КассоваяСмена_Key'] as String,
+  commentary: json['Комментарий'] as String,
+  workShiftStart: DateTime.parse(json['НачалоКассовойСмены'] as String),
+  workShiftEnd: json['ОкончаниеКассовойСмены'] == null
+      ? null
+      : DateTime.parse(json['ОкончаниеКассовойСмены'] as String),
+  status: json['СтатусКассовойСмены'] as String,
+  articleKey: json['Статья_Key'] as String,
+  structureUnitKey: json['СтруктурнаяЕдиница_Key'] as String,
+  documentSum: (json['СуммаДокумента'] as num).toDouble(),
+  items: (json['Запасы'] as List<dynamic>)
+      .map((e) => WorkShiftItemScheme.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$DetailWorkShiftSchemeToJson(
+  DetailWorkShiftScheme instance,
+) => <String, dynamic>{
+  'Ref_Key': instance.refKey,
+  'Number': instance.number,
+  'Date': instance.date.toIso8601String(),
+  'Posted': instance.posted,
+  'Ответственный_Key': instance.userKey,
+  'Автор_Key': instance.authorKey,
+  'КассаККМ_Key': instance.cashRegisterKey,
+  'КассоваяСмена_Key': instance.cashRegisterShiftKey,
+  'Комментарий': instance.commentary,
+  'НачалоКассовойСмены': instance.workShiftStart.toIso8601String(),
+  'ОкончаниеКассовойСмены': instance.workShiftEnd?.toIso8601String(),
+  'СтатусКассовойСмены': instance.status,
+  'Статья_Key': instance.articleKey,
+  'СтруктурнаяЕдиница_Key': instance.structureUnitKey,
+  'СуммаДокумента': instance.documentSum,
+  'Запасы': instance.items,
+};
