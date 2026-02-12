@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/sell_history/blocs/blocs.dart';
 import 'package:app/features/sell_history/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,21 @@ class _SellHistoryScreenState extends State<SellHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FScaffold(
-      header: SellHistoryHeader(),
-      footer: SellHistoryPagination(),
-      child: SellHistoryTable(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => FindCheckCubit()),
+      ],
+      child: FScaffold(
+        header: SellHistoryHeader(),
+        footer: SellHistoryPagination(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SellHistoryFindCheck(),
+            Expanded(child: SellHistoryTable()),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:app/features/menu/widgets/widgets.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
@@ -28,49 +27,36 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return FocusTraversalGroup(
       policy: WidgetOrderTraversalPolicy(),
-      child: Shortcuts(
-        shortcuts: {
-          const SingleActivator(LogicalKeyboardKey.tab):
-              const DoNothingIntent(),
-          const SingleActivator(LogicalKeyboardKey.enter):
-              const DoNothingIntent(),
-          const SingleActivator(LogicalKeyboardKey.numpadEnter):
-              const DoNothingIntent(),
-        },
-        child: Actions(
-          actions: {DoNothingIntent: DoNothingAction()},
-          child: AutoTabsRouter.tabBar(
-            routes: [
-              OrderRoute(),
-              SellHistoryRoute(),
-              WarehouseRoute(),
-              WithdrawRoute(),
-              MovementRoute(),
-              StatisticRoute(),
-              WorkTimeRoute(),
-            ],
-            scrollDirection: Axis.horizontal,
-            physics: NeverScrollableScrollPhysics(),
-            builder: (context, child, tabController) {
-              return ThemeSwitchingArea(
-                child: Scaffold(
-                  body: Column(
-                    children: [
-                      WindowBar(),
-                      MenuNavBar(),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: child,
-                        ),
-                      ),
-                    ],
+      child: AutoTabsRouter.tabBar(
+        routes: [
+          OrderRoute(),
+          SellHistoryRoute(),
+          WarehouseRoute(),
+          WithdrawRoute(),
+          MovementRoute(),
+          StatisticRoute(),
+          WorkTimeRoute(),
+        ],
+        scrollDirection: Axis.horizontal,
+        physics: NeverScrollableScrollPhysics(),
+        builder: (context, child, tabController) {
+          return ThemeSwitchingArea(
+            child: Scaffold(
+              body: Column(
+                children: [
+                  WindowBar(),
+                  MenuNavBar(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: child,
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
