@@ -2,6 +2,8 @@ import 'package:app/blocs/blocs.dart';
 import 'package:app/core/consts/consts.dart';
 import 'package:app/features/sell_history/blocs/detail_check/detail_check_cubit.dart';
 import 'package:app/models/models.dart';
+import 'package:app/service/print.dart';
+import 'package:app/service/print_schemes/check.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -163,6 +165,12 @@ class DetailCheckDialog {
           axis: Axis.vertical,
           label: Text('Дата'),
           child: Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
+        ),
+        FButton(
+          onPress: () {
+            PrintService().print(PrintCheckScheme(check: check), rootContext);
+          },
+          child: Text('Печать'),
         ),
       ],
     );

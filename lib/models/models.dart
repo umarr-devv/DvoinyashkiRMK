@@ -17,6 +17,7 @@ export 'session.dart';
 export 'statistic.dart';
 export 'structure_unit.dart';
 export 'uds_customer.dart';
+export 'uds_transaction.dart';
 export 'update_work_shift.dart';
 export 'user.dart';
 export 'warehouse_item.dart';
