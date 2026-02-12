@@ -36,6 +36,7 @@ class AuthScreen extends StatelessWidget {
         child: Scaffold(
           body: Stack(
             children: [
+              AuthScanner(),
               Center(
                 child: SizedBox(
                   width: 420,
@@ -45,7 +46,7 @@ class AuthScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [AuthLogo(), AuthForm(), AuthRules()],
                   ),
-                ),
+                ),  
               ),
               Column(children: [WindowBar()]),
             ],

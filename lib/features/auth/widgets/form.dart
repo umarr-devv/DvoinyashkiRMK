@@ -24,7 +24,9 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     return FCard(
       title: Text('Вход'),
-      subtitle: Text('Введите данные для авторизации'),
+      subtitle: Text(
+        'Введите данные для авторизации или отсканируйте свой штрих код в приложении',
+      ),
       child: Form(
         key: formKey,
         child: Column(
