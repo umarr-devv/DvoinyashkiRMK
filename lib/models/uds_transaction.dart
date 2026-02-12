@@ -5,11 +5,11 @@ part 'uds_transaction.g.dart';
 @JsonSerializable()
 class UDSTransactionScheme {
   UDSTransactionScheme({
-    required this.participant,
+    required this.code,
     required this.cashier,
     required this.receipt,
   });
-  final UDSTransactionParticipantScheme participant;
+  final String code;
   final UDSTransactionCashierScheme cashier;
   final UDSTransactionReceiptScheme receipt;
 
@@ -17,20 +17,6 @@ class UDSTransactionScheme {
       _$UDSTransactionSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$UDSTransactionSchemeToJson(this);
-}
-
-@JsonSerializable()
-class UDSTransactionParticipantScheme {
-  UDSTransactionParticipantScheme({required this.uid});
-
-  @JsonKey(name: 'uid')
-  final String uid;
-
-  factory UDSTransactionParticipantScheme.fromJson(Map<String, dynamic> json) =>
-      _$UDSTransactionParticipantSchemeFromJson(json);
-
-  Map<String, dynamic> toJson() =>
-      _$UDSTransactionParticipantSchemeToJson(this);
 }
 
 @JsonSerializable()
@@ -57,11 +43,11 @@ class UDSTransactionReceiptScheme {
   });
 
   @JsonKey(name: 'total')
-  final String total;
+  final double total;
   @JsonKey(name: 'cash')
-  final String cash;
+  final double cash;
   @JsonKey(name: 'points')
-  final String points;
+  final double points;
 
   factory UDSTransactionReceiptScheme.fromJson(Map<String, dynamic> json) =>
       _$UDSTransactionReceiptSchemeFromJson(json);

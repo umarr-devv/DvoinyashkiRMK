@@ -39,6 +39,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
   WorkShiftScheme? get workShift => sessionCubit.state.currentWorkShift;
   OrderData? get order => orderCubit.state.currentOrder;
   UDSCustomerScheme? get udsCustomer => udsCustomerCubit.state.customer;
+  String? get udsCode => udsCustomerCubit.state.code;
 
   void init() {
     final newState = state.copyWith(
@@ -80,57 +81,92 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     }
     emit(CreateCheckLoading(state));
     try {
-      await Future.delayed(Duration(seconds: 2));
-      await _cashCheck();
-      emit(CreateCheckLoaded(state));
+      final data = _createScheme();
+      final check = await client.createCheck(data: data);
+      await client.postCheck(refKey: check.refKey);
+      final newState = state.copyWith(check: check);
+      emit(CreateCheckLoaded(newState));
+      if (udsCode != null || udsCustomer != null) {
+        await udsPoints();
+      }
     } catch (exc, st) {
       talker.error(exc, st);
       emit(CreateCheckFailure(state));
     }
   }
 
-  Future _cashCheck() async {
-    final response = await client.createCheck(
-      data: CreateCheckScheme(
-        date: DateTime.now(),
-        authorKey: author!.refKey,
-        cashRegisterKey: cashRegister!.refKey,
-        userKey: user!.refKey,
-        sessionKey: workShift!.cashRegisterShiftKey,
-        sessionNumber: 1,
-        udsCustomer: udsCustomer?.user.displayName,
-        udsDiscountCode: '0',
-        udsDiscount: 0,
-        comment: null,
-        responsibleKey: user!.refKey,
-        subdivisionKey: subdivision!.refKey,
-        customer: null,
-        employeersDebtKey: null,
-        cash: order!.totalSum,
-        getCash: order!.totalSum,
-        documentSum: order!.totalSum,
-        getCashless: 0,
-        cashless: 0,
-        udsPayment: 0,
-        paymentForm: CheckScheme.cashPaymentType,
-        change: 0,
-        storeKey: store!.refKey,
-        items: order!.items.map((item) {
-          final index = order!.items.indexOf(item);
-          return CreateCheckItemScheme(
-            lineNumber: index + 1,
-            key: index + 1,
-            nomenclatureKey: item.product.nomenclature.refKey,
-            characteristicKey: item.product.characteristic?.refKey,
-            quantity: item.quantity,
-            price: item.price,
-            totalSum: item.totalSum,
-            allSum: item.totalSum,
-            unitKey: item.product.nomenclature.unitKey,
-          );
-        }).toList(),
-      ),
+  Future udsPoints() async {
+    try {
+      await udsClient.postTransaction(
+        data: UDSTransactionScheme(
+          code: udsCode!,
+          cashier: UDSTransactionCashierScheme(
+            externalId: '1075',
+            name: store!.description,
+          ),
+          receipt: UDSTransactionReceiptScheme(
+            total: state.totalSum,
+            cash: state.totalSum - state.udsPoints,
+            points: state.udsPoints,
+          ),
+        ),
+      );
+      emit(CreateCheckUdsTransaction(state));
+    } catch (exc, st) {
+      talker.error(exc, st);
+      emit(CreateCheckUdsFailure(state));
+    }
+  }
+
+  CreateCheckScheme _createScheme() {
+    return CreateCheckScheme(
+      date: DateTime.now(),
+      authorKey: author!.refKey,
+      cashRegisterKey: cashRegister!.refKey,
+      userKey: user!.refKey,
+      sessionKey: workShift!.cashRegisterShiftKey,
+      sessionNumber: 1,
+      udsCustomer: udsCustomer?.user.displayName,
+      udsDiscountCode: udsCode,
+      udsDiscount: 0,
+      comment: null,
+      responsibleKey: user!.refKey,
+      subdivisionKey: subdivision!.refKey,
+      customer: udsCustomer?.user.displayName,
+      employeersDebtKey: state.debtUser?.refKey,
+      cash: state.paymentType == cashPaymentType
+          ? state.totalSum - state.udsPoints
+          : 0,
+      getCash: state.paymentType == cashPaymentType
+          ? state.totalSum - state.udsPoints
+          : 0,
+      documentSum: state.totalSum,
+      getCashless: state.paymentType == cashlessPaymentType
+          ? state.totalSum - state.udsPoints
+          : 0,
+      cashless: state.paymentType == cashlessPaymentType
+          ? state.totalSum - state.udsPoints
+          : 0,
+      udsPayment: state.udsPoints,
+      paymentForm: state.paymentType == cashPaymentType
+          ? CheckScheme.cashPaymentType
+          : CheckScheme.cashlessPaymentType,
+      change: state.change,
+      storeKey: store!.refKey,
+      items: order!.items.map((item) {
+        final index = order!.items.indexOf(item);
+        return CreateCheckItemScheme(
+          lineNumber: index + 1,
+          key: index + 1,
+          nomenclatureKey: item.product.nomenclature.refKey,
+          characteristicKey: item.product.characteristic?.refKey,
+          quantity: item.quantity,
+          price: item.price,
+          totalSum: item.totalSum,
+          allSum: item.totalSum,
+          unitKey: item.product.nomenclature.unitKey,
+        );
+      }).toList(),
     );
-    await client.postCheck(refKey: response.refKey);
   }
 }

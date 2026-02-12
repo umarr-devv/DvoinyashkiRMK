@@ -77,12 +77,24 @@ class _PaymentDialogState extends State<PaymentDialog> {
             widget.rootContext,
             notification: NotificationData(
               type: NotificationType.success,
-              title: 'Чек пробит',
-              description: '',
+              icon: FluentIcons.receipt_24_regular,
+              title: 'Чек ${state.check?.number} пробит',
+              description:
+                  'Чек ${state.check?.number} на сумму ${state.check?.documentSum} успешно пробит',
             ),
           );
           BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
           AutoRouter.of(context).maybePop();
+        } else if (state is CreateCheckUdsTransaction) {
+          ToastService.showToast(
+            widget.rootContext,
+            notification: NotificationData(
+              type: NotificationType.success,
+              title: 'UDS баллы начислены',
+              description:
+                  'Клиенту ${state.check?.udsClient} начислены баллы за покупку',
+            ),
+          );
         }
       },
       child: FDialog.raw(

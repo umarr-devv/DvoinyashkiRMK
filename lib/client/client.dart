@@ -158,7 +158,7 @@ abstract class RestClient {
   Future postWorkShift({@Path('refKey') required String refKey});
 
   @POST('/Document_ЧекККМ')
-  Future<CheckScheme> createCheck({@Body() required CreateCheckScheme data});
+  Future<DetailCheckScheme> createCheck({@Body() required CreateCheckScheme data});
 
   @POST('/Document_ЧекККМ(guid\'{refKey}\')/Post')
   Future postCheck({@Path('refKey') required String refKey});

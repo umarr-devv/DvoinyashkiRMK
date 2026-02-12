@@ -9,9 +9,7 @@ part of 'uds_transaction.dart';
 UDSTransactionScheme _$UDSTransactionSchemeFromJson(
   Map<String, dynamic> json,
 ) => UDSTransactionScheme(
-  participant: UDSTransactionParticipantScheme.fromJson(
-    json['participant'] as Map<String, dynamic>,
-  ),
+  code: json['code'] as String,
   cashier: UDSTransactionCashierScheme.fromJson(
     json['cashier'] as Map<String, dynamic>,
   ),
@@ -23,18 +21,10 @@ UDSTransactionScheme _$UDSTransactionSchemeFromJson(
 Map<String, dynamic> _$UDSTransactionSchemeToJson(
   UDSTransactionScheme instance,
 ) => <String, dynamic>{
-  'participant': instance.participant,
+  'code': instance.code,
   'cashier': instance.cashier,
   'receipt': instance.receipt,
 };
-
-UDSTransactionParticipantScheme _$UDSTransactionParticipantSchemeFromJson(
-  Map<String, dynamic> json,
-) => UDSTransactionParticipantScheme(uid: json['uid'] as String);
-
-Map<String, dynamic> _$UDSTransactionParticipantSchemeToJson(
-  UDSTransactionParticipantScheme instance,
-) => <String, dynamic>{'uid': instance.uid};
 
 UDSTransactionCashierScheme _$UDSTransactionCashierSchemeFromJson(
   Map<String, dynamic> json,
@@ -53,9 +43,9 @@ Map<String, dynamic> _$UDSTransactionCashierSchemeToJson(
 UDSTransactionReceiptScheme _$UDSTransactionReceiptSchemeFromJson(
   Map<String, dynamic> json,
 ) => UDSTransactionReceiptScheme(
-  total: json['total'] as String,
-  cash: json['cash'] as String,
-  points: json['points'] as String,
+  total: (json['total'] as num).toDouble(),
+  cash: (json['cash'] as num).toDouble(),
+  points: (json['points'] as num).toDouble(),
 );
 
 Map<String, dynamic> _$UDSTransactionReceiptSchemeToJson(

@@ -75,6 +75,14 @@ final class CreateCheckLoaded extends CreateCheckState {
   CreateCheckLoaded(super.state) : super.from();
 }
 
+final class CreateCheckUdsTransaction extends CreateCheckState {
+  CreateCheckUdsTransaction(super.state) : super.from();
+}
+
+final class CreateCheckUdsFailure extends CreateCheckState {
+  CreateCheckUdsFailure(super.state) : super.from();
+}
+
 final class CreateCheckFailure extends CreateCheckState {
   CreateCheckFailure(super.state) : super.from();
 }

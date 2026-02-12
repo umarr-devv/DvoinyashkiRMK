@@ -1,5 +1,4 @@
 import 'package:app/models/models.dart';
-import 'package:app/models/uds_customer.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
@@ -13,8 +12,6 @@ abstract class UDSClient {
   @GET('/customers/find')
   Future<UDSCustomerScheme> getCustomer({@Query('code') required String code});
 
-  @POST('/transactions')
-  Future<UDSCustomerScheme> postTransaction({
-    @Body() required UDSTransactionScheme data,
-  });
+  @POST('/operations')
+  Future postTransaction({@Body() required UDSTransactionScheme data});
 }

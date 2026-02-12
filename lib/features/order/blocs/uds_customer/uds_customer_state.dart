@@ -1,20 +1,24 @@
 part of 'uds_customer_cubit.dart';
 
 class UdsCustomerState extends Equatable {
-  const UdsCustomerState({this.customer});
+  const UdsCustomerState({this.customer, this.code});
 
+  final String? code;
   final UDSCustomerScheme? customer;
 
-  UdsCustomerState copyWith(Object? customer) {
+  UdsCustomerState copyWith(Object? code, Object? customer) {
     return UdsCustomerState(
-      customer: undefCompare<UDSCustomerScheme>(customer, this.customer)
+      code: undefCompare<String?>(code, this.code),
+      customer: undefCompare<UDSCustomerScheme?>(customer, this.customer),
     );
   }
 
-  UdsCustomerState.from(UdsCustomerState other) : customer = other.customer;
+  UdsCustomerState.from(UdsCustomerState other)
+    : code = other.code,
+      customer = other.customer;
 
   @override
-  List<Object?> get props => [customer];
+  List<Object?> get props => [code, customer];
 }
 
 final class UdsCustomerInitial extends UdsCustomerState {}
@@ -30,7 +34,6 @@ final class UdsCustomerLoaded extends UdsCustomerState {
 final class UdsCustomerClear extends UdsCustomerState {
   UdsCustomerClear(super.state) : super.from();
 }
-
 
 final class UdsCustomerFailure extends UdsCustomerState {
   UdsCustomerFailure(super.state) : super.from();

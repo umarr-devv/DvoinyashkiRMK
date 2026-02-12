@@ -18,7 +18,7 @@ class UdsCustomerCubit extends Cubit<UdsCustomerState> {
     emit(UdsCustomerLoading(state));
     try {
       final response = await udsClient.getCustomer(code: code);
-      final newState = state.copyWith(response);
+      final newState = state.copyWith(code, response);
       emit(UdsCustomerLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
@@ -27,7 +27,7 @@ class UdsCustomerCubit extends Cubit<UdsCustomerState> {
   }
 
   void clear() {
-    final newState = state.copyWith(undefined);
+    final newState = state.copyWith(undefined, undefined);
     emit(UdsCustomerClear(newState));
   }
 }
