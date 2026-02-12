@@ -4,6 +4,8 @@ import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/blocs/create_check/create_check_cubit.dart';
 import 'package:app/features/order/blocs/uds_customer/uds_customer_cubit.dart';
 import 'package:app/models/models.dart';
+import 'package:app/service/print.dart';
+import 'package:app/service/print_schemes/check.dart';
 import 'package:app/service/toast.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -72,7 +74,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
     return BlocListener<CreateCheckCubit, CreateCheckState>(
       bloc: createCheckCubit,
       listener: (context, state) {
-        if (state is CreateCheckLoaded) {
+        if (state is CreateCheckLoaded && state.check != null) {
           ToastService.showToast(
             widget.rootContext,
             notification: NotificationData(
@@ -84,17 +86,16 @@ class _PaymentDialogState extends State<PaymentDialog> {
             ),
           );
           BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
-          AutoRouter.of(context).maybePop();
-        } else if (state is CreateCheckUdsTransaction) {
-          ToastService.showToast(
-            widget.rootContext,
-            notification: NotificationData(
-              type: NotificationType.success,
-              title: 'UDS баллы начислены',
-              description:
-                  'Клиенту ${state.check?.udsClient} начислены баллы за покупку',
+          PrintService(
+            printerUrl: BlocProvider.of<SettingsCubit>(context).state.printer,
+          ).print(
+            PrintCheckScheme(
+              check: state.check!,
+              dataState: BlocProvider.of<DataCubit>(context).state,
             ),
+            context,
           );
+          AutoRouter.of(context).maybePop();
         }
       },
       child: FDialog.raw(

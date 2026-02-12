@@ -83,8 +83,6 @@ class PrintCheckScheme extends PrintScheme {
                 style: pw.TextStyle(font: font, fontSize: 13),
               ),
             ),
-            pw.SizedBox(height: 128),
-            pw.Text('____'),
           ],
         ),
       ),
