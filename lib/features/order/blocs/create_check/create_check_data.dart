@@ -1,17 +1,24 @@
 part of 'create_check_cubit.dart';
 
+@JsonSerializable()
 class PaymentTypeData extends Equatable {
   const PaymentTypeData({
-    required this.icon,
+     this.icon,
     required this.label,
     required this.isCash,
     this.isDebt = false,
   });
-
-  final IconData icon;
+  
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final IconData? icon;
   final String label;
   final bool isCash;
   final bool isDebt;
+
+    factory PaymentTypeData.fromJson(Map<String, dynamic> json) =>
+      _$PaymentTypeDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentTypeDataToJson(this);
 
   @override
   List<Object?> get props => [label, isCash];

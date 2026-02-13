@@ -42,34 +42,14 @@ class PaymentDialog extends StatefulWidget {
 class _PaymentDialogState extends State<PaymentDialog> {
   final formKey = GlobalKey<FormState>();
 
-  late final UdsCustomerCubit udsCustomerCubit;
-  late final CreateCheckCubit createCheckCubit;
-
-  void initCubits() {
-    final settingsCubit = BlocProvider.of<SettingsCubit>(widget.rootContext);
-    final authCubit = BlocProvider.of<AuthCubit>(widget.rootContext);
-    final sessionCubit = BlocProvider.of<SessionCubit>(widget.rootContext);
-    final orderCubit = BlocProvider.of<OrderCubit>(widget.rootContext);
-
-    udsCustomerCubit = UdsCustomerCubit();
-    createCheckCubit = CreateCheckCubit(
-      settingsCubit,
-      authCubit,
-      sessionCubit,
-      orderCubit,
-      udsCustomerCubit,
-    );
-    createCheckCubit.init();
-  }
-
-  @override
-  void initState() {
-    initCubits();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final UdsCustomerCubit udsCustomerCubit = BlocProvider.of(
+      widget.rootContext,
+    );
+    final CreateCheckCubit createCheckCubit = BlocProvider.of(
+      widget.rootContext,
+    );
     final dataCubit = BlocProvider.of<DataCubit>(widget.rootContext);
     return BlocListener<CreateCheckCubit, CreateCheckState>(
       bloc: createCheckCubit,

@@ -7,8 +7,10 @@ import 'package:equatable/equatable.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+part 'create_check_cubit.g.dart';
 part 'create_check_data.dart';
 part 'create_check_state.dart';
 
