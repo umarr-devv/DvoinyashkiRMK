@@ -54,7 +54,9 @@ class _OrderBasketTitle extends StatelessWidget {
             ),
           ),
           FButton.icon(
-            onPress: () {},
+            onPress: () {
+              ClearBasketDialog(context).show();
+            },
             style: FButtonStyle.destructive(),
             child: Icon(FIcons.trash),
           ),
