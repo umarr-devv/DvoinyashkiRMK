@@ -51,7 +51,7 @@ class DetailSessionCubit extends Cubit<DetailSessionState> {
       WarehouseItemListScheme? endWarehouseItems;
       CashListScheme? endCash;
       if (workShift.workShiftEnd != null) {
-        final workShiftEnd = workShift.workShiftEnd!.add(Duration(minutes: 1));
+        final workShiftEnd = workShift.workShiftEnd!.add(Duration(minutes: 10));
         endWarehouseItems = await client.getWarehouseItemsWithPeriod(
           period: workShiftEnd,
           fullPath: buildODataQuery(warehouseItemsParams),

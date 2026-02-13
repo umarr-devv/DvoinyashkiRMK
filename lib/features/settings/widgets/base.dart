@@ -79,6 +79,9 @@ class _CashRegisterSelect extends StatelessWidget {
                       BlocProvider.of<WithdrawsCubit>(context).update();
                       BlocProvider.of<StatisticCubit>(context).update();
                       BlocProvider.of<WorkShiftsCubit>(context).update();
+                      BlocProvider.of<SessionCubit>(
+                        context,
+                      ).getCurrentWorkShift();
                     }
                   },
                 ),
