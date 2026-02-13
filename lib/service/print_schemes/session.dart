@@ -1,6 +1,5 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/work_time/blocs/detail_session/detail_session_cubit.dart';
-import 'package:app/models/models.dart';
 import 'package:app/service/print.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;

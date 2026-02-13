@@ -4,7 +4,7 @@ import 'package:app/app.dart';
 import 'package:app/client/clients.dart';
 import 'package:app/data/repositories/repositories.dart';
 import 'package:app/service/service.dart';
-import 'package:app/windows/customer.dart';
+import 'package:app/windows/windows.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,7 +21,7 @@ Future<void> main(List<String> args) async {
       initScale();
       final windowController = await WindowController.fromCurrentEngine();
       if (windowController.arguments == 'customer') {
-        await CustomerWindow.initWindow();
+        await customerWindowInit();
         runApp(CustomerWindow());
         return;
       }
