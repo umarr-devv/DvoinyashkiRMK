@@ -20,4 +20,10 @@ class WindowService {
       await window!.show();
     }
   }
+
+  Future<void> sendData(String method, dynamic payload) async {
+    if (window == null) return;
+    final channel = WindowMethodChannel('channel');
+    await channel.invokeMethod(method, payload);
+  }
 }

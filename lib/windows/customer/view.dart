@@ -1,8 +1,6 @@
-import 'package:app/service/service.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:scaled_app/scaled_app.dart';
 
 class CustomerWindow extends StatefulWidget {
@@ -13,20 +11,15 @@ class CustomerWindow extends StatefulWidget {
 }
 
 class _CustomerWindowState extends State<CustomerWindow> {
-  String text = 'default';
-
-  final channel = WindowMethodChannel('my_channel');
+  final channel = WindowMethodChannel('channel');
 
   @override
   void initState() {
     super.initState();
 
     channel.setMethodCallHandler((call) async {
-      setState(() {
-        text = call.method;
-      });
+      print(call.method);
     });
-    print('ready');
     channel.invokeMethod('ready');
   }
 
@@ -38,7 +31,7 @@ class _CustomerWindowState extends State<CustomerWindow> {
         theme: lightTheme.toTheme(),
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
-          return Scaffold(body: Text(text));
+          return Scaffold();
         },
       ),
     );

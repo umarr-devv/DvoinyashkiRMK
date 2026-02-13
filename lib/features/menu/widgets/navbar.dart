@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:app/blocs/blocs.dart';
 import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/dialogs/dialogs.dart';
+import 'package:app/features/menu/widgets/customer_window.dart';
 import 'package:app/models/user.dart';
 import 'package:app/service/service.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -25,6 +26,7 @@ class MenuNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: _NavBarTabs()),
+          CustomerWindowOperation(),
           _MenuNavBarUser(),
         ],
       ),
