@@ -9,6 +9,7 @@ import 'package:app/service/print_schemes/check.dart';
 import 'package:app/service/toast.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
+import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,34 @@ class _PaymentDialogState extends State<PaymentDialog> {
     return BlocListener<CreateCheckCubit, CreateCheckState>(
       bloc: createCheckCubit,
       listener: (context, state) {
-        if (state is CreateCheckLoaded && state.check != null) {
+        if (state is CreateCheckFailure) {
+          ErrorDialog(
+            context,
+            label: 'Сетевая ошибка',
+            description: 'Произашла сетевая ошибка, 1C сервер не отвечает',
+          ).show();
+        } else if (state is CreateCheckUdsFailure) {
+          ErrorDialog(
+            context,
+            label: 'Ошибка UDS',
+            description: 'Переотсканируйте QR-код клиента в приложении UDS',
+          ).show();
+          udsCustomerCubit.clear();
+          createCheckCubit.init();
+          createCheckCubit.setUdsPoints(0);
+        } else if (state is CreateCheckSettingsFailure) {
+          ErrorDialog(
+            context,
+            label: 'Ошибка настроек',
+            description: 'Укажите настройки магазина в разделе "Настройки"',
+          ).show();
+        } else if (state is CreateCheckSessionFailure) {
+          ErrorDialog(
+            context,
+            label: 'Ошибка смены',
+            description: 'Необходимо начать смену',
+          ).show();
+        } else if (state is CreateCheckLoaded && state.check != null) {
           ToastService.showToast(
             widget.rootContext,
             notification: NotificationData(
@@ -65,7 +93,9 @@ class _PaymentDialogState extends State<PaymentDialog> {
                   'Чек ${state.check?.number} на сумму ${state.check?.documentSum} успешно пробит',
             ),
           );
+          udsCustomerCubit.clear();
           BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
+          BlocProvider.of<ChecksCubit>(widget.rootContext).update();
           PrintService(
             printerUrl: BlocProvider.of<SettingsCubit>(context).state.printer,
           ).print(
@@ -416,10 +446,8 @@ class _CustomerSelect extends StatelessWidget {
           builder: (context, settingsState) {
             if (state.paymentType == debtPaymentType) {
               return _DebtCustomerSelect();
-            } else if (settingsState.store?.udsUID.isNotEmpty ?? false) {
-              return _UdsCustomerSelect();
             }
-            return SizedBox();
+            return _UdsCustomerSelect();
           },
         );
       },
@@ -615,14 +643,6 @@ class _UdsCustomerPoints extends StatefulWidget {
 }
 
 class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
-  final controller = TextEditingController(text: '0.00');
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<UdsCustomerCubit>(context);
@@ -710,7 +730,7 @@ class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
                       return null;
                     },
                     control: FTextFieldControl.managed(
-                      controller: controller,
+                      initial: TextEditingValue(text: '0.00'),
                       onChange: (value) {
                         if (double.tryParse(value.text) != null) {
                           BlocProvider.of<CreateCheckCubit>(

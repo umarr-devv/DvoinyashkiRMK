@@ -1,7 +1,9 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/client/clients.dart';
+import 'package:app/core/consts/consts.dart';
 import 'package:app/features/order/blocs/blocs.dart';
 import 'package:app/models/models.dart';
+import 'package:app/utils/utils.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -76,21 +78,39 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
         author == null ||
         store == null ||
         subdivision == null ||
-        user == null ||
-        workShift == null ||
-        order == null) {
+        user == null) {
+      emit(CreateCheckSettingsFailure(state));
+      return;
+    }
+    if (workShift == null || order == null) {
+      emit(CreateCheckSessionFailure(state));
       return;
     }
     emit(CreateCheckLoading(state));
     try {
       final CreateCheckScheme data = _createCashScheme();
       final check = await client.createCheck(data: data);
-      await client.postCheck(refKey: check.refKey);
-      final newState = state.copyWith(check: check);
-      emit(CreateCheckLoaded(newState));
-      if (udsCode != null || udsCustomer != null || store!.udsUID.isNotEmpty) {
-        await udsPoints();
+
+      if (udsCode != null || udsCustomer != null) {
+        try {
+          await udsPoints();
+          emit(CreateCheckUdsTransaction(state));
+        } catch (exc) {
+          await client.deleteCheck(refKey: check.refKey);
+          emit(CreateCheckUdsFailure(state));
+          return;
+        }
       }
+
+      await client.postCheck(refKey: check.refKey);
+      final newState = state.copyWith(
+        check: check,
+        debtUser: undefined,
+        udsPoints: 0,
+        totalSum: 0,
+        customerPay: 0,
+      );
+      emit(CreateCheckLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
       emit(CreateCheckFailure(state));
@@ -98,26 +118,22 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
   }
 
   Future udsPoints() async {
-    try {
-      await udsClient.postTransaction(
-        data: UDSTransactionScheme(
-          code: udsCode!,
-          cashier: UDSTransactionCashierScheme(
-            externalId: store!.udsUID,
-            name: store!.description,
-          ),
-          receipt: UDSTransactionReceiptScheme(
-            total: state.totalSum,
-            cash: state.totalSum - state.udsPoints,
-            points: state.udsPoints,
-          ),
+    await udsClient.postTransaction(
+      data: UDSTransactionScheme(
+        code: udsCode!,
+        cashier: UDSTransactionCashierScheme(
+          externalId: (store?.udsUID.isNotEmpty ?? false)
+              ? store!.udsUID
+              : defaultUdsExternalId,
+          name: store?.description ?? '',
         ),
-      );
-      emit(CreateCheckUdsTransaction(state));
-    } catch (exc, st) {
-      talker.error(exc, st);
-      emit(CreateCheckUdsFailure(state));
-    }
+        receipt: UDSTransactionReceiptScheme(
+          total: state.totalSum,
+          cash: state.totalSum - state.udsPoints,
+          points: state.udsPoints,
+        ),
+      ),
+    );
   }
 
   CreateCheckScheme _createCashScheme() {

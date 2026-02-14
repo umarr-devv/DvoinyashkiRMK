@@ -200,4 +200,7 @@ abstract class RestClient {
   Future<DetailWorkShiftScheme> getWorkShift({
     @Path('ref_key') required String refKey,
   });
+
+  @DELETE('/Document_ЧекККМ(guid\'{ref_key}\')')
+  Future deleteCheck({@Path('ref_key') required String refKey});
 }

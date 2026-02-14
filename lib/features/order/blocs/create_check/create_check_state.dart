@@ -28,7 +28,7 @@ class CreateCheckState extends Equatable {
     double? totalSum,
     double? customerPay,
     double? udsPoints,
-    UserScheme? debtUser,
+    Object? debtUser,
     DetailCheckScheme? check,
   }) {
     return CreateCheckState(
@@ -36,7 +36,7 @@ class CreateCheckState extends Equatable {
       totalSum: totalSum ?? this.totalSum,
       customerPay: customerPay ?? this.customerPay,
       udsPoints: udsPoints ?? this.udsPoints,
-      debtUser: debtUser ?? this.debtUser,
+      debtUser: undefCompare<UserScheme?>(debtUser, this.debtUser),
       check: check ?? this.check,
     );
   }
@@ -53,7 +53,6 @@ class CreateCheckState extends Equatable {
       _$CreateCheckStateFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreateCheckStateToJson(this);
-
 
   @override
   List<Object?> get props => [
@@ -88,6 +87,14 @@ final class CreateCheckUdsTransaction extends CreateCheckState {
 
 final class CreateCheckUdsFailure extends CreateCheckState {
   CreateCheckUdsFailure(super.state) : super.from();
+}
+
+final class CreateCheckSettingsFailure extends CreateCheckState {
+  CreateCheckSettingsFailure(super.state) : super.from();
+}
+
+final class CreateCheckSessionFailure extends CreateCheckState {
+  CreateCheckSessionFailure(super.state) : super.from();
 }
 
 final class CreateCheckFailure extends CreateCheckState {
