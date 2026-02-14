@@ -120,6 +120,7 @@ class CheckItemScheme {
     required this.quantity,
     required this.price,
     required this.itemSum,
+    required this.unitKey,
   });
 
   @JsonKey(name: 'Номенклатура_Key')
@@ -136,6 +137,9 @@ class CheckItemScheme {
 
   @JsonKey(name: 'Сумма')
   final double itemSum;
+
+  @JsonKey(name: 'ЕдиницаИзмерения')
+  final String unitKey;
 
   factory CheckItemScheme.fromJson(Map<String, dynamic> json) =>
       _$CheckItemSchemeFromJson(json);

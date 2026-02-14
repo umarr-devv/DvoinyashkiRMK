@@ -161,8 +161,14 @@ abstract class RestClient {
     @Body() required CreateCheckScheme data,
   });
 
+  @POST('/Document_ЧекККМВозврат')
+  Future<CheckReturnScheme> createCheckReturn({@Body() required CreateReturnCheckScheme data});
+
   @POST('/Document_ЧекККМ(guid\'{refKey}\')/Post')
   Future postCheck({@Path('refKey') required String refKey});
+
+  @POST('/Document_ЧекККМВозврат(guid\'{refKey}\')/Post')
+  Future postCheckReturn({@Path('refKey') required String refKey});
 
   @POST('/Document_ВыемкаНаличных')
   Future<WithdrawScheme> createWithdraw({

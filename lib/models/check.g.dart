@@ -66,6 +66,7 @@ CheckItemScheme _$CheckItemSchemeFromJson(Map<String, dynamic> json) =>
       quantity: (json['Количество'] as num).toDouble(),
       price: (json['Цена'] as num).toDouble(),
       itemSum: (json['Сумма'] as num).toDouble(),
+      unitKey: json['ЕдиницаИзмерения'] as String,
     );
 
 Map<String, dynamic> _$CheckItemSchemeToJson(CheckItemScheme instance) =>
@@ -75,6 +76,7 @@ Map<String, dynamic> _$CheckItemSchemeToJson(CheckItemScheme instance) =>
       'Количество': instance.quantity,
       'Цена': instance.price,
       'Сумма': instance.itemSum,
+      'ЕдиницаИзмерения': instance.unitKey,
     };
 
 DetailCheckScheme _$DetailCheckSchemeFromJson(Map<String, dynamic> json) =>

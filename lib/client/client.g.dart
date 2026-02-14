@@ -806,6 +806,36 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<CheckReturnScheme> createCheckReturn({
+    required CreateReturnCheckScheme data,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _options = _setStreamType<CheckReturnScheme>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/Document_ЧекККМВозврат',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late CheckReturnScheme _value;
+    try {
+      _value = CheckReturnScheme.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<dynamic> postCheck({required String refKey}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -816,6 +846,27 @@ class _RestClient implements RestClient {
           .compose(
             _dio.options,
             '/Document_ЧекККМ(guid\'${refKey}\')/Post',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> postCheckReturn({required String refKey}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<dynamic>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/Document_ЧекККМВозврат(guid\'${refKey}\')/Post',
             queryParameters: queryParameters,
             data: _data,
           )

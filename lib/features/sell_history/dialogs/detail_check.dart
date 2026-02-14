@@ -1,6 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/core/consts/consts.dart';
 import 'package:app/features/sell_history/blocs/detail_check/detail_check_cubit.dart';
+import 'package:app/features/sell_history/dialogs/dialogs.dart';
 import 'package:app/models/models.dart';
 import 'package:app/service/print.dart';
 import 'package:app/service/print_schemes/check.dart';
@@ -203,7 +204,9 @@ class DetailCheckDialog {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         FButton(
-          onPress: () {},
+          onPress: () {
+            ReturnCheckDialog(rootContext, check: check).show();
+          },
           prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
           style: FButtonStyle.secondary(),
           child: Text('Возврат'),
