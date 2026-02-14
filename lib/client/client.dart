@@ -162,7 +162,9 @@ abstract class RestClient {
   });
 
   @POST('/Document_ЧекККМВозврат')
-  Future<CheckReturnScheme> createCheckReturn({@Body() required CreateReturnCheckScheme data});
+  Future<CheckReturnScheme> createCheckReturn({
+    @Body() required CreateReturnCheckScheme data,
+  });
 
   @POST('/Document_ЧекККМ(guid\'{refKey}\')/Post')
   Future postCheck({@Path('refKey') required String refKey});
@@ -209,4 +211,12 @@ abstract class RestClient {
 
   @DELETE('/Document_ЧекККМ(guid\'{ref_key}\')')
   Future deleteCheck({@Path('ref_key') required String refKey});
+
+  @POST('/Document_ЗаказНаПеремещение')
+  Future<MovementScheme> createMovement({
+    @Body() required CreateMovementScheme data,
+  });
+
+  @POST('/Document_ЗаказНаПеремещение(guid\'{ref_key}\')/Post()')
+  Future postMovement();
 }
