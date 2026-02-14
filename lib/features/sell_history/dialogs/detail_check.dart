@@ -45,12 +45,15 @@ class DetailCheckDialog {
         if (state is DetailCheckLoading) {
           return Center(child: FCircularProgress());
         } else if (state.check != null) {
-          return Container(
+          return SingleChildScrollView(
             padding: const EdgeInsets.all(12),
             child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 title(state.check!),
-                Expanded(child: itemsList(state.check!)),
+                info(state.check!),
+                itemsList(state.check!),
                 footer(state.check!),
               ],
             ),
@@ -83,41 +86,112 @@ class DetailCheckDialog {
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, state) {
-        return Material(
-          type: MaterialType.transparency,
-          child: DataTable2(
-            dividerThickness: 0,
-            columns: [
-              DataColumn2(label: Text('Название'), fixedWidth: 320),
-              DataColumn2(label: Text('Тип')),
-              DataColumn2(label: Text('Цена'), numeric: true),
-              DataColumn2(label: Text('Кол-во'), numeric: true),
-              DataColumn2(label: Text('Сумма'), numeric: true),
-            ],
-            rows: check.items.map((i) {
-              final item = state.products.firstWhereLogTypeOrNull(
-                (k) =>
-                    k.nomenclature.refKey == i.nomenclatureKey &&
-                    (k.characteristic?.refKey == i.characteriticKey ||
-                        i.characteriticKey == emptyRefKey),
-              );
-              final index = check.items.indexOf(i);
-              return DataRow2(
-                color: WidgetStatePropertyAll(
-                  index.isOdd
-                      ? theme.custom.rowOddColor
-                      : theme.custom.rowEvenColor,
+        return FAccordion(
+          children: [
+            FAccordionItem(
+              title: Text('Запасы'),
+              child: Material(
+                type: MaterialType.transparency,
+                child: SizedBox(
+                  height: 400,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    columns: [
+                      DataColumn2(label: Text('Название'), fixedWidth: 320),
+                      DataColumn2(label: Text('Тип')),
+                      DataColumn2(label: Text('Цена'), numeric: true),
+                      DataColumn2(label: Text('Кол-во'), numeric: true),
+                      DataColumn2(label: Text('Сумма'), numeric: true),
+                    ],
+                    rows: check.items.map((i) {
+                      final item = state.products.firstWhereLogTypeOrNull(
+                        (k) =>
+                            k.nomenclature.refKey == i.nomenclatureKey &&
+                            (k.characteristic?.refKey == i.characteriticKey ||
+                                i.characteriticKey == emptyRefKey),
+                      );
+                      final index = check.items.indexOf(i);
+                      return DataRow2(
+                        color: WidgetStatePropertyAll(
+                          index.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor,
+                        ),
+                        cells: [
+                          DataCell(Text(item?.nomenclature.name ?? '')),
+                          DataCell(
+                            Text(item?.characteristic?.description ?? ''),
+                          ),
+                          DataCell(Text(i.price.toStringAsFixed(2))),
+                          DataCell(Text(i.quantity.toStringAsFixed(2))),
+                          DataCell(Text(i.itemSum.toStringAsFixed(2))),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
-                cells: [
-                  DataCell(Text(item?.nomenclature.name ?? '')),
-                  DataCell(Text(item?.characteristic?.description ?? '')),
-                  DataCell(Text(i.price.toStringAsFixed(2))),
-                  DataCell(Text(i.quantity.toStringAsFixed(2))),
-                  DataCell(Text(i.itemSum.toStringAsFixed(2))),
-                ],
-              );
-            }).toList(),
-          ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget info(DetailCheckScheme check) {
+    return BlocBuilder<DataCubit, DataState>(
+      bloc: BlocProvider.of<DataCubit>(rootContext),
+      builder: (context, state) {
+        final user = state.users.firstWhereLogTypeOrNull(
+          (i) => i.refKey == check.userKey,
+        );
+        final debtUser = state.users.firstWhereLogTypeOrNull(
+          (i) => i.refKey == check.employeerDebtKey,
+        );
+        return Column(
+          spacing: 8,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FLabel(
+              axis: Axis.vertical,
+              label: Text('Сумма'),
+              child: Text(check.documentSum.toStringAsFixed(2)),
+            ),
+            FLabel(
+              axis: Axis.vertical,
+              label: Text('Тип оплаты'),
+              child: Text(check.paymentType),
+            ),
+            FLabel(
+              axis: Axis.vertical,
+              label: Text('Статус'),
+              child: Text(check.status),
+            ),
+
+            FLabel(
+              axis: Axis.vertical,
+              label: Text('Кассир'),
+              child: Text(user?.description ?? ''),
+            ),
+
+            if (check.udsClient.isNotEmpty)
+              FLabel(
+                axis: Axis.vertical,
+                label: Text('UDS-клиент'),
+                child: Text(check.udsClient),
+              ),
+            if (debtUser != null)
+              FLabel(
+                axis: Axis.vertical,
+                label: Text('Сотрудник (в Долг)'),
+                child: Text(debtUser.description),
+              ),
+            FLabel(
+              axis: Axis.vertical,
+              label: Text('Дата'),
+              child: Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
+            ),
+          ],
         );
       },
     );
@@ -126,45 +200,13 @@ class DetailCheckDialog {
   Widget footer(DetailCheckScheme check) {
     return Row(
       spacing: 12,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        FLabel(
-          axis: Axis.vertical,
-          label: Text('Сумма'),
-          child: Text(check.documentSum.toStringAsFixed(2)),
-        ),
-        FLabel(
-          axis: Axis.vertical,
-          label: Text('Тип оплаты'),
-          child: Text(check.paymentType),
-        ),
-        FLabel(
-          axis: Axis.vertical,
-          label: Text('Статус'),
-          child: Text(check.status),
-        ),
-        BlocBuilder<DataCubit, DataState>(
-          bloc: BlocProvider.of<DataCubit>(rootContext),
-          builder: (context, state) {
-            final user = state.users.firstWhereLogTypeOrNull(
-              (i) => i.refKey == check.userKey,
-            );
-            return FLabel(
-              axis: Axis.vertical,
-              label: Text('Кассир'),
-              child: Text(user?.description ?? ''),
-            );
-          },
-        ),
-        FLabel(
-          axis: Axis.vertical,
-          label: Text('UDS-клиент'),
-          child: Text(check.udsClient),
-        ),
-        FLabel(
-          axis: Axis.vertical,
-          label: Text('Дата'),
-          child: Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
+        FButton(
+          onPress: () {},
+          prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
+          style: FButtonStyle.secondary(),
+          child: Text('Возврат'),
         ),
         FButton(
           onPress: () {
@@ -176,6 +218,8 @@ class DetailCheckDialog {
               rootContext,
             );
           },
+          prefix: Icon(FluentIcons.print_24_regular),
+          style: FButtonStyle.outline(),
           child: Text('Печать'),
         ),
       ],

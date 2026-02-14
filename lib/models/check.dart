@@ -28,6 +28,7 @@ class CheckScheme extends Equatable {
     required this.documentSum,
     required this.paymentType,
     required this.itemsAsString,
+    required this.employeerDebtKey,
   });
 
   @JsonKey(name: 'Ref_Key')
@@ -95,6 +96,9 @@ class CheckScheme extends Equatable {
 
   @JsonKey(name: 'Состав')
   final String? itemsAsString;
+
+  @JsonKey(name: 'СотрудникДолг_Key')
+  final String? employeerDebtKey;
 
   static String get cashPaymentType => 'Наличные';
   static String get cashlessPaymentType => 'Безналичные';
@@ -165,6 +169,7 @@ class DetailCheckScheme extends CheckScheme {
     required super.paymentType,
     required super.itemsAsString,
     required super.structureUnitKey,
+    required super.employeerDebtKey,
   });
 
   @JsonKey(name: 'Запасы')

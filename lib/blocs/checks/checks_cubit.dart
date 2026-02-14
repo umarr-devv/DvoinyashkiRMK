@@ -29,7 +29,7 @@ class ChecksCubit extends HydratedCubit<ChecksState> {
         '\$select':
             "Ref_Key,Number,Date,КассаККМ_Key,Кассир_Key,КассоваяСмена_Key,КлиентUDS,КодСкидкиUDS,СкидкаUDS,СуммаОплатUDS,"
             "Наличные,ОбменИННКассира,ОбменМагазин,ПолученоНаличными,ПолученоЭлектронно,Сдача,Статус,СуммаВключаетНДС,СуммаДокумента,"
-            "ФормаОплаты,СтруктурнаяЕдиница_Key",
+            "ФормаОплаты,СтруктурнаяЕдиница_Key,СотрудникДолг_Key",
         '\$top': state.limit.toString(),
         '\$skip': state.offset.toString(),
         '\$filter': 'КассаККМ_Key eq guid\'${cashRegister!.refKey}\'',

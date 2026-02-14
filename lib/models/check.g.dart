@@ -29,6 +29,7 @@ CheckScheme _$CheckSchemeFromJson(Map<String, dynamic> json) => CheckScheme(
   documentSum: (json['СуммаДокумента'] as num).toDouble(),
   paymentType: json['ФормаОплаты'] as String,
   itemsAsString: json['Состав'] as String?,
+  employeerDebtKey: json['СотрудникДолг_Key'] as String?,
 );
 
 Map<String, dynamic> _$CheckSchemeToJson(CheckScheme instance) =>
@@ -55,6 +56,7 @@ Map<String, dynamic> _$CheckSchemeToJson(CheckScheme instance) =>
       'СуммаДокумента': instance.documentSum,
       'ФормаОплаты': instance.paymentType,
       'Состав': instance.itemsAsString,
+      'СотрудникДолг_Key': instance.employeerDebtKey,
     };
 
 CheckItemScheme _$CheckItemSchemeFromJson(Map<String, dynamic> json) =>
@@ -102,6 +104,7 @@ DetailCheckScheme _$DetailCheckSchemeFromJson(Map<String, dynamic> json) =>
       paymentType: json['ФормаОплаты'] as String,
       itemsAsString: json['Состав'] as String?,
       structureUnitKey: json['СтруктурнаяЕдиница_Key'] as String,
+      employeerDebtKey: json['СотрудникДолг_Key'] as String?,
     );
 
 Map<String, dynamic> _$DetailCheckSchemeToJson(DetailCheckScheme instance) =>
@@ -128,6 +131,7 @@ Map<String, dynamic> _$DetailCheckSchemeToJson(DetailCheckScheme instance) =>
       'СуммаДокумента': instance.documentSum,
       'ФормаОплаты': instance.paymentType,
       'Состав': instance.itemsAsString,
+      'СотрудникДолг_Key': instance.employeerDebtKey,
       'Запасы': instance.items,
     };
 
