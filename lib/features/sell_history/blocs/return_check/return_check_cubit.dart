@@ -57,6 +57,7 @@ class ReturnCheckCubit extends Cubit<ReturnCheckState> {
           storeKey: store!.refKey,
           userKey: user!.refKey,
           totalSum: state.totalSum,
+          cashPayment: state.totalSum,
           items: items.map((i) {
             final index = items.indexOf(i);
             return CreateReturnCheckItemScheme(
@@ -97,7 +98,7 @@ class ReturnCheckCubit extends Cubit<ReturnCheckState> {
         nomenclatureKey: item.nomenclatureKey,
         characteristicKey: item.characteriticKey,
         price: item.price,
-        quantity: item.quantity,
+        quantity: 0,
         unitKey: item.unitKey,
       );
     }).toList();

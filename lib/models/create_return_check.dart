@@ -15,6 +15,11 @@ class CreateReturnCheckScheme {
     required this.totalSum,
     required this.items,
     required this.userKey,
+    required this.cashPayment,
+    this.movementDelete = true,
+    this.includeNds = true,
+    this.sessionNumber = 1,
+    this.priceKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c'
   });
 
   @JsonKey(name: 'Date')
@@ -46,6 +51,21 @@ class CreateReturnCheckScheme {
 
   @JsonKey(name: 'Запасы')
   final List<CreateReturnCheckItemScheme> items;
+
+  @JsonKey(name: 'ДвиженияПоЗапасамУдалять')
+  final bool movementDelete;
+
+  @JsonKey(name: 'НДСВключатьВСтоимость')
+  final bool includeNds;
+
+  @JsonKey(name: 'НомерСменыККМ')
+  final int sessionNumber;
+
+  @JsonKey(name: 'ПолученоНаличными')
+  final double cashPayment;
+
+  @JsonKey(name: 'ВидЦен_Key')
+  final String priceKey;
 
   factory CreateReturnCheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CreateReturnCheckSchemeFromJson(json);

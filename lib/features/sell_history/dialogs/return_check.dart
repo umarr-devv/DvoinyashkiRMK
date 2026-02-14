@@ -135,8 +135,17 @@ class ReturnCheckDialog {
         return Opacity(
           opacity: state.notEmptyItems.isNotEmpty ? 1 : 0.5,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              FLabel(
+                label: Text('Сумма возврата'),
+                axis: Axis.vertical,
+                child: Text(
+                  NumberFormat().format(state.totalSum),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                ),
+              ),
+
               FButton(
                 onPress: () {
                   if (state.notEmptyItems.isNotEmpty &&
