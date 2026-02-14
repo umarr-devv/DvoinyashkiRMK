@@ -45,6 +45,9 @@ class ProductData extends Equatable {
     }
   }
 
+  String get uniqueName =>
+      '${nomenclature.description} ${characteristic?.description ?? ""}';
+
   String get uniqueId =>
       nomenclature.refKey + (characteristic?.refKey ?? emptyRefKey);
 

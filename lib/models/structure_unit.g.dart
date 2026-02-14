@@ -14,6 +14,7 @@ StructureUnitScheme _$StructureUnitSchemeFromJson(Map<String, dynamic> json) =>
       code: json['Code'] as String,
       type: json['Тип'] as String,
       subdivisionKey: json['Подразделение_Key'] as String,
+      typeDetail: json['ТипСтруктурнойЕдиницы'] as String?,
     );
 
 Map<String, dynamic> _$StructureUnitSchemeToJson(
@@ -24,6 +25,7 @@ Map<String, dynamic> _$StructureUnitSchemeToJson(
   'UDS_UID': instance.udsUID,
   'Code': instance.code,
   'Тип': instance.type,
+  'ТипСтруктурнойЕдиницы': instance.typeDetail,
   'Подразделение_Key': instance.subdivisionKey,
 };
 

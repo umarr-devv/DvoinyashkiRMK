@@ -12,6 +12,7 @@ class StructureUnitScheme extends Equatable {
     required this.code,
     required this.type,
     required this.subdivisionKey,
+    required this.typeDetail,
   });
 
   @JsonKey(name: 'Ref_Key')
@@ -28,6 +29,9 @@ class StructureUnitScheme extends Equatable {
 
   @JsonKey(name: 'Тип')
   final String type;
+
+  @JsonKey(name: 'ТипСтруктурнойЕдиницы')
+  final String? typeDetail;
 
   @JsonKey(name: 'Подразделение_Key')
   final String subdivisionKey;

@@ -97,7 +97,7 @@ abstract class RestClient {
   @GET('/Catalog_СтруктурныеЕдиницы')
   Future<StructureUnitListScheme> getStructureUnits({
     @Query('\$select')
-    String select = 'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key',
+    String select = 'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key,ТипСтруктурнойЕдиницы',
     @Query('\$format') String format = 'json',
   });
 

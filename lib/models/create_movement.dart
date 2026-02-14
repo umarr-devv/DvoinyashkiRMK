@@ -8,12 +8,14 @@ class CreateMovementScheme {
     required this.date,
     required this.authorKey,
     required this.userKey,
-    required this.statusKey,
+    this.statusKey = 'e1299b34-8553-11ee-a94d-f02f741f28ff',
     required this.reserveStructureUnitKey,
     this.operationKey = '4079c82a-4a0d-11ed-a839-18d6c704b66b',
     required this.storeKey,
     required this.movementDate,
     required this.items,
+    required this.orderSum,
+    required this.documentSum
   });
   @JsonKey(name: 'Date')
   final DateTime date;
@@ -28,7 +30,7 @@ class CreateMovementScheme {
   final String statusKey;
 
   @JsonKey(name: 'СтруктурнаяЕдиницаРезерв_Key')
-  final String reserveStructureUnitKey;
+  final String? reserveStructureUnitKey;
 
   @JsonKey(name: 'ХозяйственнаяОперация_Key')
   final String operationKey;
@@ -38,6 +40,13 @@ class CreateMovementScheme {
 
   @JsonKey(name: 'ДатаПеремещения')
   final DateTime movementDate;
+
+  @JsonKey(name: 'СуммаЗаказа')
+  final double orderSum;
+
+    @JsonKey(name: 'СуммаДокумента')
+  final double documentSum;
+
 
   @JsonKey(name: 'Запасы')
   final List<CreateMovementItemScheme> items;
@@ -56,6 +65,7 @@ class CreateMovementItemScheme {
     required this.characteristicKey,
     required this.unitKey,
     required this.quantity,
+    this.unitType = "StandardODATA.Catalog_КлассификаторЕдиницИзмерения",
     required this.price,
     required this.totalSum,
   });
@@ -67,10 +77,13 @@ class CreateMovementItemScheme {
   final String nomenclatureKey;
 
   @JsonKey(name: 'Характеристика_Key')
-  final String characteristicKey;
+  final String? characteristicKey;
+
+  @JsonKey(name: 'ЕдиницаИзмерения_Type')
+  final String unitType;
 
   @JsonKey(name: 'ЕдиницаИзмерения')
-  final String unitKey;
+  final String? unitKey;
 
   @JsonKey(name: 'Количество')
   final double quantity;

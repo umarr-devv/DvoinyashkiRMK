@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/movement/blocs/create_movement/create_movement_cubit.dart';
 import 'package:app/features/movement/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,20 @@ class _MovementScreenState extends State<MovementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FScaffold(
-      header: MovementHeader(),
-      footer: MovementPagination(),
-      child: MovementTable(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CreateMovementCubit(
+            BlocProvider.of<SettingsCubit>(context),
+            BlocProvider.of<AuthCubit>(context),
+          ),
+        ),
+      ],
+      child: FScaffold(
+        header: MovementHeader(),
+        footer: MovementPagination(),
+        child: MovementTable(),
+      ),
     );
   }
 }

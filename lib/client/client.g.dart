@@ -441,7 +441,8 @@ class _RestClient implements RestClient {
 
   @override
   Future<StructureUnitListScheme> getStructureUnits({
-    String select = 'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key',
+    String select =
+        'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key,ТипСтруктурнойЕдиницы',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
