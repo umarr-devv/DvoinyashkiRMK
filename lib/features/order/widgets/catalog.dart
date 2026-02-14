@@ -41,7 +41,7 @@ class _OrderCatalogSearchBar extends StatelessWidget {
       child: FTextField(
         control: FTextFieldControl.managed(
           onChange: (value) {
-            productSeachQuery.value = value.text;
+            productSeachQueryDebounce.setValue(value.text);
           },
         ),
         prefixBuilder: (context, style, states) => Padding(
@@ -201,10 +201,6 @@ class _CatalogGrid extends StatelessWidget {
                 i.nomenclature.categoryKey ==
                 selectedCategory!.category!.refKey,
           )
-          .toList();
-    } else if (selectedCategory?.all ?? false) {
-      selectedCategoryItems = selectedCategoryItems
-          .where((i) => pinned.contains(i.nomenclature.categoryKey))
           .toList();
     } else if (selectedCategory?.favorite ?? false) {
       selectedCategoryItems = selectedCategoryItems

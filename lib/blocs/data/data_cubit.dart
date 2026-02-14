@@ -27,6 +27,11 @@ class DataCubit extends HydratedCubit<DataState> {
         DateTime.now().difference(state.update!) > Duration(hours: 12)) {
       await forceUpdate();
     }
+
+    if (state.update == null ||
+        DateTime.now().difference(state.update!) > Duration(days: 7)) {
+      await forceUpdateImages();
+    }
   }
 
   Future forceUpdate() async {
@@ -67,23 +72,24 @@ class DataCubit extends HydratedCubit<DataState> {
         update: DateTime.now(),
       );
       emit(DataLoaded(newState));
-      await updateAlt();
     } catch (exc, st) {
       talker.error(exc, st);
       emit(DataFailure(state));
     }
   }
 
-  Future updateAlt() async {
+  Future forceUpdateImages() async {
     emit(DataAltLoading(state));
     final response = await client.getProductImages();
 
-    final Map<String,String> productImages = {};
+    final Map<String, String> productImages = {};
 
-    for (final i in response.productImages){
-      
-      if (i.image?.isNotEmpty ?? false){
-        final filePath = await saveImageToCache(i.imageBytes!, i.nomenclatureKey);
+    for (final i in response.productImages) {
+      if (i.image?.isNotEmpty ?? false) {
+        final filePath = await saveImageToCache(
+          i.imageBytes!,
+          i.nomenclatureKey,
+        );
         productImages[i.nomenclatureKey] = filePath;
       }
     }
