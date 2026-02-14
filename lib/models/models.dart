@@ -7,6 +7,7 @@ export 'characteristic.dart';
 export 'check.dart';
 export 'check_return.dart';
 export 'create_check.dart';
+export 'create_movement.dart';
 export 'create_return_check.dart';
 export 'create_session.dart';
 export 'create_withdraw.dart';
