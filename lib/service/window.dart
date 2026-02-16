@@ -1,4 +1,7 @@
 import 'package:desktop_multi_window/desktop_multi_window.dart';
+import 'package:flutter/material.dart';
+import 'package:screen_retriever/screen_retriever.dart';
+import 'package:window_manager/window_manager.dart';
 
 class WindowService {
   WindowController? window;
@@ -25,5 +28,17 @@ class WindowService {
     if (window == null) return;
     final channel = WindowMethodChannel('channel');
     await channel.invokeMethod(method, payload);
+  }
+
+  static Future<List<Display>> getDisplays() async {
+    return await screenRetriever.getAllDisplays();
+  }
+
+  static Future<void> moveToDisplay(Display display) async {
+    Offset? targetOffset = display.visiblePosition;
+    if (targetOffset != null) {
+      await windowManager.setPosition(targetOffset, animate: true);
+      await windowManager.setFullScreen(true);
+    }
   }
 }

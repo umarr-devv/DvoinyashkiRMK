@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/blocs/blocs.dart';
+import 'package:app/service/window.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/dotted_line.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 import 'package:scaled_app/scaled_app.dart';
+import 'package:screen_retriever/screen_retriever.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class CustomerWindow extends StatefulWidget {
@@ -55,6 +57,7 @@ class _CustomerWindowState extends State<CustomerWindow> {
           return Scaffold(
             body: Column(
               children: [
+                displays(),
                 Expanded(child: table()),
                 footer(),
               ],
@@ -62,6 +65,30 @@ class _CustomerWindowState extends State<CustomerWindow> {
           );
         },
       ),
+    );
+  }
+
+  Widget displays() {
+    return FutureBuilder<List<Display>>(
+      future: WindowService.getDisplays(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return FCircularProgress();
+        return Padding(
+          padding: const EdgeInsets.only(top: 12, left: 16),
+          child: Row(
+            spacing: 12,
+            children: snapshot.data!.map((display) {
+              return FButton.icon(
+                onPress: () async {
+                  WindowService.moveToDisplay(display);
+                },
+                style: FButtonStyle.outline(),
+                child: Text('Экран ${snapshot.data!.indexOf(display) + 1}'),
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 
