@@ -941,7 +941,7 @@ class _RestClient implements RestClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/AccumulationRegister_ЗапасыНаСкладах/Balance()${fullPath}',
+            '/AccumulationRegister_Запасы/Balance()${fullPath}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -971,7 +971,7 @@ class _RestClient implements RestClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/AccumulationRegister_ЗапасыНаСкладах/Balance(Period=\'${period}\')${fullPath}',
+            '/AccumulationRegister_Запасы/Balance(Period=\'${period}\')${fullPath}',
             queryParameters: queryParameters,
             data: _data,
           )
