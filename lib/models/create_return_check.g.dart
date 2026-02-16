@@ -24,11 +24,14 @@ CreateReturnCheckScheme _$CreateReturnCheckSchemeFromJson(
       .toList(),
   userKey: json['Ответственный_Key'] as String,
   cashPayment: (json['ПолученоНаличными'] as num).toDouble(),
-  movementDelete: json['ДвиженияПоЗапасамУдалять'] as bool? ?? true,
+  movementDelete: json['ДвиженияПоЗапасамУдалять'] as bool? ?? false,
   includeNds: json['НДСВключатьВСтоимость'] as bool? ?? true,
   sessionNumber: (json['НомерСменыККМ'] as num?)?.toInt() ?? 1,
   priceKey:
       json['ВидЦен_Key'] as String? ?? '021f4fa7-3377-11ed-91a8-a068f8f3337c',
+  specialMode: json['СпециальныйНалоговыйРежим'] as String? ?? 'НеПрименяется',
+  prepayment: json['СпособЗачетаПредоплаты'] as String? ?? 'Вручную',
+  checkOrderId: json['ИдентификаторЧекаВОчереди'] as String,
 );
 
 Map<String, dynamic> _$CreateReturnCheckSchemeToJson(
@@ -49,6 +52,9 @@ Map<String, dynamic> _$CreateReturnCheckSchemeToJson(
   'НомерСменыККМ': instance.sessionNumber,
   'ПолученоНаличными': instance.cashPayment,
   'ВидЦен_Key': instance.priceKey,
+  'СпециальныйНалоговыйРежим': instance.specialMode,
+  'СпособЗачетаПредоплаты': instance.prepayment,
+  'ИдентификаторЧекаВОчереди': instance.checkOrderId,
 };
 
 CreateReturnCheckItemScheme _$CreateReturnCheckItemSchemeFromJson(

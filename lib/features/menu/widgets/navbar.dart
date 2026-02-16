@@ -48,35 +48,36 @@ class _NavBarTabs extends StatelessWidget {
             index: 0,
           ),
           _NavBarTabsItem(
+            icon: FluentIcons.timer_24_regular,
+            label: 'Смена',
+            index: 1,
+          ),
+          _NavBarTabsItem(
             icon: FluentIcons.receipt_24_regular,
             label: 'История продаж',
-            index: 1,
+            index: 2,
           ),
           _NavBarTabsItem(
             icon: FluentIcons.box_24_regular,
             label: 'Склад',
-            index: 2,
+            index: 3,
           ),
           _NavBarTabsItem(
             icon: FluentIcons.money_24_regular,
             label: 'Выемка',
-            index: 3,
+            index: 4,
           ),
           _NavBarTabsItem(
             icon: FluentIcons.arrow_download_24_regular,
             label: 'Заказ',
-            index: 4,
+            index: 5,
           ),
           _NavBarTabsItem(
             icon: FluentIcons.data_bar_vertical_24_regular,
             label: 'Статистика',
-            index: 5,
-          ),
-          _NavBarTabsItem(
-            icon: FluentIcons.timer_24_regular,
-            label: 'Рабочее время',
             index: 6,
           ),
+          
         ],
       ),
     );

@@ -43,12 +43,12 @@ class _MenuScreenState extends State<MenuScreen> {
         child: AutoTabsRouter.tabBar(
           routes: [
             OrderRoute(),
+            WorkTimeRoute(),
             SellHistoryRoute(),
             WarehouseRoute(),
             WithdrawRoute(),
             MovementRoute(),
             StatisticRoute(),
-            WorkTimeRoute(),
           ],
           scrollDirection: Axis.horizontal,
           physics: NeverScrollableScrollPhysics(),

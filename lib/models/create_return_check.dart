@@ -16,10 +16,14 @@ class CreateReturnCheckScheme {
     required this.items,
     required this.userKey,
     required this.cashPayment,
-    this.movementDelete = true,
+    this.movementDelete = false,
     this.includeNds = true,
     this.sessionNumber = 1,
-    this.priceKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c'
+    this.priceKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c',
+    this.specialMode = 'НеПрименяется',
+    this.prepayment = 'Вручную',
+    required this.checkOrderId,
+
   });
 
   @JsonKey(name: 'Date')
@@ -66,6 +70,15 @@ class CreateReturnCheckScheme {
 
   @JsonKey(name: 'ВидЦен_Key')
   final String priceKey;
+
+  @JsonKey(name: 'СпециальныйНалоговыйРежим')
+  final String specialMode;
+
+  @JsonKey(name: 'СпособЗачетаПредоплаты')
+  final String prepayment;
+
+  @JsonKey(name: 'ИдентификаторЧекаВОчереди')
+  final String checkOrderId;
 
   factory CreateReturnCheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CreateReturnCheckSchemeFromJson(json);

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/blocs/blocs.dart';
+import 'package:app/models/models.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -24,6 +25,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final warehouseItem = product.warehouseItem(context);
     return BlocBuilder<OrderCubit, OrderState>(
       bloc: BlocProvider.of<OrderCubit>(context),
       buildWhen: (previous, current) {
@@ -63,7 +65,7 @@ class ProductCard extends StatelessWidget {
                       _ProductCardImage(product),
                       Align(
                         alignment: Alignment.topRight,
-                        child: ProductCatdFavoriteButton(product),
+                        child: ProductCardFavoriteButton(product),
                       ),
                     ],
                   ),
@@ -86,6 +88,7 @@ class ProductCard extends StatelessWidget {
                           child: ProductCardAddButton(
                             product: product,
                             orderItem: orderItem,
+                            warehouseItem: warehouseItem,
                           ),
                         ),
                       ],
@@ -159,8 +162,8 @@ class _ProductCardTitle extends StatelessWidget {
   }
 }
 
-class ProductCatdFavoriteButton extends StatelessWidget {
-  const ProductCatdFavoriteButton(
+class ProductCardFavoriteButton extends StatelessWidget {
+  const ProductCardFavoriteButton(
     this.product, {
     super.key,
     this.padding = const EdgeInsets.all(12),
@@ -273,15 +276,20 @@ class ProductCardAddButton extends StatelessWidget {
     super.key,
     required this.product,
     this.orderItem,
+    this.warehouseItem,
   });
 
   final ProductData product;
   final OrderItem? orderItem;
+  final WarehouseItemScheme? warehouseItem;
 
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<OrderCubit>(context);
     final theme = Theme.of(context);
+    if ((warehouseItem?.quantity ?? 0) <= 0) {
+      return SizedBox();
+    }
     if (orderItem != null) {
       return FCard.raw(
         child: Padding(

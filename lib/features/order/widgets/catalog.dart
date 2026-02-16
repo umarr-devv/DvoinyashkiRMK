@@ -333,10 +333,12 @@ class _CatalogList extends StatelessWidget {
                     child: Text('Кол-во'),
                   ),
                 ),
+                SizedBox(width: 16),
               ],
             ),
             Expanded(
               child: ListView.separated(
+                padding: const EdgeInsets.only(right: 16),
                 itemBuilder: (context, index) {
                   final item = products[index];
                   final orderItem = getOrderItem(state.currentOrder, item);
@@ -346,7 +348,7 @@ class _CatalogList extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: ProductCatdFavoriteButton(
+                        child: ProductCardFavoriteButton(
                           item,
                           padding: const EdgeInsets.all(0),
                         ),
@@ -372,6 +374,7 @@ class _CatalogList extends StatelessWidget {
                           child: ProductCardAddButton(
                             product: item,
                             orderItem: orderItem,
+                            warehouseItem: item.warehouseItem(context),
                           ),
                         ),
                       ),

@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 part 'return_check_data.dart';
 part 'return_check_state.dart';
@@ -58,6 +59,7 @@ class ReturnCheckCubit extends Cubit<ReturnCheckState> {
           userKey: user!.refKey,
           totalSum: state.totalSum,
           cashPayment: state.totalSum,
+          checkOrderId: Uuid().v6(),
           items: items.map((i) {
             final index = items.indexOf(i);
             return CreateReturnCheckItemScheme(
