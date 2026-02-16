@@ -602,6 +602,7 @@ class _UdsCustomerSelectState extends State<_UdsCustomerSelect> {
             if (state is UdsCustomerLoaded) {
               return FButton.icon(
                 onPress: () {
+                  BlocProvider.of<CreateCheckCubit>(context).setCustomerPay(0);
                   cubit.clear();
                   controller.clear();
                 },
