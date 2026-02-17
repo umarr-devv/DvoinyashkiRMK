@@ -59,7 +59,7 @@ class WorkTimeTable extends StatelessWidget {
                         spacing: 6,
                         children: [
                           Icon(FluentIcons.clock_24_regular),
-                          Expanded(child: SelectableText(workShift.refKey)),
+                          Expanded(child: Text(workShift.number)),
                         ],
                       ),
                     ),

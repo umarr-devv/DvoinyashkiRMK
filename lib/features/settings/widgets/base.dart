@@ -229,6 +229,7 @@ class _AuthorSelect extends StatelessWidget {
               child: FSelect<AuthorScheme>.searchBuilder(
                 label: Text('Автор'),
                 hint: 'Выберите автора',
+                description: Text('Необходим для интеграции с 1C'),
                 control: FSelectControl.managed(
                   initial: settingsState.author,
                   onChange: (value) {
@@ -291,6 +292,7 @@ class _PrinterSelect extends StatelessWidget {
               child: FSelect<String>(
                 label: Text('Принтер'),
                 hint: 'Выберите принтер',
+                description: Text('Для печати чеков и других данных'),
                 control: FSelectControl.managed(
                   initial: state.printer,
                   onChange: (value) {

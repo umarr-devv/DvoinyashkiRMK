@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/movement/dialogs/detail_movement.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -52,7 +53,12 @@ class MovementTable extends StatelessWidget {
                 );
                 final rowIndex = state.movements.indexOf(movement);
                 return DataRow2(
-                  onTap: () {},
+                  onTap: () {
+                    DetailMovementDialog(
+                      refKey: movement.refKey,
+                      rootContext: context,
+                    ).show();
+                  },
                   color: WidgetStatePropertyAll(
                     rowIndex.isOdd
                         ? theme.custom.rowOddColor

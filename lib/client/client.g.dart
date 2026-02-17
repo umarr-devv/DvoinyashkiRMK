@@ -617,7 +617,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<DetailCheckScheme> getMovement({
+  Future<DetailMovementScheme> getMovement({
     required String refKey,
     String format = 'json',
   }) async {
@@ -625,7 +625,7 @@ class _RestClient implements RestClient {
     final queryParameters = <String, dynamic>{r'$format': format};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DetailCheckScheme>(
+    final _options = _setStreamType<DetailMovementScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -636,9 +636,9 @@ class _RestClient implements RestClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late DetailCheckScheme _value;
+    late DetailMovementScheme _value;
     try {
-      _value = DetailCheckScheme.fromJson(_result.data!);
+      _value = DetailMovementScheme.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

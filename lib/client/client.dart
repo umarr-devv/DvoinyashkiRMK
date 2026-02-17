@@ -128,7 +128,7 @@ abstract class RestClient {
   });
 
   @GET('/Document_ЗаказНаПеремещение(guid\'{ref_key}\')')
-  Future<DetailCheckScheme> getMovement({
+  Future<DetailMovementScheme> getMovement({
     @Path('ref_key') required String refKey,
     @Query('\$format') String format = 'json',
   });

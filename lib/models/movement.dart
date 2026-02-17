@@ -72,7 +72,7 @@ class MovementItemScheme {
   });
 
   @JsonKey(name: 'Ref_Key')
-  final String refKey;
+  final String? refKey;
 
   @JsonKey(name: 'Номенклатура_Key')
   final String nomenclatureKey;

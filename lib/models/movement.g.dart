@@ -39,7 +39,7 @@ Map<String, dynamic> _$MovementSchemeToJson(MovementScheme instance) =>
 
 MovementItemScheme _$MovementItemSchemeFromJson(Map<String, dynamic> json) =>
     MovementItemScheme(
-      refKey: json['Ref_Key'] as String,
+      refKey: json['Ref_Key'] as String?,
       nomenclatureKey: json['Номенклатура_Key'] as String,
       characteristicKey: json['Характеристика_Key'] as String,
       quantity: (json['Количество'] as num).toDouble(),
