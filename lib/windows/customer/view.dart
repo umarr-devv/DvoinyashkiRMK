@@ -58,7 +58,14 @@ class _CustomerWindowState extends State<CustomerWindow> {
             body: Column(
               children: [
                 displays(),
-                Expanded(child: table()),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(child: table()),
+                      offers(),
+                    ],
+                  ),
+                ),
                 footer(),
               ],
             ),
@@ -219,6 +226,15 @@ class _CustomerWindowState extends State<CustomerWindow> {
           },
         );
       },
+    );
+  }
+
+  Widget offers() {
+    return Container(
+      width: 360,
+      height: double.infinity,
+      margin: const EdgeInsets.all(12),
+      child: FCard(),
     );
   }
 }
