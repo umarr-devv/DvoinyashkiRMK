@@ -21,10 +21,10 @@ class PrintCheckScheme extends PrintScheme {
     );
     return pw.Theme(
       data: pw.ThemeData(
-        defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
+        defaultTextStyle: pw.TextStyle(font: font, fontSize: 7),
       ),
       child: pw.Padding(
-        padding: pw.EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+        padding: pw.EdgeInsets.symmetric(vertical: 6, horizontal: 8),
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
@@ -55,9 +55,13 @@ class PrintCheckScheme extends PrintScheme {
                         .firstWhereLogTypeOrNull(
                           (i) => i.refKey == item.nomenclatureKey,
                         );
+                    final characteristic = dataState.characteristics
+                        .firstWhereLogTypeOrNull(
+                          (i) => i.refKey == item.characteriticKey,
+                        );
                     return pw.TableRow(
                       children: [
-                        pw.Text(nomenclature?.description ?? ''),
+                        pw.Text('${nomenclature?.description} ${characteristic!.description}'),
                         pw.Text(item.price.toString()),
                         pw.Text(item.quantity.toString()),
                         pw.Text(item.itemSum.toString()),
@@ -77,6 +81,7 @@ class PrintCheckScheme extends PrintScheme {
               'Дата: ${DateFormat('HH:mm dd.MM.yyyy').format(check.date)}',
             ),
             pw.SizedBox(height: 32),
+            pw.Text('Не теряйте чек, без нее невозможен возврат'),
             pw.Center(
               child: pw.Text(
                 'Спасибо за покупку',

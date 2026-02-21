@@ -35,6 +35,26 @@ class DetailSessionState extends Equatable {
     );
   }
 
+  double startWarehouseItemsCash(BuildContext context) {
+    return startWarehouseItems.fold<double>(0, (a, b) {
+      final product = b.product(context);
+      if (product != null) {
+        return (product.sellPrice?.price.price ?? 0) * b.quantity;
+      }
+      return 0;
+    });
+  }
+
+  double endWarehouseItemsCash(BuildContext context) {
+    return endWarehouseItems.fold<double>(0, (a, b) {
+      final product = b.product(context);
+      if (product != null) {
+        return (product.sellPrice?.price.price ?? 0) * b.quantity;
+      }
+      return 0;
+    });
+  }
+
   DetailSessionState.from(DetailSessionState other)
     : workShift = other.workShift,
       withdraws = other.withdraws,

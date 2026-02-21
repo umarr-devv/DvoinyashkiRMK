@@ -1,15 +1,21 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/work_time/blocs/detail_session/detail_session_cubit.dart';
 import 'package:app/service/print.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:talker_flutter/talker_flutter.dart';
 
 class PrintSessionScheme extends PrintScheme {
-  PrintSessionScheme({required this.session, required this.dataState});
+  PrintSessionScheme({
+    required this.session,
+    required this.dataState,
+    required this.context,
+  });
 
   final DetailSessionState session;
   final DataState dataState;
+  final BuildContext context;
 
   @override
   pw.Widget build() {
@@ -22,6 +28,8 @@ class PrintSessionScheme extends PrintScheme {
     final user = dataState.users.firstWhereLogTypeOrNull(
       (i) => i.refKey == session.workShift?.userKey,
     );
+    final startWarehouseCash = session.startWarehouseItemsCash(context);
+    final endWarehouseCash = session.endWarehouseItemsCash(context);
     return pw.Theme(
       data: pw.ThemeData(
         defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
@@ -91,41 +99,11 @@ class PrintSessionScheme extends PrintScheme {
                   }).toList(),
             ),
             pw.SizedBox(height: 8),
-            pw.Text('Проданные товары'),
-            pw.SizedBox(height: 2),
-            pw.Table(
-              columnWidths: {
-                0: pw.FlexColumnWidth(2),
-                1: pw.FlexColumnWidth(),
-                2: pw.FlexColumnWidth(),
-                3: pw.FlexColumnWidth(),
-              },
-              children:
-                  [
-                    pw.TableRow(
-                      children: [
-                        pw.Text('Название'),
-                        pw.Text('Цена'),
-                        pw.Text('Кол-во'),
-                        pw.Text('Итого'),
-                      ],
-                    ),
-                  ] +
-                  session.workShift!.items.map((item) {
-                    final nomenclature = dataState.nomenclatures
-                        .firstWhereLogTypeOrNull(
-                          (i) => i.refKey == item.nomenclatureKey,
-                        );
-                    return pw.TableRow(
-                      children: [
-                        pw.Text(nomenclature?.description ?? ''),
-                        pw.Text(item.price.toString()),
-                        pw.Text(item.quantity.toString()),
-                        pw.Text(item.totalSum.toString()),
-                      ],
-                    );
-                  }).toList(),
-            ),
+            pw.Text('Начальные товары'),
+            pw.Text(NumberFormat().format(startWarehouseCash)),
+            pw.SizedBox(height: 8),
+            pw.Text('Конечные товары'),
+            pw.Text(NumberFormat().format(endWarehouseCash)),
             pw.SizedBox(height: 24),
           ],
         ),

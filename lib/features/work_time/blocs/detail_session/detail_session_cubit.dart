@@ -3,6 +3,7 @@ import 'package:app/models/models.dart';
 import 'package:app/utils/odata_query.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker/talker.dart';
 

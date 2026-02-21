@@ -337,6 +337,7 @@ class DetailSessionDialog {
               PrintSessionScheme(
                 session: cubit.state,
                 dataState: BlocProvider.of<DataCubit>(rootContext).state,
+                context: rootContext,
               ),
               rootContext,
             );
