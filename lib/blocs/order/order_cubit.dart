@@ -106,7 +106,10 @@ class OrderCubit extends HydratedCubit<OrderState> {
   }
 
   void saveOrder() {
-    if (state.currentOrder == null) return;
+    if (state.currentOrder == null ||
+        (state.currentOrder?.items.isEmpty ?? false)) {
+      return;
+    }
     final List<OrderData> saveOrders = List.from(state.saveOrders);
     saveOrders.add(state.currentOrder!);
 

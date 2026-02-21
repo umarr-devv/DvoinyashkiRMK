@@ -62,7 +62,6 @@ class PinnedCategoriesDialog {
               child: Column(
                 spacing: 16,
                 children: [
-                  catalogView(settingsState.catalogListView, cubit),
                   Column(
                     children:
                         [

@@ -1,4 +1,5 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -18,19 +19,21 @@ class SaveOrderListDialog {
         return BlocBuilder<OrderCubit, OrderState>(
           bloc: BlocProvider.of<OrderCubit>(rootContext),
           builder: (context, state) {
-            return FDialog.raw(
-              builder: (context, style) {
-                return Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      title(),
-                      Expanded(child: saveOrdersList(state.saveOrders)),
-                    ],
-                  ),
-                );
-              },
+            return GestureDetector(
+              child: FDialog.raw(
+                builder: (context, style) {
+                  return Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        title(),
+                        Expanded(child: saveOrdersList(state.saveOrders)),
+                      ],
+                    ),
+                  );
+                },
+              ),
             );
           },
         );
@@ -55,39 +58,48 @@ class SaveOrderListDialog {
   }
 
   Widget saveOrdersList(List<OrderData> orders) {
+    final theme = Theme.of(rootContext);
     final cubit = BlocProvider.of<OrderCubit>(rootContext);
     return SingleChildScrollView(
       child: Column(
         spacing: 12,
         mainAxisSize: MainAxisSize.min,
         children: orders.map((i) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${DateFormat('HH:mm - dd.MM.yyyy').format(i.createAt)} - ${i.totalSum.toStringAsFixed(2)} с',
-              ),
-              Expanded(child: CustomDottedLine()),
-              Row(
-                spacing: 8,
+          return GestureDetector(
+            onTap: () {
+              cubit.setCurrentOrder(i);
+            },
+            child: Container(
+              decoration: BoxDecoration(color: theme.custom.transparent),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  FButton.icon(
-                    onPress: () {
-                      cubit.setCurrentOrder(i);
-                    },
-                    style: FButtonStyle.outline(),
-                    child: Icon(FIcons.download),
+                  Text(
+                    '${DateFormat('HH:mm - dd.MM.yyyy').format(i.createAt)} - ${i.totalSum.toStringAsFixed(2)} с',
                   ),
-                  FButton.icon(
-                    onPress: () {
-                      cubit.deleteSaveOrder(i);
-                    },
-                    style: FButtonStyle.destructive(),
-                    child: Icon(FIcons.trash),
+                  Expanded(child: CustomDottedLine()),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      FButton.icon(
+                        onPress: () {
+                          cubit.setCurrentOrder(i);
+                        },
+                        style: FButtonStyle.outline(),
+                        child: Icon(FIcons.download),
+                      ),
+                      FButton.icon(
+                        onPress: () {
+                          cubit.deleteSaveOrder(i);
+                        },
+                        style: FButtonStyle.destructive(),
+                        child: Icon(FIcons.trash),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           );
         }).toList(),
       ),

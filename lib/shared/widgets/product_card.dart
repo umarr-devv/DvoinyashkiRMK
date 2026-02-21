@@ -41,61 +41,76 @@ class ProductCard extends StatelessWidget {
             product.name,
             style: TextStyle(color: theme.custom.foreground),
           ),
-          child: FCard.raw(
-            style: (style) {
-              if (orderItem != null) {
-                return style.copyWith(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: theme.custom.foreground,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+          child: GestureDetector(
+            onTap: () {
+              if ((product.warehouseItem(context)?.quantity ?? 0) > 0) {
+                BlocProvider.of<OrderCubit>(context).adaptiveAdd(
+                  orderItem ??
+                      OrderItem(
+                        product: product,
+                        quantity: 1,
+                        price: product.sellPrice?.price.price.toDouble() ?? 0,
+                      ),
+                  1,
                 );
               }
-              return style;
             },
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Stack(
-                    children: [
-                      _ProductCardImage(product),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: ProductCardFavoriteButton(product),
+            child: FCard.raw(
+              style: (style) {
+                if (orderItem != null) {
+                  return style.copyWith(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: theme.custom.foreground,
+                        width: 2,
                       ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  );
+                }
+                return style;
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Stack(
                       children: [
-                        _ProductCardTitle(product),
-                        _ProductCardPrice(product),
-                        _ProductWarehouse(product),
-                        Expanded(child: SizedBox()),
+                        _ProductCardImage(product),
                         Align(
-                          alignment: Alignment.centerRight,
-                          child: ProductCardAddButton(
-                            product: product,
-                            orderItem: orderItem,
-                            warehouseItem: warehouseItem,
-                          ),
+                          alignment: Alignment.topRight,
+                          child: ProductCardFavoriteButton(product),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          _ProductCardTitle(product),
+                          _ProductCardPrice(product),
+                          _ProductWarehouse(product),
+                          Expanded(child: SizedBox()),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: ProductCardAddButton(
+                              product: product,
+                              orderItem: orderItem,
+                              warehouseItem: warehouseItem,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
