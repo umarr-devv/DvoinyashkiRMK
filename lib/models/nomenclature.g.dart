@@ -29,11 +29,11 @@ Map<String, dynamic> _$NomenclatureSchemeToJson(NomenclatureScheme instance) =>
 NomenclatureListScheme _$NomenclatureListSchemeFromJson(
   Map<String, dynamic> json,
 ) => NomenclatureListScheme(
-  nomenclatures: (json['value'] as List<dynamic>)
+  value: (json['value'] as List<dynamic>)
       .map((e) => NomenclatureScheme.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
 Map<String, dynamic> _$NomenclatureListSchemeToJson(
   NomenclatureListScheme instance,
-) => <String, dynamic>{'value': instance.nomenclatures};
+) => <String, dynamic>{'value': instance.value};

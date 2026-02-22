@@ -24,10 +24,10 @@ class PriceTypeScheme extends Equatable {
 
 @JsonSerializable()
 class PriceTypeListScheme {
-  PriceTypeListScheme({required this.priceTypes});
+  PriceTypeListScheme({required this.value});
 
   @JsonKey(name: 'value')
-  final List<PriceTypeScheme> priceTypes;
+  final List<PriceTypeScheme> value;
 
   factory PriceTypeListScheme.fromJson(Map<String, dynamic> json) =>
       _$PriceTypeListSchemeFromJson(json);

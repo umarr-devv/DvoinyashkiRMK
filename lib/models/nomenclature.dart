@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'nomenclature.g.dart';
 
 @JsonSerializable()
-class NomenclatureScheme extends Equatable{
+class NomenclatureScheme extends Equatable {
   const NomenclatureScheme({
     required this.refKey,
     required this.description,
@@ -43,10 +43,10 @@ class NomenclatureScheme extends Equatable{
 
 @JsonSerializable()
 class NomenclatureListScheme {
-  NomenclatureListScheme({required this.nomenclatures});
+  NomenclatureListScheme({required this.value});
 
   @JsonKey(name: 'value')
-  final List<NomenclatureScheme> nomenclatures;
+  final List<NomenclatureScheme> value;
 
   factory NomenclatureListScheme.fromJson(Map<String, dynamic> json) =>
       _$NomenclatureListSchemeFromJson(json);

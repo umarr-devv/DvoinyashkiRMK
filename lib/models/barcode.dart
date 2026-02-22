@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'barcode.g.dart';
 
 @JsonSerializable()
-class BarcodeScheme extends Equatable{
+class BarcodeScheme extends Equatable {
   const BarcodeScheme({
     required this.barcode,
     required this.nomenclatureKey,
@@ -31,10 +31,10 @@ class BarcodeScheme extends Equatable{
 
 @JsonSerializable()
 class BarcodeListScheme {
-  BarcodeListScheme({required this.barcodes});
+  BarcodeListScheme({required this.value});
 
   @JsonKey(name: 'value')
-  final List<BarcodeScheme> barcodes;
+  final List<BarcodeScheme> value;
 
   factory BarcodeListScheme.fromJson(Map<String, dynamic> json) =>
       _$BarcodeListSchemeFromJson(json);

@@ -20,11 +20,11 @@ Map<String, dynamic> _$PriceTypeSchemeToJson(PriceTypeScheme instance) =>
 
 PriceTypeListScheme _$PriceTypeListSchemeFromJson(Map<String, dynamic> json) =>
     PriceTypeListScheme(
-      priceTypes: (json['value'] as List<dynamic>)
+      value: (json['value'] as List<dynamic>)
           .map((e) => PriceTypeScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$PriceTypeListSchemeToJson(
   PriceTypeListScheme instance,
-) => <String, dynamic>{'value': instance.priceTypes};
+) => <String, dynamic>{'value': instance.value};

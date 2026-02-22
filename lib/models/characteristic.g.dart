@@ -27,11 +27,11 @@ Map<String, dynamic> _$CharacteristicSchemeToJson(
 CharacteristicListScheme _$CharacteristicListSchemeFromJson(
   Map<String, dynamic> json,
 ) => CharacteristicListScheme(
-  characteristics: (json['value'] as List<dynamic>)
+  value: (json['value'] as List<dynamic>)
       .map((e) => CharacteristicScheme.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
 Map<String, dynamic> _$CharacteristicListSchemeToJson(
   CharacteristicListScheme instance,
-) => <String, dynamic>{'value': instance.characteristics};
+) => <String, dynamic>{'value': instance.value};

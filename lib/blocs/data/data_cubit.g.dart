@@ -37,9 +37,9 @@ ProductData _$ProductDataFromJson(Map<String, dynamic> json) => ProductData(
           ?.map((e) => BarcodeScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
-  images:
-      (json['images'] as List<dynamic>?)
-          ?.map((e) => ProductImageScheme.fromJson(e as Map<String, dynamic>))
+  specifications:
+      (json['specifications'] as List<dynamic>?)
+          ?.map((e) => SpecificationScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
 );
@@ -50,7 +50,7 @@ Map<String, dynamic> _$ProductDataToJson(ProductData instance) =>
       'characteristic': instance.characteristic,
       'prices': instance.prices,
       'barcodes': instance.barcodes,
-      'images': instance.images,
+      'specifications': instance.specifications,
     };
 
 DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(

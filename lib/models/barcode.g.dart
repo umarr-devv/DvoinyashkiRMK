@@ -22,10 +22,10 @@ Map<String, dynamic> _$BarcodeSchemeToJson(BarcodeScheme instance) =>
 
 BarcodeListScheme _$BarcodeListSchemeFromJson(Map<String, dynamic> json) =>
     BarcodeListScheme(
-      barcodes: (json['value'] as List<dynamic>)
+      value: (json['value'] as List<dynamic>)
           .map((e) => BarcodeScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$BarcodeListSchemeToJson(BarcodeListScheme instance) =>
-    <String, dynamic>{'value': instance.barcodes};
+    <String, dynamic>{'value': instance.value};

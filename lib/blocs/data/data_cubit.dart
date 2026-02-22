@@ -47,24 +47,25 @@ class DataCubit extends HydratedCubit<DataState> {
       final structureUnits = await client.getStructureUnits();
       final users = await client.getUsers();
       final authors = await client.getAuthors();
+      final specifications = await client.getSpecifications();
 
       final products = DataCubitUtils.getProducts(
-        nomenclatures: nomenclatures.nomenclatures,
-        characteristics: characteristics.characteristics,
-        prices: prices.prices,
-        productImages: [],
-        barcodes: barcodes.barcodes,
-        priceTypes: priceTypes.priceTypes,
+        nomenclatures: nomenclatures.value,
+        characteristics: characteristics.value,
+        prices: prices.value,
+        barcodes: barcodes.value,
+        priceTypes: priceTypes.value,
+        specifications: specifications.value,
       );
 
       final newState = state.copyWith(
         cashRegisters: cashRegisters.cashRegisters,
         categories: categories.categories,
-        nomenclatures: nomenclatures.nomenclatures,
-        characteristics: characteristics.characteristics,
-        prices: prices.prices,
-        priceTypes: priceTypes.priceTypes,
-        barcodes: barcodes.barcodes,
+        nomenclatures: nomenclatures.value,
+        characteristics: characteristics.value,
+        prices: prices.value,
+        priceTypes: priceTypes.value,
+        barcodes: barcodes.value,
         structureUnits: structureUnits.structureUnits,
         users: users.users,
         authors: authors.authors,

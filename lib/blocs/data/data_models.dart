@@ -23,14 +23,14 @@ class ProductData extends Equatable {
     this.characteristic,
     this.prices = const [],
     this.barcodes = const [],
-    this.images = const [],
+    this.specifications = const [],
   });
 
   final NomenclatureScheme nomenclature;
   final CharacteristicScheme? characteristic;
   final List<PriceData> prices;
   final List<BarcodeScheme> barcodes;
-  final List<ProductImageScheme> images;
+  final List<SpecificationScheme> specifications;
 
   static const String mainPriceTypeKey = '021f4fa7-3377-11ed-91a8-a068f8f3337c';
 

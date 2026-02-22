@@ -26,9 +26,9 @@ class DataCubitUtils {
     required List<NomenclatureScheme> nomenclatures,
     required List<CharacteristicScheme> characteristics,
     required List<PriceScheme> prices,
-    required List<ProductImageScheme> productImages,
     required List<BarcodeScheme> barcodes,
     required List<PriceTypeScheme> priceTypes,
+    required List<SpecificationScheme> specifications,
   }) {
     final List<ProductData> products = [];
 
@@ -59,11 +59,19 @@ class DataCubitUtils {
                     i.characteristicKey == char.refKey,
               )
               .toList();
+          final specifications_ = specifications
+              .where(
+                (i) =>
+                    i.nomenclatureKey == nomen.refKey &&
+                    i.characteristicKey == char.refKey,
+              )
+              .toList();
           final product = ProductData(
             nomenclature: nomen,
             characteristic: char,
             prices: actualPrices,
             barcodes: barcodes_,
+            specifications: specifications_,
           );
           products.add(product);
         }
@@ -75,7 +83,7 @@ class DataCubitUtils {
         final barcodes_ = barcodes
             .where((i) => i.nomenclatureKey == nomen.refKey)
             .toList();
-        final images_ = productImages
+        final specifications_ = specifications
             .where((i) => i.nomenclatureKey == nomen.refKey)
             .toList();
         final product = ProductData(
@@ -83,7 +91,7 @@ class DataCubitUtils {
           characteristic: null,
           prices: actualPrices,
           barcodes: barcodes_,
-          images: images_,
+          specifications: specifications_,
         );
         products.add(product);
       }
