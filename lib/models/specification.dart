@@ -105,7 +105,7 @@ class SpecificationListScheme {
   SpecificationListScheme({required this.value});
 
   @JsonKey(name: 'value')
-  final List<SpecificationItemScheme> value;
+  final List<SpecificationScheme> value;
 
 
     factory SpecificationListScheme.fromJson(Map<String, dynamic> json) =>

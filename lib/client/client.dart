@@ -97,7 +97,8 @@ abstract class RestClient {
   @GET('/Catalog_СтруктурныеЕдиницы')
   Future<StructureUnitListScheme> getStructureUnits({
     @Query('\$select')
-    String select = 'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key,ТипСтруктурнойЕдиницы',
+    String select =
+        'Ref_Key,Description,UDS_UID,Code,Тип,Подразделение_Key,ТипСтруктурнойЕдиницы',
     @Query('\$format') String format = 'json',
   });
 
@@ -185,9 +186,7 @@ abstract class RestClient {
     @Path('full_path') required String fullPath,
   });
 
-  @GET(
-    '/AccumulationRegister_Запасы/Balance(Period=\'{period}\'){full_path}',
-  )
+  @GET('/AccumulationRegister_Запасы/Balance(Period=\'{period}\'){full_path}')
   Future<WarehouseItemListScheme> getWarehouseItemsWithPeriod({
     @Path('period') required DateTime period,
     @Path('full_path') required String fullPath,
@@ -219,4 +218,13 @@ abstract class RestClient {
 
   @POST('/Document_ЗаказНаПеремещение(guid\'{ref_key}\')/Post()')
   Future postMovement();
+
+  @GET('/Catalog_Спецификации')
+  Future<SpecificationListScheme> getSpecifications({
+    @Query('\$select')
+    String select =
+        'Ref_Key,Owner_Key,ХарактеристикаПродукции_Key,Code,ВидЦены_Key,СуммаМатериал,ЗаЕдиницу,Сумма,'
+        'КоличествоПродукции,Ответственный_Key,ЦенаПродажи,Состав',
+    @Query('\$format') String format = 'json',
+  });
 }

@@ -69,7 +69,7 @@ SpecificationListScheme _$SpecificationListSchemeFromJson(
   Map<String, dynamic> json,
 ) => SpecificationListScheme(
   value: (json['value'] as List<dynamic>)
-      .map((e) => SpecificationItemScheme.fromJson(e as Map<String, dynamic>))
+      .map((e) => SpecificationScheme.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
