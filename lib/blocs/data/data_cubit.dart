@@ -26,6 +26,10 @@ class DataCubit extends HydratedCubit<DataState> {
     if (state.update == null ||
         DateTime.now().difference(state.update!) > Duration(hours: 12)) {
       await forceUpdate();
+    } else {
+      emit(DataLoading(state.copyWith(comment: 'Кеширования данных')));
+      await Future.delayed(const Duration(seconds: 3));
+      emit(DataLoaded(state));
     }
 
     if (state.update == null ||
@@ -37,16 +41,39 @@ class DataCubit extends HydratedCubit<DataState> {
   Future forceUpdate() async {
     emit(DataLoading(state));
     try {
+      emit(DataLoading(state.copyWith(comment: 'Загрузка касс')));
       final cashRegisters = await client.getCashRegisters();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка категорий')));
       final categories = await client.getCategories();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка номенклатуры')));
       final nomenclatures = await client.getNomenclatures();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка характеристик')));
       final characteristics = await client.getCharacteristics();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка цен')));
       final prices = await client.getPrices();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка типов цен')));
       final priceTypes = await client.getPriceTypes();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка штрихкодов')));
       final barcodes = await client.getBarcodes();
+
+      emit(
+        DataLoading(state.copyWith(comment: 'Загрузка магазинов и складов')),
+      );
       final structureUnits = await client.getStructureUnits();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка пользователей')));
       final users = await client.getUsers();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка авторов')));
       final authors = await client.getAuthors();
+
+      emit(DataLoading(state.copyWith(comment: 'Загрузка спецификаций')));
       final specifications = await client.getSpecifications();
 
       final products = DataCubitUtils.getProducts(

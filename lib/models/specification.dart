@@ -86,7 +86,7 @@ class SpecificationScheme extends Equatable {
   final String userKey;
 
   @JsonKey(name: 'ЦенаПродажи')
-  final String sellPrice;
+  final double sellPrice;
 
   @JsonKey(name: 'Состав')
   final List<SpecificationItemScheme> items;

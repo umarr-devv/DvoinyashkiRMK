@@ -114,6 +114,14 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
           ?.map((e) => ProductData.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  specifications:
+      (json['specifications'] as List<dynamic>?)
+          ?.map(
+            (e) => SpecificationItemScheme.fromJson(e as Map<String, dynamic>),
+          )
+          .toList() ??
+      const [],
+  comment: json['comment'] as String? ?? '',
   update: json['update'] == null
       ? null
       : DateTime.parse(json['update'] as String),
@@ -131,6 +139,8 @@ Map<String, dynamic> _$DataStateToJson(DataState instance) => <String, dynamic>{
   'productImages': instance.productImages,
   'users': instance.users,
   'authors': instance.authors,
+  'specifications': instance.specifications,
   'products': instance.products,
+  'comment': instance.comment,
   'update': instance.update?.toIso8601String(),
 };

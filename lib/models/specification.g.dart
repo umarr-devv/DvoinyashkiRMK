@@ -40,7 +40,7 @@ SpecificationScheme _$SpecificationSchemeFromJson(Map<String, dynamic> json) =>
       totalPrice: (json['Сумма'] as num).toDouble(),
       outputCount: (json['КоличествоПродукции'] as num).toDouble(),
       userKey: json['Ответственный_Key'] as String,
-      sellPrice: json['ЦенаПродажи'] as String,
+      sellPrice: (json['ЦенаПродажи'] as num).toDouble(),
       items: (json['Состав'] as List<dynamic>)
           .map(
             (e) => SpecificationItemScheme.fromJson(e as Map<String, dynamic>),

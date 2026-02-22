@@ -16,6 +16,8 @@ class DataState extends Equatable {
     this.users = const [],
     this.authors = const [],
     this.products = const [],
+    this.specifications = const [],
+    this.comment = '',
     this.update,
   });
   final List<CashRegisterScheme> cashRegisters;
@@ -29,9 +31,11 @@ class DataState extends Equatable {
   final Map<String, String> productImages;
   final List<UserScheme> users;
   final List<AuthorScheme> authors;
+  final List<SpecificationItemScheme> specifications;
 
   final List<ProductData> products;
 
+  final String comment;
   final DateTime? update;
 
   DataState copyWith({
@@ -47,6 +51,8 @@ class DataState extends Equatable {
     List<UserScheme>? users,
     List<AuthorScheme>? authors,
     List<ProductData>? products,
+    List<SpecificationItemScheme>? specifications,
+    String? comment,
     DateTime? update,
   }) {
     return DataState(
@@ -62,6 +68,8 @@ class DataState extends Equatable {
       users: users ?? this.users,
       authors: authors ?? this.authors,
       products: products ?? this.products,
+      specifications: specifications ?? this.specifications,
+      comment: comment ?? this.comment,
       update: update ?? this.update,
     );
   }
@@ -79,6 +87,8 @@ class DataState extends Equatable {
       users = other.users,
       authors = other.authors,
       products = other.products,
+      specifications = other.specifications,
+      comment = other.comment,
       update = other.update;
 
   factory DataState.fromJson(Map<String, dynamic> json) =>
@@ -100,6 +110,8 @@ class DataState extends Equatable {
     users,
     authors,
     products,
+    specifications,
+    comment,
     update,
   ];
 }

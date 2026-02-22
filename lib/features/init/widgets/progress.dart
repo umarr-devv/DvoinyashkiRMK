@@ -1,6 +1,8 @@
+import 'package:app/blocs/blocs.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
 class InitProgress extends StatelessWidget {
@@ -38,6 +40,19 @@ class InitProgress extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        BlocBuilder<DataCubit, DataState>(
+          bloc: BlocProvider.of<DataCubit>(context),
+          builder: (context, state) {
+            return Text(
+              state.comment,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: theme.custom.foreground,
+              ),
+            );
+          },
         ),
       ],
     );

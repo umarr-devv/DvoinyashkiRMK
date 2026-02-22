@@ -98,14 +98,6 @@ class _ProductOrderCard extends StatelessWidget {
 
   final OrderItem item;
 
-  Uint8List? get imageBytes {
-    if (item.product.images.isNotEmpty) {
-      return item.product.images[0].imageBytes;
-    } else {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
