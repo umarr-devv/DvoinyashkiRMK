@@ -101,14 +101,18 @@ class DetailProductDialog {
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, dataState) {
-        return FLabel(
-          label: Text('Спецификации'),
-          axis: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: product.specifications.map((specification) {
-              return Column(
+        return Column(
+          spacing: 24,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: product.specifications.map((specification) {
+            final index = product.specifications.indexOf(specification);
+            return FLabel(
+              label: Text(
+                'Спецификация ${index + 1} (себестоимость ${specification.totalPrice})',
+              ),
+              axis: Axis.vertical,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: specification.items.map((item) {
@@ -121,12 +125,12 @@ class DetailProductDialog {
                         (i) => i.refKey == item.characteristicKey,
                       );
                   return Text(
-                    '${nomenclature?.description ?? ""} ${characteristic?.description ?? ""} * ${item.quantity}',
+                    '${nomenclature?.description ?? ""} ${characteristic?.description ?? ""} - ${item.quantity}',
                   );
                 }).toList(),
-              );
-            }).toList(),
-          ),
+              ),
+            );
+          }).toList(),
         );
       },
     );
