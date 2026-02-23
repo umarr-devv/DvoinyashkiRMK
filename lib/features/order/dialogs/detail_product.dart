@@ -1,5 +1,6 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -18,19 +19,22 @@ class DetailProductDialog {
       builder: (context, _, _) {
         return FDialog.raw(
           builder: (context, _) {
-            return Container(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 24,
-                children: [
-                  title(),
-                  info(),
-                  prices(),
-                  warehouse(),
-                  specifications(),
-                ],
+            return Material(
+              type: MaterialType.transparency,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 24,
+                  children: [
+                    title(),
+                    info(),
+                    prices(),
+                    warehouse(),
+                    specifications(),
+                  ],
+                ),
               ),
             );
           },
@@ -112,22 +116,37 @@ class DetailProductDialog {
                 'Спецификация ${index + 1} (себестоимость ${specification.totalPrice})',
               ),
               axis: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: specification.items.map((item) {
-                  final nomenclature = dataState.nomenclatures
-                      .firstWhereLogTypeOrNull(
-                        (i) => i.refKey == item.nomenclatureKey,
-                      );
-                  final characteristic = dataState.characteristics
-                      .firstWhereLogTypeOrNull(
-                        (i) => i.refKey == item.characteristicKey,
-                      );
-                  return Text(
-                    '${nomenclature?.description ?? ""} ${characteristic?.description ?? ""} - ${item.quantity}',
-                  );
-                }).toList(),
+              child: SizedBox(
+                height: 240,
+                child: DataTable2(
+                  dividerThickness: 0,
+                  columnSpacing: 8,
+                  horizontalMargin: 0,
+                  columns: [
+                    DataColumn2(label: Text('Название')),
+                    DataColumn2(label: Text('Характеристика')),
+                    DataColumn2(label: Text('Кол-во'), numeric: true),
+                    DataColumn2(label: Text('Цена'), numeric: true),
+                  ],
+                  rows: specification.items.map((item) {
+                    final nomenclature = dataState.nomenclatures
+                        .firstWhereLogTypeOrNull(
+                          (i) => i.refKey == item.nomenclatureKey,
+                        );
+                    final characteristic = dataState.characteristics
+                        .firstWhereLogTypeOrNull(
+                          (i) => i.refKey == item.characteristicKey,
+                        );
+                    return DataRow2(
+                      cells: [
+                        DataCell(Text(nomenclature?.description ?? '')),
+                        DataCell(Text(characteristic?.description ?? '')),
+                        DataCell(Text(NumberFormat().format(item.quantity))),
+                        DataCell(Text(NumberFormat().format(item.price))),
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
             );
           }).toList(),
