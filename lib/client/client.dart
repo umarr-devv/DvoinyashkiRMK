@@ -229,8 +229,8 @@ abstract class RestClient {
   });
 
   @POST('/Document_СборкаЗапасов')
-  Future createProduction({@Body() required CreateProductionScheme data});
+  Future<RefKeyScheme> createProduction({@Body() required CreateProductionScheme data});
 
-  @POST('/Document_СборкаЗапасов/Post()')
-  Future postProduction();
+  @POST('/Document_СборкаЗапасов(guid\'{ref_key}\')/Post()')
+  Future postProduction({@Path('ref_key') required String refKey});
 }

@@ -9,15 +9,15 @@ part of 'create_production.dart';
 CreateProductionItemScheme _$CreateProductionItemSchemeFromJson(
   Map<String, dynamic> json,
 ) => CreateProductionItemScheme(
-  lineNumber: json['LineNumber'] as String,
+  lineNumber: (json['LineNumber'] as num).toInt(),
   nomenclatureKey: json['Номенклатура_Key'] as String,
   characteristicKey: json['Характеристика_Key'] as String?,
   quantity: (json['Количество'] as num).toDouble(),
-  unitKey: json['ЕдиницаИзмерения'] as String,
+  unitKey: json['ЕдиницаИзмерения'] as String?,
   unitType:
       json['ЕдиницаИзмерения_Type'] as String? ??
       'StandardODATA.Catalog_КлассификаторЕдиницИзмерения',
-  key: json['КлючСвязи'] as String,
+  key: (json['КлючСвязи'] as num).toInt(),
   specificationKey: json['Спецификация_Key'] as String,
 );
 
@@ -37,7 +37,7 @@ Map<String, dynamic> _$CreateProductionItemSchemeToJson(
 CreateProductionResourceScheme _$CreateProductionResourceSchemeFromJson(
   Map<String, dynamic> json,
 ) => CreateProductionResourceScheme(
-  lineNumber: json['LineNumber'] as String,
+  lineNumber: (json['LineNumber'] as num).toInt(),
   nomenclatureKey: json['Номенклатура_Key'] as String,
   characteristicKey: json['Характеристика_Key'] as String?,
   quantity: (json['Количество'] as num).toDouble(),
@@ -45,7 +45,7 @@ CreateProductionResourceScheme _$CreateProductionResourceSchemeFromJson(
   unitType:
       json['ЕдиницаИзмерения_Type'] as String? ??
       'StandardODATA.Catalog_КлассификаторЕдиницИзмерения',
-  key: json['КлючСвязи'] as String,
+  key: (json['КлючСвязи'] as num).toInt(),
 );
 
 Map<String, dynamic> _$CreateProductionResourceSchemeToJson(

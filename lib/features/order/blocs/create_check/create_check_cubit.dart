@@ -102,6 +102,10 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
         }
       }
 
+      for (final i in order!.items.where((i) => i.specification != null)){
+        await createProduction(i);
+      }
+
       await client.postCheck(refKey: check.refKey);
       final newState = state.copyWith(
         check: check,
@@ -134,6 +138,41 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
         ),
       ),
     );
+  }
+
+  Future createProduction(OrderItem item) async {
+    final response = await client.createProduction(
+      data: CreateProductionScheme(
+        date: DateTime.now(),
+        structureUnitKey: store!.refKey,
+        fromStructureUnitKey: store!.refKey,
+        toStructureUnitKey: store!.refKey,
+        items: [
+          CreateProductionItemScheme(
+            lineNumber: 1,
+            nomenclatureKey: item.product.nomenclature.refKey,
+            characteristicKey: item.product.characteristic?.refKey,
+            quantity: item.quantity,
+            unitKey: item.product.nomenclature.unitKey,
+            key: 1,
+            specificationKey: item.specification!.refKey,
+          )
+        ],
+        resources: item.specification!.items.map((i) {
+          final index = item.specification!.items.indexOf(i);
+          return CreateProductionResourceScheme(
+            lineNumber: index + 1,
+            nomenclatureKey: i.nomenclatureKey,
+            characteristicKey: i.characteristicKey,
+            quantity: i.quantity,
+            unitKey: i.unitKey,
+            key: index + 1,
+          );
+        }).toList(),
+      ),
+    );
+
+    await client.postProduction(refKey: response.refKey);
   }
 
   CreateCheckScheme _createCashScheme() {

@@ -1180,7 +1180,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> createProduction({
+  Future<RefKeyScheme> createProduction({
     required CreateProductionScheme data,
   }) async {
     final _extra = <String, dynamic>{};
@@ -1188,7 +1188,7 @@ class _RestClient implements RestClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
-    final _options = _setStreamType<dynamic>(
+    final _options = _setStreamType<RefKeyScheme>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -1198,13 +1198,19 @@ class _RestClient implements RestClient {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late RefKeyScheme _value;
+    try {
+      _value = RefKeyScheme.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
     return _value;
   }
 
   @override
-  Future<dynamic> postProduction() async {
+  Future<dynamic> postProduction({required String refKey}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -1213,7 +1219,7 @@ class _RestClient implements RestClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_СборкаЗапасов/Post()',
+            '/Document_СборкаЗапасов(guid\'${refKey}\')/Post()',
             queryParameters: queryParameters,
             data: _data,
           )

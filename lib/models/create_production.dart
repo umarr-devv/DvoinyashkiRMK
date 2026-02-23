@@ -16,7 +16,7 @@ class CreateProductionItemScheme {
   });
 
   @JsonKey(name: 'LineNumber')
-  final String lineNumber;
+  final int lineNumber;
 
   @JsonKey(name: 'Номенклатура_Key')
   final String nomenclatureKey;
@@ -28,13 +28,13 @@ class CreateProductionItemScheme {
   final double quantity;
 
   @JsonKey(name: 'ЕдиницаИзмерения')
-  final String unitKey;
+  final String? unitKey;
 
   @JsonKey(name: 'ЕдиницаИзмерения_Type')
   final String unitType;
 
   @JsonKey(name: 'КлючСвязи')
-  final String key;
+  final int key;
 
   @JsonKey(name: 'Спецификация_Key')
   final String specificationKey;
@@ -58,7 +58,7 @@ class CreateProductionResourceScheme {
   });
 
   @JsonKey(name: 'LineNumber')
-  final String lineNumber;
+  final int lineNumber;
 
   @JsonKey(name: 'Номенклатура_Key')
   final String nomenclatureKey;
@@ -76,7 +76,7 @@ class CreateProductionResourceScheme {
   final String unitType;
 
   @JsonKey(name: 'КлючСвязи')
-  final String key;
+  final int key;
 
   factory CreateProductionResourceScheme.fromJson(Map<String, dynamic> json) =>
       _$CreateProductionResourceSchemeFromJson(json);
