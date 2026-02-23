@@ -40,6 +40,9 @@ class SellHistoryTable extends StatelessWidget {
                 final user = userStates.users.firstWhereLogTypeOrNull(
                   (user) => user.refKey == check.userKey,
                 );
+                final employeer = userStates.users.firstWhereLogTypeOrNull(
+                  (user) => user.refKey == check.employeerDebtKey,
+                );
                 final rowIndex = state.checks.indexOf(check);
                 return DataRow2(
                   onTap: () {
@@ -106,7 +109,7 @@ class SellHistoryTable extends StatelessWidget {
                                 Expanded(child: Text(check.udsClient)),
                               ],
                             )
-                          : Text(''),
+                          : Text(employeer?.description ?? ''),
                     ),
                     DataCell(
                       Text(
