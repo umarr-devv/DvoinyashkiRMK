@@ -12,18 +12,22 @@ class SettingsBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 24,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _CashRegisterSelect(),
-        _AuthorSelect(),
-        _StoreSelect(),
-        _SubdivisionSelect(),
-        _PrinterSelect(),
-        _ScaleSlider(),
-        Row(),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      padding: const EdgeInsets.only(bottom: 128),
+      child: Column(
+        spacing: 24,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _CashRegisterSelect(),
+          _AuthorSelect(),
+          _StoreSelect(),
+          _SubdivisionSelect(),
+          _PrinterSelect(),
+          _ScaleSlider(),
+          Row(),
+        ],
+      ),
     );
   }
 }
