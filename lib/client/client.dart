@@ -227,4 +227,10 @@ abstract class RestClient {
         'КоличествоПродукции,Ответственный_Key,ЦенаПродажи,Состав',
     @Query('\$format') String format = 'json',
   });
+
+  @POST('/Document_СборкаЗапасов')
+  Future createProduction({@Body() required CreateProductionScheme data});
+
+  @POST('/Document_СборкаЗапасов/Post()')
+  Future postProduction();
 }

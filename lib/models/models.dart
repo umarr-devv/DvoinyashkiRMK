@@ -27,3 +27,4 @@ export 'user.dart';
 export 'warehouse_item.dart';
 export 'withdraw.dart';
 export 'work_shift.dart';
+export 'create_production.dart';
