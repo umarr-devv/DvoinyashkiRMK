@@ -98,8 +98,10 @@ class _ProductOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<OrderCubit>(context);
     final theme = Theme.of(context);
     return ListTile(
+      contentPadding: const EdgeInsets.all(4),
       title: Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Text(
@@ -126,24 +128,41 @@ class _ProductOrderCard extends StatelessWidget {
             ),
         ],
       ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      trailing: Row(
+        spacing: 8,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'Цена: ${item.price.toStringAsFixed(0)}',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: theme.custom.foreground,
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Цена: ${item.price.toStringAsFixed(0)}',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: theme.custom.foreground,
+                ),
+              ),
+              Text(
+                'Сумма: ${item.totalSum.toStringAsFixed(0)}',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  color: theme.custom.foreground,
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Сумма: ${item.totalSum.toStringAsFixed(0)}',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w500,
-              color: theme.custom.foreground,
+          FButton.icon(
+            onPress: () {
+              cubit.deleteItem(item);
+            },
+            style: FButtonStyle.ghost(),
+            child: Icon(
+              Icons.close,
+              size: 16,
+              color: theme.custom.destructiveTextForeground,
             ),
           ),
         ],
