@@ -61,7 +61,7 @@ class PrintCheckScheme extends PrintScheme {
                         );
                     return pw.TableRow(
                       children: [
-                        pw.Text('${nomenclature?.description} ${characteristic!.description}'),
+                        pw.Text('${nomenclature?.description} ${characteristic?.description}'),
                         pw.Text(item.price.toString()),
                         pw.Text(item.quantity.toString()),
                         pw.Text(item.itemSum.toString()),
