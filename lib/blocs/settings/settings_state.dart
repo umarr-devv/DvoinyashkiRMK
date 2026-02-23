@@ -12,6 +12,7 @@ class SettingsState extends Equatable {
     this.subdivision,
     this.printer,
     this.pinnedCategories = const [],
+    this.productionCategories = const [],
     this.showEmptyCategories = false,
     this.catalogListView = false,
   });
@@ -24,6 +25,7 @@ class SettingsState extends Equatable {
   final StructureUnitScheme? subdivision;
   final String? printer;
   final List<String> pinnedCategories;
+  final List<CategoryScheme> productionCategories;
   final bool showEmptyCategories;
   final bool catalogListView;
 
@@ -36,6 +38,7 @@ class SettingsState extends Equatable {
     StructureUnitScheme? subdivision,
     String? printer,
     List<String>? pinnedCategories,
+    List<CategoryScheme>? productionCategories,
     bool? showEmptyCategories,
     bool? catalogListView,
   }) {
@@ -48,6 +51,7 @@ class SettingsState extends Equatable {
       subdivision: subdivision ?? this.subdivision,
       printer: printer ?? this.printer,
       pinnedCategories: pinnedCategories ?? this.pinnedCategories,
+      productionCategories: productionCategories ?? this.productionCategories,
       showEmptyCategories: showEmptyCategories ?? this.showEmptyCategories,
       catalogListView: catalogListView ?? this.catalogListView,
     );
@@ -63,6 +67,7 @@ class SettingsState extends Equatable {
       printer = other.printer,
       pinnedCategories = other.pinnedCategories,
       showEmptyCategories = other.showEmptyCategories,
+      productionCategories = other.productionCategories,
       catalogListView = other.catalogListView;
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
@@ -80,6 +85,7 @@ class SettingsState extends Equatable {
     store,
     subdivision,
     pinnedCategories,
+    productionCategories,
     showEmptyCategories,
     catalogListView,
   ];

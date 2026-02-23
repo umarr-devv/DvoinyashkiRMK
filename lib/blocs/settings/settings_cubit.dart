@@ -24,6 +24,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     List<String>? pinnedCategories,
     bool? showEmptyCategories,
     bool? catalogListView,
+    List<CategoryScheme>? productionCategories,
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -39,6 +40,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       pinnedCategories: pinnedCategories,
       showEmptyCategories: showEmptyCategories,
       catalogListView: catalogListView,
+      productionCategories: productionCategories,
     );
     emit(SettingsUpdate(newState));
   }
