@@ -97,6 +97,12 @@ class _OrderCatalogCategories extends StatelessWidget {
                 ),
                 FButton.icon(
                   onPress: () {
+                    ProductionCategoriesDialog(context).show();
+                  },
+                  child: Icon(FIcons.coffee),
+                ),
+                FButton.icon(
+                  onPress: () {
                     PinnedCategoriesDialog(context).show();
                   },
                   child: Icon(FIcons.settings2),
@@ -282,6 +288,7 @@ class _CatalogTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return GridView.builder(
+          padding: const EdgeInsets.only(right: 12),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: (constraints.maxWidth / itemMinWidth).floor().clamp(
               1,
