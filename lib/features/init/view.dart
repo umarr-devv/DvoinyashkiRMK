@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class InitScreen extends StatelessWidget {
+class InitScreen extends StatefulWidget {
   const InitScreen({super.key});
 
+  @override
+  State<InitScreen> createState() => _InitScreenState();
+}
+
+class _InitScreenState extends State<InitScreen> {
   @override
   Widget build(BuildContext context) {
     final authCubit = BlocProvider.of<AuthCubit>(context);

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/blocs/blocs.dart';
+import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -54,6 +55,12 @@ class ProductCard extends StatelessWidget {
                   1,
                 );
               }
+            },
+            onLongPress: () {
+              DetailProductDialog(context, product: product).show();
+            },
+            onSecondaryTap: () {
+              DetailProductDialog(context, product: product).show();
             },
             child: FCard.raw(
               style: (style) {

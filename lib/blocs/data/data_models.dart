@@ -41,7 +41,7 @@ class ProductData extends Equatable {
     if (characteristic != null) {
       return "${nomenclature.name ?? ''} (${characteristic?.printName ?? ''})";
     } else {
-      return nomenclature.name ?? 'Nameless';
+      return nomenclature.name ?? 'Без названия';
     }
   }
 
