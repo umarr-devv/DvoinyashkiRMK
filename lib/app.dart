@@ -24,10 +24,10 @@ class _AppScreenState extends State<AppScreen> {
 
   final authCubit = AuthCubit();
   final favoritesCubit = FavoritesCubit();
-  final orderCubit = OrderCubit();
   final settingsCubit = SettingsCubit();
   final notificationCubit = NotificationCubit();
 
+  late final OrderCubit orderCubit;
   late final ChecksCubit checksCubit;
   late final WithdrawsCubit withdrawsCubit;
   late final MovementsCubit movementsCubit;
@@ -39,6 +39,7 @@ class _AppScreenState extends State<AppScreen> {
 
   Future initCubits() async {
     dataCubit.update();
+    orderCubit = OrderCubit(settingsCubit);
     checksCubit = ChecksCubit(settingsCubit);
     withdrawsCubit = WithdrawsCubit(settingsCubit);
     movementsCubit = MovementsCubit(settingsCubit);

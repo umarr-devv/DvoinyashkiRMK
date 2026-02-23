@@ -37,6 +37,9 @@ class ProductData extends Equatable {
   PriceData? get sellPrice =>
       prices.firstWhereLogTypeOrNull((i) => i.type?.refKey == mainPriceTypeKey);
 
+  SpecificationScheme? get currenctSpecification =>
+      specifications.elementAtOrNull(0);
+
   String get name {
     if (characteristic != null) {
       return "${nomenclature.name ?? ''} (${characteristic?.printName ?? ''})";

@@ -111,7 +111,21 @@ class _ProductOrderCard extends StatelessWidget {
           ),
         ),
       ),
-      subtitle: _ProductOrderItemQuantity(item),
+      subtitle: Column(
+        spacing: 4,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _ProductOrderItemQuantity(item),
+          if (item.specification != null)
+            Row(
+              spacing: 4,
+              children: [
+                Icon(FIcons.coffee, size: 14, color: theme.custom.accent),
+                Text('Сборка', style: TextStyle(color: theme.custom.accent)),
+              ],
+            ),
+        ],
+      ),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,

@@ -6,23 +6,25 @@ class OrderItem extends Equatable {
   const OrderItem({
     required this.product,
     required this.quantity,
+    this.specification,
     required this.price,
   });
 
   final ProductData product;
+  final SpecificationScheme? specification;
   final double quantity;
   final double price;
 
   double get totalSum => quantity * price;
 
   OrderItem copyWith({
-    NomenclatureScheme? nomenclature,
-    CharacteristicScheme? characteristic,
+    SpecificationScheme? specification,
     double? quantity,
     double? price,
   }) {
     return OrderItem(
       product: product,
+      specification: specification ?? this.specification,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
     );

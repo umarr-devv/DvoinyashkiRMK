@@ -12,9 +12,14 @@ part 'order_data.dart';
 part 'order_state.dart';
 
 class OrderCubit extends HydratedCubit<OrderState> {
-  OrderCubit() : super(OrderInitial());
+  OrderCubit(this.settingsCubit) : super(OrderInitial());
+
+  final SettingsCubit settingsCubit;
 
   final uuid = Uuid();
+
+  List<String> get productionCategories =>
+      settingsCubit.state.productionCategories.map((i) => i.refKey).toList();
 
   void createOrder() {
     if (state.currentOrder == null) {
@@ -33,7 +38,17 @@ class OrderCubit extends HydratedCubit<OrderState> {
     if (state.currentOrder == null) createOrder();
     final currentOrder = state.currentOrder!;
     final List<OrderItem> items = List.from(currentOrder.items);
-    items.add(item);
+
+    if (productionCategories.contains(item.product.nomenclature.categoryKey) &&
+        item.product.currenctSpecification != null) {
+      final item_ = item.copyWith(
+        specification: item.product.currenctSpecification,
+      );
+      items.add(item_);
+    } else {
+      items.add(item);
+    }
+
     final newState = state.copyWith(
       currentOrder: currentOrder.copyWith(items: items),
     );
