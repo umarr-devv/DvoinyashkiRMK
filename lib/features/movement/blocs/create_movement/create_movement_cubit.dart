@@ -1,5 +1,6 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
+import 'package:app/core/consts/consts.dart';
 import 'package:app/models/models.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -56,11 +57,7 @@ class CreateMovementCubit extends Cubit<CreateMovementState> {
   }
 
   Future create() async {
-    if (author == null ||
-        user == null ||
-        state.reserve == null ||
-        store == null ||
-        state.movementDate == null) {
+    if (author == null || user == null || store == null) {
       return;
     }
     emit(CreateMovementLoading(state));
@@ -71,9 +68,9 @@ class CreateMovementCubit extends Cubit<CreateMovementState> {
           date: DateTime.now(),
           authorKey: author!.refKey,
           userKey: user!.refKey,
-          reserveStructureUnitKey: state.reserve!.refKey,
+          reserveStructureUnitKey: movementWarehouseRef,
           storeKey: store!.refKey,
-          movementDate: state.movementDate!,
+          movementDate: DateTime.now(),
           orderSum: state.totalSum,
           documentSum: state.totalSum,
           items: state.items.map((i) {
@@ -90,7 +87,8 @@ class CreateMovementCubit extends Cubit<CreateMovementState> {
           }).toList(),
         ),
       );
-      emit(CreateMovementLoaded(state));
+      final newState = state.copyWith(items: []);
+      emit(CreateMovementLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
       emit(CreateMovementFailure(state));
