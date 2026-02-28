@@ -30,6 +30,11 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
+  @GET('/Catalog_Номенклатура{full_path}')
+  Future<NomenclatureListScheme> getNomenclaturesByPath({
+    @Path('full_path') required String fullPath,
+  });
+
   @GET('/Catalog_Номенклатура')
   Future<NomenclatureListScheme> getNomenclatures({
     @Query('\$select')
@@ -45,7 +50,7 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
-  @GET('/InformationRegister_ЦеныНоменклатуры')
+  @GET('/InformationRegister_ЦеныНоменклатуры/SliceLast()')
   Future<PriceListScheme> getPrices({
     @Query('\$select')
     String select =
@@ -229,7 +234,9 @@ abstract class RestClient {
   });
 
   @POST('/Document_СборкаЗапасов')
-  Future<RefKeyScheme> createProduction({@Body() required CreateProductionScheme data});
+  Future<RefKeyScheme> createProduction({
+    @Body() required CreateProductionScheme data,
+  });
 
   @POST('/Document_СборкаЗапасов(guid\'{ref_key}\')/Post()')
   Future postProduction({@Path('ref_key') required String refKey});

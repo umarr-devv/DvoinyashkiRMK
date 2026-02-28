@@ -121,6 +121,35 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<NomenclatureListScheme> getNomenclaturesByPath({
+    required String fullPath,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<NomenclatureListScheme>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/Catalog_Номенклатура${fullPath}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late NomenclatureListScheme _value;
+    try {
+      _value = NomenclatureListScheme.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<NomenclatureListScheme> getNomenclatures({
     String select =
         'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ЕдиницаИзмерения_Key,ИспользоватьХарактеристики',
@@ -204,7 +233,7 @@ class _RestClient implements RestClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/InformationRegister_ЦеныНоменклатуры',
+            '/InformationRegister_ЦеныНоменклатуры/SliceLast()',
             queryParameters: queryParameters,
             data: _data,
           )
