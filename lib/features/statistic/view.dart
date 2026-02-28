@@ -14,6 +14,8 @@ class StatisticScreen extends StatefulWidget {
 }
 
 class _StatisticScreenState extends State<StatisticScreen> {
+  final ValueNotifier<bool> _isUnlocked = ValueNotifier(false);
+
   @override
   void initState() {
     BlocProvider.of<StatisticCubit>(context).update();
@@ -21,22 +23,33 @@ class _StatisticScreenState extends State<StatisticScreen> {
   }
 
   @override
+  void dispose() {
+    _isUnlocked.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
+    return Stack(
       children: [
-        Expanded(
-          child: FScaffold(
-            header: StatisticHeader(),
-            child: Column(
-              spacing: 12,
-              children: [
-                StaticticFilter(),
-                Expanded(child: StatisticChart()),
-              ],
+        Row(
+          children: [
+            Expanded(
+              child: FScaffold(
+                header: StatisticHeader(),
+                child: Column(
+                  spacing: 12,
+                  children: [
+                    StaticticFilter(),
+                    Expanded(child: StatisticChart()),
+                  ],
+                ),
+              ),
             ),
-          ),
+            StatisticOther(),
+          ],
         ),
-        StatisticOther(),
+        StatisticPasswordBlur(isUnlocked: _isUnlocked),
       ],
     );
   }
