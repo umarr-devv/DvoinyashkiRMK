@@ -14,7 +14,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main(List<String> args) async {
-  final talker = initTalker();
+  final talker = await initTalker();
 
   runZonedGuarded(
     () async {
@@ -49,8 +49,8 @@ void initScale() {
   );
 }
 
-Talker initTalker() {
-  final talker = TalkerConfigure.init();
+Future<Talker> initTalker() async {
+  final talker = await TalkerConfigure.init();
   GetIt.I.registerSingleton<Talker>(talker);
   return talker;
 }
