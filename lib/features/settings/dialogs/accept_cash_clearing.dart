@@ -30,6 +30,14 @@ class AcceptUpdateDialog {
             ),
             FButton(
               onPress: () {
+                BlocProvider.of<DataCubit>(context).forceUpdateImages();
+                AutoRouter.of(context).maybePop();
+              },
+              style: FButtonStyle.primary(),
+              child: Text('Только изображения'),
+            ),
+            FButton(
+              onPress: () {
                 BlocProvider.of<DataCubit>(context).forceUpdate();
                 BlocProvider.of<DataCubit>(context).forceUpdateImages();
                 AutoRouter.of(context).replace(InitRoute());
