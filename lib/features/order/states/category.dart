@@ -1,21 +1,15 @@
-import 'package:app/models/models.dart';
+import 'package:app/models/group.dart';
 import 'package:flutter/material.dart';
 
-class SelectedCategoryData {
-  SelectedCategoryData({
-    this.category,
-    this.all = false,
-    this.favorite = false,
-  });
-  final CategoryScheme? category;
+class SelectedGroupData {
+  SelectedGroupData({this.group, this.all = false, this.favorite = false});
+  final GroupScheme? group;
   final bool all;
   final bool favorite;
 }
 
-final allSelectedCategory = SelectedCategoryData(all: true);
+final allSelectedCategory = SelectedGroupData(all: true);
 
-final favoriteSelectedCategory = SelectedCategoryData(favorite: true);
+final favoriteSelectedCategory = SelectedGroupData(favorite: true);
 
-final selectedCategory = ValueNotifier<SelectedCategoryData>(
-  allSelectedCategory,
-);
+final selectedCategory = ValueNotifier<SelectedGroupData>(allSelectedCategory);

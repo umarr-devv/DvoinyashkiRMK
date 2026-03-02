@@ -1,6 +1,6 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/states/states.dart';
-import 'package:app/models/models.dart';
+import 'package:app/models/group.dart';
 import 'package:app/shared/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -36,7 +36,7 @@ class PinnedCategoriesDialog {
 
   Widget title() {
     return FHeader.nested(
-      title: Text('Закрепленные категории'),
+      title: Text('Закрепленные группы'),
       titleAlignment: Alignment.centerLeft,
       prefixes: [Icon(FIcons.pin, size: 24)],
       suffixes: [
@@ -65,14 +65,14 @@ class PinnedCategoriesDialog {
                   Column(
                     children:
                         [
-                          categoriesListItem(
+                          groupListItem(
                             null,
                             settingsState.showEmptyCategories,
                             cubit,
                           ),
                         ] +
-                        state.categories.map((category) {
-                          return categoriesListItem(category, null, cubit);
+                        state.groups.map((group) {
+                          return groupListItem(group, null, cubit);
                         }).toList(),
                   ),
                 ],
@@ -107,13 +107,13 @@ class PinnedCategoriesDialog {
     );
   }
 
-  Widget categoriesListItem(
-    CategoryScheme? category,
+  Widget groupListItem(
+    GroupScheme? group,
     bool? showEmpty,
     SettingsCubit cubit,
   ) {
     final pinned =
-        cubit.state.pinnedCategories.contains(category?.refKey) ||
+        cubit.state.pinnedCategories.contains(group?.refKey) ||
         (showEmpty ?? false);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,8 +122,8 @@ class PinnedCategoriesDialog {
         Row(
           spacing: 4,
           children: [
-            if (category == null) Icon(Icons.close),
-            Text(category?.name ?? 'Без категорий'),
+            if (group == null) Icon(Icons.close),
+            Text(group?.name ?? 'Без категорий'),
           ],
         ),
         Expanded(child: CustomDottedLine()),
@@ -132,18 +132,18 @@ class PinnedCategoriesDialog {
           child: FSwitch(
             value: pinned,
             onChange: (value) {
-              if (category != null) {
+              if (group != null) {
                 if (pinned) {
                   final List<String> pinnedCategories = List.from(
                     cubit.state.pinnedCategories,
                   );
-                  pinnedCategories.remove(category.refKey);
+                  pinnedCategories.remove(group.refKey);
                   cubit.setSettings(pinnedCategories: pinnedCategories);
                 } else {
                   final List<String> pinnedCategories = List.from(
                     cubit.state.pinnedCategories,
                   );
-                  pinnedCategories.add(category.refKey);
+                  pinnedCategories.add(group.refKey);
                   cubit.setSettings(pinnedCategories: pinnedCategories);
                 }
               } else {

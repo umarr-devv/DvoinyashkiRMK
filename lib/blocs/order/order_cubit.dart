@@ -18,8 +18,8 @@ class OrderCubit extends HydratedCubit<OrderState> {
 
   final uuid = Uuid();
 
-  List<String> get productionCategories =>
-      settingsCubit.state.productionCategories.map((i) => i.refKey).toList();
+  List<String> get productionGroups =>
+      settingsCubit.state.productionGroups.map((i) => i.refKey).toList();
 
   void createOrder() {
     if (state.currentOrder == null) {
@@ -39,7 +39,7 @@ class OrderCubit extends HydratedCubit<OrderState> {
     final currentOrder = state.currentOrder!;
     final List<OrderItem> items = List.from(currentOrder.items);
 
-    if (productionCategories.contains(item.product.nomenclature.categoryKey) &&
+    if (productionGroups.contains(item.product.nomenclature.groupKey) &&
         item.product.currenctSpecification != null) {
       final item_ = item.copyWith(
         specification: item.product.currenctSpecification,

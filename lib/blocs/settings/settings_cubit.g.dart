@@ -32,9 +32,9 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      productionCategories:
-          (json['productionCategories'] as List<dynamic>?)
-              ?.map((e) => CategoryScheme.fromJson(e as Map<String, dynamic>))
+      productionGroups:
+          (json['productionGroups'] as List<dynamic>?)
+              ?.map((e) => GroupScheme.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       showEmptyCategories: json['showEmptyCategories'] as bool? ?? false,
@@ -51,7 +51,7 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'subdivision': instance.subdivision,
       'printer': instance.printer,
       'pinnedCategories': instance.pinnedCategories,
-      'productionCategories': instance.productionCategories,
+      'productionGroups': instance.productionGroups,
       'showEmptyCategories': instance.showEmptyCategories,
       'catalogListView': instance.catalogListView,
     };

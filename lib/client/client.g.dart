@@ -150,7 +150,7 @@ class _RestClient implements RestClient {
   @override
   Future<NomenclatureListScheme> getNomenclatures({
     String select =
-        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ЕдиницаИзмерения_Key,ИспользоватьХарактеристики',
+        'Ref_Key,Description,НаименованиеПолное,КатегорияНоменклатуры_Key,ЕдиницаИзмерения_Key,ИспользоватьХарактеристики,Parent_Key',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};

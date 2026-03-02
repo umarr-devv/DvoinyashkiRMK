@@ -365,9 +365,9 @@ class _CategoryStatistic extends StatelessWidget {
       if (nomen == null) {
         continue;
       }
-      final categoryKey = nomen.categoryKey;
-      data.putIfAbsent(categoryKey, () => []);
-      data[categoryKey]!.add(i);
+      final groupKey = nomen.groupKey;
+      data.putIfAbsent(groupKey, () => []);
+      data[groupKey]!.add(i);
     }
 
     return data;
@@ -404,7 +404,7 @@ class _CategoryStatistic extends StatelessWidget {
                 );
                 final totalSum = value.fold(0.0, (a, b) => a + b.totalSum);
                 final int index = data.keys.toList().indexOf(key);
-                final category = dataState.categories.firstWhereLogTypeOrNull(
+                final group = dataState.groups.firstWhereLogTypeOrNull(
                   (i) => i.refKey == key,
                 );
                 return DataRow2(
@@ -415,7 +415,7 @@ class _CategoryStatistic extends StatelessWidget {
                         : theme.custom.rowEvenColor,
                   ),
                   cells: [
-                    DataCell(Text(category?.name ?? '')),
+                    DataCell(SelectableText(group?.name ?? 'Без категории')),
                     DataCell(
                       Text(
                         NumberFormat.currency(symbol: '').format(totalQuantity),

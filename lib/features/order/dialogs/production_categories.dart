@@ -1,5 +1,5 @@
 import 'package:app/blocs/blocs.dart';
-import 'package:app/models/category.dart';
+import 'package:app/models/group.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,12 +54,12 @@ class ProductionCategoriesDialog {
         return BlocBuilder<SettingsCubit, SettingsState>(
           bloc: cubit,
           builder: (context, state) {
-            return FMultiSelect<CategoryScheme>.search(
-              {for (var element in dataCubit.categories) element.name: element},
+            return FMultiSelect<GroupScheme>.search(
+              {for (var element in dataCubit.groups) element.name: element},
               control: FMultiValueControl.managed(
-                initial: Set.from(state.productionCategories),
+                initial: Set.from(state.productionGroups),
                 onChange: (value) {
-                  cubit.setSettings(productionCategories: value.toList());
+                  cubit.setSettings(productionGroups: value.toList());
                 },
               ),
               label: Text('Категории'),

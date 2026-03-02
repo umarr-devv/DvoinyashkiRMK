@@ -1,4 +1,5 @@
 import 'package:app/data/repositories/general_storage.dart';
+import 'package:app/models/group.dart';
 import 'package:app/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
@@ -24,7 +25,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     List<String>? pinnedCategories,
     bool? showEmptyCategories,
     bool? catalogListView,
-    List<CategoryScheme>? productionCategories,
+    List<GroupScheme>? productionGroups,
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -40,7 +41,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       pinnedCategories: pinnedCategories,
       showEmptyCategories: showEmptyCategories,
       catalogListView: catalogListView,
-      productionCategories: productionCategories,
+      productionGroups: productionGroups,
     );
     emit(SettingsUpdate(newState));
   }

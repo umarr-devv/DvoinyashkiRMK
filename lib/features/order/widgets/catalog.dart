@@ -65,7 +65,7 @@ class _OrderCatalogCategories extends StatelessWidget {
         return BlocBuilder<SettingsCubit, SettingsState>(
           bloc: BlocProvider.of<SettingsCubit>(context),
           builder: (context, settingsState) {
-            final pinnedCategories = state.categories
+            final pinnedCategories = state.groups
                 .where((i) => settingsState.pinnedCategories.contains(i.refKey))
                 .toList();
             return Row(
@@ -83,13 +83,11 @@ class _OrderCatalogCategories extends StatelessWidget {
                               favoriteSelectedCategory,
                             ),
                             if (settingsState.showEmptyCategories)
-                              _OrderCatalogCategoriesItem(
-                                SelectedCategoryData(),
-                              ),
+                              _OrderCatalogCategoriesItem(SelectedGroupData()),
                           ] +
                           pinnedCategories.map((category) {
                             return _OrderCatalogCategoriesItem(
-                              SelectedCategoryData(category: category),
+                              SelectedGroupData(group: category),
                             );
                           }).toList(),
                     ),
@@ -119,7 +117,7 @@ class _OrderCatalogCategories extends StatelessWidget {
 class _OrderCatalogCategoriesItem extends StatelessWidget {
   const _OrderCatalogCategoriesItem(this.data);
 
-  final SelectedCategoryData data;
+  final SelectedGroupData data;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +141,7 @@ class _OrderCatalogCategoriesItem extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  if (data.category == null || data.all || data.favorite)
+                  if (data.group == null || data.all || data.favorite)
                     Icon(
                       data.all
                           ? FluentIcons.list_24_regular
@@ -160,7 +158,7 @@ class _OrderCatalogCategoriesItem extends StatelessWidget {
                         ? 'Все'
                         : data.favorite
                         ? 'Избраные'
-                        : data.category?.name ?? 'Без категории',
+                        : data.group?.name ?? 'Без категории',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: selected
@@ -183,7 +181,7 @@ class _CatalogGrid extends StatelessWidget {
 
   List<ProductData> getItems(
     BuildContext context, {
-    required SelectedCategoryData? selectedCategory,
+    required SelectedGroupData? selectedGroup,
     required String? searchQuery,
     required List<String> favoriteKeys,
     required List<String> pinned,
@@ -199,22 +197,18 @@ class _CatalogGrid extends StatelessWidget {
       }
     }
 
-    List<ProductData> selectedCategoryItems = List.from(warehouseProducts);
-    if (selectedCategory?.category != null) {
-      selectedCategoryItems = selectedCategoryItems
-          .where(
-            (i) =>
-                i.nomenclature.categoryKey ==
-                selectedCategory!.category!.refKey,
-          )
+    List<ProductData> selectedGroupItems = List.from(warehouseProducts);
+    if (selectedGroup?.group != null) {
+      selectedGroupItems = selectedGroupItems
+          .where((i) => i.nomenclature.groupKey == selectedGroup!.group!.refKey)
           .toList();
-    } else if (selectedCategory?.favorite ?? false) {
-      selectedCategoryItems = selectedCategoryItems
+    } else if (selectedGroup?.favorite ?? false) {
+      selectedGroupItems = selectedGroupItems
           .where((i) => favoriteKeys.contains(i.uniqueId))
           .toList();
     }
 
-    List<ProductData> searchQueryItems = List.from(selectedCategoryItems);
+    List<ProductData> searchQueryItems = List.from(selectedGroupItems);
 
     if (searchQuery?.isNotEmpty ?? false) {
       searchQueryItems = searchQueryItems
@@ -247,7 +241,7 @@ class _CatalogGrid extends StatelessWidget {
                           builder: (context, searchQuery, child) {
                             final products = getItems(
                               context,
-                              selectedCategory: selectedCat,
+                              selectedGroup: selectedCat,
                               searchQuery: searchQuery,
                               pinned: settingsState.pinnedCategories,
                               favoriteKeys: favoriteState.favoriteKeys,

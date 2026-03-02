@@ -1,7 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/movement/blocs/create_movement/create_movement_cubit.dart';
 import 'package:app/features/movement/widgets/movement_card.dart';
-import 'package:app/models/category.dart';
+import 'package:app/models/group.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/utils/debounce_notifier.dart';
 import 'package:auto_route/auto_route.dart';
@@ -22,7 +22,7 @@ class CreateMovementDialog {
 
   final searchValue = DebouncedNotifier(notifier: ValueNotifier<String>(''));
 
-  final categoryValue = ValueNotifier<CategoryScheme?>(null);
+  final groupValue = ValueNotifier<GroupScheme?>(null);
 
   void show() {
     showFDialog(
@@ -96,14 +96,14 @@ class CreateMovementDialog {
                 valueListenable: searchValue.notifier,
                 builder: (context, value, child) {
                   return ValueListenableBuilder(
-                    valueListenable: categoryValue,
+                    valueListenable: groupValue,
                     builder: (context, value, child) {
                       final Iterable<ProductData> categoryItems;
-                      if (categoryValue.value != null) {
+                      if (groupValue.value != null) {
                         categoryItems = state.products.where(
                           (i) =>
-                              i.nomenclature.categoryKey ==
-                              categoryValue.value?.refKey,
+                              i.nomenclature.groupKey ==
+                              groupValue.value?.refKey,
                         );
                       } else {
                         categoryItems = state.products;
@@ -172,7 +172,7 @@ class CreateMovementDialog {
       bloc: BlocProvider.of(rootContext),
       builder: (context, state) {
         return ValueListenableBuilder(
-          valueListenable: categoryValue,
+          valueListenable: groupValue,
           builder: (context, value, child) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -182,7 +182,7 @@ class CreateMovementDialog {
                     [
                       GestureDetector(
                         onTap: () {
-                          categoryValue.value = null;
+                          groupValue.value = null;
                         },
                         child: FBadge(
                           style: (style) => style.copyWith(
@@ -204,11 +204,11 @@ class CreateMovementDialog {
                         ),
                       ),
                     ] +
-                    state.categories.map((i) {
-                      final active = categoryValue.value == i;
+                    state.groups.map((i) {
+                      final active = groupValue.value == i;
                       return GestureDetector(
                         onTap: () {
-                          categoryValue.value = i;
+                          groupValue.value = i;
                         },
                         child: FBadge(
                           style: (style) => style.copyWith(

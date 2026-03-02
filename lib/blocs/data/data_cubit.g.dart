@@ -74,6 +74,11 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
           ?.map((e) => CharacteristicScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  groups:
+      (json['groups'] as List<dynamic>?)
+          ?.map((e) => GroupScheme.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
   prices:
       (json['prices'] as List<dynamic>?)
           ?.map((e) => PriceScheme.fromJson(e as Map<String, dynamic>))
@@ -130,6 +135,7 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
 Map<String, dynamic> _$DataStateToJson(DataState instance) => <String, dynamic>{
   'cashRegisters': instance.cashRegisters,
   'categories': instance.categories,
+  'groups': instance.groups,
   'nomenclatures': instance.nomenclatures,
   'characteristics': instance.characteristics,
   'prices': instance.prices,
