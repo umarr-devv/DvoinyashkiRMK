@@ -37,7 +37,7 @@ class GroupListScheme {
   final List<GroupScheme> value;
 
   factory GroupListScheme.fromJson(Map<String, dynamic> json) =>
-      _$GroupSchemeListSchemeFromJson(json);
+      _$GroupListSchemeFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GroupSchemeListSchemeToJson(this);
+  Map<String, dynamic> toJson() => _$GroupListSchemeToJson(this);
 }

@@ -33,6 +33,7 @@ class FileTalkerObserver extends TalkerObserver {
   void onError(TalkerError err) => _save(err.generateTextMessage());
 
   @override
+  // ignore: avoid_renaming_method_parameters
   void onException(TalkerException exc) => _save(exc.generateTextMessage());
 
   void _save(String message) {
