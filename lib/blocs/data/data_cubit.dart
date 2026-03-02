@@ -1,6 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
 import 'package:app/core/consts/consts.dart';
+import 'package:app/models/group.dart';
 import 'package:app/models/models.dart';
 import 'package:app/utils/utils.dart';
 import 'package:equatable/equatable.dart';
@@ -47,6 +48,14 @@ class DataCubit extends HydratedCubit<DataState> {
       emit(DataLoading(state.copyWith(comment: 'Загрузка категорий')));
       final categories = await client.getCategories();
 
+      emit(DataLoading(state.copyWith(comment: 'Загрузка групп')));
+      final groups = await client.getGroups(
+        fullPath: buildODataQuery({
+          '\$filter': 'IsFolder eq true',
+          '\$format': 'json',
+        }),
+      );
+
       emit(DataLoading(state.copyWith(comment: 'Загрузка номенклатуры')));
       final nomenclatures = await client.getNomenclatures();
 
@@ -90,6 +99,7 @@ class DataCubit extends HydratedCubit<DataState> {
         categories: categories.categories,
         nomenclatures: nomenclatures.value,
         characteristics: characteristics.value,
+        groups: groups.value,
         prices: prices.value,
         priceTypes: priceTypes.value,
         barcodes: barcodes.value,

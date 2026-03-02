@@ -8,6 +8,7 @@ class DataState extends Equatable {
     this.categories = const [],
     this.nomenclatures = const [],
     this.characteristics = const [],
+    this.groups = const [],
     this.prices = const [],
     this.priceTypes = const [],
     this.barcodes = const [],
@@ -22,6 +23,7 @@ class DataState extends Equatable {
   });
   final List<CashRegisterScheme> cashRegisters;
   final List<CategoryScheme> categories;
+  final List<GroupScheme> groups;
   final List<NomenclatureScheme> nomenclatures;
   final List<CharacteristicScheme> characteristics;
   final List<PriceScheme> prices;
@@ -41,6 +43,7 @@ class DataState extends Equatable {
   DataState copyWith({
     List<CashRegisterScheme>? cashRegisters,
     List<CategoryScheme>? categories,
+    List<GroupScheme>? groups,
     List<NomenclatureScheme>? nomenclatures,
     List<CharacteristicScheme>? characteristics,
     List<PriceScheme>? prices,
@@ -58,6 +61,7 @@ class DataState extends Equatable {
     return DataState(
       cashRegisters: cashRegisters ?? this.cashRegisters,
       categories: categories ?? this.categories,
+      groups: groups ?? this.groups,
       nomenclatures: nomenclatures ?? this.nomenclatures,
       characteristics: characteristics ?? this.characteristics,
       prices: prices ?? this.prices,
@@ -77,6 +81,7 @@ class DataState extends Equatable {
   DataState.from(DataState other)
     : cashRegisters = other.cashRegisters,
       categories = other.categories,
+      groups = other.groups,
       nomenclatures = other.nomenclatures,
       characteristics = other.characteristics,
       prices = other.prices,
@@ -102,6 +107,7 @@ class DataState extends Equatable {
     categories,
     nomenclatures,
     characteristics,
+    groups,
     prices,
     priceTypes,
     barcodes,
