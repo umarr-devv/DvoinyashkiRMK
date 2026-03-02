@@ -19,14 +19,12 @@ Map<String, dynamic> _$GroupSchemeToJson(GroupScheme instance) =>
       'Parent_Key': instance.groupKey,
     };
 
-GroupSchemeListScheme _$GroupSchemeListSchemeFromJson(
-  Map<String, dynamic> json,
-) => GroupSchemeListScheme(
-  value: (json['value'] as List<dynamic>)
-      .map((e) => GroupScheme.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+GroupListScheme _$GroupSchemeListSchemeFromJson(Map<String, dynamic> json) =>
+    GroupListScheme(
+      value: (json['value'] as List<dynamic>)
+          .map((e) => GroupScheme.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
-Map<String, dynamic> _$GroupSchemeListSchemeToJson(
-  GroupSchemeListScheme instance,
-) => <String, dynamic>{'value': instance.value};
+Map<String, dynamic> _$GroupSchemeListSchemeToJson(GroupListScheme instance) =>
+    <String, dynamic>{'value': instance.value};

@@ -30,13 +30,13 @@ class GroupScheme extends Equatable {
 }
 
 @JsonSerializable()
-class GroupSchemeListScheme {
-  GroupSchemeListScheme({required this.value});
+class GroupListScheme {
+  GroupListScheme({required this.value});
 
   @JsonKey(name: 'value')
   final List<GroupScheme> value;
 
-  factory GroupSchemeListScheme.fromJson(Map<String, dynamic> json) =>
+  factory GroupListScheme.fromJson(Map<String, dynamic> json) =>
       _$GroupSchemeListSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$GroupSchemeListSchemeToJson(this);

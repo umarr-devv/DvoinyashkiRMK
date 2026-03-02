@@ -1,3 +1,4 @@
+import 'package:app/models/group.dart';
 import 'package:app/models/models.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
@@ -31,7 +32,7 @@ abstract class RestClient {
   });
 
   @GET('/Catalog_Номенклатура{full_path}')
-  Future<NomenclatureListScheme> getNomenclaturesByPath({
+  Future<GroupListScheme> getGroups({
     @Path('full_path') required String fullPath,
   });
 
