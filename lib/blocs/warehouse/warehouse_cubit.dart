@@ -20,6 +20,7 @@ class WarehouseCubit extends Cubit<WarehouseState> {
   StructureUnitScheme? get storeKey => settingsCubit.state.store;
 
   Future update() async {
+    if (storeKey == null) return;
     emit(WarehouseLoading(state));
     try {
       final Map<String, dynamic> params = {
