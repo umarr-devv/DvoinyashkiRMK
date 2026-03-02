@@ -51,7 +51,7 @@ class DataCubit extends HydratedCubit<DataState> {
       emit(DataLoading(state.copyWith(comment: 'Загрузка групп')));
       final groups = await client.getGroups(
         fullPath: buildODataQuery({
-          '\$filter': 'IsFolder eq true',
+          '\$filter': 'IsFolder eq true and Parent_Key eq guid\'1d449a23-82d6-11ed-a84d-18d6c704b66b\'',
           '\$format': 'json',
         }),
       );
