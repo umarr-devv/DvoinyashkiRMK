@@ -37,7 +37,7 @@ class DataCubitUtils {
           .where((i) => i.owner == nomen.refKey || i.owner == nomen.categoryKey)
           .toList();
 
-      if (chars.isNotEmpty) {
+      if (chars.isNotEmpty && nomen.useCharacteristic == true) {
         for (final char in chars) {
           List<PriceScheme> prices_ = prices
               .where(
