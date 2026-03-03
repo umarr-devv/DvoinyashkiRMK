@@ -14,6 +14,9 @@ class AuthScanner extends StatelessWidget {
       builder: (context, state) {
         return BarcodeKeyboardListener(
           onBarcodeScanned: (value) async {
+            if (value.length <= 2){
+              return;
+            }
             final user = state.users.firstWhereLogTypeOrNull(
               (i) => i.barcode == value,
             );
