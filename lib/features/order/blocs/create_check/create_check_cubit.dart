@@ -68,7 +68,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     emit(CreateCheckUpdate(newState));
   }
 
-  void setDebtUser(UserScheme user) {
+  void setDebtUser(Object user) {
     final newState = state.copyWith(debtUser: user);
     emit(CreateCheckUpdate(newState));
   }
@@ -190,7 +190,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       responsibleKey: user!.refKey,
       subdivisionKey: subdivision!.refKey,
       customer: udsCustomer?.user.displayName,
-      employeersDebtKey: state.debtUser?.refKey,
+      employeersDebtKey: state.paymentType == debtPaymentType ? state.debtUser?.refKey : null,
       debt: state.paymentType == debtPaymentType ? state.totalSum : 0,
       isCashlessPayment: false,
       cash: state.totalSumToPay,

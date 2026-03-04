@@ -43,101 +43,127 @@ class PaymentDialog extends StatefulWidget {
 class _PaymentDialogState extends State<PaymentDialog> {
   final formKey = GlobalKey<FormState>();
 
+  SettingsCubit get settingsCubit => BlocProvider.of<SettingsCubit>(context);
+  AuthCubit get authCubit => BlocProvider.of<AuthCubit>(context);
+  SessionCubit get sessionCubit => BlocProvider.of<SessionCubit>(context);
+  OrderCubit get orderCubit => BlocProvider.of<OrderCubit>(context);
+
+  final udsCustomerCubit = UdsCustomerCubit();
+
+  late final CreateCheckCubit createCheckCubit;
+
+  void initCubits() {
+    createCheckCubit = CreateCheckCubit(
+      settingsCubit,
+      authCubit,
+      sessionCubit,
+      orderCubit,
+      udsCustomerCubit,
+    );
+    createCheckCubit.init();
+  }
+
+  @override
+  void initState() {
+    initCubits();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final UdsCustomerCubit udsCustomerCubit = BlocProvider.of(
-      widget.rootContext,
-    );
-    final CreateCheckCubit createCheckCubit = BlocProvider.of(
-      widget.rootContext,
-    );
     final dataCubit = BlocProvider.of<DataCubit>(widget.rootContext);
-    return BlocListener<CreateCheckCubit, CreateCheckState>(
-      bloc: createCheckCubit,
-      listener: (context, state) {
-        if (state is CreateCheckFailure) {
-          ErrorDialog(
-            context,
-            label: 'Сетевая ошибка',
-            description: 'Произашла сетевая ошибка, 1C сервер не отвечает',
-          ).show();
-        } else if (state is CreateCheckUdsFailure) {
-          ErrorDialog(
-            context,
-            label: 'Ошибка UDS',
-            description: 'Переотсканируйте QR-код клиента в приложении UDS',
-          ).show();
-          udsCustomerCubit.clear();
-          createCheckCubit.init();
-          createCheckCubit.setUdsPoints(0);
-        } else if (state is CreateCheckSettingsFailure) {
-          ErrorDialog(
-            context,
-            label: 'Ошибка настроек',
-            description: 'Укажите настройки магазина в разделе "Настройки"',
-          ).show();
-        } else if (state is CreateCheckSessionFailure) {
-          ErrorDialog(
-            context,
-            label: 'Ошибка смены',
-            description: 'Необходимо начать смену',
-          ).show();
-        } else if (state is CreateCheckLoaded && state.check != null) {
-          ToastService.showToast(
-            widget.rootContext,
-            notification: NotificationData(
-              type: NotificationType.success,
-              icon: FluentIcons.receipt_24_regular,
-              title: 'Чек ${state.check?.number} пробит',
-              description:
-                  'Чек ${state.check?.number} на сумму ${state.check?.documentSum} успешно пробит',
-            ),
-          );
-          udsCustomerCubit.clear();
-          BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
-          BlocProvider.of<ChecksCubit>(widget.rootContext).update();
-          PrintService(
-            printerUrl: BlocProvider.of<SettingsCubit>(context).state.printer,
-          ).print(
-            PrintCheckScheme(
-              check: state.check!,
-              dataState: BlocProvider.of<DataCubit>(context).state,
-            ),
-            context,
-          );
-          AutoRouter.of(context).maybePop();
-        }
-      },
-      child: FDialog.raw(
-        builder: (context, style) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: createCheckCubit),
-              BlocProvider.value(value: udsCustomerCubit),
-              BlocProvider.value(value: dataCubit),
-            ],
-            child: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  spacing: 24,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(children: [PaymentScanner(), _DialogHeader()]),
-                    _DialogGeneralInfo(),
-                    _PaymentTypeSelect(),
-                    _PaymentSum(),
-                    _CustomerSelect(),
-                    _UdsCustomerPoints(),
-                    _DialogAccept(formKey),
-                  ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: createCheckCubit),
+        BlocProvider.value(value: udsCustomerCubit),
+      ],
+      child: BlocListener<CreateCheckCubit, CreateCheckState>(
+        bloc: createCheckCubit,
+        listener: (context, state) {
+          if (state is CreateCheckFailure) {
+            ErrorDialog(
+              context,
+              label: 'Сетевая ошибка',
+              description: 'Произашла сетевая ошибка, 1C сервер не отвечает',
+            ).show();
+          } else if (state is CreateCheckUdsFailure) {
+            ErrorDialog(
+              context,
+              label: 'Ошибка UDS',
+              description: 'Переотсканируйте QR-код клиента в приложении UDS',
+            ).show();
+            udsCustomerCubit.clear();
+            createCheckCubit.init();
+            createCheckCubit.setUdsPoints(0);
+          } else if (state is CreateCheckSettingsFailure) {
+            ErrorDialog(
+              context,
+              label: 'Ошибка настроек',
+              description: 'Укажите настройки магазина в разделе "Настройки"',
+            ).show();
+          } else if (state is CreateCheckSessionFailure) {
+            ErrorDialog(
+              context,
+              label: 'Ошибка смены',
+              description: 'Необходимо начать смену',
+            ).show();
+          } else if (state is CreateCheckLoaded && state.check != null) {
+            ToastService.showToast(
+              widget.rootContext,
+              notification: NotificationData(
+                type: NotificationType.success,
+                icon: FluentIcons.receipt_24_regular,
+                title: 'Чек ${state.check?.number} пробит',
+                description:
+                    'Чек ${state.check?.number} на сумму ${state.check?.documentSum} успешно пробит',
+              ),
+            );
+            udsCustomerCubit.clear();
+            BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
+            BlocProvider.of<ChecksCubit>(widget.rootContext).update();
+            PrintService(
+              printerUrl: BlocProvider.of<SettingsCubit>(context).state.printer,
+            ).print(
+              PrintCheckScheme(
+                check: state.check!,
+                dataState: BlocProvider.of<DataCubit>(context).state,
+              ),
+              context,
+            );
+            AutoRouter.of(context).maybePop();
+          }
+        },
+        child: FDialog.raw(
+          builder: (context, style) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: createCheckCubit),
+                BlocProvider.value(value: udsCustomerCubit),
+                BlocProvider.value(value: dataCubit),
+              ],
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    spacing: 24,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(children: [PaymentScanner(), _DialogHeader()]),
+                      _DialogGeneralInfo(),
+                      _PaymentTypeSelect(),
+                      _PaymentSum(),
+                      _CustomerSelect(),
+                      _UdsCustomerPoints(),
+                      _DialogAccept(formKey),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
