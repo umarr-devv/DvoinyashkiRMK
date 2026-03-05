@@ -241,4 +241,9 @@ abstract class RestClient {
 
   @POST('/Document_СборкаЗапасов(guid\'{ref_key}\')/Post()')
   Future postProduction({@Path('ref_key') required String refKey});
+
+  @GET('Document_ПеремещениеЗапасов(guid\'{ref_key}\')')
+  Future<DetailTransferScheme> getTransfer({
+    @Path('ref_key') required String refKey,
+  });
 }
