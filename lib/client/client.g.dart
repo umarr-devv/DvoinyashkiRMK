@@ -1258,29 +1258,54 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<DetailTransferScheme> getTransfer({required String refKey}) async {
+  Future<TransferListScheme> getTransfer({required String fullPath}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DetailTransferScheme>(
+    final _options = _setStreamType<TransferListScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'Document_ПеремещениеЗапасов(guid\'${refKey}\')',
+            '/Document_ПеремещениеЗапасов${fullPath}',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late DetailTransferScheme _value;
+    late TransferListScheme _value;
     try {
-      _value = DetailTransferScheme.fromJson(_result.data!);
+      _value = TransferListScheme.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
     }
+    return _value;
+  }
+
+  @override
+  Future<dynamic> updateTransfer({
+    required String refKey,
+    required TransferUpdateScheme data,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _options = _setStreamType<dynamic>(
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/Document_ПеремещениеЗапасов(guid\'${refKey}\')',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     return _value;
   }
 

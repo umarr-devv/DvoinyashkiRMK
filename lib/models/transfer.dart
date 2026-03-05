@@ -16,6 +16,7 @@ class TransferScheme extends Equatable {
     required this.reserveStructureUnitKey,
     required this.transferDate,
     required this.documentSum,
+    required this.isAccepted,
   });
   @JsonKey(name: 'Ref_Key')
   final String refKey;
@@ -35,7 +36,6 @@ class TransferScheme extends Equatable {
   @JsonKey(name: 'Ответственный_Key')
   final String userKey;
 
-
   @JsonKey(name: 'СтруктурнаяЕдиница_Key')
   final String reserveStructureUnitKey;
 
@@ -47,6 +47,9 @@ class TransferScheme extends Equatable {
 
   @JsonKey(name: 'СуммаДокумента')
   final double documentSum;
+
+  @JsonKey(name: 'Принят')
+  final bool isAccepted;
 
   factory TransferScheme.fromJson(Map<String, dynamic> json) =>
       _$TransferSchemeFromJson(json);
@@ -106,6 +109,7 @@ class DetailTransferScheme extends TransferScheme {
     required super.transferDate,
     required super.documentSum,
     required this.items,
+    required super.isAccepted,
   });
 
   @JsonKey(name: 'Запасы')
@@ -126,10 +130,26 @@ class TransferListScheme {
   const TransferListScheme({required this.value});
 
   @JsonKey(name: 'value')
-  final List<TransferScheme> value;
+  final List<DetailTransferScheme> value;
 
   factory TransferListScheme.fromJson(Map<String, dynamic> json) =>
       _$TransferListSchemeFromJson(json);
 
   Map<String, dynamic> toJson() => _$TransferListSchemeToJson(this);
+}
+
+@JsonSerializable()
+class TransferUpdateScheme {
+  TransferUpdateScheme({required this.transferDate, required this.isAccepted});
+
+  @JsonKey(name: 'ДатаПриемки')
+  final DateTime transferDate;
+
+  @JsonKey(name: 'Принят')
+  final bool isAccepted;
+
+  factory TransferUpdateScheme.fromJson(Map<String, dynamic> json) =>
+      _$TransferUpdateSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransferUpdateSchemeToJson(this);
 }

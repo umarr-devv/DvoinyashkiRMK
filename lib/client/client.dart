@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/models/group.dart';
 import 'package:app/models/models.dart';
 import 'package:dio/dio.dart';
@@ -242,8 +244,14 @@ abstract class RestClient {
   @POST('/Document_СборкаЗапасов(guid\'{ref_key}\')/Post()')
   Future postProduction({@Path('ref_key') required String refKey});
 
-  @GET('Document_ПеремещениеЗапасов(guid\'{ref_key}\')')
-  Future<DetailTransferScheme> getTransfer({
+  @GET('/Document_ПеремещениеЗапасов{full_path}')
+  Future<TransferListScheme> getTransfer({
+    @Path('full_path') required String fullPath,
+  });
+
+  @PATCH('/Document_ПеремещениеЗапасов(guid\'{ref_key}\')')
+  Future updateTransfer({
     @Path('ref_key') required String refKey,
+    @Body() required TransferUpdateScheme data,
   });
 }

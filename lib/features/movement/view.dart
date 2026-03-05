@@ -1,5 +1,5 @@
 import 'package:app/blocs/blocs.dart';
-import 'package:app/features/movement/blocs/create_movement/create_movement_cubit.dart';
+import 'package:app/features/movement/blocs/blocs.dart';
 import 'package:app/features/movement/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +31,17 @@ class _MovementScreenState extends State<MovementScreen> {
             BlocProvider.of<AuthCubit>(context),
           ),
         ),
+        BlocProvider(create: (context) => TransferCubit()),
       ],
       child: FScaffold(
         header: MovementHeader(),
         footer: MovementPagination(),
-        child: MovementTable(),
+        child: Column(
+          children: [
+            TransferFindDialog(),
+            Expanded(child: MovementTable()),
+          ],
+        ),
       ),
     );
   }

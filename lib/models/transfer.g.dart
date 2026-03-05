@@ -19,6 +19,7 @@ TransferScheme _$TransferSchemeFromJson(Map<String, dynamic> json) =>
       reserveStructureUnitKey: json['СтруктурнаяЕдиница_Key'] as String,
       transferDate: DateTime.parse(json['ДатаПриемки'] as String),
       documentSum: (json['СуммаДокумента'] as num).toDouble(),
+      isAccepted: json['Принят'] as bool,
     );
 
 Map<String, dynamic> _$TransferSchemeToJson(TransferScheme instance) =>
@@ -33,6 +34,7 @@ Map<String, dynamic> _$TransferSchemeToJson(TransferScheme instance) =>
       'СтруктурнаяЕдиницаПолучатель_Key': instance.recipientStructureUnitKey,
       'ДатаПриемки': instance.transferDate.toIso8601String(),
       'СуммаДокумента': instance.documentSum,
+      'Принят': instance.isAccepted,
     };
 
 TransferItemScheme _$TransferItemSchemeFromJson(Map<String, dynamic> json) =>
@@ -71,6 +73,7 @@ DetailTransferScheme _$DetailTransferSchemeFromJson(
   items: (json['Запасы'] as List<dynamic>)
       .map((e) => TransferItemScheme.fromJson(e as Map<String, dynamic>))
       .toList(),
+  isAccepted: json['Принят'] as bool,
 );
 
 Map<String, dynamic> _$DetailTransferSchemeToJson(
@@ -86,15 +89,30 @@ Map<String, dynamic> _$DetailTransferSchemeToJson(
   'СтруктурнаяЕдиницаПолучатель_Key': instance.recipientStructureUnitKey,
   'ДатаПриемки': instance.transferDate.toIso8601String(),
   'СуммаДокумента': instance.documentSum,
+  'Принят': instance.isAccepted,
   'Запасы': instance.items,
 };
 
 TransferListScheme _$TransferListSchemeFromJson(Map<String, dynamic> json) =>
     TransferListScheme(
       value: (json['value'] as List<dynamic>)
-          .map((e) => TransferScheme.fromJson(e as Map<String, dynamic>))
+          .map((e) => DetailTransferScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$TransferListSchemeToJson(TransferListScheme instance) =>
     <String, dynamic>{'value': instance.value};
+
+TransferUpdateScheme _$TransferUpdateSchemeFromJson(
+  Map<String, dynamic> json,
+) => TransferUpdateScheme(
+  transferDate: DateTime.parse(json['ДатаПриемки'] as String),
+  isAccepted: json['Принят'] as bool,
+);
+
+Map<String, dynamic> _$TransferUpdateSchemeToJson(
+  TransferUpdateScheme instance,
+) => <String, dynamic>{
+  'ДатаПриемки': instance.transferDate.toIso8601String(),
+  'Принят': instance.isAccepted,
+};

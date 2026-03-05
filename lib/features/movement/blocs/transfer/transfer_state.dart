@@ -25,6 +25,18 @@ final class TransferLoaded extends TransferState {
   TransferLoaded(super.state) : super.from();
 }
 
+final class TransferUpdating extends TransferState {
+  TransferUpdating(super.state) : super.from();
+}
+
+final class TransferUpdated extends TransferState {
+  TransferUpdated(super.state) : super.from();
+}
+
 final class TransferFailure extends TransferState {
   TransferFailure(super.state) : super.from();
+}
+
+final class TransferUpdateFailure extends TransferState {
+  TransferUpdateFailure(super.state) : super.from();
 }
