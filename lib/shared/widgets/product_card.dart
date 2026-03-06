@@ -13,9 +13,10 @@ import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, this.warehouseItem});
 
   final ProductData product;
+  final WarehouseItemScheme? warehouseItem;
 
   OrderItem? getOrderItem(OrderData? order) {
     return order?.items.firstWhereLogTypeOrNull(
@@ -26,7 +27,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final warehouseItem = product.warehouseItem(context);
+    final warehouseItem = this.warehouseItem ?? product.warehouseItem(context);
     return BlocBuilder<OrderCubit, OrderState>(
       bloc: BlocProvider.of<OrderCubit>(context),
       buildWhen: (previous, current) {
@@ -44,7 +45,7 @@ class ProductCard extends StatelessWidget {
           ),
           child: GestureDetector(
             onTap: () {
-              if ((product.warehouseItem(context)?.quantity ?? 0) > 0) {
+              if ((warehouseItem?.quantity ?? 0) > 0) {
                 BlocProvider.of<OrderCubit>(context).adaptiveAdd(
                   orderItem ??
                       OrderItem(
@@ -102,7 +103,10 @@ class ProductCard extends StatelessWidget {
                         children: [
                           _ProductCardTitle(product),
                           _ProductCardPrice(product),
-                          _ProductWarehouse(product),
+                          _ProductWarehouse(
+                            product,
+                            warehouseItem: warehouseItem,
+                          ),
                           Expanded(child: SizedBox()),
                           Align(
                             alignment: Alignment.centerRight,
@@ -271,14 +275,15 @@ class _ProductCardPrice extends StatelessWidget {
 }
 
 class _ProductWarehouse extends StatelessWidget {
-  const _ProductWarehouse(this.product);
+  const _ProductWarehouse(this.product, {this.warehouseItem});
 
   final ProductData product;
+  final WarehouseItemScheme? warehouseItem;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final warehouseItem = product.warehouseItem(context);
+    final warehouseItem = this.warehouseItem ?? product.warehouseItem(context);
     return Container(
       padding: const EdgeInsets.only(top: 4),
       child: Text(

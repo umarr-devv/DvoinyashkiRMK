@@ -15,10 +15,16 @@ import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
 class MovementCard extends StatelessWidget {
-  const MovementCard({super.key, required this.cubit, required this.product});
+  const MovementCard({
+    super.key,
+    required this.cubit,
+    required this.product,
+    this.warehouseItem,
+  });
 
   final CreateMovementCubit cubit;
   final ProductData product;
+  final WarehouseItemScheme? warehouseItem;
 
   CreateMovementItemData? getMovementItem(List<CreateMovementItemData> items) {
     return items.firstWhereLogTypeOrNull(
@@ -29,7 +35,7 @@ class MovementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final warehouseItem = product.warehouseItem(context);
+    final warehouseItem = this.warehouseItem ?? product.warehouseItem(context);
     return BlocBuilder<CreateMovementCubit, CreateMovementState>(
       bloc: cubit,
       buildWhen: (previous, current) {
@@ -90,7 +96,10 @@ class MovementCard extends StatelessWidget {
                         children: [
                           _ProductCardTitle(product),
                           _ProductCardPrice(product),
-                          _ProductWarehouse(product),
+                          _ProductWarehouse(
+                            product,
+                            warehouseItem: warehouseItem,
+                          ),
                           Expanded(child: SizedBox()),
                           Align(
                             alignment: Alignment.centerRight,
@@ -260,14 +269,15 @@ class _ProductCardPrice extends StatelessWidget {
 }
 
 class _ProductWarehouse extends StatelessWidget {
-  const _ProductWarehouse(this.product);
+  const _ProductWarehouse(this.product, {this.warehouseItem});
 
   final ProductData product;
+  final WarehouseItemScheme? warehouseItem;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final warehouseItem = product.warehouseItem(context);
+    final warehouseItem = this.warehouseItem ?? product.warehouseItem(context);
     return Container(
       padding: const EdgeInsets.only(top: 4),
       child: Text(

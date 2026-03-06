@@ -188,10 +188,11 @@ class _CatalogGrid extends StatelessWidget {
     required List<ProductData> products,
     required List<WarehouseItemScheme> warehouseItems,
   }) {
+    final productMap = {for (final p in products) p.uniqueId: p};
     List<ProductData> warehouseProducts = [];
 
     for (final i in warehouseItems) {
-      final item = i.product(context);
+      final item = productMap[i.uniqueId];
       if (item != null) {
         warehouseProducts.add(item);
       }
@@ -248,13 +249,25 @@ class _CatalogGrid extends StatelessWidget {
                               products: state.products,
                               warehouseItems: warehouseState.items,
                             );
+
+                            final warehouseItemsMap = {
+                              for (final i in warehouseState.items)
+                                i.uniqueId: i,
+                            };
+
                             if (products.isEmpty) {
                               return _GridEmptyItems(searchQuery: searchQuery);
                             }
                             if (settingsState.catalogListView) {
-                              return _CatalogList(products);
+                              return _CatalogList(
+                                products,
+                                warehouseItemsMap: warehouseItemsMap,
+                              );
                             } else {
-                              return _CatalogTable(products);
+                              return _CatalogTable(
+                                products,
+                                warehouseItemsMap: warehouseItemsMap,
+                              );
                             }
                           },
                         );
@@ -272,9 +285,10 @@ class _CatalogGrid extends StatelessWidget {
 }
 
 class _CatalogTable extends StatelessWidget {
-  const _CatalogTable(this.products);
+  const _CatalogTable(this.products, {required this.warehouseItemsMap});
 
   final List<ProductData> products;
+  final Map<String, WarehouseItemScheme> warehouseItemsMap;
   final double itemMinWidth = 180;
 
   @override
@@ -293,7 +307,11 @@ class _CatalogTable extends StatelessWidget {
             childAspectRatio: 0.65,
           ),
           itemBuilder: (context, index) {
-            return ProductCard(product: products[index]);
+            final product = products[index];
+            return ProductCard(
+              product: product,
+              warehouseItem: warehouseItemsMap[product.uniqueId],
+            );
           },
           itemCount: products.length,
         );
@@ -303,9 +321,10 @@ class _CatalogTable extends StatelessWidget {
 }
 
 class _CatalogList extends StatelessWidget {
-  const _CatalogList(this.products);
+  const _CatalogList(this.products, {required this.warehouseItemsMap});
 
   final List<ProductData> products;
+  final Map<String, WarehouseItemScheme> warehouseItemsMap;
   OrderItem? getOrderItem(OrderData? order, ProductData product) {
     return order?.items.firstWhereLogTypeOrNull(
       (i) => product.uniqueId == i.product.uniqueId,
@@ -343,6 +362,7 @@ class _CatalogList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final item = products[index];
                   final orderItem = getOrderItem(state.currentOrder, item);
+                  final warehouseItem = warehouseItemsMap[item.uniqueId];
                   return Row(
                     spacing: 12,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -375,7 +395,7 @@ class _CatalogList extends StatelessWidget {
                           child: ProductCardAddButton(
                             product: item,
                             orderItem: orderItem,
-                            warehouseItem: item.warehouseItem(context),
+                            warehouseItem: warehouseItem,
                           ),
                         ),
                       ),

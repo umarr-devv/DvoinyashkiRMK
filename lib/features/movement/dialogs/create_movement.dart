@@ -115,28 +115,40 @@ class CreateMovementDialog {
                             ),
                           )
                           .toList();
-                      return LayoutBuilder(
-                        builder: (context, constraints) {
-                          return GridView.builder(
-                            padding: const EdgeInsets.only(right: 12),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: (constraints.maxWidth / 160)
-                                      .floor()
-                                      .clamp(1, 10),
-                                  crossAxisSpacing: 8,
-                                  mainAxisSpacing: 8,
-                                  childAspectRatio: 0.65,
-                                ),
-                            itemBuilder: (context, index) {
-                              return MovementCard(
-                                product: searchItems[index],
-                                cubit: BlocProvider.of<CreateMovementCubit>(
-                                  rootContext,
-                                ),
+                      return BlocBuilder<WarehouseCubit, WarehouseState>(
+                        bloc: BlocProvider.of<WarehouseCubit>(rootContext),
+                        builder: (context, warehouseState) {
+                          final warehouseItemsMap = {
+                            for (final i in warehouseState.items) i.uniqueId: i,
+                          };
+                          return LayoutBuilder(
+                            builder: (context, constraints) {
+                              return GridView.builder(
+                                padding: const EdgeInsets.only(right: 12),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount:
+                                          (constraints.maxWidth / 160)
+                                              .floor()
+                                              .clamp(1, 10),
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 8,
+                                      childAspectRatio: 0.65,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final product = searchItems[index];
+                                  return MovementCard(
+                                    product: product,
+                                    warehouseItem:
+                                        warehouseItemsMap[product.uniqueId],
+                                    cubit: BlocProvider.of<CreateMovementCubit>(
+                                      rootContext,
+                                    ),
+                                  );
+                                },
+                                itemCount: searchItems.length,
                               );
                             },
-                            itemCount: searchItems.length,
                           );
                         },
                       );
