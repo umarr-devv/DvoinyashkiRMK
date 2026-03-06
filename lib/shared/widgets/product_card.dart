@@ -112,6 +112,7 @@ class ProductCard extends StatelessWidget {
                           _ProductWarehouse(
                             product,
                             warehouseItem: warehouseItem,
+                            isProduction: isProduction,
                           ),
                           Expanded(child: SizedBox()),
                           Align(
@@ -282,16 +283,27 @@ class _ProductCardPrice extends StatelessWidget {
 }
 
 class _ProductWarehouse extends StatelessWidget {
-  const _ProductWarehouse(this.product, {this.warehouseItem});
+  const _ProductWarehouse(
+    this.product, {
+    this.warehouseItem,
+    required this.isProduction,
+  });
 
   final ProductData product;
   final WarehouseItemScheme? warehouseItem;
+  final bool isProduction;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final warehouseItem = this.warehouseItem ?? product.warehouseItem(context);
-    return Container(
+    if (isProduction) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Text('Сборка', style: TextStyle(color: theme.custom.accent)),
+      );
+    }
+    return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Text(
         'В Складе: ${NumberFormat.decimalPattern().format(warehouseItem?.quantity ?? 0)}',
