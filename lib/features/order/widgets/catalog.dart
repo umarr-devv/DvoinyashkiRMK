@@ -1,6 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/features/order/states/states.dart';
+import 'package:app/models/group.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/widgets.dart';
@@ -8,7 +9,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 class OrderCatalog extends StatelessWidget {
   const OrderCatalog({super.key});
@@ -182,44 +182,58 @@ class _CatalogGrid extends StatelessWidget {
   List<ProductData> getItems(
     BuildContext context, {
     required SelectedGroupData? selectedGroup,
+    required List<GroupScheme> productionGroups,
     required String? searchQuery,
     required List<String> favoriteKeys,
     required List<String> pinned,
     required List<ProductData> products,
     required List<WarehouseItemScheme> warehouseItems,
   }) {
+    final productionGroupKeys = productionGroups.map((i) => i.refKey).toSet();
+    final favoriteKeysSet = favoriteKeys.toSet();
+    final lowerSearchQuery = searchQuery?.toLowerCase() ?? '';
+    final hasSearchQuery = lowerSearchQuery.isNotEmpty;
+    final selectedGroupKey = selectedGroup?.group?.refKey;
+    final isFavoriteFilter = selectedGroup?.favorite ?? false;
+
+    final result = <ProductData>[];
+    final addedIds = <String>{};
+
+    bool isMatch(ProductData product) {
+      if (selectedGroupKey != null) {
+        if (product.nomenclature.groupKey != selectedGroupKey) return false;
+      } else if (isFavoriteFilter) {
+        if (!favoriteKeysSet.contains(product.uniqueId)) return false;
+      }
+
+      if (hasSearchQuery) {
+        if (!product.name.toLowerCase().contains(lowerSearchQuery)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
     final productMap = {for (final p in products) p.uniqueId: p};
-    List<ProductData> warehouseProducts = [];
 
     for (final i in warehouseItems) {
-      final item = productMap[i.uniqueId];
-      if (item != null) {
-        warehouseProducts.add(item);
+      final product = productMap[i.uniqueId];
+      if (product != null &&
+          isMatch(product) &&
+          addedIds.add(product.uniqueId)) {
+        result.add(product);
       }
     }
 
-    List<ProductData> selectedGroupItems = List.from(warehouseProducts);
-    if (selectedGroup?.group != null) {
-      selectedGroupItems = selectedGroupItems
-          .where((i) => i.nomenclature.groupKey == selectedGroup!.group!.refKey)
-          .toList();
-    } else if (selectedGroup?.favorite ?? false) {
-      selectedGroupItems = selectedGroupItems
-          .where((i) => favoriteKeys.contains(i.uniqueId))
-          .toList();
+    for (final product in products) {
+      if (productionGroupKeys.contains(product.nomenclature.groupKey)) {
+        if (isMatch(product) && addedIds.add(product.uniqueId)) {
+          result.add(product);
+        }
+      }
     }
 
-    List<ProductData> searchQueryItems = List.from(selectedGroupItems);
-
-    if (searchQuery?.isNotEmpty ?? false) {
-      searchQueryItems = searchQueryItems
-          .where(
-            (i) => i.name.toLowerCase().contains(searchQuery!.toLowerCase()),
-          )
-          .toList();
-    }
-
-    return searchQueryItems;
+    return result;
   }
 
   @override
@@ -244,6 +258,7 @@ class _CatalogGrid extends StatelessWidget {
                               context,
                               selectedGroup: selectedCat,
                               searchQuery: searchQuery,
+                              productionGroups: settingsState.productionGroups,
                               pinned: settingsState.pinnedCategories,
                               favoriteKeys: favoriteState.favoriteKeys,
                               products: state.products,
@@ -254,19 +269,18 @@ class _CatalogGrid extends StatelessWidget {
                               for (final i in warehouseState.items)
                                 i.uniqueId: i,
                             };
+                            final productionGroupKeys = settingsState
+                                .productionGroups
+                                .map((i) => i.refKey)
+                                .toSet();
 
                             if (products.isEmpty) {
                               return _GridEmptyItems(searchQuery: searchQuery);
-                            }
-                            if (settingsState.catalogListView) {
-                              return _CatalogList(
-                                products,
-                                warehouseItemsMap: warehouseItemsMap,
-                              );
                             } else {
                               return _CatalogTable(
                                 products,
                                 warehouseItemsMap: warehouseItemsMap,
+                                productionGroupKeys: productionGroupKeys,
                               );
                             }
                           },
@@ -285,10 +299,15 @@ class _CatalogGrid extends StatelessWidget {
 }
 
 class _CatalogTable extends StatelessWidget {
-  const _CatalogTable(this.products, {required this.warehouseItemsMap});
+  const _CatalogTable(
+    this.products, {
+    required this.warehouseItemsMap,
+    required this.productionGroupKeys,
+  });
 
   final List<ProductData> products;
   final Map<String, WarehouseItemScheme> warehouseItemsMap;
+  final Set<String> productionGroupKeys;
   final double itemMinWidth = 180;
 
   @override
@@ -311,102 +330,12 @@ class _CatalogTable extends StatelessWidget {
             return ProductCard(
               product: product,
               warehouseItem: warehouseItemsMap[product.uniqueId],
+              isProduction: productionGroupKeys.contains(
+                product.nomenclature.groupKey,
+              ),
             );
           },
           itemCount: products.length,
-        );
-      },
-    );
-  }
-}
-
-class _CatalogList extends StatelessWidget {
-  const _CatalogList(this.products, {required this.warehouseItemsMap});
-
-  final List<ProductData> products;
-  final Map<String, WarehouseItemScheme> warehouseItemsMap;
-  OrderItem? getOrderItem(OrderData? order, ProductData product) {
-    return order?.items.firstWhereLogTypeOrNull(
-      (i) => product.uniqueId == i.product.uniqueId,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<OrderCubit>(context);
-    return BlocBuilder<OrderCubit, OrderState>(
-      bloc: cubit,
-      builder: (context, state) {
-        return Column(
-          spacing: 16,
-          children: [
-            Row(
-              children: [
-                Expanded(flex: 1, child: SizedBox()),
-                Expanded(flex: 6, child: Text('Название')),
-                Expanded(flex: 4, child: Text('Тип')),
-                Expanded(flex: 4, child: Text('Цена')),
-                SizedBox(
-                  width: 150,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Text('Кол-во'),
-                  ),
-                ),
-                SizedBox(width: 16),
-              ],
-            ),
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.only(right: 16),
-                itemBuilder: (context, index) {
-                  final item = products[index];
-                  final orderItem = getOrderItem(state.currentOrder, item);
-                  final warehouseItem = warehouseItemsMap[item.uniqueId];
-                  return Row(
-                    spacing: 12,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ProductCardFavoriteButton(
-                          item,
-                          padding: const EdgeInsets.all(0),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: Text(item.nomenclature.name ?? ''),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(item.characteristic?.description ?? ''),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          item.sellPrice?.price.price.toStringAsFixed(2) ?? '',
-                        ),
-                      ),
-                      SizedBox(
-                        width: 150,
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: ProductCardAddButton(
-                            product: item,
-                            orderItem: orderItem,
-                            warehouseItem: warehouseItem,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) => CustomDottedLine(),
-                itemCount: products.length,
-              ),
-            ),
-          ],
         );
       },
     );

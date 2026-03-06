@@ -13,10 +13,16 @@ import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key, required this.product, this.warehouseItem});
+  const ProductCard({
+    super.key,
+    required this.product,
+    this.warehouseItem,
+    required this.isProduction,
+  });
 
   final ProductData product;
   final WarehouseItemScheme? warehouseItem;
+  final bool isProduction;
 
   OrderItem? getOrderItem(OrderData? order) {
     return order?.items.firstWhereLogTypeOrNull(
@@ -45,7 +51,7 @@ class ProductCard extends StatelessWidget {
           ),
           child: GestureDetector(
             onTap: () {
-              if ((warehouseItem?.quantity ?? 0) > 0) {
+              if ((warehouseItem?.quantity ?? 0) > 0 || isProduction) {
                 BlocProvider.of<OrderCubit>(context).adaptiveAdd(
                   orderItem ??
                       OrderItem(
@@ -114,6 +120,7 @@ class ProductCard extends StatelessWidget {
                               product: product,
                               orderItem: orderItem,
                               warehouseItem: warehouseItem,
+                              isProduction: isProduction,
                             ),
                           ),
                         ],
@@ -303,18 +310,20 @@ class ProductCardAddButton extends StatelessWidget {
     super.key,
     required this.product,
     this.orderItem,
+    required this.isProduction,
     this.warehouseItem,
   });
 
   final ProductData product;
   final OrderItem? orderItem;
+  final bool isProduction;
   final WarehouseItemScheme? warehouseItem;
 
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<OrderCubit>(context);
     final theme = Theme.of(context);
-    if ((warehouseItem?.quantity ?? 0) <= 0) {
+    if ((warehouseItem?.quantity ?? 0) <= 0 && !isProduction) {
       return SizedBox();
     }
     if (orderItem != null) {
