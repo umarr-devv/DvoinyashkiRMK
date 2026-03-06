@@ -20,24 +20,22 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
   final windowReady = ValueNotifier<bool>(false);
 
   void channelListener() {
-    final dataCubit = BlocProvider.of<DataCubit>(context);
-    final orderCubit = BlocProvider.of<OrderCubit>(context);
-    final createCheckCubit = BlocProvider.of<CreateCheckCubit>(context);
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'ready':
           windowReady.value = true;
           await Future.delayed(const Duration(seconds: 1));
+
+          if (!mounted) return;
+
+          final dataCubit = BlocProvider.of<DataCubit>(context);
+          final orderCubit = BlocProvider.of<OrderCubit>(context);
+          final createCheckCubit = BlocProvider.of<CreateCheckCubit>(context);
+
+          await sendData('update_data', jsonEncode(dataCubit.state.toJson()));
+          await sendData('update_order', jsonEncode(orderCubit.state.toJson()));
           await sendData(
-            'update_data',
-            jsonEncode(dataCubit.state.toJson()),
-          );
-          await sendData(
-            'update_order',
-            jsonEncode(orderCubit.state.toJson()),
-          );
-          await sendData(
-            'update_order',
+            'update_check',
             jsonEncode(createCheckCubit.state.toJson()),
           );
       }
@@ -70,7 +68,10 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
         child: BlocListener<CreateCheckCubit, CreateCheckState>(
           bloc: BlocProvider.of<CreateCheckCubit>(context),
           listener: (context, createCheckState) async {
-             await sendData('update_check', jsonEncode(createCheckState.toJson()));
+            await sendData(
+              'update_check',
+              jsonEncode(createCheckState.toJson()),
+            );
           },
           child: SizedBox(),
         ),
