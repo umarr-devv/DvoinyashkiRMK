@@ -33,7 +33,7 @@ class DataState extends Equatable {
   final Map<String, String> productImages;
   final List<UserScheme> users;
   final List<AuthorScheme> authors;
-  final List<SpecificationItemScheme> specifications;
+  final List<SpecificationScheme> specifications;
 
   final List<ProductData> products;
 
@@ -54,7 +54,7 @@ class DataState extends Equatable {
     List<UserScheme>? users,
     List<AuthorScheme>? authors,
     List<ProductData>? products,
-    List<SpecificationItemScheme>? specifications,
+    List<SpecificationScheme>? specifications,
     String? comment,
     DateTime? update,
   }) {

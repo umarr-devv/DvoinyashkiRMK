@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
 import 'package:app/core/consts/consts.dart';
@@ -18,25 +20,49 @@ part 'data_state.dart';
 part 'data_utils.dart';
 
 class DataCubit extends HydratedCubit<DataState> {
-  DataCubit() : super(DataInitial());
+  DataCubit() : super(DataInitial()) {
+    _updateTimer = Timer.periodic(const Duration(hours: 1), (_) {
+      smallUpdate();
+    });
+  }
 
   final client = GetIt.I<RestClient>();
   final talker = GetIt.I<Talker>();
+  Timer? _updateTimer;
+
+  @override
+  Future<void> close() {
+    _updateTimer?.cancel();
+    return super.close();
+  }
 
   Future update() async {
     if (state.update == null ||
         DateTime.now().difference(state.update!) > Duration(hours: 12)) {
       await forceUpdate();
     } else {
-      emit(DataLoading(state.copyWith(comment: 'Кеширования данных')));
-      await Future.delayed(const Duration(seconds: 3));
-      emit(DataLoaded(state));
+      await smallUpdate();
     }
 
     if (state.update == null ||
         DateTime.now().difference(state.update!) > Duration(days: 7)) {
       await forceUpdateImages();
     }
+  }
+
+  Future smallUpdate() async {
+    emit(DataLoading(state.copyWith(comment: 'Загрузка цен')));
+    final prices = await client.getPrices();
+    final products = DataCubitUtils.getProducts(
+      nomenclatures: state.nomenclatures,
+      characteristics: state.characteristics,
+      prices: prices.value,
+      barcodes: state.barcodes,
+      priceTypes: state.priceTypes,
+      specifications: state.specifications,
+    );
+    final newState = state.copyWith(prices: prices.value, products: products);
+    emit(DataLoaded(newState));
   }
 
   Future forceUpdate() async {
@@ -51,7 +77,8 @@ class DataCubit extends HydratedCubit<DataState> {
       emit(DataLoading(state.copyWith(comment: 'Загрузка групп')));
       final groups = await client.getGroups(
         fullPath: buildODataQuery({
-          '\$filter': 'IsFolder eq true and Parent_Key eq guid\'1d449a23-82d6-11ed-a84d-18d6c704b66b\'',
+          '\$filter':
+              'IsFolder eq true and Parent_Key eq guid\'1d449a23-82d6-11ed-a84d-18d6c704b66b\'',
           '\$format': 'json',
         }),
       );
@@ -107,6 +134,7 @@ class DataCubit extends HydratedCubit<DataState> {
         users: users.users,
         authors: authors.authors,
         products: products,
+        specifications: specifications.value,
         update: DateTime.now(),
       );
       emit(DataLoaded(newState));

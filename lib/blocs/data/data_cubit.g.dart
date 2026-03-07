@@ -121,9 +121,7 @@ DataState _$DataStateFromJson(Map<String, dynamic> json) => DataState(
       const [],
   specifications:
       (json['specifications'] as List<dynamic>?)
-          ?.map(
-            (e) => SpecificationItemScheme.fromJson(e as Map<String, dynamic>),
-          )
+          ?.map((e) => SpecificationScheme.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
   comment: json['comment'] as String? ?? '',
