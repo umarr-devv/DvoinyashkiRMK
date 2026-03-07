@@ -31,6 +31,14 @@ final class SessionLoaded extends SessionState {
   SessionLoaded(super.state) : super.from();
 }
 
+final class SessionStarted extends SessionState {
+  SessionStarted(super.state) : super.from();
+}
+
+final class SessionEnded extends SessionState {
+  SessionEnded(super.state) : super.from();
+}
+
 final class SessionFailure extends SessionState {
   SessionFailure(super.state) : super.from();
 }

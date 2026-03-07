@@ -70,7 +70,7 @@ class WorkShiftScheme extends Equatable {
 
   static String get openStatus => 'Открыта';
 
-  static String get closeStatus => 'Закрыто';
+  static String get closeStatus => 'Закрыта';
 
   factory WorkShiftScheme.fromJson(Map<String, dynamic> json) =>
       _$WorkShiftSchemeFromJson(json);
@@ -115,7 +115,6 @@ class WorkShiftItemScheme {
 
   @JsonKey(name: 'Цена')
   final double price;
-
 
   @JsonKey(name: 'Сумма')
   final double totalSum;

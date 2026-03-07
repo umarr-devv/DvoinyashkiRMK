@@ -17,7 +17,7 @@ class DetailSessionCubit extends Cubit<DetailSessionState> {
   final client = GetIt.I<RestClient>();
   final talker = GetIt.I<Talker>();
 
-  Future update() async {
+  Future<DetailSessionState?> update() async {
     emit(DetailSessionLoading(state));
     try {
       final workShift = await client.getWorkShift(refKey: sessionRefKey);
@@ -72,9 +72,11 @@ class DetailSessionCubit extends Cubit<DetailSessionState> {
         endCashes: endCash?.cashes,
       );
       emit(DetailSessionLoaded(newState));
+      return newState;
     } catch (exc, st) {
       talker.error(exc, st);
       emit(DetailSessionFailure(state));
+      return null;
     }
   }
 }

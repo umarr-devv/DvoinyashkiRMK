@@ -28,6 +28,7 @@ class StartSessionDialog {
             FButton(
               onPress: () {
                 BlocProvider.of<SessionCubit>(context).start();
+                BlocProvider.of<WorkShiftsCubit>(context).update();
                 AutoRouter.of(context).maybePop();
               },
               style: FButtonStyle.primary(),

@@ -58,7 +58,7 @@ class SessionCubit extends Cubit<SessionState> {
         ),
       );
       await getCurrentWorkShift();
-      emit(SessionLoaded(state));
+      emit(SessionStarted(state));
     } catch (exc, st) {
       talker.error(exc, st);
       emit(SessionFailure(state));
@@ -70,7 +70,8 @@ class SessionCubit extends Cubit<SessionState> {
     emit(SessionLoading(state));
     try {
       DateTime? endDate;
-      if (state.currentWorkShift!.workShiftEnd?.isAfter(DateTime.now()) ?? false){
+      if (state.currentWorkShift!.workShiftEnd?.isAfter(DateTime.now()) ??
+          false) {
         endDate = DateTime.now();
       }
       await client.patchWorkShift(
@@ -81,6 +82,7 @@ class SessionCubit extends Cubit<SessionState> {
         ),
       );
       await client.postWorkShift(refKey: state.currentWorkShift!.refKey);
+      emit(SessionEnded(state));
       final newState = state.copyWith(undefined);
       emit(SessionLoaded(newState));
     } catch (exc, st) {
