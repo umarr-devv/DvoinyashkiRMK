@@ -35,13 +35,21 @@ class DetailSessionState extends Equatable {
     );
   }
 
+  double startWarehouseItemsCount() {
+    return startWarehouseItems.fold<double>(0, (a, b) => a + b.quantity);
+  }
+
+  double endWarehouseItemsCount() {
+    return endWarehouseItems.fold<double>(0, (a, b) => a + b.quantity);
+  }
+
   double startWarehouseItemsCash(BuildContext context) {
     return startWarehouseItems.fold<double>(0, (a, b) {
       final product = b.product(context);
       if (product != null) {
-        return (product.sellPrice?.price.price ?? 0) * b.quantity;
+        return a + ((product.sellPrice?.price.price ?? 0) * b.quantity);
       }
-      return 0;
+      return a;
     });
   }
 
@@ -49,9 +57,9 @@ class DetailSessionState extends Equatable {
     return endWarehouseItems.fold<double>(0, (a, b) {
       final product = b.product(context);
       if (product != null) {
-        return (product.sellPrice?.price.price ?? 0) * b.quantity;
+        return a + ((product.sellPrice?.price.price ?? 0) * b.quantity);
       }
-      return 0;
+      return a;
     });
   }
 
