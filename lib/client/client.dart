@@ -14,7 +14,9 @@ abstract class RestClient {
 
   @GET('/Catalog_Сотрудники')
   Future<UserListScheme> getUsers({
-    @Query('\$select') String select = 'Ref_Key,Description,ИНН,ШтрихКод',
+    @Query('\$select')
+    String select =
+        'Ref_Key,Description,ИНН,ШтрихКод,Склад_Key,Подразделение_Key,Должность_Key',
     @Query('\$format') String format = 'json',
   });
 
@@ -256,7 +258,7 @@ abstract class RestClient {
   });
 
   @GET('/Document_ЧекКонтроляДоступа{full_path}')
-  Future<RefKeyScheme> getWorkReportItem({
+  Future<RefKeyListScheme> getWorkReportItem({
     @Path('full_path') required String fullPath,
   });
 

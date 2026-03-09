@@ -8,6 +8,7 @@ part of 'work_report.dart';
 
 WorkReportScheme _$WorkReportSchemeFromJson(Map<String, dynamic> json) =>
     WorkReportScheme(
+      refKey: json['Ref_Key'] as String?,
       workedTime:
           (json['ОтработанноеВремя'] as List<dynamic>?)
               ?.map((e) => WorkedTimeScheme.fromJson(e as Map<String, dynamic>))
@@ -29,6 +30,7 @@ WorkReportScheme _$WorkReportSchemeFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$WorkReportSchemeToJson(WorkReportScheme instance) =>
     <String, dynamic>{
+      'Ref_Key': instance.refKey,
       'ОтработанноеВремя': instance.workedTime,
       'Сотрудник_Key': instance.employeeKey,
       'Ответственный_Key': instance.responsibleKey,

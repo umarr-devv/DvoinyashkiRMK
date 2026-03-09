@@ -14,3 +14,16 @@ class RefKeyScheme {
 
   Map<String, dynamic> toJson() => _$RefKeySchemeToJson(this);
 }
+
+@JsonSerializable()
+class RefKeyListScheme {
+  RefKeyListScheme({required this.value});
+
+  @JsonKey(name: 'value')
+  final List<RefKeyScheme> value;
+
+  factory RefKeyListScheme.fromJson(Map<String, dynamic> json) =>
+      _$RefKeyListSchemeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RefKeyListSchemeToJson(this);
+}

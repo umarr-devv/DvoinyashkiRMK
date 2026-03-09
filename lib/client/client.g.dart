@@ -21,7 +21,8 @@ class _RestClient implements RestClient {
 
   @override
   Future<UserListScheme> getUsers({
-    String select = 'Ref_Key,Description,ИНН,ШтрихКод',
+    String select =
+        'Ref_Key,Description,ИНН,ШтрихКод,Склад_Key,Подразделение_Key,Должность_Key',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
@@ -1310,12 +1311,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<RefKeyScheme> getWorkReportItem({required String fullPath}) async {
+  Future<RefKeyListScheme> getWorkReportItem({required String fullPath}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<RefKeyScheme>(
+    final _options = _setStreamType<RefKeyListScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -1326,9 +1327,9 @@ class _RestClient implements RestClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late RefKeyScheme _value;
+    late RefKeyListScheme _value;
     try {
-      _value = RefKeyScheme.fromJson(_result.data!);
+      _value = RefKeyListScheme.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

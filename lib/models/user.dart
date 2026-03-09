@@ -13,6 +13,9 @@ class UserScheme extends Equatable {
     required this.description,
     required this.inn,
     required this.barcode,
+    required this.departmentKey,
+    required this.warehouseKey,
+    required this.positionKey,
   });
 
   @JsonKey(name: 'Ref_Key')
@@ -26,6 +29,15 @@ class UserScheme extends Equatable {
 
   @JsonKey(name: 'ШтрихКод')
   final String? barcode;
+
+    @JsonKey(name: 'Склад_Key')
+  final String warehouseKey;
+
+  @JsonKey(name:'Подразделение_Key')
+  final String departmentKey;
+
+  @JsonKey(name: 'Должность_Key')
+  final String positionKey;
 
   factory UserScheme.fromJson(Map<String, dynamic> json) =>
       _$UserSchemeFromJson(json);
@@ -46,6 +58,9 @@ class DetailUserScheme extends UserScheme {
     required super.barcode,
     required this.jobTitle,
     required this.department,
+    required super.departmentKey,
+    required super.warehouseKey,
+    required super.positionKey,
     required this.image,
   }) : imageBytes = stringToBytes(image);
 

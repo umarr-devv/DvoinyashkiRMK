@@ -4,6 +4,9 @@ part 'work_report.g.dart';
 
 @JsonSerializable()
 class WorkReportScheme {
+  @JsonKey(name: 'Ref_Key')
+  final String? refKey;
+
   @JsonKey(name: 'ОтработанноеВремя', defaultValue: [])
   final List<WorkedTimeScheme> workedTime;
 
@@ -44,6 +47,7 @@ class WorkReportScheme {
   final DateTime reportDate;
 
   WorkReportScheme({
+    this.refKey,
     required this.workedTime,
     required this.employeeKey,
     required this.responsibleKey,
@@ -59,9 +63,9 @@ class WorkReportScheme {
     required this.reportDate,
   });
 
-  factory WorkReportScheme.fromJson(Map<String, dynamic> json) => 
+  factory WorkReportScheme.fromJson(Map<String, dynamic> json) =>
       _$WorkReportSchemeFromJson(json);
-      
+
   Map<String, dynamic> toJson() => _$WorkReportSchemeToJson(this);
 }
 
@@ -70,18 +74,13 @@ class UpdateWorkReportScheme {
   @JsonKey(name: 'ОтработанноеВремя', defaultValue: [])
   final List<WorkedTimeScheme> workedTime;
 
+  UpdateWorkReportScheme({required this.workedTime});
 
-  UpdateWorkReportScheme({
-    required this.workedTime,
-  });
-
-  factory UpdateWorkReportScheme.fromJson(Map<String, dynamic> json) => 
+  factory UpdateWorkReportScheme.fromJson(Map<String, dynamic> json) =>
       _$UpdateWorkReportSchemeFromJson(json);
-      
+
   Map<String, dynamic> toJson() => _$UpdateWorkReportSchemeToJson(this);
 }
-
-
 
 @JsonSerializable()
 class WorkedTimeScheme {
@@ -120,8 +119,8 @@ class WorkedTimeScheme {
     required this.positionKey,
   });
 
-  factory WorkedTimeScheme.fromJson(Map<String, dynamic> json) => 
+  factory WorkedTimeScheme.fromJson(Map<String, dynamic> json) =>
       _$WorkedTimeSchemeFromJson(json);
-      
+
   Map<String, dynamic> toJson() => _$WorkedTimeSchemeToJson(this);
 }
