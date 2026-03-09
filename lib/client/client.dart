@@ -254,4 +254,28 @@ abstract class RestClient {
     @Path('ref_key') required String refKey,
     @Body() required TransferUpdateScheme data,
   });
+
+  @GET('/Document_ЧекКонтроляДоступа{full_path}')
+  Future<RefKeyScheme> getWorkReportItem({
+    @Path('full_path') required String fullPath,
+  });
+
+  @GET('/Document_ЧекКонтроляДоступа(guid\'{ref_key}\')/Taбель')
+  Future<WorkReportScheme> getWorkReport({
+    @Path('ref_key') required String refKey,
+  });
+
+  @POST('/Document_ЕжедневныйОтчет')
+  Future<WorkReportScheme> createWorkReport({
+    @Body() required WorkReportScheme data,
+  });
+
+  @POST('/Document_ЕжедневныйОтчет(guid\'{ref_key}\')/Post()')
+  Future postWorkReport({@Path('ref_key') required String refKey});
+
+  @PATCH('/Document_ЕжедневныйОтчет(guid\'{ref_key}\')')
+  Future<WorkReportScheme> updateWorkReport({
+    @Path('ref_key') required String refKey,
+    @Body() required UpdateWorkReportScheme data,
+  });
 }
