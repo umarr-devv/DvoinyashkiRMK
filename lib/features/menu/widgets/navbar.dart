@@ -5,6 +5,7 @@ import 'package:app/core/router/router.dart';
 import 'package:app/features/menu/dialogs/dialogs.dart';
 import 'package:app/models/user.dart';
 import 'package:app/service/service.dart';
+import 'package:app/shared/dialogs/dialogs.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -177,9 +178,11 @@ class _MenuNavBarUser extends StatelessWidget {
                 },
               ),
               FTile(
-                prefix: const Icon(FIcons.headphones),
-                title: const Text('Поддержка'),
-                onPress: () {},
+                prefix: const Icon(FIcons.terminal),
+                title: const Text('Терминал'),
+                onPress: () {
+                  TerminalDialog(context).show();
+                },
               ),
               FTile(
                 prefix: Icon(
