@@ -136,14 +136,7 @@ class _ProductOrderCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                'Цена: ${item.price.toStringAsFixed(0)}',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: theme.custom.foreground,
-                ),
-              ),
+              _PriceSelector(item: item),
               Text(
                 'Сумма: ${item.totalSum.toStringAsFixed(0)}',
                 style: TextStyle(
@@ -167,6 +160,85 @@ class _ProductOrderCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PriceSelector extends StatelessWidget {
+  const _PriceSelector({required this.item});
+
+  final OrderItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cubit = BlocProvider.of<OrderCubit>(context);
+
+    if (item.product.prices.length <= 1) {
+      return Text(
+        'Цена: ${item.price.toStringAsFixed(0)}',
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: theme.custom.foreground,
+        ),
+      );
+    }
+
+    return FPopover(
+      popoverAnchor: Alignment.bottomRight,
+      childAnchor: Alignment.topRight,
+      popoverBuilder: (context, controller) {
+        return SizedBox(
+          width: 240,
+          child: FTileGroup(
+            children: item.product.prices.map((priceData) {
+              return FTile(
+                title: Text(priceData.type?.description ?? 'Без названия'),
+                suffix: Text(
+                  priceData.price.price.toStringAsFixed(0),
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                onPress: () {
+                  cubit.updateItem(
+                    item.copyWith(price: priceData.price.price.toDouble()),
+                  );
+                  controller.toggle();
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+      builder: (context, controller, child) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: controller.toggle,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 4,
+              children: [
+                Text(
+                  'Цена: ${item.price.toStringAsFixed(0)}',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: theme.custom.foreground,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dashed,
+                  ),
+                ),
+                Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 16,
+                  color: theme.custom.foreground,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
