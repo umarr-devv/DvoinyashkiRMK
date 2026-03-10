@@ -11,9 +11,9 @@ UserScheme _$UserSchemeFromJson(Map<String, dynamic> json) => UserScheme(
   description: json['Description'] as String,
   inn: json['ИНН'] as String?,
   barcode: json['ШтрихКод'] as String?,
-  departmentKey: json['Подразделение_Key'] as String,
-  warehouseKey: json['Склад_Key'] as String,
-  positionKey: json['Должность_Key'] as String,
+  departmentKey: json['Подразделение_Key'] as String?,
+  warehouseKey: json['Склад_Key'] as String?,
+  positionKey: json['Должность_Key'] as String?,
 );
 
 Map<String, dynamic> _$UserSchemeToJson(UserScheme instance) =>
@@ -35,9 +35,9 @@ DetailUserScheme _$DetailUserSchemeFromJson(Map<String, dynamic> json) =>
       barcode: json['ШтрихКод'] as String?,
       jobTitle: json['ДолжностьОбмен'] as String?,
       department: json['ПодразделениеОбмен'] as String?,
-      departmentKey: json['Подразделение_Key'] as String,
-      warehouseKey: json['Склад_Key'] as String,
-      positionKey: json['Должность_Key'] as String,
+      departmentKey: json['Подразделение_Key'] as String?,
+      warehouseKey: json['Склад_Key'] as String?,
+      positionKey: json['Должность_Key'] as String?,
       image: json['Фотография_Base64Data'] as String?,
     );
 

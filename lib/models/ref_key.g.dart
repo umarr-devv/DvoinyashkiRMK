@@ -6,11 +6,13 @@ part of 'ref_key.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-RefKeyScheme _$RefKeySchemeFromJson(Map<String, dynamic> json) =>
-    RefKeyScheme(refKey: json['Ref_Key'] as String);
+RefKeyScheme _$RefKeySchemeFromJson(Map<String, dynamic> json) => RefKeyScheme(
+  refKey: json['Ref_Key'] as String,
+  posted: json['Posted'] as bool?,
+);
 
 Map<String, dynamic> _$RefKeySchemeToJson(RefKeyScheme instance) =>
-    <String, dynamic>{'Ref_Key': instance.refKey};
+    <String, dynamic>{'Ref_Key': instance.refKey, 'Posted': instance.posted};
 
 RefKeyListScheme _$RefKeyListSchemeFromJson(Map<String, dynamic> json) =>
     RefKeyListScheme(

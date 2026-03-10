@@ -262,9 +262,10 @@ abstract class RestClient {
     @Path('full_path') required String fullPath,
   });
 
-  @GET('/Document_ЧекКонтроляДоступа(guid\'{ref_key}\')/Taбель')
+  @GET('/Document_ЧекКонтроляДоступа(guid\'{ref_key}\')/Табель')
   Future<WorkReportScheme> getWorkReport({
     @Path('ref_key') required String refKey,
+    @Query('\$format') String format = 'json'
   });
 
   @POST('/Document_ЕжедневныйОтчет')

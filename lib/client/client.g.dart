@@ -1338,16 +1338,19 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<WorkReportScheme> getWorkReport({required String refKey}) async {
+  Future<WorkReportScheme> getWorkReport({
+    required String refKey,
+    String format = 'json',
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'$format': format};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<WorkReportScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ЧекКонтроляДоступа(guid\'${refKey}\')/Taбель',
+            '/Document_ЧекКонтроляДоступа(guid\'${refKey}\')/Табель',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -4,10 +4,13 @@ part 'ref_key.g.dart';
 
 @JsonSerializable()
 class RefKeyScheme {
-  RefKeyScheme({required this.refKey});
+  RefKeyScheme({required this.refKey, required this.posted});
 
   @JsonKey(name: 'Ref_Key')
   final String refKey;
+
+  @JsonKey(name: 'Posted')
+  final bool? posted;
 
   factory RefKeyScheme.fromJson(Map<String, dynamic> json) =>
       _$RefKeySchemeFromJson(json);

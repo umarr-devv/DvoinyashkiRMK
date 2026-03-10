@@ -2,10 +2,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'work_report.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class WorkReportScheme {
-  @JsonKey(name: 'Ref_Key')
+  @JsonKey(name: 'Ref_Key', includeToJson: false)
   final String? refKey;
+
+  @JsonKey(name: 'Posted', includeToJson: false)
+  final bool? posted;
 
   @JsonKey(name: 'ОтработанноеВремя', defaultValue: [])
   final List<WorkedTimeScheme> workedTime;
@@ -60,6 +63,7 @@ class WorkReportScheme {
     required this.comment,
     required this.date,
     required this.departmentKey,
+    this.posted,
     required this.reportDate,
   });
 
@@ -69,7 +73,7 @@ class WorkReportScheme {
   Map<String, dynamic> toJson() => _$WorkReportSchemeToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class UpdateWorkReportScheme {
   @JsonKey(name: 'ОтработанноеВремя', defaultValue: [])
   final List<WorkedTimeScheme> workedTime;
@@ -82,7 +86,7 @@ class UpdateWorkReportScheme {
   Map<String, dynamic> toJson() => _$UpdateWorkReportSchemeToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class WorkedTimeScheme {
   @JsonKey(name: 'LineNumber')
   final String lineNumber;
@@ -94,7 +98,7 @@ class WorkedTimeScheme {
   final DateTime startTime;
 
   @JsonKey(name: 'ОкончаниеРаботы')
-  final DateTime endTime;
+  final DateTime? endTime;
 
   @JsonKey(name: 'Вычет')
   final num deduction;

@@ -30,14 +30,14 @@ class UserScheme extends Equatable {
   @JsonKey(name: 'ШтрихКод')
   final String? barcode;
 
-    @JsonKey(name: 'Склад_Key')
-  final String warehouseKey;
+  @JsonKey(name: 'Склад_Key')
+  final String? warehouseKey;
 
-  @JsonKey(name:'Подразделение_Key')
-  final String departmentKey;
+  @JsonKey(name: 'Подразделение_Key')
+  final String? departmentKey;
 
   @JsonKey(name: 'Должность_Key')
-  final String positionKey;
+  final String? positionKey;
 
   factory UserScheme.fromJson(Map<String, dynamic> json) =>
       _$UserSchemeFromJson(json);

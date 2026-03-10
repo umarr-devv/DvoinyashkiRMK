@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
+import 'terminal_user_found.dart';
+
 class TerminalDialog {
   TerminalDialog(this.rootContext);
 
@@ -15,14 +17,16 @@ class TerminalDialog {
     showFDialog(
       context: rootContext,
       builder: (context, style, animation) {
-        return const _TerminalDialogWidget();
+        return _TerminalDialogWidget(rootContext: rootContext);
       },
     );
   }
 }
 
 class _TerminalDialogWidget extends StatefulWidget {
-  const _TerminalDialogWidget();
+  const _TerminalDialogWidget({required this.rootContext});
+
+  final BuildContext rootContext;
 
   @override
   State<_TerminalDialogWidget> createState() => _TerminalDialogWidgetState();
@@ -50,7 +54,12 @@ class _TerminalDialogWidgetState extends State<_TerminalDialogWidget> {
     );
 
     if (user != null) {
-      AutoRouter.of(context).maybePop(user);
+      AutoRouter.of(context).maybePop().then((_) {
+        if (mounted) {
+          // ignore: use_build_context_synchronously
+          TerminalUserFoundDialog(widget.rootContext, user: user).show();
+        }
+      });
     } else {
       setState(() {
         _errorText = 'Пользователь не найден';

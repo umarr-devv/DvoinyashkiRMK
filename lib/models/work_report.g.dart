@@ -25,12 +25,12 @@ WorkReportScheme _$WorkReportSchemeFromJson(Map<String, dynamic> json) =>
       comment: json['Комментарий'] as String,
       date: DateTime.parse(json['Date'] as String),
       departmentKey: json['Подразделение_Key'] as String,
+      posted: json['Posted'] as bool?,
       reportDate: DateTime.parse(json['ДатаОтчета'] as String),
     );
 
 Map<String, dynamic> _$WorkReportSchemeToJson(WorkReportScheme instance) =>
     <String, dynamic>{
-      'Ref_Key': instance.refKey,
       'ОтработанноеВремя': instance.workedTime,
       'Сотрудник_Key': instance.employeeKey,
       'Ответственный_Key': instance.responsibleKey,
@@ -65,7 +65,9 @@ WorkedTimeScheme _$WorkedTimeSchemeFromJson(Map<String, dynamic> json) =>
       lineNumber: json['LineNumber'] as String,
       employeeKey: json['Сотрудник_Key'] as String,
       startTime: DateTime.parse(json['НачалоРаботы'] as String),
-      endTime: DateTime.parse(json['ОкончаниеРаботы'] as String),
+      endTime: json['ОкончаниеРаботы'] == null
+          ? null
+          : DateTime.parse(json['ОкончаниеРаботы'] as String),
       deduction: json['Вычет'] as num,
       inn: json['ИНН'] as String,
       warehouseKey: json['Склад_Key'] as String,
@@ -77,7 +79,7 @@ Map<String, dynamic> _$WorkedTimeSchemeToJson(WorkedTimeScheme instance) =>
       'LineNumber': instance.lineNumber,
       'Сотрудник_Key': instance.employeeKey,
       'НачалоРаботы': instance.startTime.toIso8601String(),
-      'ОкончаниеРаботы': instance.endTime.toIso8601String(),
+      'ОкончаниеРаботы': ?instance.endTime?.toIso8601String(),
       'Вычет': instance.deduction,
       'ИНН': instance.inn,
       'Склад_Key': instance.warehouseKey,
