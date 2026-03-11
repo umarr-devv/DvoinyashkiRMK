@@ -149,22 +149,27 @@ class DataCubit extends HydratedCubit<DataState> {
   Future forceUpdateImages() async {
     if (state is DataAltLoading) return;
     emit(DataAltLoading(state));
-    final response = await client.getProductImages();
+    try {
+      final response = await client.getProductImages();
 
-    final Map<String, String> productImages = {};
+      final Map<String, String> productImages = {};
 
-    for (final i in response.productImages) {
-      if (i.image?.isNotEmpty ?? false) {
-        final filePath = await saveImageToCache(
-          i.imageBytes!,
-          i.nomenclatureKey,
-        );
-        productImages[i.nomenclatureKey] = filePath;
+      for (final i in response.productImages) {
+        if (i.image?.isNotEmpty ?? false) {
+          final filePath = await saveImageToCache(
+            i.imageBytes!,
+            i.nomenclatureKey,
+          );
+          productImages[i.nomenclatureKey] = filePath;
+        }
       }
-    }
 
-    final newState = state.copyWith(productImages: productImages);
-    emit(DataAltLoaded(newState));
+      final newState = state.copyWith(productImages: productImages);
+      emit(DataAltLoaded(newState));
+    } catch (exc, st) {
+      talker.error(exc, st);
+      emit(DataFailure(state));
+    }
   }
 
   @override
