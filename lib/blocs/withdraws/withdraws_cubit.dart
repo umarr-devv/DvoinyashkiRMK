@@ -23,6 +23,7 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
 
   Future update({bool updateCash = false}) async {
     if (cashRegister == null) return;
+    if (state is WithdrawsLoading) return;
     emit(WithdrawsLoading(state));
     try {
       final Map<String, dynamic> params = {

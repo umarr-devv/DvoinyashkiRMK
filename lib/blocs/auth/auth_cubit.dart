@@ -19,6 +19,7 @@ class AuthCubit extends HydratedCubit<AuthState> {
   final String adminPassword = 'secret';
 
   Future login({required UserScheme user, required String password}) async {
+    if (state is AuthLoading) return;
     emit(AuthLoading(state));
 
     if (user.barcode != password && adminPassword != password) {

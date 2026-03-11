@@ -23,6 +23,7 @@ class WorkShiftsCubit extends HydratedCubit<WorkShiftsState> {
 
   Future update() async {
     if (cashRegister == null) return;
+    if (state is WorkShiftsLoading) return;
     emit(WorkShiftsLoading(state));
     try {
       final Map<String, dynamic> params = {

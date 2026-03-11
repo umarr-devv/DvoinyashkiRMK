@@ -51,6 +51,7 @@ class DataCubit extends HydratedCubit<DataState> {
   }
 
   Future smallUpdate() async {
+    if (state is DataLoading) return;
     emit(DataLoading(state.copyWith(comment: 'Загрузка цен')));
     final prices = await client.getPrices();
     final products = DataCubitUtils.getProducts(
@@ -66,6 +67,7 @@ class DataCubit extends HydratedCubit<DataState> {
   }
 
   Future forceUpdate() async {
+    if (state is DataLoading) return;
     emit(DataLoading(state));
     try {
       emit(DataLoading(state.copyWith(comment: 'Загрузка касс')));
@@ -145,6 +147,7 @@ class DataCubit extends HydratedCubit<DataState> {
   }
 
   Future forceUpdateImages() async {
+    if (state is DataAltLoading) return;
     emit(DataAltLoading(state));
     final response = await client.getProductImages();
 

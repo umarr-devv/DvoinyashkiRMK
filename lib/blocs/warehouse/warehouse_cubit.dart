@@ -21,6 +21,7 @@ class WarehouseCubit extends Cubit<WarehouseState> {
 
   Future update() async {
     if (storeKey == null) return;
+    if (state is WarehouseLoading) return;
     emit(WarehouseLoading(state));
     try {
       final Map<String, dynamic> params = {

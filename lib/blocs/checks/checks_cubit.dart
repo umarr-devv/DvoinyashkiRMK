@@ -23,6 +23,7 @@ class ChecksCubit extends HydratedCubit<ChecksState> {
 
   Future update() async {
     if (cashRegister == null) return;
+    if (state is ChecksLoading) return;
     emit(ChecksLoading(state));
     try {
       final Map<String, dynamic> params = {

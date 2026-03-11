@@ -31,6 +31,7 @@ class StatisticCubit extends HydratedCubit<StatisticState> {
 
   Future update() async {
     if (cashRegister == null) return;
+    if (state is StatisticLoading) return;
     emit(StatisticLoading(state));
     try {
       final Map<String, dynamic> params = {
@@ -66,6 +67,7 @@ class StatisticCubit extends HydratedCubit<StatisticState> {
 
   Future getItemsStatistic() async {
     if (cashRegister == null) return;
+    if (state is StatisticAltLoading) return;
     emit(StatisticAltLoading(state));
     try {
       final Map<String, dynamic> params = {

@@ -32,6 +32,7 @@ class SessionCubit extends Cubit<SessionState> {
         user == null) {
       return;
     }
+    if (state is SessionLoading) return;
     emit(SessionLoading(state));
 
     try {
@@ -67,6 +68,7 @@ class SessionCubit extends Cubit<SessionState> {
 
   Future end() async {
     if (state.currentWorkShift == null) return;
+    if (state is SessionLoading) return;
     emit(SessionLoading(state));
     try {
       DateTime? endDate;
@@ -92,6 +94,7 @@ class SessionCubit extends Cubit<SessionState> {
   }
 
   Future getCurrentWorkShift() async {
+    if (state is SessionLoading) return;
     emit(SessionLoading(state));
     try {
       final workShift = await _getWorkShiftByCashRegister();

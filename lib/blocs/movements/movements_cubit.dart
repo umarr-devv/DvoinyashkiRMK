@@ -23,6 +23,7 @@ class MovementsCubit extends HydratedCubit<MovementsState> {
 
   Future update() async {
     if (store == null) return;
+    if (state is MovementsLoading) return;
     emit(MovementsLoading(state));
     try {
       final Map<String, dynamic> params = {
