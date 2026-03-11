@@ -18,17 +18,31 @@ class TerminalCubit extends Cubit<TerminalState> {
     if (state is TerminalLoading) return;
     emit(TerminalLoading(state));
     try {
+      final now = DateTime.now();
+      final startDate = to1CODataDateTime(
+        DateTime(
+          now.year,
+          now.month,
+          now.day,
+        ).subtract(const Duration(days: 3)),
+      );
+      final endDate = to1CODataDateTime(
+        DateTime(now.year, now.month, now.day, 23, 59, 59),
+      );
+
       final response = await client.getWorkReportItem(
         fullPath: buildODataQuery({
           '\$top': '1',
           '\$orderby': 'Date desc',
           '\$format': 'json',
-          '\$filter': 'Сотрудник_Key eq guid\'${user.refKey}\'',
+          '\$filter':
+              'Сотрудник_Key eq guid\'${user.refKey}\' and Date ge $startDate and Date le $endDate',
         }),
       );
       if (response.value.isNotEmpty) {
         final workReport = response.value[0];
-        if (DateTime(1).difference(workReport.endWork) < Duration(seconds: 1)) {
+        if (DateTime(1).difference(workReport.endWork).abs() <
+            Duration(seconds: 1)) {
           final newState = state.copyWith(workReport);
           emit(TerminalLoaded(newState));
           return;
@@ -55,7 +69,7 @@ class TerminalCubit extends Cubit<TerminalState> {
           startWork: nowTime,
           endWork: DateTime(1),
           inn: user.inn ?? '',
-          roleKey: user.positionKey ?? '',
+          roleKey: user.positionKey,
           continueWork: 0,
           totalWork: 0,
         ),

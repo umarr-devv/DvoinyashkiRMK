@@ -35,7 +35,7 @@ class WorkReportScheme {
   final String inn;
 
   @JsonKey(name: 'Должность_Key')
-  final String roleKey;
+  final String? roleKey;
 
   @JsonKey(name: 'ПродолжительностьДня')
   final double continueWork;

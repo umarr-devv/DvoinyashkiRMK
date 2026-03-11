@@ -14,7 +14,7 @@ WorkReportScheme _$WorkReportSchemeFromJson(Map<String, dynamic> json) =>
       startWork: DateTime.parse(json['НачалоРаботы'] as String),
       endWork: DateTime.parse(json['ОкончаниеРаботы'] as String),
       inn: json['ИНН'] as String,
-      roleKey: json['Должность_Key'] as String,
+      roleKey: json['Должность_Key'] as String?,
       continueWork: (json['ПродолжительностьДня'] as num).toDouble(),
       totalWork: (json['ИтогоОтработано'] as num).toDouble(),
     );
