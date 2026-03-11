@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:app/blocs/blocs.dart';
-import 'package:app/features/order/blocs/blocs.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,14 +29,9 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
 
           final dataCubit = BlocProvider.of<DataCubit>(context);
           final orderCubit = BlocProvider.of<OrderCubit>(context);
-          final createCheckCubit = BlocProvider.of<CreateCheckCubit>(context);
 
           await sendData('update_data', jsonEncode(dataCubit.state.toJson()));
           await sendData('update_order', jsonEncode(orderCubit.state.toJson()));
-          await sendData(
-            'update_check',
-            jsonEncode(createCheckCubit.state.toJson()),
-          );
       }
     });
   }
@@ -65,16 +59,7 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
         listener: (context, orderState) async {
           await sendData('update_order', jsonEncode(orderState.toJson()));
         },
-        child: BlocListener<CreateCheckCubit, CreateCheckState>(
-          bloc: BlocProvider.of<CreateCheckCubit>(context),
-          listener: (context, createCheckState) async {
-            await sendData(
-              'update_check',
-              jsonEncode(createCheckState.toJson()),
-            );
-          },
-          child: SizedBox(),
-        ),
+        child: SizedBox(),
       ),
     );
   }

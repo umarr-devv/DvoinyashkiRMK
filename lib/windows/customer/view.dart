@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:app/blocs/blocs.dart';
-import 'package:app/features/order/blocs/blocs.dart';
 import 'package:app/service/window.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -27,7 +26,6 @@ class _CustomerWindowState extends State<CustomerWindow> {
 
   final order = ValueNotifier<OrderState?>(null);
   final data = ValueNotifier<DataState?>(null);
-  final check = ValueNotifier<CreateCheckState?>(null);
 
   @override
   void initState() {
@@ -39,8 +37,6 @@ class _CustomerWindowState extends State<CustomerWindow> {
           order.value = OrderState.fromJson(jsonDecode(call.arguments));
         case ('update_data'):
           data.value = DataState.fromJson(jsonDecode(call.arguments));
-        case ('update_check'):
-          check.value = CreateCheckState.fromJson(jsonDecode(call.arguments));
       }
     });
     channel.invokeMethod('ready');
@@ -58,14 +54,7 @@ class _CustomerWindowState extends State<CustomerWindow> {
             body: Column(
               children: [
                 displays(),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(child: table()),
-                      offers(),
-                    ],
-                  ),
-                ),
+                Expanded(child: table()),
                 footer(),
               ],
             ),
@@ -105,7 +94,7 @@ class _CustomerWindowState extends State<CustomerWindow> {
       children: [
         CustomDottedLine(),
         ValueListenableBuilder(
-          valueListenable: check,
+          valueListenable: order,
           builder: (context, value, child) {
             return Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
@@ -124,43 +113,10 @@ class _CustomerWindowState extends State<CustomerWindow> {
                   ),
                   Expanded(child: SizedBox()),
                   FLabel(
-                    label: Text('Тип оплаты'),
-                    axis: Axis.vertical,
-                    child: Text(
-                      value?.paymentType.label ?? '',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  FLabel(
-                    label: Text('UDS-баллы'),
-                    axis: Axis.vertical,
-                    child: Text(
-                      NumberFormat().format(value?.udsPoints ?? 0),
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  FLabel(
-                    label: Text('Общая сумма'),
-                    axis: Axis.vertical,
-                    child: Text(
-                      NumberFormat().format(value?.totalSum ?? 0),
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  FLabel(
                     label: Text('К оплате'),
                     axis: Axis.vertical,
                     child: Text(
-                      NumberFormat().format(value?.customerPay ?? 0),
+                      NumberFormat().format(value?.currentOrder?.totalSum ?? 0),
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,

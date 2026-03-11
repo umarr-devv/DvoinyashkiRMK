@@ -1,3 +1,4 @@
+import 'package:app/features/menu/widgets/customer_window.dart';
 import 'package:app/features/order/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class OrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // CustomerWindowOperation(),
+        CustomerWindowOperation(),
         Expanded(child: OrderCatalog()),
         OrderBasket(),
         OrderScanner(),
