@@ -258,25 +258,17 @@ abstract class RestClient {
   });
 
   @GET('/Document_ЧекКонтроляДоступа{full_path}')
-  Future<RefKeyListScheme> getWorkReportItem({
+  Future<WorkReportListScheme> getWorkReportItem({
     @Path('full_path') required String fullPath,
   });
 
-  @GET('/Document_ЧекКонтроляДоступа(guid\'{ref_key}\')/Табель')
-  Future<WorkReportScheme> getWorkReport({
-    @Path('ref_key') required String refKey,
-    @Query('\$format') String format = 'json'
-  });
 
-  @POST('/Document_ЕжедневныйОтчет')
+  @POST('/Document_ЧекКонтроляДоступа')
   Future<WorkReportScheme> createWorkReport({
     @Body() required WorkReportScheme data,
   });
 
-  @POST('/Document_ЕжедневныйОтчет(guid\'{ref_key}\')/Post()')
-  Future postWorkReport({@Path('ref_key') required String refKey});
-
-  @PATCH('/Document_ЕжедневныйОтчет(guid\'{ref_key}\')')
+  @PATCH('/Document_ЧекКонтроляДоступа(guid\'{ref_key}\')')
   Future<WorkReportScheme> updateWorkReport({
     @Path('ref_key') required String refKey,
     @Body() required UpdateWorkReportScheme data,

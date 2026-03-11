@@ -1311,12 +1311,14 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<RefKeyListScheme> getWorkReportItem({required String fullPath}) async {
+  Future<WorkReportListScheme> getWorkReportItem({
+    required String fullPath,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<RefKeyListScheme>(
+    final _options = _setStreamType<WorkReportListScheme>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -1327,39 +1329,9 @@ class _RestClient implements RestClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late RefKeyListScheme _value;
+    late WorkReportListScheme _value;
     try {
-      _value = RefKeyListScheme.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, response: _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<WorkReportScheme> getWorkReport({
-    required String refKey,
-    String format = 'json',
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'$format': format};
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<WorkReportScheme>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/Document_ЧекКонтроляДоступа(guid\'${refKey}\')/Табель',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late WorkReportScheme _value;
-    try {
-      _value = WorkReportScheme.fromJson(_result.data!);
+      _value = WorkReportListScheme.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -1380,7 +1352,7 @@ class _RestClient implements RestClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ЕжедневныйОтчет',
+            '/Document_ЧекКонтроляДоступа',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1398,27 +1370,6 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> postWorkReport({required String refKey}) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<dynamic>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/Document_ЕжедневныйОтчет(guid\'${refKey}\')/Post()',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    return _value;
-  }
-
-  @override
   Future<WorkReportScheme> updateWorkReport({
     required String refKey,
     required UpdateWorkReportScheme data,
@@ -1432,7 +1383,7 @@ class _RestClient implements RestClient {
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ЕжедневныйОтчет(guid\'${refKey}\')',
+            '/Document_ЧекКонтроляДоступа(guid\'${refKey}\')',
             queryParameters: queryParameters,
             data: _data,
           )

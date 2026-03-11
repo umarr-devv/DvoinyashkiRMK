@@ -22,19 +22,18 @@ class TerminalCubit extends Cubit<TerminalState> {
           '\$top': '1',
           '\$orderby': 'Date desc',
           '\$format': 'json',
-          '\$filter': 'Сотрудник_Key eq guid\'${user.refKey}\' and ',
+          '\$filter': 'Сотрудник_Key eq guid\'${user.refKey}\'',
         }),
       );
       if (response.value.isNotEmpty) {
-        final workReport = await client.getWorkReport(
-          refKey: response.value[0].refKey,
-        );
-        if (workReport.posted == false) {
+        final workReport = response.value[0];
+        if (DateTime(1).difference(workReport.endWork) < Duration(seconds: 1)) {
           final newState = state.copyWith(workReport);
           emit(TerminalLoaded(newState));
           return;
         }
       }
+
       emit(TerminalLoaded(state));
     } catch (exc, st) {
       talker.error(exc, st);
@@ -49,30 +48,14 @@ class TerminalCubit extends Cubit<TerminalState> {
       final nowTime = DateTime(1, 1, 1, now.hour, now.minute);
       final response = await client.createWorkReport(
         data: WorkReportScheme(
-          workedTime: [
-            WorkedTimeScheme(
-              lineNumber: "1",
-              employeeKey: user.refKey,
-              startTime: nowTime,
-              endTime: nowTime.add(Duration(seconds: 1)),
-              deduction: 0,
-              inn: user.inn ?? '',
-              warehouseKey: user.warehouseKey ?? '',
-              positionKey: user.positionKey ?? '',
-            ),
-          ],
-          employeeKey: user.refKey,
-          responsibleKey: user.refKey,
-          workplaceKey: user.warehouseKey ?? '',
-          authorKey: author.refKey,
-          isClosed: false,
-          coefficient: 1,
-          worked: "1",
-          workShiftKey: '529de239-d16b-11ed-a8d6-18d6c704b66b',
-          comment: 'из РМК',
           date: now,
-          departmentKey: user.departmentKey ?? '',
-          reportDate: now,
+          userKey: user.refKey,
+          startWork: nowTime,
+          endWork: DateTime(1),
+          inn: user.inn ?? '',
+          roleKey: user.positionKey ?? '',
+          continueWork: 0,
+          totalWork: 0,
         ),
       );
       final newState = state.copyWith(response);
@@ -91,24 +74,19 @@ class TerminalCubit extends Cubit<TerminalState> {
     try {
       final now = DateTime.now();
       final nowTime = DateTime(1, 1, 1, now.hour, now.minute);
+      final continueWork = now
+          .difference(workReport.startWork)
+          .inHours
+          .abs()
+          .toDouble();
       await client.updateWorkReport(
         refKey: workReport.refKey!,
         data: UpdateWorkReportScheme(
-          workedTime: [
-            WorkedTimeScheme(
-              lineNumber: "1",
-              employeeKey: user.refKey,
-              startTime: workReport.workedTime[0].startTime,
-              endTime: nowTime,
-              deduction: 0,
-              inn: user.inn ?? '',
-              warehouseKey: user.warehouseKey ?? '',
-              positionKey: user.positionKey ?? '',
-            ),
-          ],
+          endWork: nowTime,
+          continueWork: continueWork,
+          totalWork: continueWork,
         ),
       );
-      await client.postWorkReport(refKey: workReport.refKey!);
       final newState = state.copyWith(undefined);
       emit(TerminalUpdated(newState));
     } catch (exc, st) {
