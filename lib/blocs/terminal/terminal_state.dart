@@ -1,18 +1,24 @@
 part of 'terminal_cubit.dart';
 
 class TerminalState extends Equatable {
-  const TerminalState({this.workReport});
+  const TerminalState({this.workReport, this.timestamp});
 
   final WorkReportScheme? workReport;
+  final int? timestamp;
 
   TerminalState copyWith(Object? workReport) {
-    return TerminalState(workReport: undefCompare(workReport, this.workReport));
+    return TerminalState(
+      workReport: undefCompare(workReport, this.workReport),
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
   }
 
-  TerminalState.from(TerminalState other) : workReport = other.workReport;
+  TerminalState.from(TerminalState other)
+    : workReport = other.workReport,
+      timestamp = DateTime.now().millisecondsSinceEpoch;
 
   @override
-  List<Object?> get props => [workReport];
+  List<Object?> get props => [workReport, timestamp];
 }
 
 final class TerminalInitial extends TerminalState {}

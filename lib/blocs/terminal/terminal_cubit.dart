@@ -15,6 +15,7 @@ class TerminalCubit extends Cubit<TerminalState> {
   final talker = GetIt.I<Talker>();
 
   Future getWorkReport(UserScheme user) async {
+    if (state is TerminalLoading) return;
     emit(TerminalLoading(state));
     try {
       final response = await client.getWorkReportItem(
@@ -42,6 +43,7 @@ class TerminalCubit extends Cubit<TerminalState> {
   }
 
   Future come(UserScheme user, AuthorScheme author) async {
+    if (state is TerminalUpdating || state is TerminalLoading) return;
     emit(TerminalUpdating(state));
     try {
       final now = DateTime.now();
@@ -70,15 +72,13 @@ class TerminalCubit extends Cubit<TerminalState> {
     final workReport = state.workReport;
     if (workReport == null) return;
     if (workReport.refKey == null) return;
+    if (state is TerminalUpdating || state is TerminalLoading) return;
     emit(TerminalUpdating(state));
     try {
       final now = DateTime.now();
       final nowTime = DateTime(1, 1, 1, now.hour, now.minute);
-      final continueWork = now
-          .difference(workReport.startWork)
-          .inHours
-          .abs()
-          .toDouble();
+      final continueWork =
+          nowTime.difference(workReport.startWork).inMinutes.abs() / 60.0;
       await client.updateWorkReport(
         refKey: workReport.refKey!,
         data: UpdateWorkReportScheme(
