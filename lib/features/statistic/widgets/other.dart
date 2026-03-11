@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
+import 'package:app/service/print.dart';
+import 'package:app/service/print_schemes/statistic_nomenclature.dart';
 
 class StatisticOther extends StatefulWidget {
   const StatisticOther({super.key});
@@ -299,10 +301,33 @@ class _NomencaltureStatistic extends StatelessWidget {
         return BlocBuilder<DataCubit, DataState>(
           bloc: BlocProvider.of<DataCubit>(context),
           builder: (context, dataState) {
-            return DataTable2(
-              columnSpacing: 2,
-              dividerThickness: 0,
-              columns: [
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: FButton(
+                      style: FButtonStyle.secondary(),
+                      onPress: () {
+                        PrintService().print(
+                          PrintStatisticNomenclatureScheme(
+                            items: state.items,
+                            dataState: dataState,
+                          ),
+                          context,
+                        );
+                      },
+                      prefix: const Icon(FluentIcons.print_24_regular, size: 20),
+                      child: const Text('Печать'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: DataTable2(
+                    columnSpacing: 2,
+                    dividerThickness: 0,
+                    columns: [
                 DataColumn2(label: Text('Название'), fixedWidth: 160),
                 DataColumn2(label: Text('Характеристика')),
                 DataColumn2(label: Text('Кол-во'), numeric: true),
@@ -343,6 +368,9 @@ class _NomencaltureStatistic extends StatelessWidget {
                   ],
                 );
               }).toList(),
+            ),
+                ),
+              ],
             );
           },
         );
