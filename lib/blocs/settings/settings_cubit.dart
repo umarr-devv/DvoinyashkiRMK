@@ -26,6 +26,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     bool? showEmptyCategories,
     bool? catalogListView,
     List<GroupScheme>? productionGroups,
+    double? fontScale,
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -42,6 +43,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       showEmptyCategories: showEmptyCategories,
       catalogListView: catalogListView,
       productionGroups: productionGroups,
+      fontScale: fontScale,
     );
     emit(SettingsUpdate(newState));
   }

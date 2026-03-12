@@ -15,10 +15,12 @@ class SettingsState extends Equatable {
     this.productionGroups = const [],
     this.showEmptyCategories = false,
     this.catalogListView = false,
+    this.fontScale = 1.0,
   });
 
   final bool isDarkTheme;
   final double scale;
+  final double fontScale;
   final CashRegisterScheme? cashRegister;
   final AuthorScheme? author;
   final StructureUnitScheme? store;
@@ -41,10 +43,12 @@ class SettingsState extends Equatable {
     List<GroupScheme>? productionGroups,
     bool? showEmptyCategories,
     bool? catalogListView,
+    double? fontScale,
   }) {
     return SettingsState(
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
       scale: scale ?? this.scale,
+      fontScale: fontScale ?? this.fontScale,
       cashRegister: cashRegister ?? this.cashRegister,
       author: author ?? this.author,
       store: store ?? this.store,
@@ -68,7 +72,8 @@ class SettingsState extends Equatable {
       pinnedCategories = other.pinnedCategories,
       showEmptyCategories = other.showEmptyCategories,
       productionGroups = other.productionGroups,
-      catalogListView = other.catalogListView;
+      catalogListView = other.catalogListView,
+      fontScale = other.fontScale;
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);
@@ -88,6 +93,7 @@ class SettingsState extends Equatable {
     productionGroups,
     showEmptyCategories,
     catalogListView,
+    fontScale,
   ];
 }
 

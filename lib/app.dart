@@ -83,19 +83,26 @@ class _AppScreenState extends State<AppScreen> {
                 ? darkTheme.toFTheme()
                 : lightTheme.toFTheme(),
             child: FToaster(
-              child: MediaQuery(
-                data: MediaQuery.of(context).scale(),
-                child: MaterialApp.router(
-                  title: 'Dvoinyashki RMK',
-                  theme: theme,
-                  debugShowCheckedModeBanner: false,
-                  scrollBehavior: CustomScrollBehavior(),
-                  routerConfig: appRoute.config(
-                    navigatorObservers: () => [
-                      TalkerRouteObserver(GetIt.I<Talker>()),
-                    ],
-                  ),
-                ),
+              child: BlocBuilder<SettingsCubit, SettingsState>(
+                bloc: settingsCubit,
+                builder: (context, settingsState) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context).scale().copyWith(
+                          textScaler: TextScaler.linear(settingsState.fontScale),
+                        ),
+                    child: MaterialApp.router(
+                      title: 'Dvoinyashki RMK',
+                      theme: theme,
+                      debugShowCheckedModeBanner: false,
+                      scrollBehavior: CustomScrollBehavior(),
+                      routerConfig: appRoute.config(
+                        navigatorObservers: () => [
+                          TalkerRouteObserver(GetIt.I<Talker>()),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );
