@@ -79,6 +79,8 @@ class DetailSessionState extends Equatable {
         .fold(0.0, (sum, item) => sum + item.documentSum);
   }
 
+  double get revenue => cashRevenue + cashlessRevenue;
+
   DetailSessionState.from(DetailSessionState other)
     : workShift = other.workShift,
       withdraws = other.withdraws,

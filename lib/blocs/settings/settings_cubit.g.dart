@@ -10,7 +10,6 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
     SettingsState(
       isDarkTheme: json['isDarkTheme'] as bool? ?? false,
       scale: (json['scale'] as num?)?.toDouble() ?? 1,
-      fontScale: (json['fontScale'] as num?)?.toDouble() ?? 1.0,
       cashRegister: json['cashRegister'] == null
           ? null
           : CashRegisterScheme.fromJson(
@@ -40,12 +39,14 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
           const [],
       showEmptyCategories: json['showEmptyCategories'] as bool? ?? false,
       catalogListView: json['catalogListView'] as bool? ?? false,
+      fontScale: (json['fontScale'] as num?)?.toDouble() ?? 1.0,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
     <String, dynamic>{
       'isDarkTheme': instance.isDarkTheme,
       'scale': instance.scale,
+      'fontScale': instance.fontScale,
       'cashRegister': instance.cashRegister,
       'author': instance.author,
       'store': instance.store,
@@ -55,5 +56,4 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'productionGroups': instance.productionGroups,
       'showEmptyCategories': instance.showEmptyCategories,
       'catalogListView': instance.catalogListView,
-      'fontScale': instance.fontScale,
     };

@@ -139,7 +139,7 @@ class DetailSessionDialog {
             FLabel(
               label: Text('Выручка'),
               axis: Axis.vertical,
-              child: Text(NumberFormat().format(workShift.documentSum)),
+              child: Text(NumberFormat().format(sessionState.revenue)),
             ),
             FLabel(
               label: Text('Наличная выручка'),
