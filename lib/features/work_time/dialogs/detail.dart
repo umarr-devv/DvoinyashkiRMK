@@ -136,7 +136,7 @@ class DetailSessionDialog {
               child: Text(workShift.status),
             ),
             FLabel(
-              label: Text('Оборот'),
+              label: Text('Выручка'),
               axis: Axis.vertical,
               child: Text(NumberFormat().format(workShift.documentSum)),
             ),

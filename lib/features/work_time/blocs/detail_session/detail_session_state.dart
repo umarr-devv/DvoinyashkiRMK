@@ -8,6 +8,7 @@ class DetailSessionState extends Equatable {
     this.endWarehouseItems = const [],
     this.startCashes = const [],
     this.endCashes = const [],
+    this.checks = const [],
   });
 
   final DetailWorkShiftScheme? workShift;
@@ -16,6 +17,7 @@ class DetailSessionState extends Equatable {
   final List<WarehouseItemScheme> endWarehouseItems;
   final List<CashScheme> startCashes;
   final List<CashScheme> endCashes;
+  final List<CheckScheme> checks;
 
   DetailSessionState copyWith({
     DetailWorkShiftScheme? workShift,
@@ -24,6 +26,7 @@ class DetailSessionState extends Equatable {
     List<WarehouseItemScheme>? endWarehouseItems,
     List<CashScheme>? startCashes,
     List<CashScheme>? endCashes,
+     List<CheckScheme>? checks,
   }) {
     return DetailSessionState(
       workShift: workShift ?? this.workShift,
@@ -32,6 +35,7 @@ class DetailSessionState extends Equatable {
       endWarehouseItems: endWarehouseItems ?? this.endWarehouseItems,
       startCashes: startCashes ?? this.startCashes,
       endCashes: endCashes ?? this.endCashes,
+      checks: checks ?? this.checks,
     );
   }
 
@@ -69,7 +73,8 @@ class DetailSessionState extends Equatable {
       startWarehouseItems = other.startWarehouseItems,
       endWarehouseItems = other.endWarehouseItems,
       startCashes = other.startCashes,
-      endCashes = other.endCashes;
+      endCashes = other.endCashes,
+      checks = other.checks;
 
   @override
   List<Object?> get props => [
@@ -79,6 +84,7 @@ class DetailSessionState extends Equatable {
     endWarehouseItems,
     startCashes,
     endCashes,
+    checks,
   ];
 }
 
