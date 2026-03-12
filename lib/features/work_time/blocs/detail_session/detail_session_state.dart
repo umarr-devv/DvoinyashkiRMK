@@ -67,6 +67,18 @@ class DetailSessionState extends Equatable {
     });
   }
 
+  double get cashRevenue {
+    return checks
+        .where((c) => c.paymentType == CheckScheme.cashPaymentType)
+        .fold(0.0, (sum, item) => sum + item.documentSum);
+  }
+
+  double get cashlessRevenue {
+    return checks
+        .where((c) => c.paymentType == CheckScheme.cashlessPaymentType)
+        .fold(0.0, (sum, item) => sum + item.documentSum);
+  }
+
   DetailSessionState.from(DetailSessionState other)
     : workShift = other.workShift,
       withdraws = other.withdraws,

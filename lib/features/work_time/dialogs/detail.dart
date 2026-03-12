@@ -46,7 +46,7 @@ class DetailSessionDialog {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         title(state.workShift!),
-                        info(state.workShift!),
+                        info(state),
                         items(state),
                         actions(),
                       ],
@@ -79,7 +79,8 @@ class DetailSessionDialog {
     );
   }
 
-  Widget info(DetailWorkShiftScheme workShift) {
+  Widget info(DetailSessionState sessionState) {
+    final workShift = sessionState.workShift!;
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, state) {
@@ -140,6 +141,16 @@ class DetailSessionDialog {
               axis: Axis.vertical,
               child: Text(NumberFormat().format(workShift.documentSum)),
             ),
+            FLabel(
+              label: Text('Наличная выручка'),
+              axis: Axis.vertical,
+              child: Text(NumberFormat().format(sessionState.cashRevenue)),
+            ),
+            FLabel(
+              label: Text('Безналичная выручка'),
+              axis: Axis.vertical,
+              child: Text(NumberFormat().format(sessionState.cashlessRevenue)),
+            ),
           ],
         );
       },
@@ -158,6 +169,7 @@ class DetailSessionDialog {
               cashInfo('Начальный остаток денег', state.startCashes, dataState),
               cashInfo('Конечный остаток денег', state.endCashes, dataState),
               selledItems(state.workShift!, dataState),
+              checksInfo(state.checks, dataState),
               warehouseItems(
                 'Начальные остатки',
                 state.startWarehouseItems,
@@ -276,6 +288,44 @@ class DetailSessionDialog {
                 DataCell(Text(NumberFormat().format(item.quantity))),
                 DataCell(Text(NumberFormat().format(item.price))),
                 DataCell(Text(NumberFormat().format(item.totalSum))),
+              ],
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget checksInfo(List<CheckScheme> checks, DataState state) {
+    final theme = Theme.of(rootContext);
+    return FAccordionItem(
+      title: Text('Чеки'),
+      child: SizedBox(
+        height: 400,
+        child: DataTable2(
+          dividerThickness: 0,
+          headingRowHeight: 24,
+          columns: [
+            DataColumn2(label: Text('Номер')),
+            DataColumn2(label: Text('Тип оплаты')),
+            DataColumn2(label: Text('Сумма'), numeric: true),
+            DataColumn2(label: Text('Дата'), numeric: true),
+          ],
+          rows: checks.map((check) {
+            final index = checks.indexOf(check);
+            return DataRow2(
+              color: WidgetStatePropertyAll(
+                index.isOdd
+                    ? theme.custom.rowOddColor
+                    : theme.custom.rowEvenColor,
+              ),
+              cells: [
+                DataCell(Text(check.number)),
+                DataCell(Text(check.paymentType)),
+                DataCell(Text(NumberFormat().format(check.documentSum))),
+                DataCell(
+                  Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
+                ),
               ],
             );
           }).toList(),

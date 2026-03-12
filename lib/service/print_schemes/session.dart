@@ -52,6 +52,10 @@ class PrintSessionScheme extends PrintScheme {
               'Конец смены: ${DateFormat('HH:mm dd.MM.yyyy').format(session.workShift!.workShiftEnd ?? DateTime(0))}',
             ),
             pw.SizedBox(height: 8),
+            pw.Text('Выручка'),
+            pw.Text('Наличные: ${NumberFormat().format(session.cashRevenue)}'),
+            pw.Text('Безналичные: ${NumberFormat().format(session.cashlessRevenue)}'),
+            pw.SizedBox(height: 8),
             pw.Text('Начальная сумма'),
             pw.Table(
               children: session.startCashes.map((i) {
