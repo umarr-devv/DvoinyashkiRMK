@@ -4,6 +4,7 @@ import 'package:app/service/service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
@@ -86,7 +87,9 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
                   ),
                 )
               else if (state.workReport != null)
-                const Text('Текущий статус: На смене')
+                Text(
+                  'Приход: ${DateFormat('HH:mm').format(state.workReport!.crossingDate)}',
+                )
               else
                 const Text('Текущий статус: Смена закрыта'),
             ],
@@ -104,7 +107,38 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
                 FButton(
                   onPress: isLoading
                       ? null
-                      : () => context.read<TerminalCubit>().leave(user),
+                      : () {
+                          showFDialog(
+                            context: context,
+                            builder: (dialogContext, style, animation) =>
+                                FDialog(
+                                  title: const Text('Подтверждение'),
+                                  body: const Text(
+                                    'Вы уверены, что хотите отметить уход?',
+                                  ),
+                                  direction: Axis.horizontal,
+                                  actions: [
+                                    FButton(
+                                      onPress: () => AutoRouter.of(
+                                        dialogContext,
+                                      ).maybePop(),
+                                      style: FButtonStyle.outline(),
+                                      child: const Text('Отмена'),
+                                    ),
+                                    FButton(
+                                      onPress: () {
+                                        AutoRouter.of(dialogContext).maybePop();
+                                        context.read<TerminalCubit>().leave(
+                                          user,
+                                        );
+                                      },
+                                      style: FButtonStyle.destructive(),
+                                      child: const Text('Подтвердить'),
+                                    ),
+                                  ],
+                                ),
+                          );
+                        },
                   style: FButtonStyle.destructive(),
                   prefix: isLoading
                       ? const FCircularProgress()
@@ -116,7 +150,36 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
                   onPress: isLoading
                       ? null
                       : () {
-                          context.read<TerminalCubit>().come(user);
+                          showFDialog(
+                            context: context,
+                            builder: (dialogContext, style, animation) =>
+                                FDialog(
+                                  title: const Text('Подтверждение'),
+                                  body: const Text(
+                                    'Вы уверены, что хотите отметить приход?',
+                                  ),
+                                  direction: Axis.horizontal,
+                                  actions: [
+                                    FButton(
+                                      onPress: () => AutoRouter.of(
+                                        dialogContext,
+                                      ).maybePop(),
+                                      style: FButtonStyle.outline(),
+                                      child: const Text('Отмена'),
+                                    ),
+                                    FButton(
+                                      onPress: () {
+                                        AutoRouter.of(dialogContext).maybePop();
+                                        context.read<TerminalCubit>().come(
+                                          user,
+                                        );
+                                      },
+                                      style: FButtonStyle.primary(),
+                                      child: const Text('Подтвердить'),
+                                    ),
+                                  ],
+                                ),
+                          );
                         },
                   style: FButtonStyle.primary(),
                   prefix: isLoading
