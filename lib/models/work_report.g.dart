@@ -8,27 +8,32 @@ part of 'work_report.dart';
 
 WorkReportScheme _$WorkReportSchemeFromJson(Map<String, dynamic> json) =>
     WorkReportScheme(
-      refKey: json['Ref_Key'] as String?,
-      date: DateTime.parse(json['Date'] as String),
-      userKey: json['Сотрудник_Key'] as String,
-      startWork: DateTime.parse(json['НачалоРаботы'] as String),
-      endWork: DateTime.parse(json['ОкончаниеРаботы'] as String),
-      inn: json['ИНН'] as String,
-      roleKey: json['Должность_Key'] as String?,
-      continueWork: (json['ПродолжительностьДня'] as num).toDouble(),
-      totalWork: (json['ИтогоОтработано'] as num).toDouble(),
+      employeeKey: json['Сотрудник_Key'] as String,
+      terminalKey: json['Терминал_Key'] as String,
+      exitType: json['Выход'] as String,
+      moment: (json['Момент'] as num).toInt(),
+      minute: json['Минута'] as String,
+      crossingDate: DateTime.parse(json['ДатаПересечения'] as String),
+      status: json['Статус'] as String,
+      fio: json['ФИО'] as String,
+      updaterKey: json['Обновил_Key'] as String?,
+      placeKey: json['Место_Key'] as String?,
+      passNumber: json['НомерПропуска'] as String?,
     );
 
 Map<String, dynamic> _$WorkReportSchemeToJson(WorkReportScheme instance) =>
     <String, dynamic>{
-      'Date': instance.date.toIso8601String(),
-      'Сотрудник_Key': instance.userKey,
-      'НачалоРаботы': instance.startWork.toIso8601String(),
-      'ОкончаниеРаботы': instance.endWork.toIso8601String(),
-      'ИНН': instance.inn,
-      'Должность_Key': instance.roleKey,
-      'ПродолжительностьДня': instance.continueWork,
-      'ИтогоОтработано': instance.totalWork,
+      'Сотрудник_Key': instance.employeeKey,
+      'Терминал_Key': instance.terminalKey,
+      'Выход': instance.exitType,
+      'Момент': instance.moment,
+      'Минута': instance.minute,
+      'ДатаПересечения': instance.crossingDate.toIso8601String(),
+      'Статус': instance.status,
+      'ФИО': instance.fio,
+      'Обновил_Key': ?instance.updaterKey,
+      'Место_Key': ?instance.placeKey,
+      'НомерПропуска': ?instance.passNumber,
     };
 
 WorkReportListScheme _$WorkReportListSchemeFromJson(
@@ -42,19 +47,3 @@ WorkReportListScheme _$WorkReportListSchemeFromJson(
 Map<String, dynamic> _$WorkReportListSchemeToJson(
   WorkReportListScheme instance,
 ) => <String, dynamic>{'value': instance.value};
-
-UpdateWorkReportScheme _$UpdateWorkReportSchemeFromJson(
-  Map<String, dynamic> json,
-) => UpdateWorkReportScheme(
-  endWork: DateTime.parse(json['ОкончаниеРаботы'] as String),
-  continueWork: (json['ПродолжительностьДня'] as num).toDouble(),
-  totalWork: (json['ИтогоОтработано'] as num).toDouble(),
-);
-
-Map<String, dynamic> _$UpdateWorkReportSchemeToJson(
-  UpdateWorkReportScheme instance,
-) => <String, dynamic>{
-  'ОкончаниеРаботы': instance.endWork.toIso8601String(),
-  'ПродолжительностьДня': instance.continueWork,
-  'ИтогоОтработано': instance.totalWork,
-};

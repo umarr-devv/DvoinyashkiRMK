@@ -2,46 +2,54 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'work_report.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class WorkReportScheme {
   WorkReportScheme({
-    this.refKey,
-    required this.date,
-    required this.userKey,
-    required this.startWork,
-    required this.endWork,
-    required this.inn,
-    required this.roleKey,
-    required this.continueWork,
-    required this.totalWork,
+    required this.employeeKey,
+    required this.terminalKey,
+    required this.exitType,
+    required this.moment,
+    required this.minute,
+    required this.crossingDate,
+    required this.status,
+    required this.fio,
+    required this.updaterKey,
+    required this.placeKey,
+    required this.passNumber,
   });
 
-  @JsonKey(name: 'Ref_Key', includeToJson: false)
-  final String? refKey;
-
-  @JsonKey(name: 'Date')
-  final DateTime date;
-
   @JsonKey(name: 'Сотрудник_Key')
-  final String userKey;
+  final String employeeKey;
 
-  @JsonKey(name: 'НачалоРаботы')
-  final DateTime startWork;
+  @JsonKey(name: 'Терминал_Key')
+  final String terminalKey;
 
-  @JsonKey(name: 'ОкончаниеРаботы')
-  final DateTime endWork;
+  @JsonKey(name: 'Выход')
+  final String exitType;
 
-  @JsonKey(name: 'ИНН')
-  final String inn;
+  @JsonKey(name: 'Момент')
+  final int moment;
 
-  @JsonKey(name: 'Должность_Key')
-  final String? roleKey;
+  @JsonKey(name: 'Минута')
+  final String minute;
 
-  @JsonKey(name: 'ПродолжительностьДня')
-  final double continueWork;
+  @JsonKey(name: 'ДатаПересечения')
+  final DateTime crossingDate;
 
-  @JsonKey(name: 'ИтогоОтработано')
-  final double totalWork;
+  @JsonKey(name: 'Статус')
+  final String status;
+
+  @JsonKey(name: 'ФИО')
+  final String fio;
+
+  @JsonKey(name: 'Обновил_Key')
+  final String? updaterKey;
+
+  @JsonKey(name: 'Место_Key')
+  final String? placeKey;
+
+  @JsonKey(name: 'НомерПропуска')
+  final String? passNumber;
 
   factory WorkReportScheme.fromJson(Map<String, dynamic> json) =>
       _$WorkReportSchemeFromJson(json);
@@ -62,25 +70,3 @@ class WorkReportListScheme {
   Map<String, dynamic> toJson() => _$WorkReportListSchemeToJson(this);
 }
 
-@JsonSerializable()
-class UpdateWorkReportScheme {
-  @JsonKey(name: 'ОкончаниеРаботы')
-  final DateTime endWork;
-
-  @JsonKey(name: 'ПродолжительностьДня')
-  final double continueWork;
-
-  @JsonKey(name: 'ИтогоОтработано')
-  final double totalWork;
-
-  UpdateWorkReportScheme({
-    required this.endWork,
-    required this.continueWork,
-    required this.totalWork,
-  });
-
-  factory UpdateWorkReportScheme.fromJson(Map<String, dynamic> json) =>
-      _$UpdateWorkReportSchemeFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UpdateWorkReportSchemeToJson(this);
-}

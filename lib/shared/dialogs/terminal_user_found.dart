@@ -116,17 +116,7 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
                   onPress: isLoading
                       ? null
                       : () {
-                          final authors = context
-                              .read<DataCubit>()
-                              .state
-                              .authors;
-                          if (authors.isNotEmpty) {
-                            // Ищем автора для текущего пользователя (или берем первого, так как логика авторов зависит от бизнес-правил)
-                            final author = authors.first;
-                            context.read<TerminalCubit>().come(user, author);
-                          } else {
-                            // Показать сообщение, если авторы не загружены
-                          }
+                          context.read<TerminalCubit>().come(user);
                         },
                   style: FButtonStyle.primary(),
                   prefix: isLoading

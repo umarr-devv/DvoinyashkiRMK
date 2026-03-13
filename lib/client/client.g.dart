@@ -1322,7 +1322,7 @@ class _RestClient implements RestClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ЧекКонтроляДоступа${fullPath}',
+            '/InformationRegister_ЯвкиСотрудников${fullPath}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1352,38 +1352,7 @@ class _RestClient implements RestClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/Document_ЧекКонтроляДоступа',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late WorkReportScheme _value;
-    try {
-      _value = WorkReportScheme.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, response: _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<WorkReportScheme> updateWorkReport({
-    required String refKey,
-    required UpdateWorkReportScheme data,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(data.toJson());
-    final _options = _setStreamType<WorkReportScheme>(
-      Options(method: 'PATCH', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/Document_ЧекКонтроляДоступа(guid\'${refKey}\')',
+            '/InformationRegister_ЯвкиСотрудников',
             queryParameters: queryParameters,
             data: _data,
           )

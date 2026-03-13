@@ -257,20 +257,14 @@ abstract class RestClient {
     @Body() required TransferUpdateScheme data,
   });
 
-  @GET('/Document_ЧекКонтроляДоступа{full_path}')
+  @GET('/InformationRegister_ЯвкиСотрудников{full_path}')
   Future<WorkReportListScheme> getWorkReportItem({
     @Path('full_path') required String fullPath,
   });
 
 
-  @POST('/Document_ЧекКонтроляДоступа')
+  @POST('/InformationRegister_ЯвкиСотрудников')
   Future<WorkReportScheme> createWorkReport({
     @Body() required WorkReportScheme data,
-  });
-
-  @PATCH('/Document_ЧекКонтроляДоступа(guid\'{ref_key}\')')
-  Future<WorkReportScheme> updateWorkReport({
-    @Path('ref_key') required String refKey,
-    @Body() required UpdateWorkReportScheme data,
   });
 }
