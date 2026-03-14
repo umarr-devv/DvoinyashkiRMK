@@ -66,4 +66,9 @@ Accept: application/json
     "НомерПропуска": ""
 }
 
+### Тест
 
+http://31.192.248.55:48702/unf3/odata/standard.odata/Catalog_Сотрудники?$top=0
+Authorization: {{$dotenv authorization}}
+Content-Type: application/json
+Accept: application/json

@@ -58,7 +58,7 @@ Future<Talker> initTalker() async {
 Future initDependencies(Talker talker) async {
   await dotenv.load(fileName: ".env");
 
-  final dio = DioConfigure.init(talker: talker);
+  final dio = await DioConfigure.init(talker: talker);
 
   final secureStorage = SecureStorage();
   final generalStorage = GeneralStorage();

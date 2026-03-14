@@ -11,7 +11,7 @@ class OrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CustomerWindowOperation(),
+        // CustomerWindowOperation(),
         Expanded(child: OrderCatalog()),
         OrderBasket(),
         OrderScanner(),
