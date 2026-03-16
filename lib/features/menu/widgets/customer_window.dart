@@ -23,12 +23,13 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
       switch (call.method) {
         case 'ready':
           windowReady.value = true;
-          await Future.delayed(const Duration(seconds: 1));
-
-          if (!mounted) return;
 
           final dataCubit = BlocProvider.of<DataCubit>(context);
           final orderCubit = BlocProvider.of<OrderCubit>(context);
+
+          await Future.delayed(const Duration(seconds: 1));
+
+          if (!mounted) return;
 
           await sendData('update_data', jsonEncode(dataCubit.state.toJson()));
           await sendData('update_order', jsonEncode(orderCubit.state.toJson()));
@@ -40,6 +41,12 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
   void initState() {
     super.initState();
     channelListener();
+  }
+
+  @override
+  void dispose() {
+    windowReady.dispose();
+    super.dispose();
   }
 
   Future<void> sendData(String method, dynamic payload) async {
