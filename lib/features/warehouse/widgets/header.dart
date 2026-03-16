@@ -1,5 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/warehouse/states/states.dart';
+import 'package:app/service/print.dart';
+import 'package:app/service/print_schemes/warehouse.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +31,31 @@ class WarehouseHeader extends StatelessWidget {
               },
             ),
           ),
+        ),
+        BlocBuilder<WarehouseCubit, WarehouseState>(
+          builder: (context, warehouseState) {
+            return BlocBuilder<DataCubit, DataState>(
+              builder: (context, dataState) {
+                return FButton.icon(
+                  onPress: warehouseState.items.isEmpty
+                      ? null
+                      : () {
+                          final settingsCubit =
+                              BlocProvider.of<SettingsCubit>(context);
+                          PrintService().print(
+                            PrintWarehouseScheme(
+                              items: warehouseState.items,
+                              dataState: dataState,
+                              store: settingsCubit.state.store,
+                            ),
+                            context,
+                          );
+                        },
+                  child: Icon(FluentIcons.print_24_regular),
+                );
+              },
+            );
+          },
         ),
         FButton.icon(
           onPress: () {

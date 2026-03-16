@@ -10,7 +10,6 @@ class PrintCheckScheme extends PrintScheme {
 
   final DetailCheckScheme check;
   final DataState dataState;
-
   @override
   List<pw.Widget> build() {
     final store = dataState.structureUnits.firstWhereLogTypeOrNull(
