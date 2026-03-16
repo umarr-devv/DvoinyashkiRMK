@@ -10,6 +10,7 @@ class StatisticCheckScheme {
     required this.udsClient,
     required this.documentSum,
     required this.composition,
+    required this.udsPayment,
   });
 
   @JsonKey(name: 'Date')
@@ -20,6 +21,9 @@ class StatisticCheckScheme {
 
   @JsonKey(name: 'КлиентUDS')
   final String udsClient;
+
+  @JsonKey(name: 'СуммаОплатUDS')
+  final String udsPayment;
 
   @JsonKey(name: 'СуммаДокумента')
   final double documentSum;

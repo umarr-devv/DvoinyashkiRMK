@@ -14,6 +14,7 @@ StatisticCheckScheme _$StatisticCheckSchemeFromJson(
   udsClient: json['КлиентUDS'] as String,
   documentSum: (json['СуммаДокумента'] as num).toDouble(),
   composition: json['Состав'] as String,
+  udsPayment: json['СуммаОплатUDS'] as String,
 );
 
 Map<String, dynamic> _$StatisticCheckSchemeToJson(
@@ -22,6 +23,7 @@ Map<String, dynamic> _$StatisticCheckSchemeToJson(
   'Date': instance.date.toIso8601String(),
   'Кассир_Key': instance.userKey,
   'КлиентUDS': instance.udsClient,
+  'СуммаОплатUDS': instance.udsPayment,
   'СуммаДокумента': instance.documentSum,
   'Состав': instance.composition,
 };

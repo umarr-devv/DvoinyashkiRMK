@@ -236,6 +236,16 @@ class _StatisticTotal extends StatelessWidget {
                 label: Row(
                   spacing: 6,
                   children: [
+                    Icon(FluentIcons.person_24_regular),
+                    Text('UDS-баллы'),
+                  ],
+                ),
+                child: Text(NumberFormat().format(state.totalUdsPoints)),
+              ),
+              _StatisticTotalItem(
+                label: Row(
+                  spacing: 6,
+                  children: [
                     Icon(Icons.percent_rounded),
                     Text('Привлеченность UDS'),
                   ],
@@ -304,7 +314,10 @@ class _NomencaltureStatistic extends StatelessWidget {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: FButton(
@@ -318,7 +331,10 @@ class _NomencaltureStatistic extends StatelessWidget {
                           context,
                         );
                       },
-                      prefix: const Icon(FluentIcons.print_24_regular, size: 20),
+                      prefix: const Icon(
+                        FluentIcons.print_24_regular,
+                        size: 20,
+                      ),
                       child: const Text('Печать'),
                     ),
                   ),
@@ -328,47 +344,49 @@ class _NomencaltureStatistic extends StatelessWidget {
                     columnSpacing: 2,
                     dividerThickness: 0,
                     columns: [
-                DataColumn2(label: Text('Название'), fixedWidth: 160),
-                DataColumn2(label: Text('Характеристика')),
-                DataColumn2(label: Text('Кол-во'), numeric: true),
-                DataColumn2(label: Text('Сумма'), numeric: true),
-              ],
-              rows: state.items.map((item) {
-                final nomenclature = dataState.nomenclatures
-                    .firstWhereLogTypeOrNull(
-                      (i) => i.refKey == item.nomenclatureKey,
-                    );
-                final characteristic = dataState.characteristics
-                    .firstWhereLogTypeOrNull(
-                      (i) => i.refKey == item.characteristicKey,
-                    );
-                final int index = state.items.indexOf(item);
-                return DataRow2(
-                  onTap: () {},
-                  color: WidgetStatePropertyAll(
-                    index.isOdd
-                        ? theme.custom.rowOddColor
-                        : theme.custom.rowEvenColor,
+                      DataColumn2(label: Text('Название'), fixedWidth: 160),
+                      DataColumn2(label: Text('Характеристика')),
+                      DataColumn2(label: Text('Кол-во'), numeric: true),
+                      DataColumn2(label: Text('Сумма'), numeric: true),
+                    ],
+                    rows: state.items.map((item) {
+                      final nomenclature = dataState.nomenclatures
+                          .firstWhereLogTypeOrNull(
+                            (i) => i.refKey == item.nomenclatureKey,
+                          );
+                      final characteristic = dataState.characteristics
+                          .firstWhereLogTypeOrNull(
+                            (i) => i.refKey == item.characteristicKey,
+                          );
+                      final int index = state.items.indexOf(item);
+                      return DataRow2(
+                        onTap: () {},
+                        color: WidgetStatePropertyAll(
+                          index.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor,
+                        ),
+                        cells: [
+                          DataCell(Text(nomenclature?.name ?? '')),
+                          DataCell(Text(characteristic?.description ?? '')),
+                          DataCell(
+                            Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(item.totalQuantity),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(item.totalSum),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
                   ),
-                  cells: [
-                    DataCell(Text(nomenclature?.name ?? '')),
-                    DataCell(Text(characteristic?.description ?? '')),
-                    DataCell(
-                      Text(
-                        NumberFormat.currency(
-                          symbol: '',
-                        ).format(item.totalQuantity),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        NumberFormat.currency(symbol: '').format(item.totalSum),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
                 ),
               ],
             );

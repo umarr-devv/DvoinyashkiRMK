@@ -41,6 +41,14 @@ class StatisticState extends Equatable {
 
   Set get uniqueUdsClient => Set.from(udsClients);
 
+  double get totalUdsPoints => checks.fold<double>(0, (a, b) {
+    final udsDiscount = double.tryParse(b.udsPayment);
+    if (udsDiscount != null){
+      return a + udsDiscount;
+    }
+    return a;
+  });
+
   double get totalSum =>
       checks.map((i) => i.documentSum).fold(0, (a, b) => a + b);
 
