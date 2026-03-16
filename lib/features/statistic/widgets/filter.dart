@@ -20,8 +20,8 @@ class StaticticFilter extends StatelessWidget {
             SizedBox(
               width: 240,
               child: FDateField.calendar(
-                control: FDateFieldControl.managed(
-                  initial: state.startDate,
+                control: FDateFieldControl.lifted(
+                  date: state.startDate,
                   onChange: (value) {
                     if (value != null) {
                       cubit.setDate(startDate: value);
@@ -38,8 +38,8 @@ class StaticticFilter extends StatelessWidget {
             SizedBox(
               width: 240,
               child: FDateField.calendar(
-                control: FDateFieldControl.managed(
-                  initial: state.endDate,
+                control: FDateFieldControl.lifted(
+                  date: state.endDate,
                   onChange: (value) {
                     if (value != null) {
                       cubit.setDate(endDate: value);
