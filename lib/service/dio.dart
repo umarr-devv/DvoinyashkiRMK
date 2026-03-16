@@ -8,7 +8,6 @@ import 'package:dio/io.dart';
 
 class DioConfigure {
   static String url = dotenv.env['EXTERNAL_API_URL']!;
-  static String internalUrl = dotenv.env['INTERNAL_API_URL']!;
   static String authorization = dotenv.env['authorization']!;
 
   static String udsUrl = dotenv.env['UDS_API']!;
@@ -31,23 +30,6 @@ class DioConfigure {
         talker: talker,
       ),
     );
-
-    try {
-      final testDio = Dio(
-        BaseOptions(
-          baseUrl: url,
-          connectTimeout: const Duration(seconds: 2),
-          receiveTimeout: const Duration(seconds: 2),
-        ),
-      );
-      await testDio.get(
-        '/Catalog_Сотрудники?\$top=0',
-        options: Options(validateStatus: (status) => true),
-      );
-    } catch (e) {
-      talker?.warning('Primary URL ($url) failed: $e. Switching to internal URL ($internalUrl)');
-      dio.options.baseUrl = internalUrl;
-    }
 
     return dio;
   }

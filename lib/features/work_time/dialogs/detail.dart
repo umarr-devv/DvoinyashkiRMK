@@ -161,214 +161,395 @@ class DetailSessionDialog {
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, dataState) {
-        return Material(
-          type: MaterialType.transparency,
-          child: FAccordion(
-            children: [
-              withdrawsItems(state.withdraws, dataState),
-              cashInfo('Начальный остаток денег', state.startCashes, dataState),
-              cashInfo('Конечный остаток денег', state.endCashes, dataState),
-              selledItems(state.workShift!, dataState),
-              checksInfo(state.checks, dataState),
-              warehouseItems(
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _sectionButton(
+              label: 'Выемки',
+              icon: FluentIcons.money_24_regular,
+              onTap: () => _showWithdrawsDialog(state.withdraws, dataState),
+            ),
+            _sectionButton(
+              label: 'Начальный остаток денег',
+              icon: FluentIcons.money_24_regular,
+              onTap: () => _showCashInfoDialog(
+                'Начальный остаток денег',
+                state.startCashes,
+                dataState,
+              ),
+            ),
+            _sectionButton(
+              label: 'Конечный остаток денег',
+              icon: FluentIcons.money_24_regular,
+              onTap: () => _showCashInfoDialog(
+                'Конечный остаток денег',
+                state.endCashes,
+                dataState,
+              ),
+            ),
+            _sectionButton(
+              label: 'Проданные товары',
+              icon: FluentIcons.cart_24_regular,
+              onTap: () =>
+                  _showSelledItemsDialog(state.workShift!, dataState),
+            ),
+            _sectionButton(
+              label: 'Чеки',
+              icon: FluentIcons.receipt_24_regular,
+              onTap: () => _showChecksDialog(state.checks, dataState),
+            ),
+            _sectionButton(
+              label: 'Начальные остатки',
+              icon: FluentIcons.box_24_regular,
+              onTap: () => _showWarehouseItemsDialog(
                 'Начальные остатки',
                 state.startWarehouseItems,
                 dataState,
               ),
-              warehouseItems(
-                'Конечный остатки',
+            ),
+            _sectionButton(
+              label: 'Конечные остатки',
+              icon: FluentIcons.box_24_regular,
+              onTap: () => _showWarehouseItemsDialog(
+                'Конечные остатки',
                 state.endWarehouseItems,
                 dataState,
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
   }
 
-  Widget warehouseItems(
+  Widget _sectionButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return FButton(
+      style: FButtonStyle.outline(),
+      prefix: Icon(icon),
+      onPress: onTap,
+      child: Text(label),
+    );
+  }
+
+  void _showWithdrawsDialog(
+    List<WithdrawScheme> withdraws,
+    DataState state,
+  ) {
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog.raw(
+          constraints: BoxConstraints(maxWidth: 900),
+          builder: (context, _) {
+            return _buildTableDialog(
+              icon: FluentIcons.money_24_regular,
+              title: 'Выемки',
+              child: SizedBox(
+                height: 400,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    headingRowHeight: 24,
+                    columns: [
+                      DataColumn2(label: Text('Номер документа')),
+                      DataColumn2(label: Text('Касса')),
+                      DataColumn2(label: Text('Магазин')),
+                      DataColumn2(label: Text('Сумма'), numeric: true),
+                      DataColumn2(label: Text('Дата'), numeric: true),
+                    ],
+                    rows: withdraws.map((withdraw) {
+                      final cashReister =
+                          state.cashRegisters.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == withdraw.cashRegisyerKey,
+                      );
+                      final store = state.structureUnits.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == withdraw.storeKey,
+                      );
+                      return DataRow2(
+                        cells: [
+                          DataCell(Text(withdraw.number)),
+                          DataCell(Text(cashReister?.description ?? '')),
+                          DataCell(Text(store?.description ?? '')),
+                          DataCell(
+                            Text(NumberFormat().format(withdraw.documentSum)),
+                          ),
+                          DataCell(
+                            Text(
+                              DateFormat('HH:mm dd.MM.yyyy').format(
+                                withdraw.date,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showCashInfoDialog(
+    String label,
+    List<CashScheme> cashes,
+    DataState state,
+  ) {
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog.raw(
+          constraints: BoxConstraints(maxWidth: 500),
+          builder: (context, _) {
+            return _buildTableDialog(
+              icon: FluentIcons.money_24_regular,
+              title: label,
+              child: SizedBox(
+                height: 200,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    headingRowHeight: 32,
+                    columns: [DataColumn2(label: Text('Сумма'))],
+                    rows: cashes.map((item) {
+                      return DataRow2(
+                        cells: [
+                          DataCell(Text(NumberFormat().format(item.value))),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showSelledItemsDialog(
+    DetailWorkShiftScheme workShift,
+    DataState state,
+  ) {
+    final theme = Theme.of(rootContext);
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog.raw(
+          constraints: BoxConstraints(maxWidth: 1000),
+          builder: (context, _) {
+            return _buildTableDialog(
+              icon: FluentIcons.cart_24_regular,
+              title: 'Проданные товары',
+              child: SizedBox(
+                height: 600,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    headingRowHeight: 32,
+                    columns: [
+                      DataColumn2(label: Text('Название')),
+                      DataColumn2(label: Text('Характеристика')),
+                      DataColumn2(label: Text('Кол-во'), numeric: true),
+                      DataColumn2(label: Text('Цена'), numeric: true),
+                      DataColumn2(label: Text('Сумма'), numeric: true),
+                    ],
+                    rows: workShift.items.map((item) {
+                      final index = workShift.items.indexOf(item);
+                      final nomenclature =
+                          state.nomenclatures.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == item.nomenclatureKey,
+                      );
+                      final characteristic =
+                          state.characteristics.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == item.characteristicKey,
+                      );
+                      return DataRow2(
+                        color: WidgetStatePropertyAll(
+                          index.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor,
+                        ),
+                        cells: [
+                          DataCell(Text(nomenclature?.name ?? '')),
+                          DataCell(Text(characteristic?.description ?? '')),
+                          DataCell(
+                            Text(NumberFormat().format(item.quantity)),
+                          ),
+                          DataCell(Text(NumberFormat().format(item.price))),
+                          DataCell(
+                            Text(NumberFormat().format(item.totalSum)),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showChecksDialog(List<CheckScheme> checks, DataState state) {
+    final theme = Theme.of(rootContext);
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog.raw(
+          constraints: BoxConstraints(maxWidth: 900),
+          builder: (context, _) {
+            return _buildTableDialog(
+              icon: FluentIcons.receipt_24_regular,
+              title: 'Чеки',
+              child: SizedBox(
+                height: 500,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    headingRowHeight: 24,
+                    columns: [
+                      DataColumn2(label: Text('Номер')),
+                      DataColumn2(label: Text('Тип оплаты')),
+                      DataColumn2(label: Text('Сумма'), numeric: true),
+                      DataColumn2(label: Text('Дата'), numeric: true),
+                    ],
+                    rows: checks.map((check) {
+                      final index = checks.indexOf(check);
+                      return DataRow2(
+                        color: WidgetStatePropertyAll(
+                          index.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor,
+                        ),
+                        cells: [
+                          DataCell(Text(check.number)),
+                          DataCell(Text(check.paymentType)),
+                          DataCell(
+                            Text(NumberFormat().format(check.documentSum)),
+                          ),
+                          DataCell(
+                            Text(
+                              DateFormat('HH:mm dd.MM.yyyy').format(check.date),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showWarehouseItemsDialog(
     String label,
     List<WarehouseItemScheme> items,
     DataState state,
   ) {
     final theme = Theme.of(rootContext);
-    return FAccordionItem(
-      title: Text(label),
-      child: SizedBox(
-        height: 800,
-        child: DataTable2(
-          dividerThickness: 0,
-          headingRowHeight: 32,
-          columns: [
-            DataColumn2(label: Text('Название')),
-            DataColumn2(label: Text('Характеристика')),
-            DataColumn2(label: Text('Кол-во'), numeric: true),
-          ],
-          rows: items.map((item) {
-            final index = items.indexOf(item);
-            final nomenclature = state.nomenclatures.firstWhereLogTypeOrNull(
-              (i) => i.refKey == item.nomenclatureKey,
-            );
-            final characteristic = state.characteristics
-                .firstWhereLogTypeOrNull(
-                  (i) => i.refKey == item.characteristicKey,
-                );
-            return DataRow2(
-              color: WidgetStatePropertyAll(
-                index.isOdd
-                    ? theme.custom.rowOddColor
-                    : theme.custom.rowEvenColor,
-              ),
-              cells: [
-                DataCell(Text(nomenclature?.name ?? '')),
-                DataCell(Text(characteristic?.description ?? '')),
-                DataCell(Text(NumberFormat().format(item.quantity))),
-              ],
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget cashInfo(String label, List<CashScheme> cashes, DataState state) {
-    return FAccordionItem(
-      title: Text(label),
-      child: SizedBox(
-        height: 100,
-        child: DataTable2(
-          dividerThickness: 0,
-          headingRowHeight: 32,
-          columns: [DataColumn2(label: Text('Сумма'))],
-          rows: cashes.map((item) {
-            return DataRow2(
-              cells: [DataCell(Text(NumberFormat().format(item.value)))],
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  FAccordionItem selledItems(DetailWorkShiftScheme workShift, DataState state) {
-    final theme = Theme.of(rootContext);
-    return FAccordionItem(
-      title: Text('Проданные товары'),
-      child: SizedBox(
-        height: 800,
-        child: DataTable2(
-          dividerThickness: 0,
-          headingRowHeight: 32,
-          columns: [
-            DataColumn2(label: Text('Название')),
-            DataColumn2(label: Text('Характеристика')),
-            DataColumn2(label: Text('Кол-во'), numeric: true),
-            DataColumn2(label: Text('Цена'), numeric: true),
-            DataColumn2(label: Text('Сумма'), numeric: true),
-          ],
-          rows: workShift.items.map((item) {
-            final index = workShift.items.indexOf(item);
-            final nomenclature = state.nomenclatures.firstWhereLogTypeOrNull(
-              (i) => i.refKey == item.nomenclatureKey,
-            );
-            final characteristic = state.characteristics
-                .firstWhereLogTypeOrNull(
-                  (i) => i.refKey == item.characteristicKey,
-                );
-            return DataRow2(
-              color: WidgetStatePropertyAll(
-                index.isOdd
-                    ? theme.custom.rowOddColor
-                    : theme.custom.rowEvenColor,
-              ),
-              cells: [
-                DataCell(Text(nomenclature?.name ?? '')),
-                DataCell(Text(characteristic?.description ?? '')),
-                DataCell(Text(NumberFormat().format(item.quantity))),
-                DataCell(Text(NumberFormat().format(item.price))),
-                DataCell(Text(NumberFormat().format(item.totalSum))),
-              ],
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget checksInfo(List<CheckScheme> checks, DataState state) {
-    final theme = Theme.of(rootContext);
-    return FAccordionItem(
-      title: Text('Чеки'),
-      child: SizedBox(
-        height: 400,
-        child: DataTable2(
-          dividerThickness: 0,
-          headingRowHeight: 24,
-          columns: [
-            DataColumn2(label: Text('Номер')),
-            DataColumn2(label: Text('Тип оплаты')),
-            DataColumn2(label: Text('Сумма'), numeric: true),
-            DataColumn2(label: Text('Дата'), numeric: true),
-          ],
-          rows: checks.map((check) {
-            final index = checks.indexOf(check);
-            return DataRow2(
-              color: WidgetStatePropertyAll(
-                index.isOdd
-                    ? theme.custom.rowOddColor
-                    : theme.custom.rowEvenColor,
-              ),
-              cells: [
-                DataCell(Text(check.number)),
-                DataCell(Text(check.paymentType)),
-                DataCell(Text(NumberFormat().format(check.documentSum))),
-                DataCell(
-                  Text(DateFormat('HH:mm dd.MM.yyyy').format(check.date)),
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog.raw(
+          constraints: BoxConstraints(maxWidth: 900),
+          builder: (context, _) {
+            return _buildTableDialog(
+              icon: FluentIcons.box_24_regular,
+              title: label,
+              child: SizedBox(
+                height: 600,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    headingRowHeight: 32,
+                    columns: [
+                      DataColumn2(label: Text('Название')),
+                      DataColumn2(label: Text('Характеристика')),
+                      DataColumn2(label: Text('Кол-во'), numeric: true),
+                    ],
+                    rows: items.map((item) {
+                      final index = items.indexOf(item);
+                      final nomenclature =
+                          state.nomenclatures.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == item.nomenclatureKey,
+                      );
+                      final characteristic =
+                          state.characteristics.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == item.characteristicKey,
+                      );
+                      return DataRow2(
+                        color: WidgetStatePropertyAll(
+                          index.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor,
+                        ),
+                        cells: [
+                          DataCell(Text(nomenclature?.name ?? '')),
+                          DataCell(Text(characteristic?.description ?? '')),
+                          DataCell(
+                            Text(NumberFormat().format(item.quantity)),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ],
+              ),
             );
-          }).toList(),
-        ),
-      ),
+          },
+        );
+      },
     );
   }
 
-  Widget withdrawsItems(List<WithdrawScheme> withdraws, DataState state) {
-    return FAccordionItem(
-      title: Text('Выемки'),
-      child: SizedBox(
-        height: 200,
-        child: DataTable2(
-          dividerThickness: 0,
-          headingRowHeight: 24,
-          columns: [
-            DataColumn2(label: Text('Номер документа')),
-            DataColumn2(label: Text('Касса')),
-            DataColumn2(label: Text('Магазин')),
-            DataColumn2(label: Text('Сумма'), numeric: true),
-            DataColumn2(label: Text('Дата'), numeric: true),
-          ],
-          rows: withdraws.map((withdraw) {
-            final cashReister = state.cashRegisters.firstWhereLogTypeOrNull(
-              (i) => i.refKey == withdraw.cashRegisyerKey,
-            );
-            final store = state.structureUnits.firstWhereLogTypeOrNull(
-              (i) => i.refKey == withdraw.storeKey,
-            );
-            return DataRow2(
-              cells: [
-                DataCell(Text(withdraw.number)),
-                DataCell(Text(cashReister?.description ?? '')),
-                DataCell(Text(store?.description ?? '')),
-                DataCell(Text(NumberFormat().format(withdraw.documentSum))),
-                DataCell(
-                  Text(DateFormat('HH:mm dd.MM.yyyy').format(withdraw.date)),
-                ),
-              ],
-            );
-          }).toList(),
-        ),
+  Widget _buildTableDialog({
+    required IconData icon,
+    required String title,
+    required Widget child,
+  }) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        spacing: 12,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FHeader.nested(
+            prefixes: [Icon(icon, size: 28)],
+            title: Text(title),
+            titleAlignment: Alignment.centerLeft,
+            suffixes: [
+              FButton.icon(
+                onPress: () {
+                  AutoRouter.of(rootContext).pop();
+                },
+                child: Icon(Icons.close),
+              ),
+            ],
+          ),
+          child,
+        ],
       ),
     );
   }
