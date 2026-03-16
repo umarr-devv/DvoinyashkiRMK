@@ -14,126 +14,71 @@ class PrintStatisticNomenclatureScheme extends PrintScheme {
   final DataState dataState;
 
   @override
-  pw.Widget build() {
-    return pw.Theme(
-      data: pw.ThemeData(
-        defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
-      ),
-      child: pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 4),
-        child: pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Image(logo, width: 128),
-            pw.SizedBox(height: 16),
-            pw.Text(
-              'Статистика по номенклатуре',
-              style: pw.TextStyle(
-                font: font,
-                fontSize: 12,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-            pw.Text(
-              'Дата печати: ${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now())}',
-            ),
-            pw.SizedBox(height: 16),
-            pw.Table(
-              border: pw.TableBorder.all(width: 0.5),
-              children: [
-                pw.TableRow(
-                  children: [
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.all(4),
-                      child: pw.Text(
-                        'Название',
-                        style: pw.TextStyle(
-                          font: font,
-                          fontWeight: pw.FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.all(4),
-                      child: pw.Text(
-                        'Характеристика',
-                        style: pw.TextStyle(
-                          font: font,
-                          fontWeight: pw.FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.all(4),
-                      child: pw.Text(
-                        'Кол-во',
-                        style: pw.TextStyle(
-                          font: font,
-                          fontWeight: pw.FontWeight.bold,
-                        ),
-                        textAlign: pw.TextAlign.right,
-                      ),
-                    ),
-                    pw.Padding(
-                      padding: const pw.EdgeInsets.all(4),
-                      child: pw.Text(
-                        'Сумма',
-                        style: pw.TextStyle(
-                          font: font,
-                          fontWeight: pw.FontWeight.bold,
-                        ),
-                        textAlign: pw.TextAlign.right,
-                      ),
-                    ),
-                  ],
+  List<pw.Widget> build() {
+    return [
+      pw.Theme(
+        data: pw.ThemeData(
+          defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
+        ),
+        child: pw.Padding(
+          padding: const pw.EdgeInsets.symmetric(horizontal: 4),
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Image(logo, width: 128),
+              pw.SizedBox(height: 16),
+              pw.Text(
+                'Статистика по номенклатуре',
+                style: pw.TextStyle(
+                  font: font,
+                  fontSize: 12,
+                  fontWeight: pw.FontWeight.bold,
                 ),
-                ...items.map((item) {
-                  final nomenclature = dataState.nomenclatures
-                      .firstWhereLogTypeOrNull(
-                        (i) => i.refKey == item.nomenclatureKey,
-                      );
-                  final characteristic = dataState.characteristics
-                      .firstWhereLogTypeOrNull(
-                        (i) => i.refKey == item.characteristicKey,
-                      );
-
-                  return pw.TableRow(
-                    children: [
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(4),
-                        child: pw.Text(nomenclature?.name ?? ''),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(4),
-                        child: pw.Text(characteristic?.description ?? ''),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(4),
-                        child: pw.Text(
-                          NumberFormat.currency(
-                            symbol: '',
-                          ).format(item.totalQuantity),
-                          textAlign: pw.TextAlign.right,
-                        ),
-                      ),
-                      pw.Padding(
-                        padding: const pw.EdgeInsets.all(4),
-                        child: pw.Text(
-                          NumberFormat.currency(
-                            symbol: '',
-                          ).format(item.totalSum),
-                          textAlign: pw.TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              ],
-            ),
-            pw.SizedBox(height: 24),
-          ],
+              ),
+              pw.Text(
+                'Дата печати: ${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now())}',
+              ),
+              pw.SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
-    );
+      pw.Padding(
+        padding: const pw.EdgeInsets.symmetric(horizontal: 4),
+        child: pw.TableHelper.fromTextArray(
+          border: pw.TableBorder.all(width: 0.5),
+          cellStyle: pw.TextStyle(font: font, fontSize: 8),
+          headerStyle: pw.TextStyle(
+            font: font,
+            fontSize: 8,
+            fontWeight: pw.FontWeight.bold,
+          ),
+          cellAlignments: {
+            0: pw.Alignment.centerLeft,
+            1: pw.Alignment.centerLeft,
+            2: pw.Alignment.centerRight,
+            3: pw.Alignment.centerRight,
+          },
+          headers: ['Название', 'Характеристика', 'Кол-во', 'Сумма'],
+          data: items.map((item) {
+            final nomenclature = dataState.nomenclatures
+                .firstWhereLogTypeOrNull(
+                  (i) => i.refKey == item.nomenclatureKey,
+                );
+            final characteristic = dataState.characteristics
+                .firstWhereLogTypeOrNull(
+                  (i) => i.refKey == item.characteristicKey,
+                );
+            return [
+              nomenclature?.name ?? '',
+              characteristic?.description ?? '',
+              NumberFormat.currency(symbol: '').format(item.totalQuantity),
+              NumberFormat.currency(symbol: '').format(item.totalSum),
+            ];
+          }).toList(),
+        ),
+      ),
+      pw.SizedBox(height: 24),
+    ];
   }
 }

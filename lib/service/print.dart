@@ -50,7 +50,7 @@ abstract class PrintScheme {
     final pdf = pw.Document(compress: false, pageMode: PdfPageMode.fullscreen);
     await prepareResources();
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         pageFormat: pageFormat,
         theme: pw.ThemeData.withFont(base: font, bold: font),
         build: (context) => build(),
@@ -59,5 +59,5 @@ abstract class PrintScheme {
     return await pdf.save();
   }
 
-  pw.Widget build();
+  List<pw.Widget> build();
 }
