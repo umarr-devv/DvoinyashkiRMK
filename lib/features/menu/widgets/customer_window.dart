@@ -40,7 +40,9 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
   @override
   void initState() {
     super.initState();
-    channelListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) channelListener();
+    });
   }
 
   @override
@@ -51,7 +53,11 @@ class _CustomerWindowOperationState extends State<CustomerWindowOperation> {
 
   Future<void> sendData(String method, dynamic payload) async {
     if (!windowReady.value) return;
-    await channel.invokeMethod(method, payload);
+    try {
+      await channel.invokeMethod(method, payload);
+    } catch (e) {
+      windowReady.value = false;
+    }
   }
 
   @override
