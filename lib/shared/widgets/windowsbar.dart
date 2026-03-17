@@ -72,60 +72,106 @@ class _WindowBarState extends State<WindowBar> with WindowListener {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          DragToMoveArea(child: WindowBarLogo()),
-          Expanded(child: DragToMoveArea(child: Container(height: 36))),
-          _ThemeSwithcer(),
-          _WindowBarButton(
-            onPressed: () {
-              NotificationSheetDialog(rootContext: context).show();
-            },
-            icon: FluentIcons.alert_24_regular,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              DragToMoveArea(child: WindowBarLogo()),
+              Expanded(child: DragToMoveArea(child: Container(height: 36))),
+              _ThemeSwithcer(),
+              _WindowBarButton(
+                onPressed: () {
+                  NotificationSheetDialog(rootContext: context).show();
+                },
+                icon: FluentIcons.alert_24_regular,
+              ),
+              SizedBox(
+                height: 20,
+                child: VerticalDivider(color: theme.custom.border, width: 8),
+              ),
+              _WindowBarButton(
+                onPressed: () {
+                  windowManager.setFullScreen(!_isFullscreen);
+                  _syncWindowState();
+                },
+                icon: _isFullscreen
+                    ? FluentIcons.full_screen_minimize_24_regular
+                    : FluentIcons.full_screen_maximize_24_regular,
+              ),
+              _WindowBarButton(
+                onPressed: () {
+                  windowManager.minimize();
+                },
+                icon: FluentIcons.subtract_24_regular,
+              ),
+              _WindowBarButton(
+                onPressed: () {
+                  if (_isMaximized) {
+                    windowManager.unmaximize();
+                  } else {
+                    windowManager.maximize();
+                  }
+                },
+                icon: _isMaximized
+                    ? FluentIcons.square_multiple_24_regular
+                    : FluentIcons.square_24_regular,
+              ),
+              _WindowBarButton(
+                onPressed: () {
+                  WindowCloseDialog().show(context);
+                },
+                color: theme.custom.destructive,
+                icon: Icons.close,
+              ),
+            ],
           ),
-          SizedBox(
-            height: 20,
-            child: VerticalDivider(color: theme.custom.border, width: 8),
+        ),
+        _ConnectivityBanner(),
+      ],
+    );
+  }
+}
+
+class _ConnectivityBanner extends StatelessWidget {
+  const _ConnectivityBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<ConnectivityCubit, ConnectivityState>(
+      builder: (context, state) {
+        if (state is ConnectivityOnline) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+          color: theme.custom.destructive,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 8,
+            children: [
+              Icon(
+                FluentIcons.wifi_off_24_regular,
+                color: theme.custom.destructiveForeground,
+                size: 16,
+              ),
+              Text(
+                'Нет подключения к интернету или серверу',
+                style: TextStyle(
+                  color: theme.custom.destructiveForeground,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
-          _WindowBarButton(
-            onPressed: () {
-              windowManager.setFullScreen(!_isFullscreen);
-              _syncWindowState();
-            },
-            icon: _isFullscreen
-                ? FluentIcons.full_screen_minimize_24_regular
-                : FluentIcons.full_screen_maximize_24_regular,
-          ),
-          _WindowBarButton(
-            onPressed: () {
-              windowManager.minimize();
-            },
-            icon: FluentIcons.subtract_24_regular,
-          ),
-          _WindowBarButton(
-            onPressed: () {
-              if (_isMaximized) {
-                windowManager.unmaximize();
-              } else {
-                windowManager.maximize();
-              }
-            },
-            icon: _isMaximized
-                ? FluentIcons.square_multiple_24_regular
-                : FluentIcons.square_24_regular,
-          ),
-          _WindowBarButton(
-            onPressed: () {
-              WindowCloseDialog().show(context);
-            },
-            color: theme.custom.destructive,
-            icon: Icons.close,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

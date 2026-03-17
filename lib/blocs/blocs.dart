@@ -13,3 +13,4 @@ export 'work_shifts/work_shifts_cubit.dart';
 export 'warehouse/warehouse_cubit.dart';
 export 'terminal/terminal_cubit.dart';
 export 'offline_checks/offline_checks_cubit.dart';
+export 'connectivity/connectivity_cubit.dart';
