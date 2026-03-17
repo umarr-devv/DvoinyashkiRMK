@@ -53,17 +53,27 @@ class DataCubit extends HydratedCubit<DataState> {
   Future smallUpdate() async {
     if (state is DataLoading) return;
     emit(DataLoading(state.copyWith(comment: 'Загрузка цен')));
-    final prices = await client.getPrices();
-    final products = DataCubitUtils.getProducts(
-      nomenclatures: state.nomenclatures,
-      characteristics: state.characteristics,
-      prices: prices.value,
-      barcodes: state.barcodes,
-      priceTypes: state.priceTypes,
-      specifications: state.specifications,
-    );
-    final newState = state.copyWith(prices: prices.value, products: products);
-    emit(DataLoaded(newState));
+    try {
+      final prices = await Future.any([
+        client.getPrices(),
+        Future.delayed(
+          const Duration(seconds: 5),
+          () => throw TimeoutException('smallUpdate timeout'),
+        ),
+      ]);
+      final products = DataCubitUtils.getProducts(
+        nomenclatures: state.nomenclatures,
+        characteristics: state.characteristics,
+        prices: prices.value,
+        barcodes: state.barcodes,
+        priceTypes: state.priceTypes,
+        specifications: state.specifications,
+      );
+      final newState = state.copyWith(prices: prices.value, products: products);
+      emit(DataLoaded(newState));
+    } catch (_) {
+      emit(DataLoaded(state));
+    }
   }
 
   Future forceUpdate() async {

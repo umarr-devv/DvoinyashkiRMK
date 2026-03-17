@@ -1,5 +1,6 @@
 part of 'session_cubit.dart';
 
+@JsonSerializable()
 class SessionState extends Equatable {
   const SessionState({this.currentWorkShift});
 
@@ -16,6 +17,12 @@ class SessionState extends Equatable {
 
   SessionState.from(SessionState other)
     : currentWorkShift = other.currentWorkShift;
+
+
+  factory SessionState.fromJson(Map<String, dynamic> json) =>
+      _$SessionStateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SessionStateToJson(this);
 
   @override
   List<Object?> get props => [currentWorkShift];

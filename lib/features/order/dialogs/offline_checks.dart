@@ -191,7 +191,35 @@ class _OfflineCheckTile extends StatelessWidget {
       trailing: isLoading
           ? null
           : FButton.icon(
-              onPress: () => cubit.removeCheck(index),
+              onPress: () {
+                showFDialog(
+                  context: context,
+                  builder: (ctx, _, _) => FDialog(
+                    title: Text('Удалить чек?'),
+                    body: Text(
+                      'Чек от $dateFormatted на сумму '
+                      '${NumberFormat.currency(symbol: '').format(check.documentSum)} '
+                      'будет удалён без возможности восстановления.',
+                    ),
+                    direction: Axis.horizontal,
+                    actions: [
+                      FButton(
+                        onPress: () => AutoRouter.of(ctx).maybePop(),
+                        style: FButtonStyle.outline(),
+                        child: Text('Отмена'),
+                      ),
+                      FButton(
+                        onPress: () {
+                          AutoRouter.of(ctx).maybePop();
+                          cubit.removeCheck(index);
+                        },
+                        style: FButtonStyle.destructive(),
+                        child: Text('Удалить'),
+                      ),
+                    ],
+                  ),
+                );
+              },
               style: FButtonStyle.ghost(),
               child: Icon(
                 Icons.close,

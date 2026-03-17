@@ -2,14 +2,16 @@ import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
 import 'package:app/models/models.dart';
 import 'package:app/utils/utils.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+part 'session_cubit.g.dart';
 part 'session_state.dart';
 
-class SessionCubit extends Cubit<SessionState> {
+class SessionCubit extends HydratedCubit<SessionState> {
   SessionCubit(this.settingsCubit, this.authCubit) : super(SessionInitial());
 
   final SettingsCubit settingsCubit;
@@ -146,5 +148,15 @@ class SessionCubit extends Cubit<SessionState> {
       }
     }
     return null;
+  }
+
+  @override
+  SessionState? fromJson(Map<String, dynamic> json) {
+    return SessionState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(SessionState state) {
+    return state.toJson();
   }
 }
