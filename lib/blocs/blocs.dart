@@ -12,3 +12,4 @@ export 'withdraws/withdraws_cubit.dart';
 export 'work_shifts/work_shifts_cubit.dart';
 export 'warehouse/warehouse_cubit.dart';
 export 'terminal/terminal_cubit.dart';
+export 'offline_checks/offline_checks_cubit.dart';

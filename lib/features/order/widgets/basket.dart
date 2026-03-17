@@ -416,6 +416,44 @@ class _OrderBasketSubmitButton extends StatelessWidget {
                 ),
               ],
             ),
+            BlocBuilder<OfflineChecksCubit, OfflineChecksState>(
+              bloc: BlocProvider.of<OfflineChecksCubit>(context),
+              builder: (context, offlineState) {
+                final count = offlineState.checks.length;
+                return FButton(
+                  onPress: () {
+                    OfflineChecksDialog(context).show();
+                  },
+                  style: FButtonStyle.outline(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 8,
+                    children: [
+                      if (count > 0)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.custom.destructive,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$count',
+                            style: TextStyle(
+                              color: theme.custom.actionForeground,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      Text('Оффлайн чеки'),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         );
       },

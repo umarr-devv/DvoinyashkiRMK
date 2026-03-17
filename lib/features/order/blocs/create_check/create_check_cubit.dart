@@ -88,7 +88,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     }
     emit(CreateCheckLoading(state));
     try {
-      final CreateCheckScheme data = _createCashScheme();
+      final CreateCheckScheme data = createCashScheme();
       final check = await client.createCheck(data: data);
 
       if (udsCode != null || udsCustomer != null) {
@@ -119,6 +119,20 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       talker.error(exc, st);
       emit(CreateCheckFailure(state));
     }
+  }
+
+  void saveOffline(OfflineChecksCubit offlineChecksCubit) {
+    if (udsCustomer != null || udsCode != null) {
+      emit(CreateCheckUdsOfflineNotSupported(state));
+      return;
+    }
+    if (state.debtUser != null) {
+      emit(CreateCheckDebtOfflineNotSupported(state));
+      return;
+    }
+    final scheme = createCashScheme();
+    offlineChecksCubit.addCheck(scheme);
+    emit(CreateCheckOfflineSaved(state));
   }
 
   Future udsPoints() async {
@@ -175,7 +189,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     await client.postProduction(refKey: response.refKey);
   }
 
-  CreateCheckScheme _createCashScheme() {
+  CreateCheckScheme createCashScheme() {
     return CreateCheckScheme(
       date: DateTime.now(),
       authorKey: author!.refKey,

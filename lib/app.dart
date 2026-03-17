@@ -36,6 +36,7 @@ class _AppScreenState extends State<AppScreen> {
   late final WarehouseCubit warehouseCubit;
 
   late final SessionCubit sessionCubit;
+  late final OfflineChecksCubit offlineChecksCubit;
 
   Future initCubits() async {
     dataCubit.update();
@@ -47,6 +48,7 @@ class _AppScreenState extends State<AppScreen> {
     workShiftsCubit = WorkShiftsCubit(settingsCubit);
     sessionCubit = SessionCubit(settingsCubit, authCubit);
     warehouseCubit = WarehouseCubit(settingsCubit);
+    offlineChecksCubit = OfflineChecksCubit();
   }
 
   @override
@@ -72,6 +74,7 @@ class _AppScreenState extends State<AppScreen> {
         BlocProvider.value(value: workShiftsCubit),
         BlocProvider.value(value: sessionCubit),
         BlocProvider.value(value: warehouseCubit),
+        BlocProvider.value(value: offlineChecksCubit),
       ],
       child: ThemeProvider(
         initTheme: settingsCubit.state.isDarkTheme

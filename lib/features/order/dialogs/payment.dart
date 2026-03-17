@@ -81,10 +81,42 @@ class _PaymentDialogState extends State<PaymentDialog> {
         bloc: createCheckCubit,
         listener: (context, state) {
           if (state is CreateCheckFailure) {
+            final hasUdsOrDebt = createCheckCubit.udsCustomer != null ||
+                createCheckCubit.udsCode != null ||
+                createCheckCubit.state.debtUser != null;
+            _NetworkErrorDialog(
+              context,
+              createCheckCubit: createCheckCubit,
+              offlineChecksCubit:
+                  BlocProvider.of<OfflineChecksCubit>(widget.rootContext),
+              canGoOffline: !hasUdsOrDebt,
+            ).show();
+          } else if (state is CreateCheckOfflineSaved) {
+            ToastService.showToast(
+              widget.rootContext,
+              notification: NotificationData(
+                type: NotificationType.info,
+                icon: FluentIcons.cloud_off_24_regular,
+                title: 'Чек сохранён оффлайн',
+                description:
+                    'Чек будет отправлен в 1C при восстановлении соединения',
+              ),
+            );
+            udsCustomerCubit.clear();
+            AutoRouter.of(context).maybePop();
+          } else if (state is CreateCheckUdsOfflineNotSupported) {
             ErrorDialog(
               context,
-              label: 'Сетевая ошибка',
-              description: 'Произашла сетевая ошибка, 1C сервер не отвечает',
+              label: 'UDS недоступен оффлайн',
+              description:
+                  'Чеки с UDS-клиентом нельзя сохранить оффлайн. Попробуйте позже.',
+            ).show();
+          } else if (state is CreateCheckDebtOfflineNotSupported) {
+            ErrorDialog(
+              context,
+              label: 'Долг недоступен оффлайн',
+              description:
+                  'Чеки с долговым клиентом нельзя сохранить оффлайн. Попробуйте позже.',
             ).show();
           } else if (state is CreateCheckUdsFailure) {
             ErrorDialog(
@@ -773,6 +805,89 @@ class _UdsCustomerPointsState extends State<_UdsCustomerPoints> {
               return SizedBox();
             }
           },
+        );
+      },
+    );
+  }
+}
+
+class _NetworkErrorDialog {
+  _NetworkErrorDialog(
+    this.rootContext, {
+    required this.createCheckCubit,
+    required this.offlineChecksCubit,
+    required this.canGoOffline,
+  });
+
+  final BuildContext rootContext;
+  final CreateCheckCubit createCheckCubit;
+  final OfflineChecksCubit offlineChecksCubit;
+  final bool canGoOffline;
+
+  void show() {
+    final theme = Theme.of(rootContext);
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog(
+          title: Row(
+            spacing: 6,
+            children: [
+              Icon(
+                FluentIcons.wifi_off_24_regular,
+                color: theme.custom.destructiveTextForeground,
+                size: 20,
+              ),
+              Text(
+                'Сетевая ошибка',
+                style: TextStyle(
+                  color: theme.custom.destructiveTextForeground,
+                ),
+              ),
+            ],
+          ),
+          body: Text(
+            'Произошла сетевая ошибка, 1C сервер не отвечает.\n'
+            '${canGoOffline ? 'Вы можете сохранить чек оффлайн и отправить позже.' : 'Чек с UDS-клиентом или долгом нельзя сохранить оффлайн.'}',
+          ),
+          direction: Axis.horizontal,
+          actions: [
+            FButton(
+              onPress: () => AutoRouter.of(context).maybePop(),
+              style: FButtonStyle.outline(),
+              child: Text('Назад'),
+            ),
+            if (canGoOffline)
+              FButton(
+                onPress: () {
+                  AutoRouter.of(context).maybePop();
+                  createCheckCubit.saveOffline(offlineChecksCubit);
+                },
+                style: (style) => style.copyWith(
+                  decoration: FWidgetStateMap.all(
+                    BoxDecoration(
+                      color: theme.custom.info,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  spacing: 6,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      FluentIcons.cloud_off_24_regular,
+                      size: 16,
+                      color: theme.custom.invertForeground,
+                    ),
+                    Text(
+                      'Пробить оффлайн',
+                      style: TextStyle(color: theme.custom.invertForeground),
+                    ),
+                  ],
+                ),
+              ),
+          ],
         );
       },
     );

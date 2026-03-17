@@ -100,3 +100,15 @@ final class CreateCheckSessionFailure extends CreateCheckState {
 final class CreateCheckFailure extends CreateCheckState {
   CreateCheckFailure(super.state) : super.from();
 }
+
+final class CreateCheckOfflineSaved extends CreateCheckState {
+  CreateCheckOfflineSaved(super.state) : super.from();
+}
+
+final class CreateCheckUdsOfflineNotSupported extends CreateCheckState {
+  CreateCheckUdsOfflineNotSupported(super.state) : super.from();
+}
+
+final class CreateCheckDebtOfflineNotSupported extends CreateCheckState {
+  CreateCheckDebtOfflineNotSupported(super.state) : super.from();
+}
