@@ -107,18 +107,17 @@ class CreateWithdrawDialog {
         FTextFormField(
           label: Text('Сумма выемки'),
           control: FTextFieldControl.managed(controller: documentSumController),
-          inputFormatters: [
-            CurrencyInputFormatter(
-              mantissaLength: 0,
-              thousandSeparator: ThousandSeparator.Space,
-            ),
-          ],
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Это поле не должен быть пустым';
-            } else if (double.tryParse(value) == null) {
+            } 
+
+            final cleanValue = value.replaceAll(RegExp(r'\s+\b|\b\s+'), '').replaceAll(' ', '');
+            final doubleValue = double.tryParse(cleanValue);
+            
+            if (doubleValue == null) {
               return 'Некорректное значение';
-            } else if (double.tryParse(value) == 0) {
+            } else if (doubleValue == 0) {
               return 'Значение не должен быть равен 0';
             } else {
               return null;
