@@ -327,11 +327,13 @@ class _CatalogTable extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             final product = products[index];
-            return ProductCard(
-              product: product,
-              warehouseItem: warehouseItemsMap[product.uniqueId],
-              isProduction: productionGroupKeys.contains(
-                product.nomenclature.groupKey,
+            return RepaintBoundary(
+              child: ProductCard(
+                product: product,
+                warehouseItem: warehouseItemsMap[product.uniqueId],
+                isProduction: productionGroupKeys.contains(
+                  product.nomenclature.groupKey,
+                ),
               ),
             );
           },
