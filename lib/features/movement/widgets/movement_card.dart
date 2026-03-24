@@ -433,7 +433,7 @@ class _MovementItemQuantityState extends State<MovementItemQuantity> {
             ),
             inputFormatters: [
               CurrencyInputFormatter(
-                thousandSeparator: ThousandSeparator.Space,
+                thousandSeparator: ThousandSeparator.None,
                 mantissaLength: 2,
               ),
             ],

@@ -314,7 +314,7 @@ class _ProductOrderItemQuantityState extends State<_ProductOrderItemQuantity> {
             ),
             inputFormatters: [
               CurrencyInputFormatter(
-                thousandSeparator: ThousandSeparator.Space,
+                thousandSeparator: ThousandSeparator.None,
                 mantissaLength: 2,
               ),
             ],

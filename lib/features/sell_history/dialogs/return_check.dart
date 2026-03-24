@@ -236,7 +236,7 @@ class _ItemQuantityState extends State<_ItemQuantity> {
             ),
             inputFormatters: [
               CurrencyInputFormatter(
-                thousandSeparator: ThousandSeparator.Space,
+                thousandSeparator: ThousandSeparator.None,
                 mantissaLength: 2,
               ),
             ],
