@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/order/dialogs/dialogs.dart';
+import 'package:app/features/order/states/states.dart';
 import 'package:app/models/models.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -61,6 +62,8 @@ class ProductCard extends StatelessWidget {
                       ),
                   1,
                 );
+                productSeachQuery.value = '';
+                productSeachQueryDebounce.setValue('');
               }
             },
             onLongPress: () {
@@ -389,6 +392,8 @@ class ProductCardAddButton extends StatelessWidget {
               price: product.sellPrice?.price.price.toDouble() ?? 0,
             ),
           );
+          productSeachQuery.value = '';
+          productSeachQueryDebounce.setValue('');
         },
         style: FButtonStyle.outline(),
         child: Icon(FIcons.plus),

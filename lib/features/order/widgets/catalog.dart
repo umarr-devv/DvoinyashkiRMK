@@ -31,8 +31,35 @@ class OrderCatalog extends StatelessWidget {
   }
 }
 
-class _OrderCatalogSearchBar extends StatelessWidget {
+class _OrderCatalogSearchBar extends StatefulWidget {
   const _OrderCatalogSearchBar();
+
+  @override
+  State<_OrderCatalogSearchBar> createState() => _OrderCatalogSearchBarState();
+}
+
+class _OrderCatalogSearchBarState extends State<_OrderCatalogSearchBar> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+    productSeachQuery.addListener(_onQueryChanged);
+  }
+
+  void _onQueryChanged() {
+    if (productSeachQuery.value.isEmpty && _controller.text.isNotEmpty) {
+      _controller.clear();
+    }
+  }
+
+  @override
+  void dispose() {
+    productSeachQuery.removeListener(_onQueryChanged);
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +67,12 @@ class _OrderCatalogSearchBar extends StatelessWidget {
       width: 320,
       child: FTextField(
         control: FTextFieldControl.managed(
+          controller: _controller,
           onChange: (value) {
             productSeachQueryDebounce.setValue(value.text);
           },
         ),
+        clearable: (p0) => p0.text.isNotEmpty,
         prefixBuilder: (context, style, states) => Padding(
           padding: const EdgeInsets.only(left: 12),
           child: Icon(FIcons.search),
