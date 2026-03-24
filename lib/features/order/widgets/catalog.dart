@@ -40,17 +40,20 @@ class _OrderCatalogSearchBar extends StatefulWidget {
 
 class _OrderCatalogSearchBarState extends State<_OrderCatalogSearchBar> {
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _focusNode = FocusNode();
     productSeachQuery.addListener(_onQueryChanged);
   }
 
   void _onQueryChanged() {
     if (productSeachQuery.value.isEmpty && _controller.text.isNotEmpty) {
       _controller.clear();
+      _focusNode.requestFocus();
     }
   }
 
@@ -58,6 +61,7 @@ class _OrderCatalogSearchBarState extends State<_OrderCatalogSearchBar> {
   void dispose() {
     productSeachQuery.removeListener(_onQueryChanged);
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -66,6 +70,7 @@ class _OrderCatalogSearchBarState extends State<_OrderCatalogSearchBar> {
     return SizedBox(
       width: 320,
       child: FTextField(
+        focusNode: _focusNode,
         control: FTextFieldControl.managed(
           controller: _controller,
           onChange: (value) {
