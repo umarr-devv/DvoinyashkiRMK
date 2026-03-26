@@ -123,7 +123,7 @@ class DataCubit extends HydratedCubit<DataState> {
 
       emit(DataLoading(state.copyWith(comment: 'Загрузка спецификаций')));
       final specifications = await client.getSpecifications();
-
+ 
       final products = DataCubitUtils.getProducts(
         nomenclatures: nomenclatures.value,
         characteristics: characteristics.value,
@@ -179,6 +179,7 @@ class DataCubit extends HydratedCubit<DataState> {
     } catch (exc, st) {
       talker.error(exc, st);
       emit(DataFailure(state));
+      emit(DataLoaded(state));
     }
   }
 

@@ -22,7 +22,7 @@ class _RestClient implements RestClient {
   @override
   Future<UserListScheme> getUsers({
     String select =
-        'Ref_Key,Description,ИНН,ШтрихКод,Склад_Key,Подразделение_Key,Должность_Key',
+        'Ref_Key,Description,ИНН,ШтрихКод,Склад_Key,Подразделение_Key,Должность_Key,МагнитныйКод',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
@@ -56,15 +56,10 @@ class _RestClient implements RestClient {
   @override
   Future<DetailUserScheme> getUser({
     required String refKey,
-    String select =
-        'Ref_Key,Description,ИНН,ШтрихКод,ДолжностьОбмен,ПодразделениеОбмен,Фотография_Base64Data',
     String format = 'json',
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'$select': select,
-      r'$format': format,
-    };
+    final queryParameters = <String, dynamic>{r'$format': format};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<DetailUserScheme>(

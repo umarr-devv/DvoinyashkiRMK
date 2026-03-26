@@ -14,6 +14,7 @@ UserScheme _$UserSchemeFromJson(Map<String, dynamic> json) => UserScheme(
   departmentKey: json['Подразделение_Key'] as String?,
   warehouseKey: json['Склад_Key'] as String?,
   positionKey: json['Должность_Key'] as String?,
+  code: json['МагнитныйКод'] as String?,
 );
 
 Map<String, dynamic> _$UserSchemeToJson(UserScheme instance) =>
@@ -25,6 +26,7 @@ Map<String, dynamic> _$UserSchemeToJson(UserScheme instance) =>
       'Склад_Key': instance.warehouseKey,
       'Подразделение_Key': instance.departmentKey,
       'Должность_Key': instance.positionKey,
+      'МагнитныйКод': instance.code,
     };
 
 DetailUserScheme _$DetailUserSchemeFromJson(Map<String, dynamic> json) =>
@@ -39,6 +41,7 @@ DetailUserScheme _$DetailUserSchemeFromJson(Map<String, dynamic> json) =>
       warehouseKey: json['Склад_Key'] as String?,
       positionKey: json['Должность_Key'] as String?,
       image: json['Фотография_Base64Data'] as String?,
+      code: json['МагнитныйКод'] as String?,
     );
 
 Map<String, dynamic> _$DetailUserSchemeToJson(DetailUserScheme instance) =>
@@ -50,6 +53,7 @@ Map<String, dynamic> _$DetailUserSchemeToJson(DetailUserScheme instance) =>
       'Склад_Key': instance.warehouseKey,
       'Подразделение_Key': instance.departmentKey,
       'Должность_Key': instance.positionKey,
+      'МагнитныйКод': instance.code,
       'ДолжностьОбмен': instance.jobTitle,
       'ПодразделениеОбмен': instance.department,
       'Фотография_Base64Data': instance.image,

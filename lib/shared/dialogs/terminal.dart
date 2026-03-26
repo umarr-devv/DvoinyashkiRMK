@@ -44,12 +44,12 @@ class _TerminalDialogWidgetState extends State<_TerminalDialogWidget> {
     super.dispose();
   }
 
-  void _searchUser(String barcode) {
-    if (barcode.trim().isEmpty) return;
+  void _searchUser(String code) {
+    if (code.trim().isEmpty) return;
 
     final users = context.read<DataCubit>().state.users;
     final user = users.cast<UserScheme?>().firstWhere(
-      (u) => u?.barcode == barcode,
+      (u) => u?.code == code,
       orElse: () => null,
     );
 
@@ -79,12 +79,14 @@ class _TerminalDialogWidgetState extends State<_TerminalDialogWidget> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Отсканируйте штрихкод или введите его вручную:'),
+          const Text(
+            'Введите свой номер карты. \nНомер карты можно посмотреть в приложении "Кабинет Сотрудника" в разделе "Профиль" -> "Код"',
+          ),
           const SizedBox(height: 16),
           FTextField(
             focusNode: _focusNode,
             autofocus: true,
-            label: const Text('Штрихкод'),
+            label: const Text('Номер карты'),
             description: _errorText != null
                 ? Text(
                     _errorText!,

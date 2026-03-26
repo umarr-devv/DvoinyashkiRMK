@@ -21,7 +21,7 @@ class DioConfigure {
           'Authorization': authorization,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        },
+        }, 
       ),
     );
     dio.interceptors.add(

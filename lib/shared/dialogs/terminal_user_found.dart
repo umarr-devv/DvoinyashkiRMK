@@ -4,7 +4,6 @@ import 'package:app/service/service.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
@@ -52,11 +51,6 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
       builder: (context, state) {
         final isLoading = state is TerminalLoading || state is TerminalUpdating;
 
-        // Cast user to DetailUserScheme if possible to access department
-        final detailUser = user is DetailUserScheme
-            ? user as DetailUserScheme
-            : null;
-
         return FDialog(
           title: const Text('Терминал'),
           direction: Axis.horizontal,
@@ -64,34 +58,8 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                user.description,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (detailUser != null && detailUser.department != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  detailUser.department!,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ],
-              const SizedBox(height: 24),
-              if (state is TerminalLoading)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: FCircularProgress(),
-                  ),
-                )
-              else if (state.workReport != null)
-                Text(
-                  'Приход: ${DateFormat('HH:mm').format(state.workReport!.crossingDate)}',
-                )
-              else
-                const Text('Текущий статус: Смена закрыта'),
+              Text('Сотрудник: ${user.description}'),
+              SizedBox(height: 24),
             ],
           ),
           actions: [
@@ -102,91 +70,82 @@ class _TerminalUserFoundDialogWidget extends StatelessWidget {
               style: FButtonStyle.outline(),
               child: const Text('Отмена'),
             ),
+            SizedBox(width: 12),
             if (state is! TerminalLoading)
-              if (state.workReport != null)
-                FButton(
-                  onPress: isLoading
-                      ? null
-                      : () {
-                          showFDialog(
-                            context: context,
-                            builder: (dialogContext, style, animation) =>
-                                FDialog(
-                                  title: const Text('Подтверждение'),
-                                  body: const Text(
-                                    'Вы уверены, что хотите отметить уход?',
-                                  ),
-                                  direction: Axis.horizontal,
-                                  actions: [
-                                    FButton(
-                                      onPress: () => AutoRouter.of(
-                                        dialogContext,
-                                      ).maybePop(),
-                                      style: FButtonStyle.outline(),
-                                      child: const Text('Отмена'),
-                                    ),
-                                    FButton(
-                                      onPress: () {
-                                        AutoRouter.of(dialogContext).maybePop();
-                                        context.read<TerminalCubit>().leave(
-                                          user,
-                                        );
-                                      },
-                                      style: FButtonStyle.destructive(),
-                                      child: const Text('Подтвердить'),
-                                    ),
-                                  ],
-                                ),
-                          );
-                        },
-                  style: FButtonStyle.destructive(),
-                  prefix: isLoading
-                      ? const FCircularProgress()
-                      : const Icon(FluentIcons.arrow_exit_20_regular),
-                  child: const Text('Уход'),
-                )
-              else
-                FButton(
-                  onPress: isLoading
-                      ? null
-                      : () {
-                          showFDialog(
-                            context: context,
-                            builder: (dialogContext, style, animation) =>
-                                FDialog(
-                                  title: const Text('Подтверждение'),
-                                  body: const Text(
-                                    'Вы уверены, что хотите отметить приход?',
-                                  ),
-                                  direction: Axis.horizontal,
-                                  actions: [
-                                    FButton(
-                                      onPress: () => AutoRouter.of(
-                                        dialogContext,
-                                      ).maybePop(),
-                                      style: FButtonStyle.outline(),
-                                      child: const Text('Отмена'),
-                                    ),
-                                    FButton(
-                                      onPress: () {
-                                        AutoRouter.of(dialogContext).maybePop();
-                                        context.read<TerminalCubit>().come(
-                                          user,
-                                        );
-                                      },
-                                      style: FButtonStyle.primary(),
-                                      child: const Text('Подтвердить'),
-                                    ),
-                                  ],
-                                ),
-                          );
-                        },
-                  style: FButtonStyle.primary(),
-                  prefix: isLoading
-                      ? const FCircularProgress()
-                      : const Icon(FluentIcons.arrow_enter_20_regular),
-                  child: const Text('Приход'),
-                ),
+              FButton(
+                onPress: isLoading
+                    ? null
+                    : () {
+                        showFDialog(
+                          context: context,
+                          builder: (dialogContext, style, animation) => FDialog(
+                            title: const Text('Подтверждение'),
+                            body: const Text(
+                              'Вы уверены, что хотите отметить приход?',
+                            ),
+                            direction: Axis.horizontal,
+                            actions: [
+                              FButton(
+                                onPress: () =>
+                                    AutoRouter.of(dialogContext).maybePop(),
+                                style: FButtonStyle.outline(),
+                                child: const Text('Отмена'),
+                              ),
+                              FButton(
+                                onPress: () {
+                                  AutoRouter.of(dialogContext).maybePop();
+                                  context.read<TerminalCubit>().come(user);
+                                },
+                                style: FButtonStyle.primary(),
+                                child: const Text('Подтвердить'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                style: FButtonStyle.secondary(),
+                prefix: isLoading
+                    ? const FCircularProgress()
+                    : const Icon(FluentIcons.arrow_enter_20_regular),
+                child: const Text('Приход'),
+              ),
+            FButton(
+              onPress: isLoading
+                  ? null
+                  : () {
+                      showFDialog(
+                        context: context,
+                        builder: (dialogContext, style, animation) => FDialog(
+                          title: const Text('Подтверждение'),
+                          body: const Text(
+                            'Вы уверены, что хотите отметить уход?',
+                          ),
+                          direction: Axis.horizontal,
+                          actions: [
+                            FButton(
+                              onPress: () =>
+                                  AutoRouter.of(dialogContext).maybePop(),
+                              style: FButtonStyle.outline(),
+                              child: const Text('Отмена'),
+                            ),
+                            FButton(
+                              onPress: () {
+                                AutoRouter.of(dialogContext).maybePop();
+                                context.read<TerminalCubit>().leave(user);
+                              },
+                              style: FButtonStyle.destructive(),
+                              child: const Text('Подтвердить'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+              style: FButtonStyle.secondary(),
+              prefix: isLoading
+                  ? const FCircularProgress()
+                  : const Icon(FluentIcons.arrow_exit_20_regular),
+              child: const Text('Уход'),
+            ),
           ],
         );
       },

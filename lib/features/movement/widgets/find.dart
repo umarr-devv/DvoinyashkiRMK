@@ -63,9 +63,6 @@ class _TransferFindDialogState extends State<TransferFindDialog> {
                     if (value == null || value.isEmpty) {
                       return 'Пустое поле';
                     }
-                    if (!value.startsWith('НФДВ')) {
-                      return 'Номер документа начинается с НФДВ';
-                    }
                     return null;
                   },
                   suffixBuilder: (context, style, states) {
