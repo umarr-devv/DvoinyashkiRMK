@@ -7,13 +7,14 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:dio/io.dart';
 
 class DioConfigure {
-  static String url = dotenv.env['EXTERNAL_API_URL']!;
+  static String url = dotenv.env['API_URL']!;
+  static String secondUrl = dotenv.env['SECOND_API_URL']!;
   static String authorization = dotenv.env['authorization']!;
 
   static String udsUrl = dotenv.env['UDS_API']!;
   static String udsAuthorization = dotenv.env['uds_authorization']!;
 
-  static Future<Dio> init({Talker? talker}) async {
+  static Dio init({Talker? talker}) {
     final dio = Dio(
       BaseOptions(
         baseUrl: url,
@@ -21,7 +22,28 @@ class DioConfigure {
           'Authorization': authorization,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
+        },
+      ),
+    );
+    dio.interceptors.add(
+      TalkerDioLogger(
+        settings: const TalkerDioLoggerSettings(printResponseData: false),
+        talker: talker,
+      ),
+    );
+
+    return dio;
+  }
+
+  static Dio initSecond({Talker? talker}) {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: url,
+        headers: {
+          'Authorization': authorization,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       ),
     );
     dio.interceptors.add(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/app.dart';
 import 'package:app/client/clients.dart';
+import 'package:app/client/second_client/second_client.dart';
 import 'package:app/data/repositories/repositories.dart';
 import 'package:app/service/service.dart';
 import 'package:app/windows/windows.dart';
@@ -58,8 +59,6 @@ Future<Talker> initTalker() async {
 Future initDependencies(Talker talker) async {
   await dotenv.load(fileName: ".env");
 
-  final dio = await DioConfigure.init(talker: talker);
-
   final secureStorage = SecureStorage();
   final generalStorage = GeneralStorage();
 
@@ -69,8 +68,11 @@ Future initDependencies(Talker talker) async {
   GetIt.I.registerSingleton<SecureStorage>(secureStorage);
   GetIt.I.registerSingleton<GeneralStorage>(generalStorage);
 
-  final client = RestClient(dio);
+  final client = RestClient(DioConfigure.init(talker: talker));
   GetIt.I.registerSingleton<RestClient>(client);
+
+  final secondClient = SecondRestClient(DioConfigure.initSecond(talker: talker));
+  GetIt.I.registerSingleton<SecondRestClient>(secondClient);
 
   final udsClient = UDSClient(DioConfigure.initUDS());
   GetIt.I.registerSingleton<UDSClient>(udsClient);
