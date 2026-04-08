@@ -36,19 +36,20 @@ class _MovementScreenState extends State<MovementScreen> {
         ),
         BlocProvider(create: (context) => TransferCubit()),
         BlocProvider(
-          create: (context) => TransfersCubit(
-            BlocProvider.of<SettingsCubit>(context),
-          )..update(),
+          create: (context) =>
+              TransfersCubit(BlocProvider.of<SettingsCubit>(context))..update(),
         ),
       ],
       child: FScaffold(
-        header: MovementHeader(),
-        footer: MovementPagination(),
+        header: MovementHeader(tabIndex: _currentIndex),
+        footer: MovementPagination(tabIndex: _currentIndex),
         child: Column(
           children: [
-            TransferFindDialog(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Row(
                 spacing: 8,
                 children: [
@@ -58,7 +59,9 @@ class _MovementScreenState extends State<MovementScreen> {
                         _currentIndex = 0;
                       });
                     },
-                    style: _currentIndex == 0 ? FButtonStyle.primary() : FButtonStyle.outline(),
+                    style: _currentIndex == 0
+                        ? FButtonStyle.primary()
+                        : FButtonStyle.outline(),
                     child: const Text('Заказы'),
                   ),
                   FButton(
@@ -67,14 +70,18 @@ class _MovementScreenState extends State<MovementScreen> {
                         _currentIndex = 1;
                       });
                     },
-                    style: _currentIndex == 1 ? FButtonStyle.primary() : FButtonStyle.outline(),
+                    style: _currentIndex == 1
+                        ? FButtonStyle.primary()
+                        : FButtonStyle.outline(),
                     child: const Text('Перемещения'),
                   ),
                 ],
               ),
             ),
             Expanded(
-              child: _currentIndex == 0 ? const MovementTable() : const TransferTable(),
+              child: _currentIndex == 0
+                  ? const MovementTable()
+                  : const TransferTable(),
             ),
           ],
         ),

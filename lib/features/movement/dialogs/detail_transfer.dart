@@ -13,10 +13,15 @@ import 'package:intl/intl.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class DetailTransferDialog {
-  DetailTransferDialog({required this.transfer, required this.rootContext});
+  DetailTransferDialog({
+    required this.transfer,
+    required this.rootContext,
+    required this.isFromTable,
+  });
 
   final TransferScheme transfer;
   final BuildContext rootContext;
+  final bool isFromTable;
 
   void show() {
     showFDialog(
@@ -199,7 +204,10 @@ class DetailTransferDialog {
             FLabel(
               label: Text('Статус'),
               axis: Axis.vertical,
-              child: transfer.isAccepted || state is TransferUpdated
+              child:
+                  transfer.isAccepted ||
+                      state is TransferUpdated ||
+                      transfer.posted == true
                   ? Text(
                       'Принят',
                       style: TextStyle(
@@ -216,7 +224,9 @@ class DetailTransferDialog {
                     ),
             ),
             Expanded(child: SizedBox()),
-            if (!transfer.isAccepted && state is! TransferUpdated)
+            if (!transfer.isAccepted &&
+                state is! TransferUpdated &&
+                !isFromTable)
               FButton(
                 onPress: () {
                   showFDialog(

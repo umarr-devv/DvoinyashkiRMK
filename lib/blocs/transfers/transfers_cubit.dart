@@ -35,9 +35,7 @@ class TransfersCubit extends Cubit<TransfersState> {
       final response = await client.getTransfer(
         fullPath: buildODataQuery(params),
       );
-      final newState = state.copyWith(
-        transfers: response.value,
-      );
+      final newState = state.copyWith(transfers: response.value);
       emit(TransfersLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);

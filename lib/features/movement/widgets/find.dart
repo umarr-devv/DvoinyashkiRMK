@@ -28,6 +28,7 @@ class _TransferFindDialogState extends State<TransferFindDialog> {
               DetailTransferDialog(
                 transfer: state.transfer!,
                 rootContext: context,
+                isFromTable: false
               ).show();
             } else if (state is TransferFailure) {
               showFDialog(

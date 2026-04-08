@@ -40,20 +40,19 @@ class TransferTable extends StatelessWidget {
                 final user = dataState.users.firstWhereOrNull(
                   (i) => i.refKey == transfer.authorKey,
                 );
-                final reserve = dataState.structureUnits
-                    .firstWhereOrNull(
-                      (i) => i.refKey == transfer.senderUnitKey,
-                    );
-                final recipient = dataState.structureUnits
-                    .firstWhereOrNull(
-                      (i) => i.refKey == transfer.receiverUnitKey,
-                    );
+                final reserve = dataState.structureUnits.firstWhereOrNull(
+                  (i) => i.refKey == transfer.senderUnitKey,
+                );
+                final recipient = dataState.structureUnits.firstWhereOrNull(
+                  (i) => i.refKey == transfer.receiverUnitKey,
+                );
                 final rowIndex = state.transfers.indexOf(transfer);
                 return DataRow2(
                   onTap: () {
                     DetailTransferDialog(
                       transfer: transfer,
                       rootContext: context,
+                      isFromTable: true
                     ).show();
                   },
                   color: WidgetStatePropertyAll(
