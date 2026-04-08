@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:app/app.dart';
 import 'package:app/client/clients.dart';
-import 'package:app/client/second_client/second_client.dart';
+import 'package:app/client/second_client.dart';
 import 'package:app/data/repositories/repositories.dart';
 import 'package:app/service/service.dart';
 import 'package:app/windows/windows.dart';
@@ -71,7 +71,7 @@ Future initDependencies(Talker talker) async {
   final client = RestClient(DioConfigure.init(talker: talker));
   GetIt.I.registerSingleton<RestClient>(client);
 
-  final secondClient = SecondRestClient(DioConfigure.initSecond(talker: talker));
+  final secondClient = SecondRestClient(DioConfigure.initSecond());
   GetIt.I.registerSingleton<SecondRestClient>(secondClient);
 
   final udsClient = UDSClient(DioConfigure.initUDS());

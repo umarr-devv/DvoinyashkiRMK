@@ -248,17 +248,22 @@ abstract class RestClient {
     @Path('full_path') required String fullPath,
   });
 
+  @POST('/Document_ПеремещениеЗапасов')
+  Future createTransfer({@Body() required TransferScheme data});
+
   @PATCH('/Document_ПеремещениеЗапасов(guid\'{ref_key}\')')
   Future updateTransfer({
     @Path('ref_key') required String refKey,
     @Body() required TransferUpdateScheme data,
   });
 
+  @POST('/Document_ПеремещениеЗапасов(guid\'{ref_key}\')/Post()')
+  Future postTransfer({@Path('ref_key') required String refKey});
+
   @GET('/InformationRegister_ЯвкиСотрудников{full_path}')
   Future<WorkReportListScheme> getWorkReportItem({
     @Path('full_path') required String fullPath,
   });
-
 
   @POST('/InformationRegister_ЯвкиСотрудников')
   Future<WorkReportScheme> createWorkReport({

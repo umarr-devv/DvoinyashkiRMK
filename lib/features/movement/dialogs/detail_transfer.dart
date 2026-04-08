@@ -15,7 +15,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 class DetailTransferDialog {
   DetailTransferDialog({required this.transfer, required this.rootContext});
 
-  final DetailTransferScheme transfer;
+  final TransferScheme transfer;
   final BuildContext rootContext;
 
   void show() {
@@ -51,7 +51,7 @@ class DetailTransferDialog {
     );
   }
 
-  Widget title(DetailTransferScheme transfer) {
+  Widget title(TransferScheme transfer) {
     return FHeader.nested(
       prefixes: [Icon(FluentIcons.receipt_24_regular, size: 28)],
       title: Text(transfer.number),
@@ -67,7 +67,7 @@ class DetailTransferDialog {
     );
   }
 
-  Widget itemsList(DetailTransferScheme transfer) {
+  Widget itemsList(TransferScheme transfer) {
     final theme = Theme.of(rootContext);
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(rootContext),
@@ -89,14 +89,14 @@ class DetailTransferDialog {
                       DataColumn2(label: Text('Кол-во'), numeric: true),
                       DataColumn2(label: Text('Сумма'), numeric: true),
                     ],
-                    rows: transfer.items.map((i) {
+                    rows: transfer.inventory.map((i) {
                       final item = state.products.firstWhereLogTypeOrNull(
                         (k) =>
                             k.nomenclature.refKey == i.nomenclatureKey &&
                             (k.characteristic?.refKey == i.characteristicKey ||
                                 i.characteristicKey == emptyRefKey),
                       );
-                      final index = transfer.items.indexOf(i);
+                      final index = transfer.inventory.indexOf(i);
                       return DataRow2(
                         color: WidgetStatePropertyAll(
                           index.isOdd
@@ -110,7 +110,7 @@ class DetailTransferDialog {
                           ),
                           DataCell(Text(i.quantity.toStringAsFixed(2))),
                           DataCell(Text(i.price.toStringAsFixed(2))),
-                          DataCell(Text(i.totalSum.toStringAsFixed(2))),
+                          DataCell(Text(i.sum.toStringAsFixed(2))),
                         ],
                       );
                     }).toList(),
@@ -124,18 +124,18 @@ class DetailTransferDialog {
     );
   }
 
-  Widget info(DetailTransferScheme transfer) {
+  Widget info(TransferScheme transfer) {
     return BlocBuilder<DataCubit, DataState>(
       bloc: BlocProvider.of<DataCubit>(rootContext),
       builder: (context, state) {
         final user = state.users.firstWhereLogTypeOrNull(
-          (i) => i.refKey == transfer.userKey,
+          (i) => i.refKey == transfer.employeeKey,
         );
         final reserve = state.structureUnits.firstWhereLogTypeOrNull(
-          (i) => i.refKey == transfer.reserveStructureUnitKey,
+          (i) => i.refKey == transfer.senderUnitKey,
         );
         final recipient = state.structureUnits.firstWhereLogTypeOrNull(
-          (i) => i.refKey == transfer.recipientStructureUnitKey,
+          (i) => i.refKey == transfer.receiverUnitKey,
         );
         return Column(
           spacing: 8,
@@ -157,7 +157,6 @@ class DetailTransferDialog {
               label: Text('Сотрудник'),
               child: Text(user?.description ?? ''),
             ),
-
             FLabel(
               axis: Axis.vertical,
               label: Text('Дата создания'),
@@ -167,7 +166,11 @@ class DetailTransferDialog {
               axis: Axis.vertical,
               label: Text('Дата получения'),
               child: Text(
-                DateFormat('HH:mm dd.MM.yyyy').format(transfer.transferDate),
+                transfer.deliveryDeadline != null
+                    ? DateFormat(
+                        'HH:mm dd.MM.yyyy',
+                      ).format(transfer.deliveryDeadline!)
+                    : '',
               ),
             ),
           ],
@@ -176,7 +179,7 @@ class DetailTransferDialog {
     );
   }
 
-  Widget footer(DetailTransferScheme transfer) {
+  Widget footer(TransferScheme transfer) {
     final theme = Theme.of(rootContext);
     return BlocBuilder<TransferCubit, TransferState>(
       bloc: BlocProvider.of<TransferCubit>(rootContext),
@@ -189,7 +192,7 @@ class DetailTransferDialog {
               label: Text('Общая сумма'),
               axis: Axis.vertical,
               child: Text(
-                NumberFormat().format(transfer.documentSum),
+                NumberFormat().format(transfer.documentAmount),
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
             ),
@@ -234,7 +237,7 @@ class DetailTransferDialog {
                             onPress: () {
                               BlocProvider.of<TransferCubit>(
                                 rootContext,
-                              ).accept(transfer.refKey);
+                              ).accept();
                               AutoRouter.of(context).maybePop();
                             },
                             style: FButtonStyle.primary(),

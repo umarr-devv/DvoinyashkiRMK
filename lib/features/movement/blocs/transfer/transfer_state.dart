@@ -1,15 +1,24 @@
 part of 'transfer_cubit.dart';
 
 class TransferState extends Equatable {
-  const TransferState({this.transfer});
+  const TransferState({this.transfer, this.isSecondData});
 
-  final DetailTransferScheme? transfer;
+  final TransferScheme? transfer;
+  final bool? isSecondData;
 
-  TransferState copyWith(DetailTransferScheme? transfer) {
-    return TransferState(transfer: transfer ?? this.transfer);
+  TransferState copyWith(
+    TransferScheme? transfer,
+    bool? isSecondData,
+  ) {
+    return TransferState(
+      transfer: transfer ?? this.transfer,
+      isSecondData: isSecondData ?? this.isSecondData,
+    );
   }
 
-  TransferState.from(TransferState other) : transfer = other.transfer;
+  TransferState.from(TransferState other)
+    : transfer = other.transfer,
+      isSecondData = other.isSecondData;
 
   @override
   List<Object?> get props => [transfer];

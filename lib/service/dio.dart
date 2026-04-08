@@ -38,7 +38,7 @@ class DioConfigure {
   static Dio initSecond({Talker? talker}) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: url,
+        baseUrl: secondUrl,
         headers: {
           'Authorization': authorization,
           'Accept': 'application/json',
