@@ -14,3 +14,4 @@ export 'warehouse/warehouse_cubit.dart';
 export 'terminal/terminal_cubit.dart';
 export 'offline_checks/offline_checks_cubit.dart';
 export 'connectivity/connectivity_cubit.dart';
+export 'transfers/transfers_cubit.dart';
