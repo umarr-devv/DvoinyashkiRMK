@@ -32,11 +32,9 @@ class EndSessionDialog {
                     PrintSessionScheme(
                       session: data,
                       dataState: dataCubit.state,
-                      // ignore: use_build_context_synchronously
-                      context: context,
+                      context: rootContext,
                     ),
-                    // ignore: use_build_context_synchronously
-                    context,
+                    rootContext,
                   );
                 } catch (exc, st) {
                   GetIt.I<Talker>().error(exc, st);
@@ -57,9 +55,16 @@ class EndSessionDialog {
                 child: Text('Отмена'),
               ),
               FButton(
-                onPress: () {
-                  BlocProvider.of<SessionCubit>(context).end();
-                  BlocProvider.of<WorkShiftsCubit>(context).update();
+                onPress: () async {
+                  final workShiftsCubit =
+                      BlocProvider.of<WorkShiftsCubit>(context);
+
+                  await BlocProvider.of<SessionCubit>(context).end();
+                  await Future.delayed(const Duration(milliseconds: 100));
+
+                  workShiftsCubit.update();
+
+                  if (!context.mounted) return;
                   AutoRouter.of(context).maybePop();
                 },
                 style: FButtonStyle.primary(),

@@ -26,10 +26,17 @@ class StartSessionDialog {
               child: Text('Отмена'),
             ),
             FButton(
-              onPress: () {
-                BlocProvider.of<SessionCubit>(context).start();
-                BlocProvider.of<WorkShiftsCubit>(context).update();
-                AutoRouter.of(context).maybePop();
+              onPress: () async {
+                  final workShiftsCubit =
+                      BlocProvider.of<WorkShiftsCubit>(context);
+
+                  await BlocProvider.of<SessionCubit>(context).start();
+                  await Future.delayed(const Duration(milliseconds: 100));
+
+                  workShiftsCubit.update();
+
+                  if (!context.mounted) return;
+                  AutoRouter.of(context).maybePop();
               },
               style: FButtonStyle.primary(),
               child: Text('Начать'),
