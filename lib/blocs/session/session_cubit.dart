@@ -60,7 +60,7 @@ class SessionCubit extends HydratedCubit<SessionState> {
           status: null,
         ),
       );
-      await getCurrentWorkShift();
+      await getCurrentWorkShift(force: true);
       emit(SessionStarted(state));
     } catch (exc, st) {
       talker.error(exc, st);
@@ -95,8 +95,8 @@ class SessionCubit extends HydratedCubit<SessionState> {
     }
   }
 
-  Future getCurrentWorkShift() async {
-    if (state is SessionLoading) return;
+  Future getCurrentWorkShift({bool force = false}) async {
+    if (!force && state is SessionLoading) return;
     emit(SessionLoading(state));
     try {
       final workShift = await _getWorkShiftByCashRegister();
