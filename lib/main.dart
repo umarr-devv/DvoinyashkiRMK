@@ -61,7 +61,6 @@ Future initDependencies(Talker talker) async {
 
   final secureStorage = SecureStorage();
   final generalStorage = GeneralStorage();
-
   secureStorage.init();
   await generalStorage.init();
 

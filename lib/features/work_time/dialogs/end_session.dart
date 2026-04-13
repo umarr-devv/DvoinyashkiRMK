@@ -42,8 +42,6 @@ class EndSessionDialog {
                   GetIt.I<Talker>().error(exc, st);
                 }
               }
-              // ignore: use_build_context_synchronously
-              BlocProvider.of<AuthCubit>(context).logout();
             }
           },
           child: FDialog(

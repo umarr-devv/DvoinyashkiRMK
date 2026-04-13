@@ -26,7 +26,7 @@ class DetailSessionState extends Equatable {
     List<WarehouseItemScheme>? endWarehouseItems,
     List<CashScheme>? startCashes,
     List<CashScheme>? endCashes,
-     List<CheckScheme>? checks,
+    List<CheckScheme>? checks,
   }) {
     return DetailSessionState(
       workShift: workShift ?? this.workShift,
@@ -69,14 +69,33 @@ class DetailSessionState extends Equatable {
 
   double get cashRevenue {
     return checks
-        .where((c) => c.paymentType == CheckScheme.cashPaymentType)
+        .where(
+      (c) => c.paymentType == CheckScheme.cashPaymentType && !c.isDebt,
+        )
         .fold(0.0, (sum, item) => sum + item.documentSum);
   }
 
   double get cashlessRevenue {
     return checks
-        .where((c) => c.paymentType == CheckScheme.cashlessPaymentType)
+        .where(
+      (c) => c.paymentType == CheckScheme.cashlessPaymentType && !c.isDebt,
+        )
         .fold(0.0, (sum, item) => sum + item.documentSum);
+  }
+
+  double get debtRevenue {
+    return checks
+        .where((c) => c.isDebt)
+        .fold(0.0, (sum, item) => sum + item.documentSum);
+  }
+
+  Map<String, double> get debtsByEmployee {
+    final debts = <String, double>{};
+    for (final check in checks.where((c) => c.isDebt)) {
+      debts[check.employeerDebtKey!] =
+          (debts[check.employeerDebtKey!] ?? 0) + check.documentSum;
+    }
+    return debts;
   }
 
   double get revenue => cashRevenue + cashlessRevenue;

@@ -151,6 +151,12 @@ class DetailSessionDialog {
               axis: Axis.vertical,
               child: Text(NumberFormat().format(sessionState.cashlessRevenue)),
             ),
+            if (sessionState.debtRevenue > 0) ...[
+              FLabel(
+                label: Text('Долги (сумма)'),
+                axis: Axis.vertical,
+                child: Text(NumberFormat().format(sessionState.debtRevenue))),
+            ],
           ],
         );
       },
@@ -165,6 +171,12 @@ class DetailSessionDialog {
           spacing: 8,
           runSpacing: 8,
           children: [
+            if (state.debtsByEmployee.isNotEmpty)
+              _sectionButton(
+                label: 'Долги по клиентам',
+                icon: FluentIcons.money_24_regular,
+                onTap: () => _showDebtsDialog(state.debtsByEmployee, dataState),
+              ),
             _sectionButton(
               label: 'Выемки',
               icon: FluentIcons.money_24_regular,
@@ -451,6 +463,63 @@ class DetailSessionDialog {
                         ],
                       );
                     }).toList(),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showDebtsDialog(Map<String, double> debts, DataState state) {
+    final theme = Theme.of(rootContext);
+    showFDialog(
+      context: rootContext,
+      builder: (context, _, _) {
+        return FDialog.raw(
+          constraints: BoxConstraints(maxWidth: 600),
+          builder: (context, _) {
+            return _buildTableDialog(
+              icon: FluentIcons.money_24_regular,
+              title: 'Долги по клиентам',
+              child: SizedBox(
+                height: 400,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: DataTable2(
+                    dividerThickness: 0,
+                    headingRowHeight: 32,
+                    columns: [
+                      DataColumn2(label: Text('Клиент')),
+                      DataColumn2(label: Text('Сумма долга'), numeric: true),
+                    ],
+                    rows:
+                        debts.entries.toList().asMap().entries.map((item) {
+                          final index = item.key;
+                          final entry = item.value;
+                          final client = state.users.firstWhereLogTypeOrNull(
+                            (i) => i.refKey == entry.key,
+                          );
+                          return DataRow2(
+                            color: WidgetStatePropertyAll(
+                              index.isOdd
+                                  ? theme.custom.rowOddColor
+                                  : theme.custom.rowEvenColor,
+                            ),
+                            cells: [
+                              DataCell(
+                                Text(
+                                  client?.description ?? 'Неизвестный клиент',
+                                ),
+                              ),
+                              DataCell(
+                                Text(NumberFormat().format(entry.value)),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                   ),
                 ),
               ),

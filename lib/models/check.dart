@@ -103,6 +103,11 @@ class CheckScheme extends Equatable {
   static String get cashPaymentType => 'Наличные';
   static String get cashlessPaymentType => 'Безналичные';
 
+  bool get isDebt =>
+      employeerDebtKey != null &&
+      employeerDebtKey!.isNotEmpty &&
+      employeerDebtKey != '00000000-0000-0000-0000-000000000000';
+
   factory CheckScheme.fromJson(Map<String, dynamic> json) =>
       _$CheckSchemeFromJson(json);
 
