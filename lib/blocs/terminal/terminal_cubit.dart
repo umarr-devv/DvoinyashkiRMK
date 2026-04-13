@@ -1,3 +1,4 @@
+import 'package:app/blocs/blocs.dart';
 import 'package:app/client/client.dart';
 import 'package:app/models/models.dart';
 import 'package:app/utils/utils.dart';
@@ -9,10 +10,14 @@ import 'package:talker/talker.dart';
 part 'terminal_state.dart';
 
 class TerminalCubit extends Cubit<TerminalState> {
-  TerminalCubit() : super(TerminalInitial());
+  TerminalCubit(this.settingsCubit) : super(TerminalInitial());
+
+  final SettingsCubit settingsCubit;
 
   final client = GetIt.I<RestClient>();
   final talker = GetIt.I<Talker>();
+
+  StructureUnitScheme? get store => settingsCubit.state.store;
 
   Future getWorkReport(UserScheme user) async {
     if (state is TerminalLoading) return;
@@ -59,7 +64,7 @@ class TerminalCubit extends Cubit<TerminalState> {
           status: "",
           fio: user.description,
           updaterKey: null,
-          placeKey: user.departmentKey,
+          placeKey: store?.refKey ?? user.departmentKey,
           passNumber: null,
         ),
       );
@@ -89,7 +94,7 @@ class TerminalCubit extends Cubit<TerminalState> {
           status: "",
           fio: user.description,
           updaterKey: workReport.updaterKey,
-          placeKey: workReport.placeKey,
+          placeKey: store?.refKey ?? user.departmentKey,
           passNumber: workReport.passNumber,
         ),
       );
