@@ -36,7 +36,7 @@ class PrintSessionScheme extends PrintScheme {
           defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
         ),
         child: pw.Padding(
-          padding: pw.EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+          padding: pw.EdgeInsets.symmetric(vertical: 16, horizontal: 2),
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [

@@ -24,7 +24,7 @@ class PrintCheckScheme extends PrintScheme {
           defaultTextStyle: pw.TextStyle(font: font, fontSize: 7),
         ),
         child: pw.Padding(
-          padding: pw.EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+          padding: pw.EdgeInsets.symmetric(vertical: 6, horizontal: 2),
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [

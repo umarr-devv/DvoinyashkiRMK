@@ -21,7 +21,7 @@ class PrintStatisticNomenclatureScheme extends PrintScheme {
           defaultTextStyle: pw.TextStyle(font: font, fontSize: 8),
         ),
         child: pw.Padding(
-          padding: const pw.EdgeInsets.symmetric(horizontal: 4),
+          padding: const pw.EdgeInsets.symmetric(horizontal: 2),
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
@@ -44,7 +44,7 @@ class PrintStatisticNomenclatureScheme extends PrintScheme {
         ),
       ),
       pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(horizontal: 4),
+        padding: const pw.EdgeInsets.symmetric(horizontal: 2),
         child: pw.TableHelper.fromTextArray(
           border: pw.TableBorder.all(width: 0.5),
           cellStyle: pw.TextStyle(font: font, fontSize: 8),
