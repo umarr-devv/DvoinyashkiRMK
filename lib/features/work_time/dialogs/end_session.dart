@@ -60,6 +60,7 @@ class EndSessionDialog {
                 onPress: () {
                   BlocProvider.of<SessionCubit>(context).end();
                   BlocProvider.of<WorkShiftsCubit>(context).update();
+                  AutoRouter.of(context).maybePop();
                 },
                 style: FButtonStyle.primary(),
                 child: Text('Закончить'),
