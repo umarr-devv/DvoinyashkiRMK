@@ -18,7 +18,9 @@ class TerminalUserFoundDialog {
       context: rootContext,
       builder: (context, style, animation) {
         return BlocProvider(
-          create: (_) => TerminalCubit()..getWorkReport(user),
+          create: (_) =>
+              TerminalCubit(BlocProvider.of<SettingsCubit>(context))
+                ..getWorkReport(user),
           child: _TerminalUserFoundDialogWidget(user: user),
         );
       },
