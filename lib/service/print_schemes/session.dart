@@ -54,8 +54,27 @@ class PrintSessionScheme extends PrintScheme {
               ),
               pw.SizedBox(height: 8),
               pw.Text('Выручка'),
-              pw.Text('Наличные: ${NumberFormat().format(session.cashRevenue)}'),
-              pw.Text('Безналичные: ${NumberFormat().format(session.cashlessRevenue)}'),
+              pw.Text(
+                'Наличные: ${NumberFormat().format(session.cashRevenue)}',
+              ),
+              pw.Text(
+                'Безналичные: ${NumberFormat().format(session.cashlessRevenue)}',
+              ),
+              if (session.debtRevenue > 0) ...[
+                pw.Text(
+                  'Долги (сумма): ${NumberFormat().format(session.debtRevenue)}',
+                ),
+                pw.SizedBox(height: 4),
+                pw.Text('Долги по клиентам:'),
+                ...session.debtsByEmployee.entries.map((entry) {
+                  final client = dataState.users.firstWhereLogTypeOrNull(
+                    (i) => i.refKey == entry.key,
+                  );
+                  return pw.Text(
+                    '${client?.description ?? 'Неизвестный клиент'}: ${NumberFormat().format(entry.value)}',
+                  );
+                }),
+              ],
               pw.SizedBox(height: 8),
               pw.Text('Начальная сумма'),
               pw.Table(
