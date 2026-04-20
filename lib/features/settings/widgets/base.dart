@@ -1,3 +1,4 @@
+import 'package:app/features/settings/widgets/printer_groups_settings.dart';
 import 'package:app/features/settings/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -6,21 +7,57 @@ class SettingsBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      padding: const EdgeInsets.only(bottom: 128),
+    return DefaultTabController(
+      length: 2,
       child: Column(
-        spacing: 24,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CashRegisterSelect(),
-          AuthorSelect(),
-          StoreSelect(),
-          SubdivisionSelect(),
-          PrinterSelect(),
-          ScaleSlider(),
-          FontScaleSlider(),
-          Row(),
+          TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            tabs: [
+              Tab(text: 'Основное'),
+              Tab(text: 'Принтеры'),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  padding: const EdgeInsets.only(
+                    top: 24,
+                    bottom: 128,
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: Column(
+                    spacing: 24,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CashRegisterSelect(),
+                      AuthorSelect(),
+                      StoreSelect(),
+                      SubdivisionSelect(),
+                      PrinterSelect(),
+                      ScaleSlider(),
+                      FontScaleSlider(),
+                      Row(),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  padding: const EdgeInsets.only(
+                    top: 24,
+                    bottom: 128,
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: PrinterGroupsSettings(),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
