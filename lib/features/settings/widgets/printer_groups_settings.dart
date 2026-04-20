@@ -39,7 +39,7 @@ class PrinterGroupsSettings extends StatelessWidget {
               builder: (context, settingsState) {
                 final cubit = context.read<SettingsCubit>();
                 final groups = dataState.groups;
-                final printerGroups = settingsState.printerGroups ?? {};
+                final printerGroups = settingsState.printerGroups;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

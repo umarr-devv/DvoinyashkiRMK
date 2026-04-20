@@ -6,6 +6,7 @@ import 'package:app/features/order/blocs/uds_customer/uds_customer_cubit.dart';
 import 'package:app/models/models.dart';
 import 'package:app/service/print.dart';
 import 'package:app/service/print_schemes/check.dart';
+import 'package:app/service/print_schemes/print_schemes.dart';
 import 'package:app/service/toast.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
@@ -81,14 +82,16 @@ class _PaymentDialogState extends State<PaymentDialog> {
         bloc: createCheckCubit,
         listener: (context, state) {
           if (state is CreateCheckFailure) {
-            final hasUdsOrDebt = createCheckCubit.udsCustomer != null ||
+            final hasUdsOrDebt =
+                createCheckCubit.udsCustomer != null ||
                 createCheckCubit.udsCode != null ||
                 createCheckCubit.state.debtUser != null;
             _NetworkErrorDialog(
               context,
               createCheckCubit: createCheckCubit,
-              offlineChecksCubit:
-                  BlocProvider.of<OfflineChecksCubit>(widget.rootContext),
+              offlineChecksCubit: BlocProvider.of<OfflineChecksCubit>(
+                widget.rootContext,
+              ),
               canGoOffline: !hasUdsOrDebt,
             ).show();
           } else if (state is CreateCheckOfflineSaved) {
@@ -150,6 +153,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     'Чек ${state.check?.number} на сумму ${state.check?.documentSum} успешно пробит',
               ),
             );
+            printGroupProductsByPrinter(state.check!);
             udsCustomerCubit.clear();
             BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
             BlocProvider.of<ChecksCubit>(widget.rootContext).update();
@@ -198,6 +202,39 @@ class _PaymentDialogState extends State<PaymentDialog> {
         ),
       ),
     );
+  }
+
+  void printGroupProductsByPrinter(DetailCheckScheme check) {
+    final Map<String, List<OrderItem>> grouped = {};
+    final printerGroups = settingsCubit.state.printerGroups;
+    final items = orderCubit.state.currentOrder?.items ?? [];
+
+    for (final item in items) {
+      final groupKey = item.product.nomenclature.groupKey;
+      if (groupKey != null && printerGroups.containsKey(groupKey)) {
+        final printer = printerGroups[groupKey]!;
+        final printerName = printer.name;
+
+        if (!grouped.containsKey(printerName)) {
+          grouped[printerName] = [];
+        }
+        grouped[printerName]!.add(item);
+      }
+    }
+
+    for (final printer in grouped.keys) {
+      final value = grouped[printer];
+      if (value?.isNotEmpty ?? false) {
+        PrintService(printerUrl: printer).print(
+          PrintOrderCheckScheme(
+            products: value!,
+            check: check,
+            dataState: context.read<DataCubit>().state,
+          ),
+          context,
+        );
+      }
+    }
   }
 }
 
@@ -840,9 +877,7 @@ class _NetworkErrorDialog {
               ),
               Text(
                 'Сетевая ошибка',
-                style: TextStyle(
-                  color: theme.custom.destructiveTextForeground,
-                ),
+                style: TextStyle(color: theme.custom.destructiveTextForeground),
               ),
             ],
           ),
