@@ -12,6 +12,7 @@ dependencies:
   auto_route: ^11.1.0
   bloc: ^9.2.0
   cached_network_image: ^3.4.1
+  collection: ^1.19.1
   cupertino_icons: ^1.0.8
   data_table_2: ^2.7.2
   desktop_multi_window: ^0.3.0

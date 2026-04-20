@@ -32,8 +32,10 @@ class EndSessionDialog {
                     PrintSessionScheme(
                       session: data,
                       dataState: dataCubit.state,
+                      // ignore: use_build_context_synchronously
                       context: rootContext,
                     ),
+                    // ignore: use_build_context_synchronously
                     rootContext,
                   );
                 } catch (exc, st) {
