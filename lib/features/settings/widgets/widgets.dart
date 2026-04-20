@@ -1,3 +1,10 @@
+export 'author_select.dart';
 export 'base.dart';
+export 'cash_register_select.dart';
+export 'font_scale_slider.dart';
 export 'footer.dart';
 export 'header.dart';
+export 'printer_select.dart';
+export 'scale_slider.dart';
+export 'store_select.dart';
+export 'subdivision_select.dart';
