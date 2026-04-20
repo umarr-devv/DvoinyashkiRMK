@@ -16,7 +16,7 @@ class SettingsState extends Equatable {
     this.showEmptyCategories = false,
     this.catalogListView = false,
     this.fontScale = 1.0,
-    this.printerGroups = const {}
+    this.printerGroups = const {},
   });
 
   final bool isDarkTheme;
@@ -31,7 +31,7 @@ class SettingsState extends Equatable {
   final List<GroupScheme> productionGroups;
   final bool showEmptyCategories;
   final bool catalogListView;
-  final Map<String, GroupScheme>? printerGroups;
+  final Map<String, GroupScheme> printerGroups;
 
   SettingsState copyWith({
     bool? isDarkTheme,
@@ -46,7 +46,7 @@ class SettingsState extends Equatable {
     bool? showEmptyCategories,
     bool? catalogListView,
     double? fontScale,
-    Map<String, GroupScheme>? printerGroups
+    Map<String, GroupScheme>? printerGroups,
   }) {
     return SettingsState(
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,

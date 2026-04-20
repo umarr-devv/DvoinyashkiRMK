@@ -72,6 +72,12 @@ class PrinterGroupsSettings extends StatelessWidget {
                             }
                             cubit.setSettings(printerGroups: updated);
                           },
+                          onClear: () {
+                            final updated = Map<String, GroupScheme>.from(
+                              printerGroups,
+                            )..remove(group.refKey);
+                            cubit.setSettings(printerGroups: updated);
+                          },
                         ),
                       ),
                   ],
@@ -113,6 +119,7 @@ class _GroupPrinterRow extends StatelessWidget {
     required this.group,
     required this.printers,
     required this.onChanged,
+    required this.onClear,
     this.selectedPrinter,
   });
 
@@ -124,6 +131,7 @@ class _GroupPrinterRow extends StatelessWidget {
   final GroupScheme? selectedPrinter;
 
   final ValueChanged<Printer?> onChanged;
+  final VoidCallback onClear;
 
   /// Finds the [Printer] matching the stored [GroupScheme.refKey] (= printer url).
   Printer? get _resolvedPrinter {
@@ -137,17 +145,35 @@ class _GroupPrinterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 420,
-      child: FSelect<Printer>(
-        label: Text(group.name),
-        hint: 'Не назначен',
-        control: FSelectControl.managed(
-          initial: _resolvedPrinter,
-          onChange: onChanged,
+    final resolved = _resolvedPrinter;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      spacing: 8,
+      children: [
+        SizedBox(
+          width: 380,
+          child: FSelect<Printer>(
+            label: Text(group.name),
+            hint: 'Не назначен',
+            control: FSelectControl.lifted(
+              value: resolved,
+              onChange: onChanged,
+            ),
+            items: {for (final p in printers) p.name: p},
+          ),
         ),
-        items: {for (final p in printers) p.name: p},
-      ),
+        if (resolved != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: FButton.icon(
+              style: FButtonStyle.outline(),
+              onPress: onClear,
+              child: const Icon(Icons.close, size: 16),
+            ),
+          ),
+      ],
     );
   }
 }
+
