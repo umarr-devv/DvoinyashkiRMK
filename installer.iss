@@ -1,12 +1,12 @@
 [Setup]
 AppName=Двойняшки РМК 
-AppVersion=1.2.0
+AppVersion=1.3.0
 DefaultDirName={pf}\dvoinyashki_rmk
 DefaultGroupName=dvoinyashki_rmk
-OutputBaseFilename=Двойняшки РМК Installer
+OutputBaseFilename=РМК 1.3.0
 Compression=lzma
 SolidCompression=yes
-UninstallDisplayName=РМК Двойняшки Uninstaller
+UninstallDisplayName=РМК Удаление
 
 [Files]
 Source: "build\windows\x64\runner\Release\*"; DestDir: "{app}"; Flags: recursesubdirs
