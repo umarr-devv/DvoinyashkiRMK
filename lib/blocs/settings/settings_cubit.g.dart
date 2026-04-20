@@ -40,6 +40,12 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
       showEmptyCategories: json['showEmptyCategories'] as bool? ?? false,
       catalogListView: json['catalogListView'] as bool? ?? false,
       fontScale: (json['fontScale'] as num?)?.toDouble() ?? 1.0,
+      printerGroups:
+          (json['printerGroups'] as Map<String, dynamic>?)?.map(
+            (k, e) =>
+                MapEntry(k, GroupScheme.fromJson(e as Map<String, dynamic>)),
+          ) ??
+          const {},
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -56,4 +62,5 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'productionGroups': instance.productionGroups,
       'showEmptyCategories': instance.showEmptyCategories,
       'catalogListView': instance.catalogListView,
+      'printerGroups': instance.printerGroups,
     };
