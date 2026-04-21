@@ -5,7 +5,11 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:talker_flutter/talker_flutter.dart';
 
 class PrintOrderCheckScheme extends PrintScheme {
-  PrintOrderCheckScheme({required this.products, required this.check, required this.dataState});
+  PrintOrderCheckScheme({
+    required this.products,
+    required this.check,
+    required this.dataState,
+  });
 
   final List<OrderItem> products;
   final DetailCheckScheme check;
@@ -13,6 +17,12 @@ class PrintOrderCheckScheme extends PrintScheme {
 
   @override
   List<pw.Widget> build() {
+    final store = dataState.structureUnits.firstWhereLogTypeOrNull(
+      (i) => i.refKey == check.structureUnitKey,
+    );
+    final user = dataState.users.firstWhereLogTypeOrNull(
+      (i) => i.refKey == check.userKey,
+    );
     return [
       pw.Theme(
         data: pw.ThemeData(
@@ -25,6 +35,7 @@ class PrintOrderCheckScheme extends PrintScheme {
             children: [
               pw.Image(logo, width: 128),
               pw.SizedBox(height: 32),
+              pw.Text('Заказ на приготовление'),
               pw.Text('Номер чека: ${check.number}'),
               pw.SizedBox(height: 24),
               pw.Table(
@@ -41,7 +52,6 @@ class PrintOrderCheckScheme extends PrintScheme {
                           pw.Text('Название'),
                           pw.Text('Цена'),
                           pw.Text('Кол-во'),
-                          pw.Text('Итого'),
                         ],
                       ),
                     ] +
@@ -52,16 +62,23 @@ class PrintOrderCheckScheme extends PrintScheme {
                           );
                       final characteristic = dataState.characteristics
                           .firstWhereLogTypeOrNull(
-                            (i) => i.refKey == item.product.characteristic?.refKey,
+                            (i) =>
+                                i.refKey == item.product.characteristic?.refKey,
                           );
                       return pw.TableRow(
                         children: [
-                          pw.Text('${nomenclature?.description} ${characteristic?.description}'),
+                          pw.Text(
+                            '${nomenclature?.description} ${characteristic?.description ?? ""}',
+                          ),
+                          pw.Text(item.price.toString()),
                           pw.Text(item.quantity.toString()),
                         ],
                       );
                     }).toList(),
               ),
+              pw.SizedBox(height: 24),
+              pw.Text('Магазин: ${store?.description}'),
+              pw.Text('Кассир: ${user?.description}'),
             ],
           ),
         ),
