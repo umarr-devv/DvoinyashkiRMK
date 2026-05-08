@@ -46,8 +46,23 @@ class AuthCubit extends HydratedCubit<AuthState> {
       );
       emit(AuthLoggedIn(newState));
     } catch (exc, st) {
+      final detail = DetailUserScheme(
+        refKey: user.refKey,
+        description: user.description,
+        inn: user.inn,
+        barcode: user.barcode,
+        jobTitle: 'Оффлайн',
+        department: 'Отдел',
+        departmentKey: user.departmentKey,
+        warehouseKey: user.warehouseKey,
+        positionKey: user.positionKey,
+        image: null,
+        code: user.code,
+      );
+      final newState = state.copyWith(user: detail);
+      emit(AuthLoggedIn(newState));
+
       talker.error(exc, st);
-      emit(AuthFailure(state));
     }
   }
 
