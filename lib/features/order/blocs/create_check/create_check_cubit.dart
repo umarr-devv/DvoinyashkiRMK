@@ -23,6 +23,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     this.sessionCubit,
     this.orderCubit,
     this.udsCustomerCubit,
+    this.connectivityCubit,
   ) : super(CreateCheckInitial(paymentType: cashPaymentType));
 
   final SettingsCubit settingsCubit;
@@ -30,6 +31,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
   final SessionCubit sessionCubit;
   final OrderCubit orderCubit;
   final UdsCustomerCubit udsCustomerCubit;
+  final ConnectivityCubit connectivityCubit;
 
   final client = GetIt.I<RestClient>();
   final udsClient = GetIt.I<UDSClient>();
@@ -86,6 +88,11 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       emit(CreateCheckSessionFailure(state));
       return;
     }
+    if (connectivityCubit.state is ConnectivityOffline) {
+      emit(CreateCheckFailure(state));
+      emit(CreateCheckInitial(paymentType: state.paymentType));
+      return;
+    }
     emit(CreateCheckLoading(state));
     try {
       final CreateCheckScheme data = createCashScheme();
@@ -102,7 +109,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
         }
       }
 
-      for (final i in order!.items.where((i) => i.specification != null)){
+      for (final i in order!.items.where((i) => i.specification != null)) {
         await createProduction(i);
       }
 
@@ -170,7 +177,7 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
             unitKey: item.product.nomenclature.unitKey,
             key: 1,
             specificationKey: item.specification!.refKey,
-          )
+          ),
         ],
         resources: item.specification!.items.map((i) {
           final index = item.specification!.items.indexOf(i);
@@ -204,7 +211,9 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
       responsibleKey: user!.refKey,
       subdivisionKey: subdivision!.refKey,
       customer: udsCustomer?.user.displayName,
-      employeersDebtKey: state.paymentType == debtPaymentType ? state.debtUser?.refKey : null,
+      employeersDebtKey: state.paymentType == debtPaymentType
+          ? state.debtUser?.refKey
+          : null,
       debt: state.paymentType == debtPaymentType ? state.totalSum : 0,
       isCashlessPayment: false,
       cash: state.totalSumToPay,

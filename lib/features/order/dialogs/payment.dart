@@ -52,6 +52,9 @@ class _PaymentDialogState extends State<PaymentDialog> {
 
   late final CreateCheckCubit createCheckCubit;
 
+  ConnectivityCubit get connectivityCubit =>
+      BlocProvider.of<ConnectivityCubit>(context);
+
   void initCubits() {
     createCheckCubit = CreateCheckCubit(
       settingsCubit,
@@ -59,6 +62,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
       sessionCubit,
       orderCubit,
       udsCustomerCubit,
+      connectivityCubit,
     );
     createCheckCubit.init();
   }
@@ -104,6 +108,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     'Чек будет отправлен в 1C при восстановлении соединения',
               ),
             );
+            context.read<OrderCubit>().clearItems();
             udsCustomerCubit.clear();
             AutoRouter.of(context).maybePop();
           } else if (state is CreateCheckUdsOfflineNotSupported) {
@@ -377,7 +382,9 @@ class _DialogAccept extends StatelessWidget {
                     cubit.create();
                   }
                 },
-          prefix: state is CreateCheckLoading ? const FCircularProgress() : null,
+          prefix: state is CreateCheckLoading
+              ? const FCircularProgress()
+              : null,
           style: (style) => style.copyWith(
             decoration: FWidgetStateMap.all(
               BoxDecoration(
