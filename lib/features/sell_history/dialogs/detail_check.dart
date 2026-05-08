@@ -203,14 +203,24 @@ class DetailCheckDialog {
       spacing: 12,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        FButton(
-          onPress: () {
-            ReturnCheckDialog(rootContext, check: check).show();
-          },
-          prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
-          style: FButtonStyle.secondary(),
-          child: Text('Возврат'),
-        ),
+        if (check.posted)
+          FButton(
+            onPress: () {
+              
+            },
+            prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
+            style: FButtonStyle.secondary(),
+            child: Text('Полный возврат'),
+          ),
+        if (check.posted)
+          FButton(
+            onPress: () {
+              ReturnCheckDialog(rootContext, check: check).show();
+            },
+            prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
+            style: FButtonStyle.secondary(),
+            child: Text('Частичный возврат'),
+          ),
         FButton(
           onPress: () {
             PrintService().print(

@@ -5,7 +5,6 @@ import 'package:app/features/order/blocs/create_check/create_check_cubit.dart';
 import 'package:app/features/order/blocs/uds_customer/uds_customer_cubit.dart';
 import 'package:app/models/models.dart';
 import 'package:app/service/print.dart';
-import 'package:app/service/print_schemes/check.dart';
 import 'package:app/service/print_schemes/print_schemes.dart';
 import 'package:app/service/toast.dart';
 import 'package:app/shared/icons/icons.dart';
