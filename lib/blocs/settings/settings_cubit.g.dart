@@ -46,6 +46,7 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
                 MapEntry(k, GroupScheme.fromJson(e as Map<String, dynamic>)),
           ) ??
           const {},
+      useSmartCatalog: json['useSmartCatalog'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -63,4 +64,5 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'showEmptyCategories': instance.showEmptyCategories,
       'catalogListView': instance.catalogListView,
       'printerGroups': instance.printerGroups,
+      'useSmartCatalog': instance.useSmartCatalog,
     };

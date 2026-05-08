@@ -17,8 +17,19 @@ class OrderCatalog extends StatelessWidget {
   Widget build(BuildContext context) {
     return FScaffold(
       header: FHeader(
-        title: Text('Каталог'),
-        suffixes: [OrderCatalogSearchBar()],
+        title: const Text('Каталог'),
+        suffixes: [
+          const OrderCatalogSearchBar(),
+          const SizedBox(width: 4),
+          FButton.icon(
+            onPress: () {
+              BlocProvider.of<SettingsCubit>(context).setSettings(
+                useSmartCatalog: true,
+              );
+            },
+            child: const Icon(FluentIcons.apps_24_regular),
+          ),
+        ],
       ),
       child: Column(
         spacing: 12,

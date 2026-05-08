@@ -37,13 +37,22 @@ class _SmartCatalogState extends State<SmartCatalog> {
                 .toList();
             return FScaffold(
               header: FHeader(
-                title: Text('Каталог'),
+                title: const Text('Каталог'),
                 suffixes: [
                   FButton.icon(
                     onPress: () {
                       PinnedCategoriesDialog(context).show();
                     },
-                    child: Icon(FIcons.settings2),
+                    child: const Icon(FIcons.settings2),
+                  ),
+                  FButton.icon(
+                    onPress: () {
+                      BlocProvider.of<SettingsCubit>(
+                        context,
+                      ).setSettings(useSmartCatalog: false);
+                    },
+                    style: FButtonStyle.primary(),
+                    child: const Icon(FluentIcons.list_24_regular),
                   ),
                 ],
               ),

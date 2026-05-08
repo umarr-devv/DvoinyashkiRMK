@@ -27,7 +27,8 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     bool? catalogListView,
     List<GroupScheme>? productionGroups,
     double? fontScale,
-    Map<String, GroupScheme>? printerGroups
+    Map<String, GroupScheme>? printerGroups,
+    bool? useSmartCatalog,
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -45,7 +46,8 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       catalogListView: catalogListView,
       productionGroups: productionGroups,
       fontScale: fontScale,
-      printerGroups: printerGroups
+      printerGroups: printerGroups,
+      useSmartCatalog: useSmartCatalog,
     );
     emit(SettingsUpdate(newState));
   }

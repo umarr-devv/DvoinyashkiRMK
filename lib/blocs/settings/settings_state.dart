@@ -17,6 +17,7 @@ class SettingsState extends Equatable {
     this.catalogListView = false,
     this.fontScale = 1.0,
     this.printerGroups = const {},
+    this.useSmartCatalog = true,
   });
 
   final bool isDarkTheme;
@@ -32,6 +33,7 @@ class SettingsState extends Equatable {
   final bool showEmptyCategories;
   final bool catalogListView;
   final Map<String, GroupScheme> printerGroups;
+  final bool useSmartCatalog;
 
   SettingsState copyWith({
     bool? isDarkTheme,
@@ -47,6 +49,7 @@ class SettingsState extends Equatable {
     bool? catalogListView,
     double? fontScale,
     Map<String, GroupScheme>? printerGroups,
+    bool? useSmartCatalog,
   }) {
     return SettingsState(
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
@@ -62,6 +65,7 @@ class SettingsState extends Equatable {
       showEmptyCategories: showEmptyCategories ?? this.showEmptyCategories,
       catalogListView: catalogListView ?? this.catalogListView,
       printerGroups: printerGroups ?? this.printerGroups,
+      useSmartCatalog: useSmartCatalog ?? this.useSmartCatalog,
     );
   }
 
@@ -78,7 +82,8 @@ class SettingsState extends Equatable {
       productionGroups = other.productionGroups,
       catalogListView = other.catalogListView,
       fontScale = other.fontScale,
-      printerGroups = other.printerGroups;
+      printerGroups = other.printerGroups,
+      useSmartCatalog = other.useSmartCatalog;
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);
@@ -100,6 +105,7 @@ class SettingsState extends Equatable {
     catalogListView,
     fontScale,
     printerGroups,
+    useSmartCatalog,
   ];
 }
 
