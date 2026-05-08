@@ -13,7 +13,7 @@ class OrderScreen extends StatelessWidget {
       child: Row(
         children: [
           // CustomerWindowOperation(),
-          Expanded(child: OrderCatalog()),
+          Expanded(child: SmartCatalog()),
           OrderBasket(),
           OrderScanner(),
         ],

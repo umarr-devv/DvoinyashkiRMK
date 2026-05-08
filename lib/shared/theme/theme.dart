@@ -82,6 +82,28 @@ class CustomThemeData {
 
   Color get uds => Color(0xff6950cb);
 
+  static const List<Color> palette = [
+    Color(0xffE63946),
+    Color(0xff2A9D8F),
+    Color(0xffF4A261),
+    Color(0xffE76F51),
+    Color(0xff457B9D),
+    Color(0xff6D597A),
+    Color(0xff0077B6),
+    Color(0xff2D6A4F),
+    Color(0xff264653),
+    Color(0xffB56576),
+    Color(0xffFB8500),
+    Color(0xff3F37C9),
+  ];
+
+  Color byUuid(String uuid) {
+    if (uuid.isEmpty) return Colors.grey;
+    final int hash = uuid.hashCode;
+    final int colorIndex = hash.abs() % palette.length;
+    return palette[colorIndex];
+  }
+
   ThemeData toTheme() {
     return ThemeData(
       useMaterial3: true,

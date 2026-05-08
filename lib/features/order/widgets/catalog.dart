@@ -18,7 +18,7 @@ class OrderCatalog extends StatelessWidget {
     return FScaffold(
       header: FHeader(
         title: Text('Каталог'),
-        suffixes: [_OrderCatalogSearchBar()],
+        suffixes: [OrderCatalogSearchBar()],
       ),
       child: Column(
         spacing: 12,
@@ -31,14 +31,14 @@ class OrderCatalog extends StatelessWidget {
   }
 }
 
-class _OrderCatalogSearchBar extends StatefulWidget {
-  const _OrderCatalogSearchBar();
+class OrderCatalogSearchBar extends StatefulWidget {
+  const OrderCatalogSearchBar();
 
   @override
-  State<_OrderCatalogSearchBar> createState() => _OrderCatalogSearchBarState();
+  State<OrderCatalogSearchBar> createState() => _OrderCatalogSearchBarState();
 }
 
-class _OrderCatalogSearchBarState extends State<_OrderCatalogSearchBar> {
+class _OrderCatalogSearchBarState extends State<OrderCatalogSearchBar> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
 
