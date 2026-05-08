@@ -55,7 +55,11 @@ class DetailCheckDialog {
                 title(state.check!),
                 info(state.check!),
                 itemsList(state.check!),
-                footer(state.check!),
+                DetailCheckFooter(
+                  check: state.check!,
+                  rootContext: rootContext,
+                  cubit: cubit,
+                ),
               ],
             ),
           );
@@ -197,43 +201,124 @@ class DetailCheckDialog {
       },
     );
   }
+}
 
-  Widget footer(DetailCheckScheme check) {
+class DetailCheckFooter extends StatefulWidget {
+  const DetailCheckFooter({
+    super.key,
+    required this.check,
+    required this.rootContext,
+    required this.cubit,
+  });
+
+  final DetailCheckScheme check;
+  final BuildContext rootContext;
+  final DetailCheckCubit cubit;
+
+  @override
+  State<DetailCheckFooter> createState() => _DetailCheckFooterState();
+}
+
+class _DetailCheckFooterState extends State<DetailCheckFooter> {
+  bool isUnposting = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       spacing: 12,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (check.posted)
+        if (widget.check.posted)
           FButton(
-            onPress: () {
-              
-            },
-            prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
+            onPress: isUnposting
+                ? null
+                : () async {
+                    final confirm = await showFDialog<bool>(
+                      context: widget.rootContext,
+                      builder: (context, style, animation) {
+                        return FDialog(
+                          title: const Text('Подтверждение'),
+                          body: const Text('Вы уверены, что хотите выполнить полный возврат?'),
+                          direction: Axis.horizontal,
+                          actions: [
+                            FButton(
+                              onPress: () {
+                                AutoRouter.of(context).maybePop(false);
+                              },
+                              style: FButtonStyle.outline(),
+                              child: const Text('Отмена'),
+                            ),
+                            FButton(
+                              onPress: () {
+                                AutoRouter.of(context).maybePop(true);
+                              },
+                              child: const Text('Подтвердить'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                    if (confirm != true) return;
+
+                    setState(() {
+                      isUnposting = true;
+                    });
+                    try {
+                      await widget.cubit.client.unpostCheck(
+                        refKey: widget.check.refKey,
+                      );
+                      if (context.mounted) {
+                        widget.rootContext.read<ChecksCubit>().update();
+                        AutoRouter.of(widget.rootContext).maybePop();
+                      }
+                    } catch (e, st) {
+                      widget.cubit.talker.error(e, st);
+                    } finally {
+                      if (context.mounted) {
+                        setState(() {
+                          isUnposting = false;
+                        });
+                      }
+                    }
+                  },
+            prefix: isUnposting
+                ? FCircularProgress()
+                : const Icon(FluentIcons.arrow_hook_up_left_24_regular),
             style: FButtonStyle.secondary(),
-            child: Text('Полный возврат'),
+            child: const Text('Полный возврат'),
           ),
-        if (check.posted)
+        if (widget.check.posted)
           FButton(
-            onPress: () {
-              ReturnCheckDialog(rootContext, check: check).show();
-            },
-            prefix: Icon(FluentIcons.arrow_hook_up_left_24_regular),
+            onPress: isUnposting
+                ? null
+                : () {
+                    ReturnCheckDialog(
+                      widget.rootContext,
+                      check: widget.check,
+                    ).show();
+                  },
+            prefix: const Icon(FluentIcons.arrow_hook_up_left_24_regular),
             style: FButtonStyle.secondary(),
-            child: Text('Частичный возврат'),
+            child: const Text('Частичный возврат'),
           ),
         FButton(
-          onPress: () {
-            PrintService().print(
-              PrintCheckScheme(
-                check: check,
-                dataState: BlocProvider.of<DataCubit>(rootContext).state,
-              ),
-              rootContext,
-            );
-          },
-          prefix: Icon(FluentIcons.print_24_regular),
+          onPress: isUnposting
+              ? null
+              : () {
+                  PrintService().print(
+                    PrintCheckScheme(
+                      check: widget.check,
+                      dataState: BlocProvider.of<DataCubit>(
+                        widget.rootContext,
+                      ).state,
+                    ),
+                    widget.rootContext,
+                  );
+                },
+          prefix: const Icon(FluentIcons.print_24_regular),
           style: FButtonStyle.outline(),
-          child: Text('Печать'),
+          child: const Text('Печать'),
         ),
       ],
     );
