@@ -52,9 +52,11 @@ class SellHistoryTable extends StatelessWidget {
                     ).show();
                   },
                   color: WidgetStatePropertyAll(
-                    rowIndex.isOdd
-                        ? theme.custom.rowOddColor
-                        : theme.custom.rowEvenColor,
+                    check.posted
+                        ? rowIndex.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor
+                        : theme.custom.error.withValues(alpha: 0.25),
                   ),
                   cells: [
                     DataCell(
@@ -83,14 +85,21 @@ class SellHistoryTable extends StatelessWidget {
                             )
                           : SizedBox(),
                     ),
-
                     DataCell(Text(check.paymentType)),
                     DataCell(
+                      check.posted ?
                       Row(
                         spacing: 4,
                         children: [
                           Icon(Icons.check),
                           Expanded(child: Text(check.status)),
+                        ],
+                      ) :
+                      Row(
+                        spacing: 4,
+                        children: [
+                          Icon(Icons.close),
+                          Expanded(child: Text('Отменен')),
                         ],
                       ),
                     ),

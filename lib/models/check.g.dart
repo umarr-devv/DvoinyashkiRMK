@@ -8,6 +8,7 @@ part of 'check.dart';
 
 CheckScheme _$CheckSchemeFromJson(Map<String, dynamic> json) => CheckScheme(
   refKey: json['Ref_Key'] as String,
+  posted: json['Posted'] as bool,
   number: json['Number'] as String,
   date: DateTime.parse(json['Date'] as String),
   cashRegisterKey: json['КассаККМ_Key'] as String,
@@ -35,6 +36,7 @@ CheckScheme _$CheckSchemeFromJson(Map<String, dynamic> json) => CheckScheme(
 Map<String, dynamic> _$CheckSchemeToJson(CheckScheme instance) =>
     <String, dynamic>{
       'Ref_Key': instance.refKey,
+      'Posted': instance.posted,
       'Number': instance.number,
       'Date': instance.date.toIso8601String(),
       'КассаККМ_Key': instance.cashRegisterKey,
@@ -85,6 +87,7 @@ DetailCheckScheme _$DetailCheckSchemeFromJson(Map<String, dynamic> json) =>
           .map((e) => CheckItemScheme.fromJson(e as Map<String, dynamic>))
           .toList(),
       refKey: json['Ref_Key'] as String,
+      posted: json['Posted'] as bool,
       number: json['Number'] as String,
       date: DateTime.parse(json['Date'] as String),
       cashRegisterKey: json['КассаККМ_Key'] as String,
@@ -112,6 +115,7 @@ DetailCheckScheme _$DetailCheckSchemeFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DetailCheckSchemeToJson(DetailCheckScheme instance) =>
     <String, dynamic>{
       'Ref_Key': instance.refKey,
+      'Posted': instance.posted,
       'Number': instance.number,
       'Date': instance.date.toIso8601String(),
       'КассаККМ_Key': instance.cashRegisterKey,

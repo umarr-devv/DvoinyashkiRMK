@@ -65,11 +65,8 @@ class DetailSessionCubit extends Cubit<DetailSessionState> {
 
       final checks = await client.getChecks(
         fullPath: buildODataQuery({
-          '\$select':
-              'Ref_Key,Number,Date,КассаККМ_Key,СтруктурнаяЕдиница_Key,Кассир_Key,КассоваяСмена_Key,'
-              'КлиентUDS,КодСкидкиUDS,СкидкаUDS,СуммаОплатUDS,Наличные,ОбменИННКассира,ОбменМагазин,ПолученоНаличными,'
-              'ПолученоЭлектронно,Сдача,Статус,СуммаВключаетНДС,СуммаДокумента,ФормаОплаты,Состав,СотрудникДолг_Key',
-          '\$filter': 'КассоваяСмена_Key eq guid\'$sessionRefKey\'',
+          '\$filter':
+              'КассоваяСмена_Key eq guid\'$sessionRefKey\' and Posted eq true',
           '\$format': 'json',
         }),
       );

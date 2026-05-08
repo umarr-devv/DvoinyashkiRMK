@@ -7,6 +7,7 @@ part 'check.g.dart';
 class CheckScheme extends Equatable {
   const CheckScheme({
     required this.refKey,
+    required this.posted,
     required this.number,
     required this.date,
     required this.cashRegisterKey,
@@ -33,6 +34,9 @@ class CheckScheme extends Equatable {
 
   @JsonKey(name: 'Ref_Key')
   final String refKey;
+
+  @JsonKey(name: 'Posted')
+  final bool posted;
 
   @JsonKey(name: 'Number')
   final String number;
@@ -157,6 +161,7 @@ class DetailCheckScheme extends CheckScheme {
   const DetailCheckScheme({
     required this.items,
     required super.refKey,
+    required super.posted,
     required super.number,
     required super.date,
     required super.cashRegisterKey,

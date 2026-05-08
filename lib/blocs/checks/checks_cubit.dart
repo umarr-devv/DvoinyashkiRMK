@@ -28,7 +28,7 @@ class ChecksCubit extends HydratedCubit<ChecksState> {
     try {
       final Map<String, dynamic> params = {
         '\$select':
-            "Ref_Key,Number,Date,КассаККМ_Key,Кассир_Key,КассоваяСмена_Key,КлиентUDS,КодСкидкиUDS,СкидкаUDS,СуммаОплатUDS,"
+            "Ref_Key,Posted,Number,Date,КассаККМ_Key,Кассир_Key,КассоваяСмена_Key,КлиентUDS,КодСкидкиUDS,СкидкаUDS,СуммаОплатUDS,"
             "Наличные,ОбменИННКассира,ОбменМагазин,ПолученоНаличными,ПолученоЭлектронно,Сдача,Статус,СуммаВключаетНДС,СуммаДокумента,"
             "ФормаОплаты,СтруктурнаяЕдиница_Key,СотрудникДолг_Key",
         '\$top': state.limit.toString(),
