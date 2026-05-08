@@ -1,6 +1,7 @@
 import 'package:app/features/order/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
 @RoutePage()
 class OrderScreen extends StatelessWidget {
@@ -8,13 +9,15 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // CustomerWindowOperation(),
-        Expanded(child: OrderCatalog()),
-        OrderBasket(),
-        OrderScanner(),
-      ],
+    return FScaffold(
+      child: Row(
+        children: [
+          // CustomerWindowOperation(),
+          Expanded(child: OrderCatalog()),
+          OrderBasket(),
+          OrderScanner(),
+        ],
+      ),
     );
   }
 }

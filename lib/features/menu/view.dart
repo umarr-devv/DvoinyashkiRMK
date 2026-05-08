@@ -61,7 +61,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     MenuNavBar(),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.only(bottom: 8),
                         child: child,
                       ),
                     ),
