@@ -14,15 +14,11 @@ class TerminalUserFoundDialog {
   final UserScheme user;
 
   void show() {
+    rootContext.read<TerminalCubit>().getWorkReport(user);
     showFDialog(
       context: rootContext,
       builder: (context, style, animation) {
-        return BlocProvider(
-          create: (_) =>
-              TerminalCubit(BlocProvider.of<SettingsCubit>(context))
-                ..getWorkReport(user),
-          child: _TerminalUserFoundDialogWidget(user: user),
-        );
+        return _TerminalUserFoundDialogWidget(user: user);
       },
     );
   }
