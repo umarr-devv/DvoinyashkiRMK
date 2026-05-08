@@ -129,12 +129,6 @@ class _OrderCatalogCategories extends StatelessWidget {
                 ),
                 FButton.icon(
                   onPress: () {
-                    ProductionCategoriesDialog(context).show();
-                  },
-                  child: Icon(FIcons.coffee),
-                ),
-                FButton.icon(
-                  onPress: () {
                     PinnedCategoriesDialog(context).show();
                   },
                   child: Icon(FIcons.settings2),

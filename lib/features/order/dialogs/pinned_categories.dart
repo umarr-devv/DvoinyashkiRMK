@@ -36,15 +36,15 @@ class PinnedCategoriesDialog {
 
   Widget title() {
     return FHeader.nested(
-      title: Text('Закрепленные группы'),
+      title: const Text('Настройки групп'),
       titleAlignment: Alignment.centerLeft,
-      prefixes: [Icon(FIcons.pin, size: 24)],
+      prefixes: const [Icon(FIcons.pin, size: 24)],
       suffixes: [
         FButton.icon(
           onPress: () {
             AutoRouter.of(rootContext).maybePop();
           },
-          child: Icon(Icons.close),
+          child: const Icon(Icons.close),
         ),
       ],
     );
@@ -62,6 +62,27 @@ class PinnedCategoriesDialog {
               child: Column(
                 spacing: 16,
                 children: [
+                  Row(
+                    children: [
+                      const Expanded(child: SizedBox()),
+                      const SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Закрепить',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 80,
+                        child: Text(
+                          'Авто-сборка',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
                   Column(
                     children:
                         [
@@ -112,9 +133,14 @@ class PinnedCategoriesDialog {
     bool? showEmpty,
     SettingsCubit cubit,
   ) {
-    final pinned =
-        cubit.state.pinnedCategories.contains(group?.refKey) ||
-        (showEmpty ?? false);
+    final pinned = group != null
+        ? cubit.state.pinnedCategories.contains(group.refKey)
+        : (showEmpty ?? false);
+
+    final production =
+        group != null &&
+        cubit.state.productionGroups.any((g) => g.refKey == group.refKey);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -122,37 +148,68 @@ class PinnedCategoriesDialog {
         Row(
           spacing: 4,
           children: [
-            if (group == null) Icon(Icons.close),
+            if (group == null) const Icon(Icons.close),
             Text(group?.name ?? 'Без категорий'),
           ],
         ),
-        Expanded(child: CustomDottedLine()),
-        Transform.scale(
-          scale: 0.75,
-          child: FSwitch(
-            value: pinned,
-            onChange: (value) {
-              if (group != null) {
-                if (pinned) {
-                  final List<String> pinnedCategories = List.from(
-                    cubit.state.pinnedCategories,
-                  );
-                  pinnedCategories.remove(group.refKey);
-                  cubit.setSettings(pinnedCategories: pinnedCategories);
-                } else {
-                  final List<String> pinnedCategories = List.from(
-                    cubit.state.pinnedCategories,
-                  );
-                  pinnedCategories.add(group.refKey);
-                  cubit.setSettings(pinnedCategories: pinnedCategories);
-                }
-              } else {
-                cubit.setSettings(
-                  showEmptyCategories: !cubit.state.showEmptyCategories,
-                );
-              }
-              selectedCategory.value = favoriteSelectedCategory;
-            },
+        const Expanded(child: CustomDottedLine()),
+        SizedBox(
+          width: 80,
+          child: Center(
+            child: Transform.scale(
+              scale: 0.75,
+              child: FSwitch(
+                value: pinned,
+                onChange: (value) {
+                  if (group != null) {
+                    final List<String> pinnedCategories = List.from(
+                      cubit.state.pinnedCategories,
+                    );
+                    if (value) {
+                      if (!pinnedCategories.contains(group.refKey)) {
+                        pinnedCategories.add(group.refKey);
+                      }
+                    } else {
+                      pinnedCategories.remove(group.refKey);
+                    }
+                    cubit.setSettings(pinnedCategories: pinnedCategories);
+                  } else {
+                    cubit.setSettings(showEmptyCategories: value);
+                  }
+                  selectedCategory.value = favoriteSelectedCategory;
+                },
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 80,
+          child: Center(
+            child: group == null
+                ? const SizedBox()
+                : Transform.scale(
+                    scale: 0.75,
+                    child: FSwitch(
+                      value: production,
+                      onChange: (value) {
+                        final List<GroupScheme> productionGroups = List.from(
+                          cubit.state.productionGroups,
+                        );
+                        if (value) {
+                          if (!productionGroups.any(
+                            (g) => g.refKey == group.refKey,
+                          )) {
+                            productionGroups.add(group);
+                          }
+                        } else {
+                          productionGroups.removeWhere(
+                            (g) => g.refKey == group.refKey,
+                          );
+                        }
+                        cubit.setSettings(productionGroups: productionGroups);
+                      },
+                    ),
+                  ),
           ),
         ),
       ],
