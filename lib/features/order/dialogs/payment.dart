@@ -370,12 +370,14 @@ class _DialogAccept extends StatelessWidget {
       bloc: cubit,
       builder: (context, state) {
         return FButton(
-          onPress: () {
-            if (formKey.currentState?.validate() ?? false) {
-              cubit.create();
-            }
-          },
-          prefix: state is CreateCheckLoading ? FCircularProgress() : null,
+          onPress: state is CreateCheckLoading
+              ? null
+              : () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    cubit.create();
+                  }
+                },
+          prefix: state is CreateCheckLoading ? const FCircularProgress() : null,
           style: (style) => style.copyWith(
             decoration: FWidgetStateMap.all(
               BoxDecoration(
