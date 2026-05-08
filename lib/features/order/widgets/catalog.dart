@@ -43,7 +43,7 @@ class OrderCatalog extends StatelessWidget {
 }
 
 class OrderCatalogSearchBar extends StatefulWidget {
-  const OrderCatalogSearchBar();
+  const OrderCatalogSearchBar({super.key});
 
   @override
   State<OrderCatalogSearchBar> createState() => _OrderCatalogSearchBarState();
