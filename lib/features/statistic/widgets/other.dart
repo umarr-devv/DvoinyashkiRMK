@@ -188,7 +188,7 @@ class _StatisticTotal extends StatelessWidget {
           child: Column(
             spacing: 8,
             children: [
-              _StatisticTotalItem(
+              StatisticTotalItem(
                 label: Row(
                   spacing: 6,
                   children: [
@@ -200,7 +200,7 @@ class _StatisticTotal extends StatelessWidget {
                   NumberFormat.currency(symbol: '').format(state.totalSum),
                 ),
               ),
-              _StatisticTotalItem(
+              StatisticTotalItem(
                 label: Row(
                   spacing: 6,
                   children: [
@@ -210,7 +210,7 @@ class _StatisticTotal extends StatelessWidget {
                 ),
                 child: Text(state.checks.length.toStringAsFixed(0)),
               ),
-              _StatisticTotalItem(
+              StatisticTotalItem(
                 label: Row(
                   spacing: 6,
                   children: [
@@ -222,7 +222,7 @@ class _StatisticTotal extends StatelessWidget {
                   NumberFormat.currency(symbol: '').format(state.avgCheckSum),
                 ),
               ),
-              _StatisticTotalItem(
+              StatisticTotalItem(
                 label: Row(
                   spacing: 6,
                   children: [
@@ -232,7 +232,7 @@ class _StatisticTotal extends StatelessWidget {
                 ),
                 child: Text(state.uniqueUdsClient.length.toStringAsFixed(0)),
               ),
-              _StatisticTotalItem(
+              StatisticTotalItem(
                 label: Row(
                   spacing: 6,
                   children: [
@@ -242,7 +242,7 @@ class _StatisticTotal extends StatelessWidget {
                 ),
                 child: Text(NumberFormat().format(state.totalUdsPoints)),
               ),
-              _StatisticTotalItem(
+              StatisticTotalItem(
                 label: Row(
                   spacing: 6,
                   children: [
@@ -260,8 +260,8 @@ class _StatisticTotal extends StatelessWidget {
   }
 }
 
-class _StatisticTotalItem extends StatelessWidget {
-  const _StatisticTotalItem({required this.label, required this.child});
+class StatisticTotalItem extends StatelessWidget {
+  const StatisticTotalItem({required this.label, required this.child});
 
   final Widget label;
   final Widget child;
