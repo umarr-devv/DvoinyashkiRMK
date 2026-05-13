@@ -103,24 +103,36 @@ class CreateWithdrawDialog {
             );
           },
         ),
-        FTextFormField(
-          label: Text('Сумма выемки'),
-          control: FTextFieldControl.managed(controller: documentSumController),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Это поле не должен быть пустым';
-            } 
+        BlocBuilder<WithdrawsCubit, WithdrawsState>(
+          builder: (context, state) {
+            return FTextFormField(
+              label: Text('Сумма выемки'),
+              control: FTextFieldControl.managed(
+                controller: documentSumController,
+              ),
+              validator: (value) {
+                final cubit = context.read<WithdrawsCubit>();
+                if (value == null || value.isEmpty) {
+                  return 'Это поле не должен быть пустым';
+                }
 
-            final cleanValue = value.replaceAll(RegExp(r'\s+\b|\b\s+'), '').replaceAll(' ', '');
-            final doubleValue = double.tryParse(cleanValue);
-            
-            if (doubleValue == null) {
-              return 'Некорректное значение';
-            } else if (doubleValue == 0) {
-              return 'Значение не должен быть равен 0';
-            } else {
-              return null;
-            }
+                final cleanValue = value
+                    .replaceAll(RegExp(r'\s+\b|\b\s+'), '')
+                    .replaceAll(' ', '');
+                final doubleValue = double.tryParse(cleanValue);
+
+                if (doubleValue == null) {
+                  return 'Некорректное значение';
+                } else if (doubleValue == 0) {
+                  return 'Значение не должен быть равен 0';
+                } else if (doubleValue >
+                    (cubit.state.cash?.value.toDouble() ?? 0)) {
+                  return 'В кассе нет столько средств. В данный момент в кассе ${cubit.state.cash?.value}';
+                } else {
+                  return null;
+                }
+              },
+            );
           },
         ),
 
