@@ -261,7 +261,7 @@ class _StatisticTotal extends StatelessWidget {
 }
 
 class StatisticTotalItem extends StatelessWidget {
-  const StatisticTotalItem({required this.label, required this.child});
+  const StatisticTotalItem({super.key, required this.label, required this.child});
 
   final Widget label;
   final Widget child;

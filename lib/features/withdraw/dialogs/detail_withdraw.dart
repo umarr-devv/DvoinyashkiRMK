@@ -49,16 +49,27 @@ class DetailWithdrawDialog {
   }
 
   Widget body() {
-    return FLabel(
-      label: Text('Сумма выемки'),
-      axis: Axis.vertical,
-      child: Text(
-        NumberFormat.currency(
-          symbol: '',
-          decimalDigits: 0,
-        ).format(withdraw.documentSum),
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-      ),
+    return Column(
+      crossAxisAlignment: .start,
+      spacing: 16,
+      children: [
+        FLabel(
+          label: Text('Сумма выемки'),
+          axis: Axis.vertical,
+          child: Text(
+            NumberFormat.currency(
+              symbol: '',
+              decimalDigits: 0,
+            ).format(withdraw.documentSum),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          ),
+        ),
+        FLabel(
+          label: Text('Комментарий'),
+          axis: Axis.vertical,
+          child: Text(withdraw.commentary),
+        ),
+      ],
     );
   }
 

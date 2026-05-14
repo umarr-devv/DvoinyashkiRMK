@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
+enum WithdrawCheckGroup { none, store, bar }
+
 class CreateWithdrawDialog {
   CreateWithdrawDialog(this.rootContext);
 
@@ -15,7 +17,10 @@ class CreateWithdrawDialog {
   final formKey = GlobalKey<FormState>();
 
   final documentSumController = TextEditingController(text: '0');
+
   final commentController = TextEditingController();
+
+  final withdrawType = ValueNotifier<WithdrawCheckGroup>(.none);
 
   CreateWithdrawCubit initCubit() {
     final settingsCubit = BlocProvider.of<SettingsCubit>(rootContext);
@@ -66,6 +71,7 @@ class CreateWithdrawDialog {
   }
 
   Widget body() {
+    final theme = rootContext.theme;
     return Column(
       spacing: 24,
       children: [
@@ -125,12 +131,69 @@ class CreateWithdrawDialog {
                   return 'Некорректное значение';
                 } else if (doubleValue == 0) {
                   return 'Значение не должен быть равен 0';
-                } else if (doubleValue >
+                }
+                else if (doubleValue >
                     (cubit.state.cash?.value.toDouble() ?? 0)) {
                   return 'В кассе нет столько средств. В данный момент в кассе ${cubit.state.cash?.value}';
-                } else {
+                }
+                else {
                   return null;
                 }
+              },
+            );
+          },
+        ),
+
+        ValueListenableBuilder(
+          valueListenable: withdrawType,
+          builder: (context, value, child) {
+            return FormField<WithdrawCheckGroup>(
+              initialValue: withdrawType.value,
+              validator: (value) {
+                if (value == .none) {
+                  return 'Выберите один из вариантов';
+                }
+                return null;
+              },
+              builder: (field) {
+                return Column(
+                  crossAxisAlignment: .start,
+                  spacing: 12,
+                  children: [
+                    FCheckbox(
+                      label: Text('Магазин'),
+                      value: value == .store,
+                      onChange: (newValue) {
+                        if (newValue) {
+                          withdrawType.value = .store;
+                          field.didChange(.store); //
+                        }
+                      },
+                    ),
+                    FCheckbox(
+                      label: Text('Бар'),
+                      value: value == .bar,
+                      onChange: (newValue) {
+                        if (newValue) {
+                          withdrawType.value = .bar;
+                          field.didChange(.bar); //
+                        }
+                      },
+                    ),
+                    if (field.hasError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          field.errorText!,
+                          style: TextStyle(
+                            color: theme.colors.destructive,
+                            fontSize: 15,
+                            fontWeight: .w600,
+                          ),
+                        ),
+                      ),
+                  ],
+                );
               },
             );
           },
@@ -162,7 +225,15 @@ class CreateWithdrawDialog {
               AcceptCreateWithdrawDialog(rootContext, () {
                 final documentSum = double.tryParse(documentSumController.text);
                 if (documentSum != null) {
-                  cubit.create(documentSum, commentController.text);
+                  cubit.create(
+                    documentSum,
+                    commentController.text,
+                    withdrawType.value == .bar
+                        ? 'Бар'
+                        : withdrawType.value == .store
+                        ? 'Магазин'
+                        : '',
+                  );
                 }
               }).show();
             }

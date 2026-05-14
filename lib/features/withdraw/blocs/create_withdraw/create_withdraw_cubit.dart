@@ -24,7 +24,7 @@ class CreateWithdrawCubit extends Cubit<CreateWithdrawState> {
   StructureUnitScheme? get subdivision => settingsCubit.state.subdivision;
   WorkShiftScheme? get workShift => sessionCubit.state.currentWorkShift;
 
-  Future create(double documentSum, String? comment) async {
+  Future create(double documentSum, String? comment, String type) async {
     if (cashRegister == null ||
         author == null ||
         store == null ||
@@ -34,10 +34,11 @@ class CreateWithdrawCubit extends Cubit<CreateWithdrawState> {
     }
     emit(CreateWithdrawLoading(state));
     try {
+      final comment_ = 'Источник выемки: $type${(comment?.isNotEmpty ?? false) ? "\n${comment!}" : ""}'; 
       final response = await client.createWithdraw(
         data: CreateWithdrawScheme(
           date: DateTime.now(),
-          comment: comment,
+          comment: comment_,
           cashRegisterKey: cashRegister!.refKey,
           authorKey: author!.refKey,
           subdivisionKey: subdivision!.refKey,
