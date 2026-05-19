@@ -90,7 +90,6 @@ class CreateCheckCubit extends Cubit<CreateCheckState> {
     }
     if (connectivityCubit.state is ConnectivityOffline) {
       emit(CreateCheckFailure(state));
-      emit(CreateCheckInitial(paymentType: state.paymentType));
       return;
     }
     emit(CreateCheckLoading(state));
