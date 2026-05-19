@@ -159,6 +159,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
             );
             printGroupProductsByPrinter(state.check!);
             udsCustomerCubit.clear();
+            BlocProvider.of<WarehouseCubit>(widget.rootContext).update();
             BlocProvider.of<OrderCubit>(widget.rootContext).clearItems();
             BlocProvider.of<ChecksCubit>(widget.rootContext).update();
             PrintService(
