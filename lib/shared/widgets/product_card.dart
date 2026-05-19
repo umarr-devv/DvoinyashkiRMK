@@ -185,16 +185,33 @@ class _ProductCardTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Text(
-      product.name,
-      textAlign: TextAlign.start,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: theme.custom.foreground,
-      ),
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        Text(
+          product.nomenclature.name ?? '',
+          textAlign: TextAlign.start,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: theme.custom.foreground,
+          ),
+        ),
+        if (product.characteristic != null)
+          Text(
+            product.characteristic?.description ?? '',
+            textAlign: TextAlign.start,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: theme.custom.accent,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -303,7 +320,18 @@ class _ProductWarehouse extends StatelessWidget {
     if (isProduction) {
       return Padding(
         padding: const EdgeInsets.only(top: 4),
-        child: Text('Сборка', style: TextStyle(color: theme.custom.accent)),
+        child: Row(
+          spacing: 6,
+          children: [
+            Icon(FIcons.coffee, size: 14),
+            Flexible(
+              child: Text(
+                'Сборка',
+                style: TextStyle(color: theme.custom.mutedForeground),
+              ),
+            ),
+          ],
+        ),
       );
     }
     return Padding(
