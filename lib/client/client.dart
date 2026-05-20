@@ -79,6 +79,11 @@ abstract class RestClient {
     @Query('\$format') String format = 'json',
   });
 
+  @GET('/Catalog_Номенклатура{full_path}')
+  Future<ProductImageListScheme> getProductImages_({
+    @Path('full_path') required String fullPath,
+  });
+
   @GET('/Catalog_КассыККМ')
   Future<CashRegisterListScheme> getCashRegisters({
     @Query('\$select') String select = 'Ref_Key,Description',
