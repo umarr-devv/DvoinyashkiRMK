@@ -1,5 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/models/models.dart';
+import 'package:app/service/print.dart';
+import 'package:app/service/print_schemes/print_schemes.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/shared/widgets/dotted_line.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -9,8 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 import 'package:talker/talker.dart';
-import 'package:app/service/print.dart';
-import 'package:app/service/print_schemes/statistic_nomenclature.dart';
 
 class StatisticOther extends StatefulWidget {
   const StatisticOther({super.key});
@@ -261,7 +261,11 @@ class _StatisticTotal extends StatelessWidget {
 }
 
 class StatisticTotalItem extends StatelessWidget {
-  const StatisticTotalItem({super.key, required this.label, required this.child});
+  const StatisticTotalItem({
+    super.key,
+    required this.label,
+    required this.child,
+  });
 
   final Widget label;
   final Widget child;
@@ -432,47 +436,81 @@ class _CategoryStatistic extends StatelessWidget {
           bloc: BlocProvider.of<DataCubit>(context),
           builder: (context, dataState) {
             final data = getCategoryData(state.items, dataState.nomenclatures);
-            return DataTable2(
-              columnSpacing: 2,
-              dividerThickness: 0,
-              columns: [
-                DataColumn2(label: Text('Название'), fixedWidth: 160),
-                DataColumn2(label: Text('Кол-во'), numeric: true),
-                DataColumn2(label: Text('Сумма'), numeric: true),
-              ],
-              rows: data.entries.map((item) {
-                final key = item.key;
-                final value = item.value;
-
-                final totalQuantity = value.fold(
-                  0.0,
-                  (a, b) => a + b.totalQuantity,
-                );
-                final totalSum = value.fold(0.0, (a, b) => a + b.totalSum);
-                final int index = data.keys.toList().indexOf(key);
-                final group = dataState.groups.firstWhereLogTypeOrNull(
-                  (i) => i.refKey == key,
-                );
-                return DataRow2(
-                  onTap: () {},
-                  color: WidgetStatePropertyAll(
-                    index.isOdd
-                        ? theme.custom.rowOddColor
-                        : theme.custom.rowEvenColor,
+            return Column(
+              children: [
+                Padding(
+                  padding: .all(8),
+                  child: FButton(
+                    onPress: () {
+                      PrintService().print(
+                        PrintStatisticCategoryScheme(
+                          items: data,
+                          dataState: dataState,
+                        ),
+                        context,
+                      );
+                    },
+                    style: FButtonStyle.secondary(),
+                    prefix: Icon(FluentIcons.print_24_regular),
+                    child: Text('Печать'),
                   ),
-                  cells: [
-                    DataCell(SelectableText(group?.name ?? 'Без категории')),
-                    DataCell(
-                      Text(
-                        NumberFormat.currency(symbol: '').format(totalQuantity),
-                      ),
-                    ),
-                    DataCell(
-                      Text(NumberFormat.currency(symbol: '').format(totalSum)),
-                    ),
-                  ],
-                );
-              }).toList(),
+                ),
+                Expanded(
+                  child: DataTable2(
+                    columnSpacing: 2,
+                    dividerThickness: 0,
+                    columns: [
+                      DataColumn2(label: Text('Название'), fixedWidth: 160),
+                      DataColumn2(label: Text('Кол-во'), numeric: true),
+                      DataColumn2(label: Text('Сумма'), numeric: true),
+                    ],
+                    rows: data.entries.map((item) {
+                      final key = item.key;
+                      final value = item.value;
+
+                      final totalQuantity = value.fold(
+                        0.0,
+                        (a, b) => a + b.totalQuantity,
+                      );
+                      final totalSum = value.fold(
+                        0.0,
+                        (a, b) => a + b.totalSum,
+                      );
+                      final int index = data.keys.toList().indexOf(key);
+                      final group = dataState.groups.firstWhereLogTypeOrNull(
+                        (i) => i.refKey == key,
+                      );
+                      return DataRow2(
+                        onTap: () {},
+                        color: WidgetStatePropertyAll(
+                          index.isOdd
+                              ? theme.custom.rowOddColor
+                              : theme.custom.rowEvenColor,
+                        ),
+                        cells: [
+                          DataCell(
+                            SelectableText(group?.name ?? 'Без категории'),
+                          ),
+                          DataCell(
+                            Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(totalQuantity),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              NumberFormat.currency(
+                                symbol: '',
+                              ).format(totalSum),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             );
           },
         );
