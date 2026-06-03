@@ -1,6 +1,8 @@
 import 'package:app/blocs/blocs.dart';
+import 'package:app/core/router/router.dart';
 import 'package:app/shared/icons/icons.dart';
 import 'package:app/shared/theme/theme.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
@@ -53,6 +55,21 @@ class InitProgress extends StatelessWidget {
               ),
             );
           },
+        ),
+        SizedBox(height: 12),
+        SizedBox(
+          width: 160,
+          child: FButton(
+            style: FButtonStyle.outline(),
+            onPress: () {
+              if (context.read<AuthCubit>().state.user != null) {
+                AutoRouter.of(context).push(MenuRoute());
+              } else {
+                AutoRouter.of(context).push(AuthRoute());
+              }
+            },
+            child: Text('Пропустить'),
+          ),
         ),
       ],
     );
