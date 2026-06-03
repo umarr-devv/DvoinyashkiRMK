@@ -1,6 +1,7 @@
 import 'package:app/blocs/blocs.dart';
 import 'package:app/features/movement/blocs/create_movement/create_movement_cubit.dart';
 import 'package:app/features/movement/widgets/movement_card.dart';
+import 'package:app/features/order/dialogs/dialogs.dart';
 import 'package:app/models/group.dart';
 import 'package:app/shared/theme/theme.dart';
 import 'package:app/utils/debounce_notifier.dart';
@@ -172,17 +173,30 @@ class CreateMovementDialog {
   }
 
   Widget search() {
-    return FTextField(
-      prefixBuilder: (context, style, states) => Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: Icon(FIcons.search),
-      ),
-      hint: 'Поиск',
-      control: FTextFieldControl.managed(
-        onChange: (value) {
-          searchValue.setValue(value.text);
-        },
-      ),
+    return Row(
+      spacing: 12,
+      children: [
+        Expanded(
+          child: FTextField(
+            prefixBuilder: (context, style, states) => Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Icon(FIcons.search),
+            ),
+            hint: 'Поиск',
+            control: FTextFieldControl.managed(
+              onChange: (value) {
+                searchValue.setValue(value.text);
+              },
+            ),
+          ),
+        ),
+        FButton(
+          onPress: () {
+            PinnedCategoriesDialog(rootContext).show();
+          },
+          child: Text('Категории'),
+        ),
+      ],
     );
   }
 
