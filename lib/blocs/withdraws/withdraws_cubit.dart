@@ -55,7 +55,7 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
         );
         if (cashResponse.cashes.isNotEmpty) {
           final newState = state.copyWith(cash: cashResponse.cashes[0]);
-          emit(WithdrawsLoaded(newState));
+          emit(WithdrawsLoading(newState));
         }
       }
 
@@ -72,8 +72,9 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
           fullPath: buildODataQuery(params),
         );
         final newState = state.copyWith(sessionWithdraws: response.withdraws);
-        emit(WithdrawsLoaded(newState));
+        emit(WithdrawsLoading(newState));
       }
+      await getWithdrawAccepting(response.withdraws);
       final newState = state.copyWith(withdraws: response.withdraws);
       emit(WithdrawsLoaded(newState));
     } catch (exc, st) {
@@ -88,6 +89,65 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
     emit(WithdrawsUpdate(newState));
     await update();
   }
+
+  Future getWithdrawAccepting(List<WithdrawScheme> withdraws) async {
+  if (withdraws.isEmpty) {
+    final newState = state.copyWith(accepting: <String, bool>{});
+    emit(WithdrawsLoading(newState));
+    return;
+  }
+
+  final Map<String, bool> accepting = {
+    for (var element in withdraws) element.refKey: false,
+  };
+
+  const int chunkSize = 5;
+  final List<List<WithdrawScheme>> chunks = [];
+  
+  for (var i = 0; i < withdraws.length; i += chunkSize) {
+    chunks.add(
+      withdraws.sublist(
+        i, 
+        i + chunkSize > withdraws.length ? withdraws.length : i + chunkSize,
+      ),
+    );
+  }
+
+  try {
+    final futures = chunks.map((chunk) {
+      final filterConditions = chunk.map((i) {
+        return "ДокументОснование eq cast(guid'${i.refKey}', 'Document_ВыемкаНаличных')";
+      }).join(' or ');
+
+      final Map<String, dynamic> params = {
+        '\$filter': filterConditions,
+        '\$format': 'json',
+        '\$select': 'Ref_Key,Posted,ДокументОснование',
+      };
+
+      return client.getWithdrawsAccepting(
+        fullPath: buildODataQuery(params),
+      );
+    });
+
+    final responses = await Future.wait(futures);
+
+    for (final response in responses) {
+      if (response.value.isNotEmpty) {
+        for (final item in response.value) {
+          final String? baseDocKey = item.withdrawKey;
+          if (baseDocKey != null && accepting.containsKey(baseDocKey)) {
+            accepting[baseDocKey] = true;
+          }
+        }
+      }
+    }
+    // ignore: empty_catches
+  } catch (e) {}
+
+  final newState = state.copyWith(accepting: accepting);
+  emit(WithdrawsLoading(newState));
+}
 
   @override
   WithdrawsState? fromJson(Map<String, dynamic> json) {

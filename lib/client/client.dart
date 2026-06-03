@@ -277,4 +277,9 @@ abstract class RestClient {
   Future<WorkReportScheme> createWorkReport({
     @Body() required WorkReportScheme data,
   });
+
+  @GET('/Document_ПоступлениеВКассу{fullPath}')
+  Future<WithdrawAcceptListScheme> getWithdrawsAccepting({
+    @Path('fullPath') required String fullPath,
+  });
 }
