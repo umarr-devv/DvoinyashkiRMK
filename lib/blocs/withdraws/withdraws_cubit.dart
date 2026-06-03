@@ -20,6 +20,8 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
   final talker = GetIt.I<Talker>();
 
   CashRegisterScheme? get cashRegister => settingsCubit.state.cashRegister;
+  CashRegisterScheme? get cafeCashRegister =>
+      settingsCubit.state.cafeCashRegister;
 
   Future update({bool updateCash = false}) async {
     if (cashRegister == null) return;
@@ -29,7 +31,9 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
       final Map<String, dynamic> params = {
         '\$top': state.limit.toString(),
         '\$skip': state.offset.toString(),
-        '\$filter': 'КассаККМ_Key eq guid\'${cashRegister!.refKey}\'',
+        '\$filter':
+            'КассаККМ_Key eq guid\'${cashRegister!.refKey}\''
+            '${cafeCashRegister != null ? " or КассаККМ_Key eq guid'${cafeCashRegister!.refKey}'" : ""}',
         '\$orderby': 'Date desc',
         '\$format': 'json',
       };

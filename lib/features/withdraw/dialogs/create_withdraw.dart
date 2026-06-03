@@ -117,7 +117,7 @@ class CreateWithdrawDialog {
                 controller: documentSumController,
               ),
               validator: (value) {
-                final cubit = context.read<WithdrawsCubit>();
+                // final cubit = context.read<WithdrawsCubit>();
                 if (value == null || value.isEmpty) {
                   return 'Это поле не должен быть пустым';
                 }
@@ -131,12 +131,7 @@ class CreateWithdrawDialog {
                   return 'Некорректное значение';
                 } else if (doubleValue == 0) {
                   return 'Значение не должен быть равен 0';
-                }
-                else if (doubleValue >
-                    (cubit.state.cash?.value.toDouble() ?? 0)) {
-                  return 'В кассе нет столько средств. В данный момент в кассе ${cubit.state.cash?.value}';
-                }
-                else {
+                } else {
                   return null;
                 }
               },
@@ -192,6 +187,14 @@ class CreateWithdrawDialog {
                           ),
                         ),
                       ),
+                    if (withdrawType.value == .store)
+                      Text(
+                        'Касса: ${context.read<SettingsCubit>().state.cashRegister?.description}',
+                      ),
+                    if (withdrawType.value == .bar)
+                      Text(
+                        'Касса: ${context.read<SettingsCubit>().state.cafeCashRegister?.description ?? context.read<SettingsCubit>().state.cashRegister?.description}',
+                      ),
                   ],
                 );
               },
@@ -228,11 +231,7 @@ class CreateWithdrawDialog {
                   cubit.create(
                     documentSum,
                     commentController.text,
-                    withdrawType.value == .bar
-                        ? 'Бар'
-                        : withdrawType.value == .store
-                        ? 'Магазин'
-                        : '',
+                    withdrawType.value == .bar,
                   );
                 }
               }).show();

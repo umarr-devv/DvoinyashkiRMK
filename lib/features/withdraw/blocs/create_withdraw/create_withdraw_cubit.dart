@@ -19,12 +19,14 @@ class CreateWithdrawCubit extends Cubit<CreateWithdrawState> {
   final talker = GetIt.I<Talker>();
 
   CashRegisterScheme? get cashRegister => settingsCubit.state.cashRegister;
+  CashRegisterScheme? get cafeCashRegister =>
+      settingsCubit.state.cafeCashRegister;
   AuthorScheme? get author => settingsCubit.state.author;
   StructureUnitScheme? get store => settingsCubit.state.store;
   StructureUnitScheme? get subdivision => settingsCubit.state.subdivision;
   WorkShiftScheme? get workShift => sessionCubit.state.currentWorkShift;
 
-  Future create(double documentSum, String? comment, String type) async {
+  Future create(double documentSum, String? comment, bool isCafe) async {
     if (cashRegister == null ||
         author == null ||
         store == null ||
@@ -34,12 +36,14 @@ class CreateWithdrawCubit extends Cubit<CreateWithdrawState> {
     }
     emit(CreateWithdrawLoading(state));
     try {
-      final comment_ = 'Источник выемки: $type${(comment?.isNotEmpty ?? false) ? "\n${comment!}" : ""}'; 
+      final comment_ = 'Источник выемки: ${isCafe ? "Бар" : "Магазин"}';
       final response = await client.createWithdraw(
         data: CreateWithdrawScheme(
           date: DateTime.now(),
           comment: comment_,
-          cashRegisterKey: cashRegister!.refKey,
+          cashRegisterKey: isCafe
+              ? cafeCashRegister?.refKey ?? cashRegister!.refKey
+              : cashRegister!.refKey,
           authorKey: author!.refKey,
           subdivisionKey: subdivision!.refKey,
           storeKey: store!.refKey,
