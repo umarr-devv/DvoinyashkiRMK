@@ -1,3 +1,4 @@
+import 'package:app/features/settings/tabs/withdraw_tab.dart';
 import 'package:app/features/settings/widgets/printer_groups_settings.dart';
 import 'package:app/features/settings/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class SettingsBase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Column(
         children: [
           TabBar(
@@ -16,6 +17,7 @@ class SettingsBase extends StatelessWidget {
             tabAlignment: TabAlignment.start,
             tabs: [
               Tab(text: 'Основное'),
+              Tab(text: 'Выемка'),
               Tab(text: 'Принтеры'),
             ],
           ),
@@ -45,6 +47,7 @@ class SettingsBase extends StatelessWidget {
                     ],
                   ),
                 ),
+                SettingsWithdrawTab(),
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.only(

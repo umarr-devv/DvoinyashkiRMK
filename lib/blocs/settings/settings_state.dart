@@ -11,6 +11,7 @@ class SettingsState extends Equatable {
     this.store,
     this.subdivision,
     this.printer,
+    this.cafeCashRegister,
     this.pinnedCategories = const [],
     this.productionGroups = const [],
     this.showEmptyCategories = false,
@@ -35,6 +36,8 @@ class SettingsState extends Equatable {
   final Map<String, GroupScheme> printerGroups;
   final bool useSmartCatalog;
 
+  final CashRegisterScheme? cafeCashRegister;
+
   SettingsState copyWith({
     bool? isDarkTheme,
     double? scale,
@@ -50,6 +53,7 @@ class SettingsState extends Equatable {
     double? fontScale,
     Map<String, GroupScheme>? printerGroups,
     bool? useSmartCatalog,
+    Object? cafeCashRegister,
   }) {
     return SettingsState(
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
@@ -66,6 +70,10 @@ class SettingsState extends Equatable {
       catalogListView: catalogListView ?? this.catalogListView,
       printerGroups: printerGroups ?? this.printerGroups,
       useSmartCatalog: useSmartCatalog ?? this.useSmartCatalog,
+      cafeCashRegister: undefCompare<CashRegisterScheme?>(
+        cafeCashRegister,
+        this.cafeCashRegister,
+      ),
     );
   }
 
@@ -83,7 +91,8 @@ class SettingsState extends Equatable {
       catalogListView = other.catalogListView,
       fontScale = other.fontScale,
       printerGroups = other.printerGroups,
-      useSmartCatalog = other.useSmartCatalog;
+      useSmartCatalog = other.useSmartCatalog,
+      cafeCashRegister = other.cafeCashRegister;
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);
@@ -106,6 +115,7 @@ class SettingsState extends Equatable {
     fontScale,
     printerGroups,
     useSmartCatalog,
+    cafeCashRegister,
   ];
 }
 

@@ -27,6 +27,11 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
               json['subdivision'] as Map<String, dynamic>,
             ),
       printer: json['printer'] as String?,
+      cafeCashRegister: json['cafeCashRegister'] == null
+          ? null
+          : CashRegisterScheme.fromJson(
+              json['cafeCashRegister'] as Map<String, dynamic>,
+            ),
       pinnedCategories:
           (json['pinnedCategories'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -65,4 +70,5 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'catalogListView': instance.catalogListView,
       'printerGroups': instance.printerGroups,
       'useSmartCatalog': instance.useSmartCatalog,
+      'cafeCashRegister': instance.cafeCashRegister,
     };

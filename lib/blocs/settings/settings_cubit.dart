@@ -1,6 +1,7 @@
 import 'package:app/data/repositories/general_storage.dart';
 import 'package:app/models/group.dart';
 import 'package:app/models/models.dart';
+import 'package:app/utils/undefined.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -29,6 +30,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
     double? fontScale,
     Map<String, GroupScheme>? printerGroups,
     bool? useSmartCatalog,
+    Object? cafeCashRegister
   }) {
     if (scale != null) {
       storage.setValue(GeneralStorageKey.scale, scale);
@@ -48,6 +50,7 @@ class SettingsCubit extends HydratedCubit<SettingsState> {
       fontScale: fontScale,
       printerGroups: printerGroups,
       useSmartCatalog: useSmartCatalog,
+      cafeCashRegister: cafeCashRegister,
     );
     emit(SettingsUpdate(newState));
   }
