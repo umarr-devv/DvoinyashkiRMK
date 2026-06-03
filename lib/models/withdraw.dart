@@ -15,6 +15,7 @@ class WithdrawScheme extends Equatable {
     required this.documentSum,
     required this.storeKey,
     required this.subdivisionKey,
+    required this.sessionKey,
   });
 
   @JsonKey(name: 'Ref_Key')
@@ -43,6 +44,9 @@ class WithdrawScheme extends Equatable {
 
   @JsonKey(name: 'Подразделение_Key')
   final String subdivisionKey;
+
+  @JsonKey(name: 'ОтчетОРозничныхПродажах_Key')
+  final String sessionKey;
 
   factory WithdrawScheme.fromJson(Map<String, dynamic> json) =>
       _$WithdrawSchemeFromJson(json);

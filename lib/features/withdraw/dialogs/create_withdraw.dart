@@ -4,6 +4,7 @@ import 'package:app/models/models.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forui/forui.dart';
 
@@ -16,7 +17,7 @@ class CreateWithdrawDialog {
 
   final formKey = GlobalKey<FormState>();
 
-  final documentSumController = TextEditingController(text: '0');
+  final documentSumController = TextEditingController(text: '');
 
   final commentController = TextEditingController();
 
@@ -113,6 +114,8 @@ class CreateWithdrawDialog {
           builder: (context, state) {
             return FTextFormField(
               label: Text('Сумма выемки'),
+              hint: 'Введите сумму выемки',
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               control: FTextFieldControl.managed(
                 controller: documentSumController,
               ),

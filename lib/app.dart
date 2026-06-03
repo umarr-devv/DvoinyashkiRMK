@@ -44,11 +44,11 @@ class _AppScreenState extends State<AppScreen> {
     dataCubit.update();
     orderCubit = OrderCubit(settingsCubit);
     checksCubit = ChecksCubit(settingsCubit);
-    withdrawsCubit = WithdrawsCubit(settingsCubit);
     movementsCubit = MovementsCubit(settingsCubit);
     statisticCubit = StatisticCubit(settingsCubit);
     workShiftsCubit = WorkShiftsCubit(settingsCubit);
     sessionCubit = SessionCubit(settingsCubit, authCubit);
+    withdrawsCubit = WithdrawsCubit(settingsCubit, sessionCubit);
     warehouseCubit = WarehouseCubit(settingsCubit);
     offlineChecksCubit = OfflineChecksCubit();
     connectivityCubit = ConnectivityCubit();

@@ -23,9 +23,11 @@ class EndSessionDialog {
           listener: (context, state) async {
             if (state is SessionEnded && state.currentWorkShift != null) {
               final settingsCubit = BlocProvider.of<SettingsCubit>(context);
+              final withdrawsCubit = context.read<WithdrawsCubit>();
               final dataCubit = BlocProvider.of<DataCubit>(context);
               final cubit = DetailSessionCubit(state.currentWorkShift!.refKey);
               final data = await cubit.update();
+              withdrawsCubit.update(updateCash: true);
               if (data != null && settingsCubit.state.printer != null) {
                 try {
                   PrintService(printerUrl: settingsCubit.state.printer).print(
@@ -58,8 +60,9 @@ class EndSessionDialog {
               ),
               FButton(
                 onPress: () async {
-                  final workShiftsCubit =
-                      BlocProvider.of<WorkShiftsCubit>(context);
+                  final workShiftsCubit = BlocProvider.of<WorkShiftsCubit>(
+                    context,
+                  );
 
                   await BlocProvider.of<SessionCubit>(context).end();
                   await Future.delayed(const Duration(milliseconds: 100));

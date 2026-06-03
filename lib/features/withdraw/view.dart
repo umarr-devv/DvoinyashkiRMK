@@ -1,4 +1,5 @@
 import 'package:app/blocs/withdraws/withdraws_cubit.dart';
+import 'package:app/features/withdraw/widgets/total_info.dart';
 import 'package:app/features/withdraw/widgets/widgets.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   @override
   Widget build(BuildContext context) {
     return FScaffold(
-      header: WithdrawHeader(),
+      header: Column(
+        crossAxisAlignment: .start,
+        children: [WithdrawHeader(), WithdrawInfo()],
+      ),
       footer: WithdrawPagination(),
       child: WithdrawTable(),
     );

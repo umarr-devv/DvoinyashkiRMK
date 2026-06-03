@@ -27,16 +27,19 @@ class StartSessionDialog {
             ),
             FButton(
               onPress: () async {
-                  final workShiftsCubit =
-                      BlocProvider.of<WorkShiftsCubit>(context);
+                final workShiftsCubit = BlocProvider.of<WorkShiftsCubit>(
+                  context,
+                );
+                final withdrawsCubit = context.read<WithdrawsCubit>();
 
-                  await BlocProvider.of<SessionCubit>(context).start();
-                  await Future.delayed(const Duration(milliseconds: 100));
+                await BlocProvider.of<SessionCubit>(context).start();
+                await Future.delayed(const Duration(milliseconds: 100));
 
-                  workShiftsCubit.update();
+                workShiftsCubit.update();
+                withdrawsCubit.update(updateCash: true);
 
-                  if (!context.mounted) return;
-                  AutoRouter.of(context).maybePop();
+                if (!context.mounted) return;
+                AutoRouter.of(context).maybePop();
               },
               style: FButtonStyle.primary(),
               child: Text('Начать'),

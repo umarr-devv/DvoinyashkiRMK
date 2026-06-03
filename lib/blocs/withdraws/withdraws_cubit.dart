@@ -12,9 +12,11 @@ part 'withdraws_cubit.g.dart';
 part 'withdraws_state.dart';
 
 class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
-  WithdrawsCubit(this.settingsCubit) : super(WithdrawsInitial());
+  WithdrawsCubit(this.settingsCubit, this.sessionCubit)
+    : super(WithdrawsInitial());
 
   final SettingsCubit settingsCubit;
+  final SessionCubit sessionCubit;
 
   final client = GetIt.I<RestClient>();
   final talker = GetIt.I<Talker>();
@@ -22,6 +24,7 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
   CashRegisterScheme? get cashRegister => settingsCubit.state.cashRegister;
   CashRegisterScheme? get cafeCashRegister =>
       settingsCubit.state.cafeCashRegister;
+  WorkShiftScheme? get currentWorkShift => sessionCubit.state.currentWorkShift;
 
   Future update({bool updateCash = false}) async {
     if (cashRegister == null) return;
@@ -54,6 +57,22 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
           final newState = state.copyWith(cash: cashResponse.cashes[0]);
           emit(WithdrawsLoaded(newState));
         }
+      }
+
+      if (currentWorkShift != null) {
+        final Map<String, dynamic> params = {
+          '\$filter':
+              'ОтчетОРозничныхПродажах_Key eq guid\'${currentWorkShift!.refKey}\''
+              '${cafeCashRegister != null ? " or КассаККМ_Key eq guid'${cafeCashRegister!.refKey}'" : ""}',
+          '\$orderby': 'Date desc',
+          '\$format': 'json',
+        };
+
+        final response = await client.getWithdraws(
+          fullPath: buildODataQuery(params),
+        );
+        final newState = state.copyWith(sessionWithdraws: response.withdraws);
+        emit(WithdrawsLoaded(newState));
       }
       final newState = state.copyWith(withdraws: response.withdraws);
       emit(WithdrawsLoaded(newState));

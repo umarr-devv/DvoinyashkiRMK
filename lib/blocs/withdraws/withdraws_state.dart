@@ -5,11 +5,13 @@ part of 'withdraws_cubit.dart';
 class WithdrawsState extends Equatable {
   const WithdrawsState({
     this.withdraws = const [],
+    this.sessionWithdraws = const [],
     this.cash,
     this.pageNum = 0,
   });
 
   final List<WithdrawScheme> withdraws;
+  final List<WithdrawScheme> sessionWithdraws;
   final CashScheme? cash;
   final int pageNum;
 
@@ -23,11 +25,13 @@ class WithdrawsState extends Equatable {
 
   WithdrawsState copyWith({
     List<WithdrawScheme>? withdraws,
+    List<WithdrawScheme>? sessionWithdraws,
     CashScheme? cash,
     int? pageNum,
   }) {
     return WithdrawsState(
       withdraws: withdraws ?? this.withdraws,
+      sessionWithdraws: sessionWithdraws ?? this.sessionWithdraws,
       cash: cash ?? this.cash,
       pageNum: pageNum ?? this.pageNum,
     );
@@ -35,11 +39,12 @@ class WithdrawsState extends Equatable {
 
   WithdrawsState.from(WithdrawsState other)
     : withdraws = other.withdraws,
+      sessionWithdraws = other.sessionWithdraws,
       cash = other.cash,
       pageNum = other.pageNum;
 
   @override
-  List<Object> get props => [withdraws];
+  List<Object?> get props => [withdraws, sessionWithdraws, cash, pageNum];
 }
 
 final class WithdrawsInitial extends WithdrawsState {}

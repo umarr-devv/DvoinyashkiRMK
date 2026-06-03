@@ -17,6 +17,7 @@ WithdrawScheme _$WithdrawSchemeFromJson(Map<String, dynamic> json) =>
       documentSum: (json['СуммаДокумента'] as num).toDouble(),
       storeKey: json['Магазин_Key'] as String,
       subdivisionKey: json['Подразделение_Key'] as String,
+      sessionKey: json['ОтчетОРозничныхПродажах_Key'] as String,
     );
 
 Map<String, dynamic> _$WithdrawSchemeToJson(WithdrawScheme instance) =>
@@ -30,6 +31,7 @@ Map<String, dynamic> _$WithdrawSchemeToJson(WithdrawScheme instance) =>
       'СуммаДокумента': instance.documentSum,
       'Магазин_Key': instance.storeKey,
       'Подразделение_Key': instance.subdivisionKey,
+      'ОтчетОРозничныхПродажах_Key': instance.sessionKey,
     };
 
 WithdrawListScheme _$WithdrawListSchemeFromJson(Map<String, dynamic> json) =>

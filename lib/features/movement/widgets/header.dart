@@ -21,13 +21,6 @@ class MovementHeader extends StatelessWidget {
         TransferFindDialog(),
         FButton.icon(
           onPress: () {
-            CreateMovementDialog(context).show();
-          },
-          style: FButtonStyle.primary(),
-          child: const Icon(Icons.add),
-        ),
-        FButton.icon(
-          onPress: () {
             if (tabIndex == 0) {
               BlocProvider.of<MovementsCubit>(context).update();
             } else {
@@ -35,6 +28,14 @@ class MovementHeader extends StatelessWidget {
             }
           },
           child: const Icon(FIcons.refreshCw),
+        ),
+        FButton(
+          onPress: () {
+            CreateMovementDialog(context).show();
+          },
+          style: FButtonStyle.primary(),
+          prefix: const Icon(Icons.add),
+          child: Text('Создать заказ'),
         ),
       ],
     );
