@@ -106,7 +106,7 @@ class CreateMovementDialog {
                               groupValue.value?.refKey,
                         );
                       } else {
-                        categoryItems = state.products;
+                        categoryItems = [];
                       }
                       final searchItems = categoryItems
                           .where(
@@ -121,6 +121,14 @@ class CreateMovementDialog {
                           final warehouseItemsMap = {
                             for (final i in warehouseState.items) i.uniqueId: i,
                           };
+                          if (categoryItems.isEmpty) {
+                            return Center(
+                              child: Text(
+                                'Выберите категорию',
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            );
+                          }
                           return LayoutBuilder(
                             builder: (context, constraints) {
                               return GridView.builder(
@@ -186,62 +194,46 @@ class CreateMovementDialog {
         return ValueListenableBuilder(
           valueListenable: groupValue,
           builder: (context, value, child) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                spacing: 8,
-                children:
-                    [
-                      GestureDetector(
-                        onTap: () {
-                          groupValue.value = null;
-                        },
-                        child: FBadge(
-                          style: (style) => style.copyWith(
-                            decoration: BoxDecoration(
-                              color: value == null
-                                  ? theme.custom.primary
-                                  : theme.custom.muted,
-                              borderRadius: BorderRadius.circular(128),
-                            ),
-                            contentStyle: (style) => style.copyWith(
-                              labelTextStyle: TextStyle(
-                                color: value == null
-                                    ? theme.custom.primaryForeground
-                                    : theme.custom.foreground,
-                              ),
-                            ),
+            final groups = state.groups.where(
+              (element) => context
+                  .read<SettingsCubit>()
+                  .state
+                  .pinnedCategories
+                  .contains(element.refKey),
+            );
+            return SizedBox(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: 8,
+                  children: groups.map((i) {
+                    final active = groupValue.value == i;
+                    return GestureDetector(
+                      onTap: () {
+                        groupValue.value = i;
+                      },
+                      child: FBadge(
+                        style: (style) => style.copyWith(
+                          decoration: BoxDecoration(
+                            color: active
+                                ? theme.custom.primary
+                                : theme.custom.muted,
+                            borderRadius: BorderRadius.circular(128),
                           ),
-                          child: Text('Все'),
-                        ),
-                      ),
-                    ] +
-                    state.groups.map((i) {
-                      final active = groupValue.value == i;
-                      return GestureDetector(
-                        onTap: () {
-                          groupValue.value = i;
-                        },
-                        child: FBadge(
-                          style: (style) => style.copyWith(
-                            decoration: BoxDecoration(
+                          contentStyle: (style) => style.copyWith(
+                            labelTextStyle: TextStyle(
                               color: active
-                                  ? theme.custom.primary
-                                  : theme.custom.muted,
-                              borderRadius: BorderRadius.circular(128),
-                            ),
-                            contentStyle: (style) => style.copyWith(
-                              labelTextStyle: TextStyle(
-                                color: active
-                                    ? theme.custom.primaryForeground
-                                    : theme.custom.foreground,
-                              ),
+                                  ? theme.custom.primaryForeground
+                                  : theme.custom.foreground,
                             ),
                           ),
-                          child: Text(i.name),
                         ),
-                      );
-                    }).toList(),
+                        child: Text(i.name),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             );
           },
