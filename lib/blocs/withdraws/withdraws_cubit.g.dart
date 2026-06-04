@@ -18,6 +18,11 @@ WithdrawsState _$WithdrawsStateFromJson(Map<String, dynamic> json) =>
               ?.map((e) => WithdrawScheme.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      notAcceptedWithdraws:
+          (json['notAcceptedWithdraws'] as List<dynamic>?)
+              ?.map((e) => WithdrawScheme.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       cash: json['cash'] == null
           ? null
           : CashScheme.fromJson(json['cash'] as Map<String, dynamic>),
@@ -33,6 +38,7 @@ Map<String, dynamic> _$WithdrawsStateToJson(WithdrawsState instance) =>
     <String, dynamic>{
       'withdraws': instance.withdraws,
       'sessionWithdraws': instance.sessionWithdraws,
+      'notAcceptedWithdraws': instance.notAcceptedWithdraws,
       'cash': instance.cash,
       'accepting': instance.accepting,
       'pageNum': instance.pageNum,

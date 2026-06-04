@@ -6,6 +6,7 @@ class WithdrawsState extends Equatable {
   const WithdrawsState({
     this.withdraws = const [],
     this.sessionWithdraws = const [],
+    this.notAcceptedWithdraws = const [],
     this.cash,
     this.pageNum = 0,
     this.accepting = const {},
@@ -13,6 +14,7 @@ class WithdrawsState extends Equatable {
 
   final List<WithdrawScheme> withdraws;
   final List<WithdrawScheme> sessionWithdraws;
+  final List<WithdrawScheme> notAcceptedWithdraws;
   final CashScheme? cash;
   final Map<String, bool> accepting;
   final int pageNum;
@@ -28,6 +30,7 @@ class WithdrawsState extends Equatable {
   WithdrawsState copyWith({
     List<WithdrawScheme>? withdraws,
     List<WithdrawScheme>? sessionWithdraws,
+    List<WithdrawScheme>? notAcceptedWithdraws,
     Map<String, bool>? accepting,
     CashScheme? cash,
     int? pageNum,
@@ -37,6 +40,7 @@ class WithdrawsState extends Equatable {
       sessionWithdraws: sessionWithdraws ?? this.sessionWithdraws,
       cash: cash ?? this.cash,
       accepting: accepting ?? this.accepting,
+      notAcceptedWithdraws: notAcceptedWithdraws ?? this.notAcceptedWithdraws,
       pageNum: pageNum ?? this.pageNum,
     );
   }
@@ -45,6 +49,7 @@ class WithdrawsState extends Equatable {
     : withdraws = other.withdraws,
       sessionWithdraws = other.sessionWithdraws,
       cash = other.cash,
+      notAcceptedWithdraws = other.notAcceptedWithdraws,
       accepting = other.accepting,
       pageNum = other.pageNum;
 
@@ -52,6 +57,7 @@ class WithdrawsState extends Equatable {
   List<Object?> get props => [
     withdraws,
     sessionWithdraws,
+    notAcceptedWithdraws,
     cash,
     pageNum,
     accepting,

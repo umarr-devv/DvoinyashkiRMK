@@ -74,8 +74,12 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
         final newState = state.copyWith(sessionWithdraws: response.withdraws);
         emit(WithdrawsLoading(newState));
       }
-      await getWithdrawAccepting(response.withdraws);
-      final newState = state.copyWith(withdraws: response.withdraws);
+      final accepting = await getWithdrawAccepting(response.withdraws);
+      await getNotAcceptedWithdraws();
+      final newState = state.copyWith(
+        withdraws: response.withdraws,
+        accepting: accepting,
+      );
       emit(WithdrawsLoaded(newState));
     } catch (exc, st) {
       talker.error(exc, st);
@@ -90,64 +94,93 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
     await update();
   }
 
-  Future getWithdrawAccepting(List<WithdrawScheme> withdraws) async {
-  if (withdraws.isEmpty) {
-    final newState = state.copyWith(accepting: <String, bool>{});
-    emit(WithdrawsLoading(newState));
-    return;
-  }
+  Future<Map<String, bool>?> getWithdrawAccepting(
+    List<WithdrawScheme> withdraws,
+  ) async {
+    if (withdraws.isEmpty) {
+      final newState = state.copyWith(accepting: <String, bool>{});
+      emit(WithdrawsLoading(newState));
+      return null;
+    }
 
-  final Map<String, bool> accepting = {
-    for (var element in withdraws) element.refKey: false,
-  };
+    final Map<String, bool> accepting = {
+      for (var element in withdraws) element.refKey: false,
+    };
 
-  const int chunkSize = 5;
-  final List<List<WithdrawScheme>> chunks = [];
-  
-  for (var i = 0; i < withdraws.length; i += chunkSize) {
-    chunks.add(
-      withdraws.sublist(
-        i, 
-        i + chunkSize > withdraws.length ? withdraws.length : i + chunkSize,
-      ),
-    );
-  }
+    const int chunkSize = 5;
+    final List<List<WithdrawScheme>> chunks = [];
 
-  try {
-    final futures = chunks.map((chunk) {
-      final filterConditions = chunk.map((i) {
-        return "ДокументОснование eq cast(guid'${i.refKey}', 'Document_ВыемкаНаличных')";
-      }).join(' or ');
-
-      final Map<String, dynamic> params = {
-        '\$filter': filterConditions,
-        '\$format': 'json',
-        '\$select': 'Ref_Key,Posted,ДокументОснование',
-      };
-
-      return client.getWithdrawsAccepting(
-        fullPath: buildODataQuery(params),
+    for (var i = 0; i < withdraws.length; i += chunkSize) {
+      chunks.add(
+        withdraws.sublist(
+          i,
+          i + chunkSize > withdraws.length ? withdraws.length : i + chunkSize,
+        ),
       );
-    });
+    }
 
-    final responses = await Future.wait(futures);
+    try {
+      final futures = chunks.map((chunk) {
+        final filterConditions = chunk
+            .map((i) {
+              return "ДокументОснование eq cast(guid'${i.refKey}', 'Document_ВыемкаНаличных')";
+            })
+            .join(' or ');
 
-    for (final response in responses) {
-      if (response.value.isNotEmpty) {
-        for (final item in response.value) {
-          final String? baseDocKey = item.withdrawKey;
-          if (baseDocKey != null && accepting.containsKey(baseDocKey)) {
-            accepting[baseDocKey] = true;
+        final Map<String, dynamic> params = {
+          '\$filter': filterConditions,
+          '\$format': 'json',
+          '\$select': 'Ref_Key,Posted,ДокументОснование',
+        };
+
+        return client.getWithdrawsAccepting(fullPath: buildODataQuery(params));
+      });
+
+      final responses = await Future.wait(futures);
+
+      for (final response in responses) {
+        if (response.value.isNotEmpty) {
+          for (final item in response.value) {
+            final String? baseDocKey = item.withdrawKey;
+            if (baseDocKey != null && accepting.containsKey(baseDocKey)) {
+              accepting[baseDocKey] = true;
+            }
           }
         }
       }
-    }
-    // ignore: empty_catches
-  } catch (e) {}
+      // ignore: empty_catches
+    } catch (e) {}
 
-  final newState = state.copyWith(accepting: accepting);
-  emit(WithdrawsLoading(newState));
-}
+    return accepting;
+  }
+
+  Future getNotAcceptedWithdraws() async {
+    final List<WithdrawScheme> result = [];
+
+    final twoDaysAgo = DateTime.now().subtract(Duration(days: 2));
+    final formattedDate = twoDaysAgo.toIso8601String().substring(0, 19);
+    final Map<String, dynamic> params = {
+      '\$filter':
+          'Date ge datetime\'$formattedDate\' and '
+          'КассаККМ_Key eq guid\'${cashRegister!.refKey}\''
+          '${cafeCashRegister != null ? " or КассаККМ_Key eq guid'${cafeCashRegister!.refKey}'" : ""}',
+      '\$orderby': 'Date desc',
+      '\$format': 'json',
+    };
+    final response = await client.getWithdraws(
+      fullPath: buildODataQuery(params),
+    );
+    final accepting = await getWithdrawAccepting(response.withdraws);
+    if (accepting == null) {
+      return;
+    }
+    for (final i in response.withdraws) {
+      if (accepting[i.refKey] == false) {
+        result.add(i);
+      }
+    }
+    emit(state.copyWith(notAcceptedWithdraws: result));
+  }
 
   @override
   WithdrawsState? fromJson(Map<String, dynamic> json) {
