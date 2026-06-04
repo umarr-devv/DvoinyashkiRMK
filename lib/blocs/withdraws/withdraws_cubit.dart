@@ -75,7 +75,6 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
         emit(WithdrawsLoading(newState));
       }
       final accepting = await getWithdrawAccepting(response.withdraws);
-      await getNotAcceptedWithdraws();
       final newState = state.copyWith(
         withdraws: response.withdraws,
         accepting: accepting,
@@ -152,34 +151,6 @@ class WithdrawsCubit extends HydratedCubit<WithdrawsState> {
     } catch (e) {}
 
     return accepting;
-  }
-
-  Future getNotAcceptedWithdraws() async {
-    final List<WithdrawScheme> result = [];
-
-    final twoDaysAgo = DateTime.now().subtract(Duration(days: 2));
-    final formattedDate = twoDaysAgo.toIso8601String().substring(0, 19);
-    final Map<String, dynamic> params = {
-      '\$filter':
-          'Date ge datetime\'$formattedDate\' and '
-          'КассаККМ_Key eq guid\'${cashRegister!.refKey}\''
-          '${cafeCashRegister != null ? " or КассаККМ_Key eq guid'${cafeCashRegister!.refKey}'" : ""}',
-      '\$orderby': 'Date desc',
-      '\$format': 'json',
-    };
-    final response = await client.getWithdraws(
-      fullPath: buildODataQuery(params),
-    );
-    final accepting = await getWithdrawAccepting(response.withdraws);
-    if (accepting == null) {
-      return;
-    }
-    for (final i in response.withdraws) {
-      if (accepting[i.refKey] == false) {
-        result.add(i);
-      }
-    }
-    emit(state.copyWith(notAcceptedWithdraws: result));
   }
 
   @override

@@ -1,9 +1,9 @@
 [Setup]
 AppName=Двойняшки РМК 
-AppVersion=1.11.0
+AppVersion=1.12.0
 DefaultDirName={pf}\dvoinyashki_rmk
 DefaultGroupName=dvoinyashki_rmk
-OutputBaseFilename=РМК 1.11.0
+OutputBaseFilename=РМК 1.12.0
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayName=РМК Удаление
