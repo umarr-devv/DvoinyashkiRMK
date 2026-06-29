@@ -19,7 +19,7 @@ class CashScheme extends Equatable {
   Map<String, dynamic> toJson() => _$CashSchemeToJson(this);
 
   @override
-  List<Object?> get props => [cashRegisterKey];
+  List<Object?> get props => [cashRegisterKey, value];
 }
 
 @JsonSerializable()
