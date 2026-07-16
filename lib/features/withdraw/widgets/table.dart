@@ -31,7 +31,6 @@ class WithdrawTable extends StatelessWidget {
                 DataColumn2(label: Text('Номер')),
                 DataColumn2(label: Text('Касса')),
                 DataColumn2(label: Text('Магазин')),
-                DataColumn2(label: Text('Статус')),
                 DataColumn2(label: Text('Сумма'), numeric: true),
                 DataColumn2(label: Text('Дата'), numeric: true),
               ],
@@ -44,7 +43,6 @@ class WithdrawTable extends StatelessWidget {
                   (i) => i.refKey == withdraw.storeKey,
                 );
                 final rowIndex = state.withdraws.indexOf(withdraw);
-                final accepted = state.accepting[withdraw.refKey] ?? false;
                 return DataRow2(
                   onTap: () {
                     DetailWithdrawDialog(context, withdraw: withdraw).show();
@@ -66,19 +64,6 @@ class WithdrawTable extends StatelessWidget {
                     ),
                     DataCell(Text(cashRegister?.description ?? '')),
                     DataCell(Text(store?.description ?? '')),
-                    DataCell(
-                      accepted
-                          ? FLabel(
-                              axis: .horizontal,
-                              label: Text('Поступил в кассу'),
-                              child: Icon(FIcons.check),
-                            )
-                          : FLabel(
-                              axis: .horizontal,
-                              label: Text('Ожидание'),
-                              child: Icon(FIcons.clock),
-                            ),
-                    ),
                     DataCell(
                       Text(
                         NumberFormat.currency(
