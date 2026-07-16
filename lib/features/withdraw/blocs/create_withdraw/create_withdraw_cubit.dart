@@ -40,6 +40,7 @@ class CreateWithdrawCubit extends Cubit<CreateWithdrawState> {
       final response = await client.createWithdraw(
         data: CreateWithdrawScheme(
           date: DateTime.now(),
+          posted: false,
           comment: comment_,
           cashRegisterKey: isCafe
               ? cafeCashRegister?.refKey ?? cashRegister!.refKey
@@ -51,6 +52,7 @@ class CreateWithdrawCubit extends Cubit<CreateWithdrawState> {
           documentSum: documentSum,
         ),
       );
+      await client.postWithdraw(refKey: response.refKey);
       final newState = state.copyWith(response);
       emit(CreateWithdrawLoaded(newState));
     } catch (exc, st) {

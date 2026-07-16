@@ -35,9 +35,10 @@ class StatisticCubit extends HydratedCubit<StatisticState> {
     emit(StatisticLoading(state));
     try {
       final Map<String, dynamic> params = {
-        '\$select': "Date,Кассир_Key,КлиентUDS,СуммаДокумента,Состав,СуммаОплатUDS",
+        '\$select':
+            "Date,Кассир_Key,КлиентUDS,СуммаДокумента,Состав,СуммаОплатUDS",
         '\$filter':
-            "КассаККМ_Key eq guid'${cashRegister!.refKey}' and Date ge ${to1CODataDateTime(state.startDate)} and Date le ${to1CODataDateTime(state.endDate)}",
+            "КассаККМ_Key eq guid'${cashRegister!.refKey}' and Date ge ${to1CODataDateTime(state.startDate)} and Date le ${to1CODataDateTime(state.endDate)} and Posted eq true",
         '\$format': 'json',
       };
 

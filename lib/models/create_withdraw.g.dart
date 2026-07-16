@@ -11,6 +11,7 @@ CreateWithdrawScheme _$CreateWithdrawSchemeFromJson(
 ) => CreateWithdrawScheme(
   date: DateTime.parse(json['Date'] as String),
   comment: json['Комментарий'] as String?,
+  posted: json['Posted'] as bool,
   cashRegisterKey: json['КассаККМ_Key'] as String,
   authorKey: json['Автор_Key'] as String,
   subdivisionKey: json['Подразделение_Key'] as String,
@@ -30,6 +31,7 @@ Map<String, dynamic> _$CreateWithdrawSchemeToJson(
 ) => <String, dynamic>{
   'ВалютаДенежныхСредств_Key': instance.currencyKey,
   'Date': instance.date.toIso8601String(),
+  'Posted': instance.posted,
   'Комментарий': instance.comment,
   'Организация_Key': instance.orgKey,
   'КассаККМ_Key': instance.cashRegisterKey,

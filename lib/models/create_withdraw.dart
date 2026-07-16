@@ -7,6 +7,7 @@ class CreateWithdrawScheme {
   CreateWithdrawScheme({
     required this.date,
     required this.comment,
+    required this.posted,
     required this.cashRegisterKey,
     required this.authorKey,
     required this.subdivisionKey,
@@ -22,6 +23,9 @@ class CreateWithdrawScheme {
 
   @JsonKey(name: 'Date')
   final DateTime date;
+
+    @JsonKey(name: 'Posted')
+  final bool posted;
 
   @JsonKey(name: 'Комментарий')
   final String? comment;
